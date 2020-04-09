@@ -11,6 +11,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Test Steiner Emanuel Rep Branch
+        Board board = new Board();
+        board.getActionField().pickCard(ActionType.TYPEONE);
+
     }
 }
