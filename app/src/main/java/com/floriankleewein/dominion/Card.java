@@ -2,9 +2,11 @@ package com.floriankleewein.dominion;
 
 public class Card {
     private int value;
+    private int numberOfCards;
 
-    public Card(int value) {
+    public Card(int value, int numberOfCards) {
         this.value = value;
+        this.numberOfCards = numberOfCards;
     }
 
     public int getValue() {
@@ -13,5 +15,13 @@ public class Card {
 
     public void setValue(int value) {
         this.value = value;
+    }
+
+    public int getNumberOfCards() {
+        return numberOfCards;
+    }
+
+    public void setNumberOfCards(int numberOfCards) {
+        this.numberOfCards = numberOfCards;
     }
 }

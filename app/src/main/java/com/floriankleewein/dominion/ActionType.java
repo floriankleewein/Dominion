@@ -1,7 +1,14 @@
 package com.floriankleewein.dominion;
 
 public enum ActionType {
-    TYPEONE,
-    TYPETWO,
-    TYPETHREE
+    BURGGRABEN,
+    DORF,
+    HOLZFAELLER,
+    KELLER,
+    WERKSTATT,
+    SCHMIEDE,
+    MARKT,
+    HEXE,
+    MINE,
+    MILIZ
 }

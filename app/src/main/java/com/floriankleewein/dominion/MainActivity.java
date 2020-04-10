@@ -12,7 +12,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Board board = new Board();
-        board.getActionField().pickCard(ActionType.TYPEONE);
+        board.getActionField().pickCard(ActionType.HEXE);
 
     }
 }
