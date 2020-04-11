@@ -9,16 +9,25 @@ import com.esotericsoftware.kryonet.Server;
 import java.io.IOException;
 
 public class KryoServer {
-Server server;
+    Server server;
 
     public KryoServer() {
         server = new Server();
     }
+
+    public void registerClass(Class regClass) {
+        server.getKryo().register(regClass);
+    }
+
     public void startServer() {
-        server.start();
         try {
+            registerClass(SomeRequest.class);
+            registerClass(SomeResponse.class);
             server.bind(53217, 53217);
+            server.start();
+            Log.d("START SERVER SUC", "startServer: Success!");
         } catch (IOException e) {
+            Log.d("START SERVER EXC", "startServer: Failed! ");
             e.printStackTrace();
         }
         server.addListener(new Listener() {
@@ -33,5 +42,11 @@ Server server;
                 }
             }
         });
+    }
+
+    public void broadcastToClients(SomeResponse response) {
+        for (Connection con : server.getConnections()) {
+            con.sendTCP("UPDATE AN ALLE");
+        }
     }
 }
