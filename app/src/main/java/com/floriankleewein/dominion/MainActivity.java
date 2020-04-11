@@ -15,6 +15,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         btnCon = findViewById(R.id.btn_con);
+        //Server Start
+        KryoServer kserver = new KryoServer();
+        kserver.startServer();
     }
 
     @Override
