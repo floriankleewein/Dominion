@@ -8,9 +8,11 @@ import java.io.IOException;
 
 public class ClientConnector {
     private final String TAG = "CLIENT-CONNECTOR";
+    private static final String SERVER_IP = "143.205.174.196";
+    private static final int SERVER_PORT = 53217;
     private Client client;
 
-    public ClientConnector(){
+    public ClientConnector() {
         this.client = new Client();
     }
 
@@ -23,11 +25,11 @@ public class ClientConnector {
 //        registerClass(SomeRequest.class);
         client.start();
         Log.d(TAG, "connect: To my server");
-        client.connect(5000, "143.205.174.196", 53217, 53217);
-        Log.d(TAG, "connect: Successfull!");
-        MessageClass ms = new MessageClass();
-        ms.setMessage("Hello Server!");
-        client.sendTCP(ms);
+        client.connect(5000, SERVER_IP, SERVER_PORT);
+        Log.d(TAG, "connect: Successful!");
+//        MessageClass ms = new MessageClass();
+//        ms.setMessage("Hello Server!");
+//        client.sendTCP(ms);
     }
 }
 
