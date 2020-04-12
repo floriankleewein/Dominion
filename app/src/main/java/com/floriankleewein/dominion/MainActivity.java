@@ -1,9 +1,11 @@
 package com.floriankleewein.dominion;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
@@ -16,8 +18,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         btnCon = findViewById(R.id.btn_con);
         //Server Start
-        KryoServer kserver = new KryoServer();
-        kserver.startServer();
+//        KryoServer kserver = new KryoServer();
+//        kserver.startServer();
     }
 
     @Override

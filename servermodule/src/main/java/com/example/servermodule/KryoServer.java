@@ -1,4 +1,4 @@
-package com.floriankleewein.dominion;
+package com.example.servermodule;
 
 import android.util.Log;
 
@@ -22,7 +22,7 @@ public class KryoServer {
     public void startServer() {
         try {
             registerClass(SomeRequest.class);
-            registerClass(MessageClass.class);
+            registerClass(SomeResponse.class);
             server.bind(53217, 53217);
             server.start();
             Log.d("START SERVER SUC", "startServer: Success!");
@@ -36,15 +36,15 @@ public class KryoServer {
                     SomeRequest request = (SomeRequest) object;
                     Log.d("RESPONSE", "received: " + object.getClass().getName());
 
-                    MessageClass response = new MessageClass();
-                    response.setMessage("TEST from Server");
+                    SomeResponse response = new SomeResponse();
+                    response.text = "TEST from Server";
                     connection.sendTCP(response);
                 }
             }
         });
     }
 
-    public void broadcastToClients(MessageClass response) {
+    public void broadcastToClients(SomeResponse response) {
         for (Connection con : server.getConnections()) {
             con.sendTCP("UPDATE AN ALLE");
         }

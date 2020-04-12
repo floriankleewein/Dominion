@@ -1,4 +1,4 @@
-package com.floriankleewein.dominion;
+package com.example.servermodule;
 
 class SomeResponse {
    // TODO privacy etc.
