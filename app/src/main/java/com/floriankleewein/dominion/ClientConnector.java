@@ -3,6 +3,8 @@ package com.floriankleewein.dominion;
 import android.util.Log;
 
 import com.esotericsoftware.kryonet.Client;
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
 
 import java.io.IOException;
 
@@ -22,14 +24,22 @@ public class ClientConnector {
 
     public void connect() throws IOException {
         registerClass(MessageClass.class);
-//        registerClass(SomeRequest.class);
         client.start();
         Log.d(TAG, "connect: To my server");
         client.connect(5000, SERVER_IP, SERVER_PORT);
         Log.d(TAG, "connect: Successful!");
-//        MessageClass ms = new MessageClass();
-//        ms.setMessage("Hello Server!");
-//        client.sendTCP(ms);
+        MessageClass ms = new MessageClass();
+        ms.setMessage("Hello Server!");
+        client.sendTCP(ms);
+        client.run();
+        client.addListener(new Listener() {
+            public void received(Connection con, Object object) {
+                if(object instanceof MessageClass) {
+                    MessageClass ms = (MessageClass) object;
+                    Log.d(TAG, "received: " + ms.getMessage());
+                }
+            }
+        });
     }
 }
 
