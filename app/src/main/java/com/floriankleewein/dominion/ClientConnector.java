@@ -23,7 +23,7 @@ public class ClientConnector {
 //        registerClass(SomeRequest.class);
         client.start();
         Log.d(TAG, "connect: To my server");
-        client.connect(5000, "[143.205.174.196", 53217, 53217);
+        client.connect(5000, "143.205.174.196", 53217, 53217);
         Log.d(TAG, "connect: Successfull!");
         MessageClass ms = new MessageClass();
         ms.setMessage("Hello Server!");
