@@ -16,14 +16,18 @@ public class TestServer {
         server = new Server();
     }
 
-    public void startServer() throws IOException {
-        System.out.println("Running Server!");
+    public void startServer() {
+        Log.d(TAG, "Running Server!");
         server.getKryo().register(MessageClass.class);
         server.start();
-        server.bind(8080);
+        try {
+            server.bind(8080);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         server.addListener(new Listener() {
             public void received(Connection con, Object object) {
-                if( object instanceof MessageClass) {
+                if (object instanceof MessageClass) {
                     MessageClass recMessage = (MessageClass) object;
                     Log.d(TAG, "Received: " + recMessage.getMessage());
 

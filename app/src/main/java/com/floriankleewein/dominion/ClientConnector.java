@@ -23,12 +23,16 @@ public class ClientConnector {
         client.getKryo().register(regClass);
     }
 
-    public void connect() throws IOException {
+    public void connect() {
         registerClass(MessageClass.class);
         client.start();
 
         //connects to localtestserver now
-        client.connect(5000, InetAddress.getLocalHost(), 8080);
+        try {
+            client.connect(5000, InetAddress.getLocalHost(), 8080);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         Log.d(TAG, "Connection-Status: " + client.isConnected());
 
         MessageClass ms = new MessageClass();
@@ -37,7 +41,7 @@ public class ClientConnector {
         client.sendTCP(ms);
         client.addListener(new Listener() {
             public void received(Connection con, Object object) {
-                if(object instanceof MessageClass) {
+                if (object instanceof MessageClass) {
                     MessageClass ms = (MessageClass) object;
                     Log.d(TAG, "Received: " + ms.getMessage());
                 }

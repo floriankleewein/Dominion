@@ -10,7 +10,7 @@ import com.floriankleewein.localtestserver.TestServer;
 
 import java.io.IOException;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
 
     Button btnCon;
 
@@ -22,11 +22,8 @@ public class MainActivity extends AppCompatActivity{
 
         //Server Start
         TestServer testServer = new TestServer();
-        try {
-            testServer.startServer();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        testServer.startServer();
+
     }
 
     @Override
@@ -34,16 +31,12 @@ public class MainActivity extends AppCompatActivity{
         super.onStart();
         btnCon.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         ClientConnector temp = new ClientConnector();
-                        try {
-                            temp.connect();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        temp.connect();
                     }
                 }).start();
             }
