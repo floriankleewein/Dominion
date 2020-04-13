@@ -7,6 +7,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 
 import java.io.IOException;
+import java.net.InetAddress;
 
 public class ClientConnector {
     private final String TAG = "CLIENT-CONNECTOR";
@@ -25,7 +26,9 @@ public class ClientConnector {
     public void connect() throws IOException {
         registerClass(MessageClass.class);
         client.start();
-        client.connect(5000, SERVER_IP, SERVER_PORT);
+
+        //connects to localtestserver now
+        client.connect(5000, InetAddress.getLocalHost(), 8080);
         Log.d(TAG, "Connection-Status: " + client.isConnected());
 
         MessageClass ms = new MessageClass();
@@ -36,7 +39,7 @@ public class ClientConnector {
             public void received(Connection con, Object object) {
                 if(object instanceof MessageClass) {
                     MessageClass ms = (MessageClass) object;
-                    Log.d(TAG, "received: " + ms.getMessage());
+                    Log.d(TAG, "Received: " + ms.getMessage());
                 }
             }
         });

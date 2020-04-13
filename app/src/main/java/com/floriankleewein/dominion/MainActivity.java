@@ -6,6 +6,8 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.floriankleewein.localtestserver.TestServer;
+
 import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity{
@@ -17,9 +19,14 @@ public class MainActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         btnCon = findViewById(R.id.btn_con);
+
         //Server Start
-//        KryoServer kserver = new KryoServer();
-//        kserver.startServer();
+        TestServer testServer = new TestServer();
+        try {
+            testServer.startServer();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

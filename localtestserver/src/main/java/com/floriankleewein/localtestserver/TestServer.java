@@ -1,5 +1,7 @@
 package com.floriankleewein.localtestserver;
 
+import android.util.Log;
+
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
@@ -8,6 +10,7 @@ import java.io.IOException;
 
 public class TestServer {
     private Server server;
+    private final String TAG = "TEST-SERVER";
 
     public TestServer() {
         server = new Server();
@@ -22,10 +25,10 @@ public class TestServer {
             public void received(Connection con, Object object) {
                 if( object instanceof MessageClass) {
                     MessageClass recMessage = (MessageClass) object;
-                    System.out.println("Received: " + recMessage.getMessage());
+                    Log.d(TAG, "Received: " + recMessage.getMessage());
 
                     MessageClass sendMessage = new MessageClass();
-                    sendMessage.setMessage("Received Reply: " + recMessage.getMessage() + " from: " +con.getRemoteAddressTCP().getHostString());
+                    sendMessage.setMessage("Hello Client! " + " from: " + con.getRemoteAddressTCP().getHostString());
 
                     con.sendTCP(sendMessage);
                 }
