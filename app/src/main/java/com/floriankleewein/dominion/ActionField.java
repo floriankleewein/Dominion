@@ -27,7 +27,7 @@ public class ActionField {
     }
 
     public Card pickCard(ActionType actionType) {
-        if(actionType == ActionType.TYPEONE) {
+        if(actionType == ActionType.BURGGRABEN) {
             // TODO: Check if card can be picked
         }
         return null;
