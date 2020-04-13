@@ -13,15 +13,22 @@ public class User {
     private String UserEmail;
     private String Password;
     private UserCards userCards;
+    private GamePoints gamePoints;
 
 
-
-    User(String UserName, String UserEmail, String Password){
-
+    User(String UserName, String UserEmail, String Password) {
         this.UserID = ID++;
         this.UserName = UserName;
         this.UserEmail = UserEmail;
         this.Password = Password;
+    }
+
+    public GamePoints getGamePoints() {
+        return gamePoints;
+    }
+
+    public void setGamePoints(GamePoints gamePoints) {
+        this.gamePoints = gamePoints;
     }
 
     public UserCards getUserCards() {

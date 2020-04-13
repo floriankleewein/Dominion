@@ -5,10 +5,12 @@ package com.floriankleewein.dominion.User;
  */
 
 public class GamePoints {
-    int Coins;
-    int WinningPoints;
-    int PlaysAmount;
-    int BuyAmounts;
+
+
+    private int Coins;
+    private int WinningPoints;
+    private int PlaysAmount;
+    private int BuyAmounts;
 
     GamePoints() {
         Coins = 0;
@@ -69,6 +71,39 @@ public class GamePoints {
             this.BuyAmounts -= buyAmounts;
         }
     }
+
+    public int getCoins() {
+        return Coins;
+    }
+
+    public void setCoins(int coins) {
+        Coins = coins;
+    }
+
+    public int getWinningPoints() {
+        return WinningPoints;
+    }
+
+    public void setWinningPoints(int winningPoints) {
+        WinningPoints = winningPoints;
+    }
+
+    public int getPlaysAmount() {
+        return PlaysAmount;
+    }
+
+    public void setPlaysAmount(int playsAmount) {
+        PlaysAmount = playsAmount;
+    }
+
+    public int getBuyAmounts() {
+        return BuyAmounts;
+    }
+
+    public void setBuyAmounts(int buyAmounts) {
+        BuyAmounts = buyAmounts;
+    }
+
 
 }
 
