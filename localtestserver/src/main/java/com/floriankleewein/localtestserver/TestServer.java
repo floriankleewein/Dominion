@@ -1,3 +1,5 @@
+package com.floriankleewein.localtestserver;
+
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;

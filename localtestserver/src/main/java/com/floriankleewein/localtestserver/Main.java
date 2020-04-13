@@ -1,3 +1,5 @@
+package com.floriankleewein.localtestserver;
+
 import java.io.IOException;
 
 public class Main {

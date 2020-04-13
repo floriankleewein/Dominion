@@ -1,3 +1,5 @@
+package com.floriankleewein.localtestserver;
+
 public class MessageClass {
 
     private String message;
