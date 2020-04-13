@@ -25,13 +25,13 @@ public class ClientConnector {
     public void connect() throws IOException {
         registerClass(MessageClass.class);
         client.start();
-        Log.d(TAG, "connect: To my server");
         client.connect(5000, SERVER_IP, SERVER_PORT);
-        Log.d(TAG, "connect: Successful!");
+        Log.d(TAG, "Connection-Status: " + client.isConnected());
+
         MessageClass ms = new MessageClass();
         ms.setMessage("Hello Server!");
+
         client.sendTCP(ms);
-        client.run();
         client.addListener(new Listener() {
             public void received(Connection con, Object object) {
                 if(object instanceof MessageClass) {
