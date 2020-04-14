@@ -19,20 +19,11 @@ public class GamePoints {
         BuyAmounts = 1;
     }
 
-    String getCardType(Object PlayedCard) {
-        String CardType = "";
-        /**
-         * Should return the Type of the Card, so it can decied if it's a Card for Points, coins or action
-         *  Not necessary if the Method underneath will be called in the Cards.
-         */
-        return CardType;
-    }
-
-    void increaseCoins(int amountCoins) {
+    public void increaseCoins(int amountCoins) {
         this.Coins = Coins + amountCoins;
     }
 
-    void decreaseCoins(int amountCoins) {
+    public void decreaseCoins(int amountCoins) {
         if (amountCoins <= this.Coins) {
             this.Coins = Coins - amountCoins;
         }
@@ -41,36 +32,37 @@ public class GamePoints {
          */
     }
 
-    void increaseWinningPoints(int wp) {
+    public void increaseWinningPoints(int wp) {
         this.WinningPoints = WinningPoints + wp;
     }
 
-    void decreaseWinningPoints(int wp) {
+    public void decreaseWinningPoints(int wp) {
         this.WinningPoints = WinningPoints - wp;
         /**
          * No If because WinningPoints CAN be negative!
          */
     }
 
-    void increasePlaysAmount(int playsAmount) {
+    public void increasePlaysAmount(int playsAmount) {
         this.PlaysAmount += playsAmount;
     }
 
-    void decreasePlaysAmount(int playsAmount) {
+    public void decreasePlaysAmount(int playsAmount) {
         if (playsAmount <= this.PlaysAmount) {
             this.PlaysAmount -= playsAmount;
         }
     }
 
-    void increaseBuyAmounts(int buyAmounts) {
+    public void increaseBuyAmounts(int buyAmounts) {
         this.BuyAmounts += buyAmounts;
     }
 
-    void decreaseBuyAmounts(int buyAmounts) {
+    public void decreaseBuyAmounts(int buyAmounts) {
         if (buyAmounts <= this.BuyAmounts) {
             this.BuyAmounts -= buyAmounts;
         }
     }
+
 
     public int getCoins() {
         return Coins;

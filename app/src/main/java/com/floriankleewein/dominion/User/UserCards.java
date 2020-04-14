@@ -31,14 +31,12 @@ public class UserCards {
 
         int decksize = Deck.size();
 
-        for (int i = 0; i < HandCards.size(); i++) {
-            this.DiscardCards.add(HandCards.get(i));
-        }
+        this.DiscardCards.addAll(HandCards);
 
         this.HandCards.clear();
 
         if (decksize < 5) {
-            this.Deck = this.DiscardCards;
+            this.Deck.addAll(DiscardCards);
             shufflesCards();
             this.DiscardCards.clear();
         }
@@ -63,9 +61,7 @@ public class UserCards {
     }
 
     public void putCardsinTheDeck(LinkedList<Object> GivenCards) {
-        /**
-         * For specific ActionCards
-         */
+        this.Deck.addAll(GivenCards);
     }
 
     public void getCard(String cardName) {

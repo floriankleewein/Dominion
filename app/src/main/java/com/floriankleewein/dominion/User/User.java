@@ -7,7 +7,7 @@ package com.floriankleewein.dominion.User;
 
 
 public class User {
-    static long ID;
+    private static long ID;
     private long UserID;
     private String UserName;
     private String UserEmail;
@@ -16,11 +16,16 @@ public class User {
     private GamePoints gamePoints;
 
 
-    User(String UserName, String UserEmail, String Password) {
+    public User(String UserName, String UserEmail, String Password) {
         this.UserID = ID++;
         this.UserName = UserName;
         this.UserEmail = UserEmail;
         this.Password = Password;
+    }
+
+    public void setUpforGame() {
+        this.userCards = new UserCards();
+        this.gamePoints = new GamePoints();
     }
 
     public GamePoints getGamePoints() {
