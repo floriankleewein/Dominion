@@ -20,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         btnCon = findViewById(R.id.btn_con);
 
+
         //Server Start
         TestServer testServer = new TestServer();
         testServer.startServer();
@@ -41,5 +42,10 @@ public class MainActivity extends AppCompatActivity {
                 }).start();
             }
         });
+
+        Board board = new Board();
+        board.getActionField().pickCard(ActionType.BURGGRABEN);
+
+
     }
 }
