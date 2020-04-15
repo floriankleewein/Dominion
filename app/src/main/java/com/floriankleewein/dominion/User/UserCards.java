@@ -3,6 +3,11 @@ package com.floriankleewein.dominion.User;
 import java.util.Collections;
 import java.util.LinkedList;
 
+/**
+ * Class User
+ * The Lists should have the params Card
+ */
+
 public class UserCards {
 
     private LinkedList<Object> Deck;

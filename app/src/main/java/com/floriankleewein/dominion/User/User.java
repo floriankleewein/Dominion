@@ -1,9 +1,6 @@
 package com.floriankleewein.dominion.User;
 
-/**
- * Class User
- * The Lists should have the params Card
- */
+
 
 
 public class User {
@@ -66,6 +63,14 @@ public class User {
 
     public void setUserEmail(String userEmail) {
         UserEmail = userEmail;
+    }
+
+    public String getPassword() {
+        return Password;
+    }
+
+    public void setPassword(String password) {
+        Password = password;
     }
 
 
