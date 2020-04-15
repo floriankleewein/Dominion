@@ -1,6 +1,6 @@
 package UserTests;
 
-import com.floriankleewein.dominion.User.User;
+import com.group7.dominion.User.User;
 
 import org.junit.After;
 import org.junit.Assert;
