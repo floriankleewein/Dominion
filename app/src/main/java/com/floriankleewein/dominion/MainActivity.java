@@ -1,9 +1,13 @@
 package com.floriankleewein.dominion;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.floriankleewein.localtestserver.TestServer;
+
 import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
@@ -15,6 +19,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         btnCon = findViewById(R.id.btn_con);
+
+        //Server Start
+        TestServer testServer = new TestServer();
+        testServer.startServer();
+
     }
 
     @Override
@@ -22,13 +31,14 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         btnCon.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
-                ClientConnector temp = new ClientConnector();
-                try {
-                    temp.connect();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            public void onClick(View v) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ClientConnector temp = new ClientConnector();
+                        temp.connect();
+                    }
+                }).start();
             }
         });
     }
