@@ -2,25 +2,22 @@ package com.floriankleewein.commonclasses;
 
 import com.floriankleewein.commonclasses.User.User;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class Game {
 
-    private List<User> playerList;
-    private static Game game;
-    private int id;
+    private List<User> playerList = new ArrayList<>();
 
+    //hidden class variable for Singleton pattern.
+    private static Game game;
+    //overwriting constructor so it cannot be instanced.
     private Game(){}
 
     public static synchronized Game getGame(){
         if(Game.game == null){
             Game.game = new Game();
-            game.setRandomId();
         }
-        //System.out.println("ID: " + game.id);
-        //TODO: check correct position for the setRandomId() call.
-        //game.setRandomId();
         return Game.game;
     }
 
@@ -33,12 +30,11 @@ public class Game {
     }
 
     public void addPlayer(User user){
-        playerList.add(user);
-    }
+        if(!playerList.contains(user)){
+            playerList.add(user);
+        }else{
+            //TODO: what else when user is already there?
+        }
 
-    public void setRandomId(){
-        id = (int) (Math.random() * 10000);
-        System.out.println("ID: " + game.id);
     }
-
 }

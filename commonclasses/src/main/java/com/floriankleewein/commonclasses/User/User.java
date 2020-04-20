@@ -20,6 +20,11 @@ public class User {
         this.Password = Password;
     }
 
+    //constructor needed for user registration
+    public User(String userName){
+       this.UserName = userName;
+    }
+
     public void setUpforGame() {
         this.userCards = new UserCards();
         this.gamePoints = new GamePoints();

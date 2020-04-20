@@ -13,6 +13,7 @@ public class TestServer {
 
     private Server server;
     private Game game;
+    private boolean hasGame = false;
     private final String TAG = "TEST-SERVER";
 
     public TestServer() {
@@ -23,6 +24,7 @@ public class TestServer {
         Log.d(TAG, "Running Server!");
         server.getKryo().register(MessageClass.class);
         server.start();
+
         try {
             server.bind(8080);
         } catch (IOException e) {
@@ -44,12 +46,18 @@ public class TestServer {
     }
 
     public void startGame(){
-        //TODO: check if game is overwritten when a second player instantiates it.
 
         game = Game.getGame();
-        Log.d("GAME", "hi i am the game.");
+        hasGame = true;
+        Log.d("GAME", "game instanced - started");
     }
 
+    public boolean hasGame(){
+        return hasGame;
+    }
 
+    public Game getGame(){
+        return game;
+    }
 
 }
