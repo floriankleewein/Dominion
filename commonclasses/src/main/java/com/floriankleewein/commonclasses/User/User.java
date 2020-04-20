@@ -1,4 +1,4 @@
-package com.group7.dominion.User;
+package com.floriankleewein.commonclasses.User;
 
 
 

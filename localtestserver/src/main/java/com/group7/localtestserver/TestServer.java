@@ -5,11 +5,14 @@ import android.util.Log;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
+import com.floriankleewein.commonclasses.Game;
 
 import java.io.IOException;
 
 public class TestServer {
+
     private Server server;
+    private Game game;
     private final String TAG = "TEST-SERVER";
 
     public TestServer() {
@@ -39,4 +42,14 @@ public class TestServer {
             }
         });
     }
+
+    public void startGame(){
+        //TODO: check if game is overwritten when a second player instantiates it.
+
+        game = Game.getGame();
+        Log.d("GAME", "hi i am the game.");
+    }
+
+
+
 }

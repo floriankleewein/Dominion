@@ -11,38 +11,49 @@ import com.group7.dominion.Cards.ActionType;
 import com.group7.dominion.Network.ClientConnector;
 import com.group7.localtestserver.TestServer;
 
+
 public class MainActivity extends AppCompatActivity {
 
-    Button btnCon;
+    Button btnCreate, btnCon;
+    TestServer testServer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        btnCreate = findViewById(R.id.btn_create);
         btnCon = findViewById(R.id.btn_con);
 
-
         //Server Start
-        TestServer testServer = new TestServer();
+        testServer = new TestServer();
         testServer.startServer();
-
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+
+        btnCreate.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                testServer.startGame();
+            }
+        });
+
         btnCon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
+                        //setContentView(R.layout.activity_main);
                         ClientConnector temp = new ClientConnector();
                         temp.connect();
                     }
                 }).start();
             }
         });
+
 
         //Board board = new Board();
         //board.getActionField().pickCard(ActionType.BURGGRABEN);
