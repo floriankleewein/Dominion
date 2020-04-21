@@ -1,6 +1,4 @@
-package com.group7.dominion.Network;
-
-import com.group7.dominion.Interfaces.GameInfo;
+package com.group7.localtestserver;
 
 class GameInfo_Imp implements GameInfo {
 

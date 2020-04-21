@@ -1,8 +1,8 @@
 package com.group7.dominion.Network;
 
-import com.group7.dominion.Interfaces.NetworkInfo;
+import com.group7.dominion.Interfaces.NetworkInformation;
 
-public class Network_NetworkInfo implements NetworkInfo {
+public class NetworkInfo_Imp implements NetworkInformation {
     private String message;
     @Override
     public String getMessage() {

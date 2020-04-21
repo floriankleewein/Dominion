@@ -1,6 +1,6 @@
 package com.group7.localtestserver;
 
-public interface NetworkInfo {
+public interface NetworkInformation {
    String getMessage();
    void setMessage(String message);
 }

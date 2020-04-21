@@ -1,4 +1,4 @@
-package com.group7.dominion.Interfaces;
+package com.group7.localtestserver;
 
 public interface GameInfo {
     void updateServer();

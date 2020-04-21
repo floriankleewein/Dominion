@@ -18,7 +18,8 @@ public class TestServer {
 
     public void startServer() {
         Log.d(TAG, "Running Server!");
-        server.getKryo().register(MessageClass.class);
+        server.getKryo().register(NetworkInfo_Imp.class);
+        server.getKryo().register(GameInfo_Imp.class);
         server.start();
         try {
             server.bind(8080);
@@ -27,14 +28,16 @@ public class TestServer {
         }
         server.addListener(new Listener() {
             public void received(Connection con, Object object) {
-                if (object instanceof MessageClass) {
-                    MessageClass recMessage = (MessageClass) object;
+                if (object instanceof NetworkInformation) {
+                    NetworkInformation recMessage = (NetworkInfo_Imp) object;
                     Log.d(TAG, "Received: " + recMessage.getMessage());
 
-                    MessageClass sendMessage = new MessageClass();
+                    NetworkInformation sendMessage = new NetworkInfo_Imp();
                     sendMessage.setMessage("Hello Client! " + " from: " + con.getRemoteAddressTCP().getHostString());
 
                     con.sendTCP(sendMessage);
+                } else if (object instanceof GameInfo_Imp) {
+
                 }
             }
         });

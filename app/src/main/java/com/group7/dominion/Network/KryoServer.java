@@ -5,6 +5,9 @@ import android.util.Log;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
+import com.group7.localtestserver.GameInfo;
+import com.group7.localtestserver.NetworkInfo_Imp;
+import com.group7.localtestserver.NetworkInformation;
 
 import java.io.IOException;
 
@@ -21,8 +24,8 @@ public class KryoServer {
 
     public void startServer() {
         try {
-            registerClass(SomeRequest.class);
-            registerClass(MessageClass.class);
+            registerClass(NetworkInformation.class);
+            registerClass(GameInfo.class);
             server.bind(53217, 53217);
             server.start();
             Log.d("START SERVER SUC", "startServer: Success!");
@@ -32,11 +35,11 @@ public class KryoServer {
         }
         server.addListener(new Listener() {
             public void received(Connection connection, Object object) {
-                if (object instanceof SomeRequest) {
-                    SomeRequest request = (SomeRequest) object;
+                if (object instanceof NetworkInformation) {
+                    NetworkInformation request = (NetworkInfo_Imp) object;
                     Log.d("RESPONSE", "received: " + object.getClass().getName());
 
-                    MessageClass response = new MessageClass();
+                    NetworkInformation response = new NetworkInfo_Imp();
                     response.setMessage("TEST from Server");
                     connection.sendTCP(response);
                 }
@@ -44,9 +47,9 @@ public class KryoServer {
         });
     }
 
-    public void broadcastToClients(MessageClass response) {
+    public void broadcastToClients(NetworkInformation response) {
         for (Connection con : server.getConnections()) {
-            con.sendTCP("UPDATE AN ALLE");
+            con.sendTCP(response);
         }
     }
 }

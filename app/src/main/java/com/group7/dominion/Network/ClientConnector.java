@@ -5,6 +5,7 @@ import android.util.Log;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.group7.dominion.Interfaces.NetworkInformation;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -24,7 +25,8 @@ public class ClientConnector {
     }
 
     public void connect() {
-        registerClass(MessageClass.class);
+        registerClass(NetworkInfo_Imp.class);
+        registerClass(GameInfo_Imp.class);
         client.start();
 
         //connects to localtestserver now
@@ -35,15 +37,17 @@ public class ClientConnector {
         }
         Log.d(TAG, "Connection-Status: " + client.isConnected());
 
-        MessageClass ms = new MessageClass();
-        ms.setMessage("Hello Server!");
-        client.sendTCP(ms);
+        NetworkInformation msg = new NetworkInfo_Imp();
+        msg.setMessage("Hello Server!");
+        client.sendTCP(msg);
 
         client.addListener(new Listener() {
             public void received(Connection con, Object object) {
-                if (object instanceof MessageClass) {
-                    MessageClass ms = (MessageClass) object;
-                    Log.d(TAG, "Received: " + ms.getMessage());
+                if (object instanceof NetworkInformation) {
+                    NetworkInformation rcvMsg = (NetworkInfo_Imp) object;
+                    Log.d(TAG, "Received: " + rcvMsg.getMessage());
+                } else if (object instanceof GameInfo_Imp) {
+
                 }
             }
         });

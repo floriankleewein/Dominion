@@ -1,6 +1,4 @@
-package com.group7.dominion.Network;
-
-import com.group7.dominion.Interfaces.NetworkInformation;
+package com.group7.localtestserver;
 
 public class NetworkInfo_Imp implements NetworkInformation {
     private String message;
