@@ -43,7 +43,7 @@ public class ClientConnector {
             public void received(Connection con, Object object) {
                 if (object instanceof MessageClass) {
                     MessageClass ms = (MessageClass) object;
-                    Log.d(TAG, "Received: " + ms.getMessage());
+                    Log.d(TAG, "Received response: " + ms.getMessage());
                 }
             }
         });

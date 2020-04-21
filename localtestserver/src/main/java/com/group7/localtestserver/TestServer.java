@@ -34,7 +34,7 @@ public class TestServer {
             public void received(Connection con, Object object) {
                 if (object instanceof MessageClass) {
                     MessageClass recMessage = (MessageClass) object;
-                    Log.d(TAG, "Received: " + recMessage.getMessage());
+                    Log.d(TAG, "Received message: " + recMessage.getMessage());
 
                     MessageClass sendMessage = new MessageClass();
                     sendMessage.setMessage("Hello Client! " + " from: " + con.getRemoteAddressTCP().getHostString());

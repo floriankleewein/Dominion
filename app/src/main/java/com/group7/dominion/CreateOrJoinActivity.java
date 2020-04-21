@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -52,6 +53,18 @@ public class CreateOrJoinActivity extends AppCompatActivity {
 
                         ClientConnector temp = new ClientConnector();
                         temp.connect();
+
+                        String userName = getIntent().getStringExtra(MainActivity.EXTRA_MESSAGE);
+                        if(testServer.getGame().checkName(userName)){
+                            User user = new User(userName);
+                            testServer.getGame().addPlayer(user);
+                            Log.d("GAME", "Player " + user.getUserName() + " added to Dominion!");
+                        }else{
+                            //TODO: what to do if playername is already in use?
+                        }
+
+
+
 
                     }
                 }).start();

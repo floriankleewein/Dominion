@@ -1,5 +1,6 @@
 package com.floriankleewein.commonclasses;
 
+
 import com.floriankleewein.commonclasses.User.User;
 
 import java.util.ArrayList;
@@ -30,11 +31,21 @@ public class Game {
     }
 
     public void addPlayer(User user){
-        if(!playerList.contains(user)){
+
+        if(playerList.size() < 5) {
             playerList.add(user);
         }else{
-            //TODO: what else when user is already there?
+            //TODO: what else if playersize is already 4?
         }
 
+    }
+
+    public boolean checkName(String name){
+        for (User user: playerList) {
+            if(user.getUserName().equals(name)){
+                return false;
+            }
+        }
+        return true;
     }
 }
