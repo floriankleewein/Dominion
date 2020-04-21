@@ -10,14 +10,14 @@ import java.io.IOException;
 
 public class TestServer {
     private Server server;
-    private final String TAG = "TEST-SERVER";
+    private final String LogTag = "TEST-SERVER";
 
     public TestServer() {
         server = new Server();
     }
 
     public void startServer() {
-        Log.d(TAG, "Running Server!");
+        Log.d(LogTag, "Running Server!");
         server.getKryo().register(NetworkInfo_Imp.class);
         server.getKryo().register(GameInfo_Imp.class);
         server.start();
@@ -30,7 +30,7 @@ public class TestServer {
             public void received(Connection con, Object object) {
                 if (object instanceof NetworkInformation) {
                     NetworkInformation recMessage = (NetworkInfo_Imp) object;
-                    Log.d(TAG, "Received: " + recMessage.getMessage());
+                    Log.d(LogTag, "Received: " + recMessage.getMessage());
 
                     NetworkInformation sendMessage = new NetworkInfo_Imp();
                     sendMessage.setMessage("Hello Client! " + " from: " + con.getRemoteAddressTCP().getHostString());
@@ -38,7 +38,7 @@ public class TestServer {
                     con.sendTCP(sendMessage);
                 } else if (object instanceof GameInfo_Imp) {
                     GameInfo rcvGameMsg = (GameInfo) object;
-                    Log.d(TAG, "Received: " + rcvGameMsg.getMessage() + " from ");
+                    Log.d(LogTag, "Received: " + rcvGameMsg.getMessage() + " from "); //TODO
                 }
             }
         });
