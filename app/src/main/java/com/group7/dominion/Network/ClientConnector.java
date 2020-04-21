@@ -5,13 +5,14 @@ import android.util.Log;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.group7.dominion.Interfaces.GameInfo;
 import com.group7.dominion.Interfaces.NetworkInformation;
 
 import java.io.IOException;
 import java.net.InetAddress;
 
 public class ClientConnector {
-    private final String TAG = "CLIENT-CONNECTOR";
+    private final String LogTag = "CLIENT-CONNECTOR";
     private static final String SERVER_IP = "143.205.174.196";
     private static final int SERVER_PORT = 53217;
     private Client client;
@@ -35,19 +36,24 @@ public class ClientConnector {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Log.d(TAG, "Connection-Status: " + client.isConnected());
+        Log.d(LogTag, "Connection-Status: " + client.isConnected());
 
         NetworkInformation msg = new NetworkInfo_Imp();
         msg.setMessage("Hello Server!");
         client.sendTCP(msg);
 
+        GameInfo gameMsg = new GameInfo_Imp();
+        gameMsg.setMessage("SPIELZUGINFO EVTL HIER");
+        client.sendTCP(gameMsg);
+
         client.addListener(new Listener() {
             public void received(Connection con, Object object) {
                 if (object instanceof NetworkInformation) {
                     NetworkInformation rcvMsg = (NetworkInfo_Imp) object;
-                    Log.d(TAG, "Received: " + rcvMsg.getMessage());
+                    Log.d(LogTag, "Received: " + rcvMsg.getMessage());
                 } else if (object instanceof GameInfo_Imp) {
-
+                    GameInfo rcvGameMsg = (GameInfo) object;
+                    Log.d(LogTag, "Received: " + rcvGameMsg.getMessage());
                 }
             }
         });

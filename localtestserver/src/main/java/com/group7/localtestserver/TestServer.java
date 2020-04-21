@@ -37,7 +37,8 @@ public class TestServer {
 
                     con.sendTCP(sendMessage);
                 } else if (object instanceof GameInfo_Imp) {
-
+                    GameInfo rcvGameMsg = (GameInfo) object;
+                    Log.d(TAG, "Received: " + rcvGameMsg.getMessage() + " from ");
                 }
             }
         });
