@@ -5,6 +5,8 @@ import com.group7.dominion.Cards.ActionType;
 import com.group7.dominion.Cards.Card;
 import com.group7.dominion.Cards.MoneyCard;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ActionField {
@@ -22,7 +24,8 @@ public class ActionField {
         this.actionCardsToBuy = actionCardsToBuy;
     }
 
-    public void init() {
+    private void init() {
+        this.actionCardsToBuy = new ArrayList<>();
         // Hier sind alle Action Karten definiert => von jeder Karte gibt es 10
         for(int i = 0; i < 10; i++) {
             this.actionCardsToBuy.add(new ActionCard(2, ActionType.KELLER));

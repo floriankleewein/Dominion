@@ -6,8 +6,8 @@ public class ActionCard extends Card {
 
     public ActionCard(int price, ActionType actionType) {
         super(price);
-        this.action = calculateAction();
         this.actionType = actionType;
+        this.action = calculateAction();
     }
 
     public Action getAction() {
@@ -26,7 +26,7 @@ public class ActionCard extends Card {
         this.actionType = actionType;
     }
 
-    public Action calculateAction() {
+    private Action calculateAction() {
         Action action = null;
 
         switch(actionType){

@@ -8,6 +8,7 @@ import com.group7.dominion.Cards.EstateType;
 import com.group7.dominion.Cards.MoneyCard;
 import com.group7.dominion.Cards.MoneyType;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BuyField {
@@ -26,6 +27,7 @@ public class BuyField {
     }
 
     public void init() {
+        this.cardsToBuy = new ArrayList<>();
         // Init List mit Provinzen und Währung
         // 60 x Kupfer, 40 x Silber, 30 x Gold
         for(int i = 0; i < 30; i++) {
