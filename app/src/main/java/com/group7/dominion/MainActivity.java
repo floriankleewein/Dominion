@@ -1,20 +1,16 @@
 package com.group7.dominion;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.floriankleewein.commonclasses.User.User;
-import com.group7.dominion.Board.Board;
-import com.group7.dominion.Cards.ActionType;
 import com.group7.dominion.Network.ClientConnector;
 import com.group7.localtestserver.TestServer;
 
@@ -72,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
                             Log.d("GAME", "Player " + user.getUserName() + " added to Dominion!");
 
                             temp.connect();
-                            startActivity(new Intent(MainActivity.this, CreateOrJoinActivity.class));
+                            startActivity(new Intent(MainActivity.this, startGameActivity.class));
 
                         }else{
 

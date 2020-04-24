@@ -11,7 +11,7 @@ public class User {
     private String Password;
     private UserCards userCards;
     private GamePoints gamePoints;
-
+    private boolean gameCreator = false;
 
     public User(String UserName, String UserEmail, String Password) {
         this.UserID = ID++;
@@ -79,6 +79,13 @@ public class User {
     }
 
 
+    public boolean isGameCreator() {
+        return gameCreator;
+    }
+
+    public void setGameCreator(boolean gameCreator) {
+        this.gameCreator = gameCreator;
+    }
 }
 
 
