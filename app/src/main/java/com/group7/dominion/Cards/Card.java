@@ -4,7 +4,7 @@ import android.widget.ImageButton;
 
 public class Card {
     private int price;
-    //private ImageButton imageButton;
+    private ImageButton imageButton;
 
     public Card(int price) {
         this.price = price;
