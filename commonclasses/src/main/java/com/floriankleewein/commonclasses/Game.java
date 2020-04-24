@@ -31,7 +31,6 @@ public class Game {
     }
 
     public void addPlayer(User user){
-
         if(playerList.size() < 5) {
             playerList.add(user);
         }else{

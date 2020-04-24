@@ -16,25 +16,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/btn_con"
-        android:layout_width="0dp"
-        android:layout_height="45dp"
-        android:layout_marginEnd="60dp"
-        android:layout_marginBottom="100dp"
-        android:text="Connect"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <Button
-        android:id="@+id/btn_create"
-        android:layout_width="0dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="60dp"
-        android:layout_marginBottom="100dp"
-        android:text="Create"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

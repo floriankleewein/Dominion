@@ -16,77 +16,22 @@ import com.group7.localtestserver.TestServer;
 
 public class CreateOrJoinActivity extends AppCompatActivity {
 
-    Button btnCreate, btnCon;
-    TestServer testServer;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_or_join);
-        btnCreate = findViewById(R.id.btn_create);
-        btnCon = findViewById(R.id.btn_con);
-
-        //Server Start
-        testServer = new TestServer();
-        testServer.startServer();
-
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
-        btnCreate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                testServer.startGame();
-                checkButtons();
-            }
-        });
-
-        btnCon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        ClientConnector temp = new ClientConnector();
-                        temp.connect();
-
-                        String userName = getIntent().getStringExtra(MainActivity.EXTRA_MESSAGE);
-                        if(testServer.getGame().checkName(userName)){
-                            User user = new User(userName);
-                            testServer.getGame().addPlayer(user);
-                            Log.d("GAME", "Player " + user.getUserName() + " added to Dominion!");
-                        }else{
-                            //TODO: what to do if playername is already in use?
-                        }
 
 
+        //Intent intent = getIntent();
+        //String msg = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
 
-
-                    }
-                }).start();
-            }
-        });
-
-        Intent intent = getIntent();
-        String msg = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
-
-        TextView textView = findViewById(R.id.testTextView);
-        textView.setText(msg);
-
-        checkButtons();
-    }
-
-    public void checkButtons() {
-        if(testServer.hasGame() == false){
-            btnCreate.setEnabled(true);
-            btnCon.setEnabled(false);
-        }else {
-            btnCreate.setEnabled(false);
-            btnCon.setEnabled(true);
-        }
+        //TextView textView = findViewById(R.id.testTextView);
+        //textView.setText(msg);
     }
 }
