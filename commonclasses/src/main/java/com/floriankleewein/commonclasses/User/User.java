@@ -1,4 +1,4 @@
-package com.group7.dominion.User;
+package com.floriankleewein.commonclasses.User;
 
 
 
@@ -11,13 +11,18 @@ public class User {
     private String Password;
     private UserCards userCards;
     private GamePoints gamePoints;
-
+    private boolean gameCreator = false;
 
     public User(String UserName, String UserEmail, String Password) {
         this.UserID = ID++;
         this.UserName = UserName;
         this.UserEmail = UserEmail;
         this.Password = Password;
+    }
+
+    //constructor needed for user registration
+    public User(String userName){
+       this.UserName = userName;
     }
 
     public void setUpforGame() {
@@ -74,6 +79,13 @@ public class User {
     }
 
 
+    public boolean isGameCreator() {
+        return gameCreator;
+    }
+
+    public void setGameCreator(boolean gameCreator) {
+        this.gameCreator = gameCreator;
+    }
 }
 
 
