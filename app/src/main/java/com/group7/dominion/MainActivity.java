@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.floriankleewein.commonclasses.User.User;
 import com.group7.dominion.Board.Board;
 import com.group7.dominion.Network.ClientConnector;
 import com.group7.localtestserver.TestServer;
