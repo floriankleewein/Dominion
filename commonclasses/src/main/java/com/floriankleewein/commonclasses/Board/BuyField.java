@@ -1,6 +1,6 @@
-package com.group7.dominion.Board;
+package com.floriankleewein.commonclasses.Board;
 
-import com.group7.dominion.Cards.Card;
+import com.floriankleewein.commonclasses.Cards.Card;
 
 import java.util.List;
 

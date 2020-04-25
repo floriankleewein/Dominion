@@ -1,4 +1,4 @@
-package com.group7.dominion.Board;
+package com.floriankleewein.commonclasses.Board;
 
 public class Board {
     private ActionField actionField;

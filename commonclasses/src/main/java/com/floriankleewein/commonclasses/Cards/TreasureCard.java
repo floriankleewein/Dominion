@@ -1,4 +1,4 @@
-package com.group7.dominion.Cards;
+package com.floriankleewein.commonclasses.Cards;
 
 public class TreasureCard extends Card {
     private int worth;
