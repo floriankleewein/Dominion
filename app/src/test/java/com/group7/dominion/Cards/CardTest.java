@@ -1,13 +1,26 @@
 package com.group7.dominion.Cards;
 
+import android.view.ViewGroup;
+import android.widget.ImageButton;
+
+import com.group7.dominion.CardActivity;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.modules.junit4.PowerMockRunner;
 
+import static org.mockito.Mockito.mock;
+
+@RunWith(PowerMockRunner.class)
 public class CardTest {
+    private CardActivity cardActivity;
 
     @BeforeClass
     public static void beforeClass() {
@@ -16,7 +29,7 @@ public class CardTest {
 
     @Before
     public void before() {
-
+        cardActivity = mock(CardActivity.class);
     }
 
     @AfterClass
@@ -31,83 +44,107 @@ public class CardTest {
 
     @Test
     public void testActionCardCalculationAction() {
-        ActionCard actionCard = new ActionCard(1, ActionType.BURGGRABEN);
-        assertActionIntegers(actionCard, 2, 0, 0, 0,0,0);
+        /* TODO: Cannot be tested because there needs to be a mock for method setImageResource in ActionField class
+        ActionCard actionCard = new ActionCard(cardActivity, 1, ActionType.BURGGRABEN);
+        actionCard.init();
+        assertActionIntegers(actionCard, 2, 0, 0, 0, 0, 0);
+        assertActionBooleans(actionCard, false, false, false, false);
+        */
+
+        ActionCard actionCard = new ActionCard(cardActivity, 1, ActionType.DORF);
+        actionCard.init();
+        assertActionIntegers(actionCard, 1, 2, 0, 0, 0, 0);
         assertActionBooleans(actionCard, false, false, false, false);
 
-        actionCard = new ActionCard(1, ActionType.DORF);
-        assertActionIntegers(actionCard, 1, 2, 0, 0,0,0);
+        actionCard = new ActionCard(cardActivity, 1, ActionType.HOLZFAELLER);
+        actionCard.init();
+        assertActionIntegers(actionCard, 0, 0, 1, 0, 0, 1);
         assertActionBooleans(actionCard, false, false, false, false);
 
-        actionCard = new ActionCard(1, ActionType.HOLZFAELLER);
-        assertActionIntegers(actionCard, 0, 0, 1, 0,0,1);
-        assertActionBooleans(actionCard, false, false, false, false);
-
-        actionCard = new ActionCard(1, ActionType.KELLER);
-        assertActionIntegers(actionCard, 0, 1, 0, 0,0,0);
+        actionCard = new ActionCard(cardActivity, 1, ActionType.KELLER);
+        actionCard.init();
+        assertActionIntegers(actionCard, 0, 1, 0, 0, 0, 0);
         assertActionBooleans(actionCard, false, false, true, false);
 
-        actionCard = new ActionCard(1, ActionType.WERKSTATT);
-        assertActionIntegers(actionCard, 1, 0, 0, 0,4,0);
+        actionCard = new ActionCard(cardActivity, 1, ActionType.WERKSTATT);
+        actionCard.init();
+        assertActionIntegers(actionCard, 1, 0, 0, 0, 4, 0);
         assertActionBooleans(actionCard, false, false, false, false);
 
-        actionCard = new ActionCard(1, ActionType.SCHMIEDE);
-        assertActionIntegers(actionCard, 3, 0, 0, 0,0,0);
+        actionCard = new ActionCard(cardActivity, 1, ActionType.SCHMIEDE);
+        actionCard.init();
+        assertActionIntegers(actionCard, 3, 0, 0, 0, 0, 0);
         assertActionBooleans(actionCard, false, false, false, false);
 
-        actionCard = new ActionCard(1, ActionType.MARKT);
-        assertActionIntegers(actionCard, 1, 1, 1, 0,0,1);
+        actionCard = new ActionCard(cardActivity, 1, ActionType.MARKT);
+        actionCard.init();
+        assertActionIntegers(actionCard, 1, 1, 1, 0, 0, 1);
         assertActionBooleans(actionCard, false, false, false, false);
 
-        actionCard = new ActionCard(1, ActionType.HEXE);
-        assertActionIntegers(actionCard, 1, 0, 0, 1,0,0);
+        actionCard = new ActionCard(cardActivity, 1, ActionType.HEXE);
+        actionCard.init();
+        assertActionIntegers(actionCard, 1, 0, 0, 1, 0, 0);
         assertActionBooleans(actionCard, false, false, false, false);
 
-        actionCard = new ActionCard(1, ActionType.MINE);
-        assertActionIntegers(actionCard, -1, 0, 0, 0,0,0);
+        actionCard = new ActionCard(cardActivity, 1, ActionType.MINE);
+        actionCard.init();
+        assertActionIntegers(actionCard, -1, 0, 0, 0, 0, 0);
         assertActionBooleans(actionCard, true, true, false, false);
 
-        actionCard = new ActionCard(1, ActionType.MILIZ);
-        assertActionIntegers(actionCard, 0, 0, 0, 0,0,2);
+        actionCard = new ActionCard(cardActivity, 1, ActionType.MILIZ);
+        actionCard.init();
+        assertActionIntegers(actionCard, 0, 0, 0, 0, 0, 2);
         assertActionBooleans(actionCard, false, false, false, true);
     }
 
     @Test
     public void testCard() {
-        Card card = new Card(1);
+        Card card = new Card(cardActivity, 1);
+
         Assert.assertEquals(1, card.getPrice());
+
         card.setPrice(2);
+
         Assert.assertEquals(2, card.getPrice());
     }
 
     @Test
     public void testActionCard() {
-        Card card = new ActionCard(1, ActionType.KELLER);
-        Assert.assertEquals(ActionType.KELLER, ((ActionCard) card).getActionType());
-        ((ActionCard) card).setActionType(ActionType.BURGGRABEN);
-        Assert.assertEquals(ActionType.BURGGRABEN, ((ActionCard) card).getActionType());
+        ActionCard card = new ActionCard(cardActivity, 1, ActionType.KELLER);
+
+        Assert.assertEquals(ActionType.KELLER, card.getActionType());
+
+        card.setActionType(ActionType.BURGGRABEN);
+
+        Assert.assertEquals(ActionType.BURGGRABEN, card.getActionType());
     }
 
     @Test
     public void testEstateCard() {
-        Card card = new EstateCard(1,1, EstateType.PROVINZ);
-        Assert.assertEquals(1, ((EstateCard) card).getEstateValue());
-        Assert.assertEquals(EstateType.PROVINZ, ((EstateCard) card).getEstateType());
-        ((EstateCard) card).setEstateValue(2);
-        ((EstateCard) card).setEstateType(EstateType.ANWESEN);
-        Assert.assertEquals(2, ((EstateCard) card).getEstateValue());
-        Assert.assertEquals(EstateType.ANWESEN, ((EstateCard) card).getEstateType());
+        EstateCard card = new EstateCard(cardActivity, 1, 1, EstateType.PROVINZ);
+
+        Assert.assertEquals(1, card.getEstateValue());
+        Assert.assertEquals(EstateType.PROVINZ, card.getEstateType());
+
+        card.setEstateValue(2);
+        card.setEstateType(EstateType.ANWESEN);
+
+        Assert.assertEquals(2, card.getEstateValue());
+        Assert.assertEquals(EstateType.ANWESEN, card.getEstateType());
     }
 
     @Test
     public void testMoneyCard() {
-        Card card = new MoneyCard(1,1, MoneyType.GOLD);
-        Assert.assertEquals(1, ((MoneyCard) card).getWorth());
-        Assert.assertEquals(MoneyType.GOLD, ((MoneyCard) card).getMoneyType());
-        ((MoneyCard) card).setWorth(2);
-        ((MoneyCard) card).setMoneyType(MoneyType.KUPFER);
-        Assert.assertEquals(2, ((MoneyCard) card).getWorth());
-        Assert.assertEquals(MoneyType.KUPFER, ((MoneyCard) card).getMoneyType());
+        MoneyCard card = new MoneyCard(cardActivity, 1, 1, MoneyType.GOLD);
+
+        Assert.assertEquals(1, card.getWorth());
+        Assert.assertEquals(MoneyType.GOLD, card.getMoneyType());
+
+        card.setWorth(2);
+        card.setMoneyType(MoneyType.KUPFER);
+
+        Assert.assertEquals(2, card.getWorth());
+        Assert.assertEquals(MoneyType.KUPFER, card.getMoneyType());
     }
 
     private void assertActionIntegers(ActionCard actionCard,

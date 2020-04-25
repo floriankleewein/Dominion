@@ -1,19 +1,20 @@
 package com.group7.dominion.Board;
 
+import com.group7.dominion.CardActivity;
 import com.group7.dominion.Cards.ActionCard;
 import com.group7.dominion.Cards.ActionType;
 import com.group7.dominion.Cards.Card;
-import com.group7.dominion.Cards.MoneyCard;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ActionField {
     private List<Card> actionCardsToBuy;
+    private CardActivity cardActivity;
 
-    public ActionField() {
-        init();
+    public ActionField(CardActivity cardActivity) {
+        this.cardActivity = cardActivity;
+        initCards();
     }
 
     public List<Card> getActionCardsToBuy() {
@@ -24,20 +25,30 @@ public class ActionField {
         this.actionCardsToBuy = actionCardsToBuy;
     }
 
-    private void init() {
+    public void initCardTypesAndButtonImages() {
+        for(Card card: this.actionCardsToBuy) {
+            if(card instanceof ActionCard){
+                ActionCard actionCard = (ActionCard) card;
+                actionCard.initImageButton();
+                actionCard.init();
+            }
+        }
+    }
+
+    private void initCards() {
         this.actionCardsToBuy = new ArrayList<>();
         // Hier sind alle Action Karten definiert => von jeder Karte gibt es 10
         for(int i = 0; i < 10; i++) {
-            this.actionCardsToBuy.add(new ActionCard(2, ActionType.KELLER));
-            this.actionCardsToBuy.add(new ActionCard(2, ActionType.BURGGRABEN));
-            this.actionCardsToBuy.add(new ActionCard(3, ActionType.DORF));
-            this.actionCardsToBuy.add(new ActionCard(3, ActionType.WERKSTATT));
-            this.actionCardsToBuy.add(new ActionCard(3, ActionType.HOLZFAELLER));
-            this.actionCardsToBuy.add(new ActionCard(4, ActionType.SCHMIEDE));
-            this.actionCardsToBuy.add(new ActionCard(4, ActionType.HEXE));
-            this.actionCardsToBuy.add(new ActionCard(4, ActionType.MILIZ));
-            this.actionCardsToBuy.add(new ActionCard(5, ActionType.MARKT));
-            this.actionCardsToBuy.add(new ActionCard(5, ActionType.MINE));
+            this.actionCardsToBuy.add(new ActionCard(cardActivity,2, ActionType.KELLER));
+            this.actionCardsToBuy.add(new ActionCard(cardActivity,2, ActionType.BURGGRABEN));
+            this.actionCardsToBuy.add(new ActionCard(cardActivity,3, ActionType.DORF));
+            this.actionCardsToBuy.add(new ActionCard(cardActivity,3, ActionType.WERKSTATT));
+            this.actionCardsToBuy.add(new ActionCard(cardActivity,3, ActionType.HOLZFAELLER));
+            this.actionCardsToBuy.add(new ActionCard(cardActivity,4, ActionType.SCHMIEDE));
+            this.actionCardsToBuy.add(new ActionCard(cardActivity,4, ActionType.HEXE));
+            this.actionCardsToBuy.add(new ActionCard(cardActivity,4, ActionType.MILIZ));
+            this.actionCardsToBuy.add(new ActionCard(cardActivity,5, ActionType.MARKT));
+            this.actionCardsToBuy.add(new ActionCard(cardActivity,5, ActionType.MINE));
         }
     }
 
