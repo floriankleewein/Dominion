@@ -2,10 +2,12 @@ package com.group7.dominion.Cards;
 
 public class EstateCard extends Card {
     private int estateValue;
+    private EstateType estateType;
 
-    public EstateCard(int value, int estateValue, int numberOfCards) {
-        super(value, numberOfCards);
+    public EstateCard(int price, int estateValue, EstateType estateType) {
+        super(price);
         this.estateValue = estateValue;
+        this.estateType = estateType;
     }
 
     public int getEstateValue() {
@@ -16,5 +18,11 @@ public class EstateCard extends Card {
         this.estateValue = estateValue;
     }
 
-    // je Provinz 12 Karten
+    public EstateType getEstateType() {
+        return estateType;
+    }
+
+    public void setEstateType(EstateType estateType) {
+        this.estateType = estateType;
+    }
 }
