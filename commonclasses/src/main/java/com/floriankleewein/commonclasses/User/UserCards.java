@@ -1,4 +1,4 @@
-package com.group7.dominion.User;
+package com.floriankleewein.commonclasses.User;
 
 import com.group7.dominion.Board.ActionField;
 import com.group7.dominion.Cards.Action;

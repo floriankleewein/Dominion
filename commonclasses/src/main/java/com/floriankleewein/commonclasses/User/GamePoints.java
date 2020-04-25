@@ -1,4 +1,4 @@
-package com.group7.dominion.User;
+package com.floriankleewein.commonclasses.User;
 
 /**
  * Class that manage the points for a Player. Every Param can be increased and decreased. Those Methods should be called in the Class "Card"!
