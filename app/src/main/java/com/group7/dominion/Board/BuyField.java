@@ -1,7 +1,7 @@
 package com.group7.dominion.Board;
 
-import com.group7.dominion.CardActivity;
 import com.group7.dominion.Cards.ActionCard;
+import com.group7.dominion.Cards.ActionType;
 import com.group7.dominion.Cards.Card;
 import com.group7.dominion.Cards.EstateCard;
 import com.group7.dominion.Cards.EstateType;
@@ -13,11 +13,9 @@ import java.util.List;
 
 public class BuyField {
     private List<Card> cardsToBuy;
-    private CardActivity cardActivity;
 
-    public BuyField(CardActivity cardActivity) {
-        this.cardActivity = cardActivity;
-        initCards();
+    public BuyField() {
+        init();
     }
 
     public List<Card> getCardsToBuy() {
@@ -28,44 +26,29 @@ public class BuyField {
         this.cardsToBuy = cardsToBuy;
     }
 
-    public void initCardTypesAndButtonImages() {
-        for(Card card: this.cardsToBuy) {
-            if(card instanceof MoneyCard){
-                MoneyCard moneyCard = (MoneyCard) card;
-                moneyCard.initImageButton();
-                moneyCard.init();
-            }
-            if(card instanceof EstateCard){
-                EstateCard estateCard = (EstateCard) card;
-                estateCard.initImageButton();
-                estateCard.init();
-            }
-        }
-    }
-
-    private void initCards() {
+    public void init() {
         this.cardsToBuy = new ArrayList<>();
         // Init List mit Provinzen und Währung
         // 60 x Kupfer, 40 x Silber, 30 x Gold
         for(int i = 0; i < 30; i++) {
             // Gold
-            this.cardsToBuy.add(new MoneyCard(cardActivity, 6, 3, MoneyType.GOLD));
+            this.cardsToBuy.add(new MoneyCard(6, 3, MoneyType.GOLD));
         }
         for(int i = 0; i <40; i++) {
             // Silber
-            this.cardsToBuy.add(new MoneyCard(cardActivity,3, 2, MoneyType.SILBER));
+            this.cardsToBuy.add(new MoneyCard(3, 2, MoneyType.SILBER));
         }
         for(int i = 0; i <60; i++) {
             // Kupfer
-            this.cardsToBuy.add(new MoneyCard(cardActivity,0, 1, MoneyType.KUPFER));
+            this.cardsToBuy.add(new MoneyCard(0, 1, MoneyType.KUPFER));
         }
 
         // je Provinz 12 Karten
         for(int i = 0; i <12; i++) {
-            this.cardsToBuy.add(new EstateCard(cardActivity,8, 6, EstateType.PROVINZ));
-            this.cardsToBuy.add(new EstateCard(cardActivity,5, 3, EstateType.HERZOGTUM));
-            this.cardsToBuy.add(new EstateCard(cardActivity,2, 1, EstateType.ANWESEN));
-            this.cardsToBuy.add(new EstateCard(cardActivity,0, -1, EstateType.FLUCH));
+            this.cardsToBuy.add(new EstateCard(8, 6, EstateType.PROVINZ));
+            this.cardsToBuy.add(new EstateCard(5, 3, EstateType.HERZOGTUM));
+            this.cardsToBuy.add(new EstateCard(2, 1, EstateType.ANWESEN));
+            this.cardsToBuy.add(new EstateCard(0, -1, EstateType.FLUCH));
         }
     }
 

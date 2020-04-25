@@ -1,18 +1,12 @@
 package com.group7.dominion.Cards;
 
-import com.group7.dominion.CardActivity;
-import com.group7.dominion.R;
-
 public class ActionCard extends Card {
     private Action action;
     private ActionType actionType;
 
-    public ActionCard(CardActivity cardActivity, int price, ActionType actionType) {
-        super(cardActivity, price);
+    public ActionCard(int price, ActionType actionType) {
+        super(price);
         this.actionType = actionType;
-    }
-
-    public void init() {
         this.action = calculateAction();
     }
 
@@ -32,16 +26,11 @@ public class ActionCard extends Card {
         this.actionType = actionType;
     }
 
-    private void setImageResource(int id) {
-        getImageButton().setImageResource(id);
-    }
-
     private Action calculateAction() {
         Action action = null;
 
         switch(actionType){
             case BURGGRABEN:
-                setImageResource(R.drawable.burggraben);
                 action = new Action();
                 action.setCardCount(2);
                 action.setThrowEveryUserCardsUntilThreeLeft(false); // Da die einzige Angriffskarte die Miliz ist hat diese keine Wirkung auf den Spieler und somit muss der boolean für diesen Spieler false sein
@@ -49,7 +38,6 @@ public class ActionCard extends Card {
                 break;
 
             case DORF:
-                //setImageResource(R.drawable.dorf);
                 action = new Action();
                 action.setCardCount(1);
                 action.setActionCount(2);
@@ -57,7 +45,6 @@ public class ActionCard extends Card {
                 break;
 
             case HOLZFAELLER:
-                //setImageResource(R.drawable.holzfaeller);
                 action = new Action();
                 action.setBuyCount(1);
                 action.setMoneyValue(1);
@@ -65,7 +52,6 @@ public class ActionCard extends Card {
                 break;
 
             case KELLER: //
-                //setImageResource(R.drawable.keller);
                 action = new Action();
                 action.setActionCount(1);
                 action.setThrowAnyAmountCards(true); // Maximale Anzahl an Handkarten kann hier abgelegt werden => Input für den User der auf diese Anzahl begrenzt
@@ -74,7 +60,6 @@ public class ActionCard extends Card {
                 break;
 
             case WERKSTATT: //
-                //setImageResource(R.drawable.werkstatt);
                 action = new Action();
                 action.setCardCount(1);
                 action.setMaxMoneyValue(4);
@@ -82,14 +67,12 @@ public class ActionCard extends Card {
                 break;
 
             case SCHMIEDE:
-                //setImageResource(R.drawable.schmiede);
                 action = new Action();
                 action.setCardCount(3);
                 // +3 Karten
                 break;
 
             case MARKT:
-                //setImageResource(R.drawable.markt);
                 action = new Action();
                 action.setCardCount(1);
                 action.setActionCount(1);
@@ -99,7 +82,6 @@ public class ActionCard extends Card {
                 break;
 
             case HEXE: //
-                //setImageResource(R.drawable.hexe);
                 action = new Action();
                 action.setCardCount(1);
                 action.setCurseCount(1);
@@ -107,7 +89,6 @@ public class ActionCard extends Card {
                 break;
 
             case MINE: //
-                //setImageResource(R.drawable.mine);
                 action = new Action();
                 action.setCardCount(-1);
                 action.setTakeMoneyCardThatCostThreeMoreThanOld(true);
@@ -118,7 +99,6 @@ public class ActionCard extends Card {
                 break;
 
             case MILIZ: // Miliz ist eine Angriffskarte
-                //setImageResource(R.drawable.miliz);
                 action = new Action();
                 action.setMoneyValue(2);
                 action.setThrowEveryUserCardsUntilThreeLeft(true);

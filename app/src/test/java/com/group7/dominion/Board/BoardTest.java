@@ -1,11 +1,5 @@
 package com.group7.dominion.Board;
 
-import android.app.ActionBar;
-import android.content.Context;
-import android.view.ViewGroup;
-import android.widget.ImageButton;
-
-import com.group7.dominion.CardActivity;
 import com.group7.dominion.Cards.ActionCard;
 import com.group7.dominion.Cards.ActionType;
 import com.group7.dominion.Cards.Card;
@@ -21,17 +15,11 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mockito;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.util.List;
 
-@RunWith(PowerMockRunner.class)
 public class BoardTest {
     private Board board;
-    private CardActivity cardActivity;
 
     @BeforeClass
     public static void beforeClass() {
@@ -39,10 +27,8 @@ public class BoardTest {
     }
 
     @Before
-    public void before() throws Exception {
-        cardActivity = Mockito.mock(CardActivity.class);
-        board = new Board(cardActivity);
-        //board.init();
+    public void before() {
+        board = new Board();
     }
 
     @AfterClass
@@ -92,7 +78,7 @@ public class BoardTest {
 
         Assert.assertEquals(142, cardsToBuy.size());
 
-        cardsToBuy.add(new MoneyCard(cardActivity,0, 1, MoneyType.KUPFER));
+        cardsToBuy.add(new MoneyCard(0, 1, MoneyType.KUPFER));
         assertMoneyCardType(cardsToBuy, MoneyType.GOLD, 6, 3);
         assertMoneyCardType(cardsToBuy, MoneyType.SILBER, 3, 2);
         assertMoneyCardType(cardsToBuy, MoneyType.KUPFER, 0, 1);

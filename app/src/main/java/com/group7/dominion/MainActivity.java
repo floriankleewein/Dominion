@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //board = new Board();
+        board = new Board();
         //UserCards userCards = new UserCards(this);
     }
 
