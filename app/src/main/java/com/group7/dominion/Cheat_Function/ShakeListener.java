@@ -37,7 +37,7 @@ public class ShakeListener {
 
 
                 acelLast = acelVal;
-                acelVal = (float) Math.sqrt( (x * x + y * y + z * z));
+                acelVal = (float) Math.sqrt((x * x + y * y + z * z));
                 float delta = acelVal - acelLast;
                 shake = shake * 0.9f + delta;
 
