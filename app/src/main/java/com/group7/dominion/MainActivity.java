@@ -1,6 +1,8 @@
 package com.group7.dominion;
 
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.floriankleewein.commonclasses.Board.Board;
 import com.floriankleewein.commonclasses.User.User;
+import com.group7.dominion.CheatFunction.ShakeListener;
 import com.group7.dominion.Network.ClientConnector;
 import com.group7.localtestserver.TestServer;
 
@@ -21,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
     Button btnCreate, btnCon;
     TestServer testServer;
     private Board board;
+    SensorManager sm;
+    ShakeListener shakeListener;
 
     //TODO: change this
     public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
@@ -36,6 +41,12 @@ public class MainActivity extends AppCompatActivity {
 
         btnCreate = findViewById(R.id.btn_create);
         btnCon = findViewById(R.id.btn_con);
+
+
+        //Start Shake Listener
+        shakeListener = new ShakeListener(getSupportFragmentManager());
+        sm = (SensorManager) getSystemService(SENSOR_SERVICE);
+        sm.registerListener(shakeListener.newSensorListener(), sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
 
     }
 
@@ -63,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
 
                         EditText editText = findViewById(R.id.inputName);
                         String userName = editText.getText().toString();
-                        if(testServer.getGame().checkName(userName)){
+                        if (testServer.getGame().checkName(userName)) {
                             User user = new User(userName);
                             testServer.getGame().addPlayer(user);
                             Log.d("GAME", "Player " + user.getUserName() + " added to Dominion!");
@@ -71,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
                             temp.connect();
                             startActivity(new Intent(MainActivity.this, startGameActivity.class));
 
-                        }else{
+                        } else {
 
                             runOnUiThread(new Runnable() {
                                 @Override
@@ -81,7 +92,6 @@ public class MainActivity extends AppCompatActivity {
                                     textView.setText("Name nicht verfügbar. Bitte wähle einen anderen!");
                                 }
                             });
-
 
 
                             Log.d("GAME", "ERROR: Player " + userName + " already exists!");
@@ -106,10 +116,10 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void checkButtons() {
-        if(testServer.hasGame() == false){
+        if (testServer.hasGame() == false) {
             btnCreate.setEnabled(true);
             btnCon.setEnabled(false);
-        }else {
+        } else {
             btnCreate.setEnabled(false);
             btnCon.setEnabled(true);
         }
