@@ -14,15 +14,7 @@ public class Board {
         return actionField;
     }
 
-    public void setActionField(ActionField actionField) {
-        this.actionField = actionField;
-    }
-
     public BuyField getBuyField() {
         return buyField;
-    }
-
-    public void setBuyField(BuyField buyField) {
-        this.buyField = buyField;
     }
 }

@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.floriankleewein.commonclasses.Board.Board;
 import com.floriankleewein.commonclasses.User.User;
 import com.group7.dominion.Network.ClientConnector;
 import com.group7.localtestserver.TestServer;
@@ -19,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
     Button btnCreate, btnCon;
     TestServer testServer;
-
+    private Board board;
 
     //TODO: change this
     public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
@@ -112,5 +113,9 @@ public class MainActivity extends AppCompatActivity {
             btnCreate.setEnabled(false);
             btnCon.setEnabled(true);
         }
+    }
+
+    public Board getBoard() {
+        return board;
     }
 }
