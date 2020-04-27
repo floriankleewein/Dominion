@@ -5,11 +5,16 @@ repositories {
 }
 
 jar {
-
+    manifest {
+        attributes(
+                'Main-Class': 'com.group7.Main'
+        )
+    }
     from {
         configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
     }
 }
+
 
 sourceCompatibility = 1.8
 

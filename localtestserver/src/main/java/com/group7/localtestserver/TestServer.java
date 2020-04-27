@@ -1,6 +1,5 @@
 package com.group7.localtestserver;
 
-import android.util.Log;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -23,7 +22,7 @@ public class TestServer {
     }
 
     public void startServer() {
-        Log.d(Tag, "Running Server!");
+        System.out.println(Tag + ", Running Server!");
         registerClass(MessageClass.class);
         registerClass(Game_Information.class);
         registerClass(Network_Information.class);
@@ -38,7 +37,7 @@ public class TestServer {
             public void received(Connection con, Object object) {
                 if (object instanceof MessageClass) {
                     MessageClass recMessage = (MessageClass) object;
-                    Log.d(Tag, "Received message: " + recMessage.getMessage());
+                    System.out.println(Tag + ", Received Message " + recMessage.getMessage());
 
                     MessageClass sendMessage = new MessageClass();
                     sendMessage.setMessage("Hello Client! " + " from: " + con.getRemoteAddressTCP().getHostString());
@@ -57,7 +56,7 @@ public class TestServer {
 
         game = Game.getGame();
         hasGame = true;
-        Log.d("GAME", "game instanced - started");
+        System.out.println("GAME, game instanced - started");
     }
 
     public boolean hasGame() {
