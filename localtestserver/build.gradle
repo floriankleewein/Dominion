@@ -26,7 +26,11 @@ task fatJar(type: Jar) {
 }
 
 sourceCompatibility = 1.8
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
+if (!hasProperty('mainClass')) {
+    ext.mainClass = 'com.group7.localtestserver.Main'
+}
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
