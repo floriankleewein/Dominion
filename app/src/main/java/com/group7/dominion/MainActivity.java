@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                testServer.startGame();
+                testServer.startGame(); // send to server -> start game
                 checkButtons();
             }
         });
