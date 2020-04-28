@@ -47,4 +47,8 @@ public class Game {
         }
         return true;
     }
+
+    public int getPlayerNumber(){
+        return game.playerList.size();
+    }
 }

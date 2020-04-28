@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
 
                         ClientConnector temp = new ClientConnector();
-
+                        //TODO: get rid of logic here!! Service
                         EditText editText = findViewById(R.id.inputName);
                         String userName = editText.getText().toString();
                         if (testServer.getGame().checkName(userName)) {
