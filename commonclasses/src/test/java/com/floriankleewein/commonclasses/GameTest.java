@@ -14,13 +14,11 @@ public class GameTest {
 
     private Game game;
     private User user1;
-    //private User user2;
 
     @Before
     public void setupGame() {
         game = Game.getGame();
         user1 = new User("testName1");
-        //user2 = new User("testName2");
     }
 
     @Test
@@ -66,7 +64,7 @@ public class GameTest {
         game.addPlayer(new User("b"));
         game.addPlayer(new User("c"));
         game.addPlayer(new User("d"));
-        Assert.assertEquals(false, game.addPlayer(new User("e")));
+        Assert.assertEquals(false, game.addPlayer(user1));
     }
 
     @Test
