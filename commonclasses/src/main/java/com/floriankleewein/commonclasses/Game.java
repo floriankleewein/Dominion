@@ -31,12 +31,13 @@ public class Game {
     }
 
     public void addPlayer(User user){
-        if(playerList.size() < 5) {
-            playerList.add(user);
-        }else{
-            //TODO: what else if playersize is already 4?
+        if(checkName(user.getUserName())) {
+            if (checkSize()) {
+                playerList.add(user);
+            } else {
+                //TODO: what else if playersize is already 4?
+            }
         }
-
     }
 
     public boolean checkName(String name){
@@ -46,6 +47,13 @@ public class Game {
             }
         }
         return true;
+    }
+
+    public boolean checkSize(){
+        if(getPlayerNumber() < 4){
+            return true;
+        }
+        return false;
     }
 
     public int getPlayerNumber(){
