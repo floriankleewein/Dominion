@@ -62,7 +62,16 @@ public class GameTest {
 
     @Test
     public void testAddPlayer2(){
-        //TODO: check what happens when player size is already 4!
+        game.addPlayer(new User("a"));
+        game.addPlayer(new User("b"));
+        game.addPlayer(new User("c"));
+        game.addPlayer(new User("d"));
+        Assert.assertEquals(false, game.addPlayer(new User("e")));
+    }
+
+    @Test
+    public void testAddPlayer3(){
+        Assert.assertEquals(true, game.addPlayer(user1));
     }
 
     @After

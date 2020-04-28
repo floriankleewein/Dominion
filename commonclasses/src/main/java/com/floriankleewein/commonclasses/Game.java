@@ -30,14 +30,14 @@ public class Game {
         this.playerList = playerList;
     }
 
-    public void addPlayer(User user){
+    public boolean addPlayer(User user){
         if(checkName(user.getUserName())) {
             if (checkSize()) {
                 playerList.add(user);
-            } else {
-                //TODO: what else if playersize is already 4?
+                return true;
             }
         }
+        return false;
     }
 
     public boolean checkName(String name){
