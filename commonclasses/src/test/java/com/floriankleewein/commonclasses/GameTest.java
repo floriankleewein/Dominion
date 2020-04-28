@@ -7,6 +7,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+
 
 public class GameTest {
 
@@ -53,8 +55,11 @@ public class GameTest {
 
     @After
     public void setNull() {
+        this.game.setPlayerList(new ArrayList<>());
         this.game = null;
         this.user1 = null;
+
+
         //this.user2 = null;
     }
 
