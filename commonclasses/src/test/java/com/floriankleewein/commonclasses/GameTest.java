@@ -40,6 +40,20 @@ public class GameTest {
     }
 
     @Test
+    public void testCheckSize1(){
+        Assert.assertEquals(true, game.checkSize());
+    }
+
+    @Test
+    public void testCheckSize2(){
+        game.addPlayer(new User("a"));
+        game.addPlayer(new User("b"));
+        game.addPlayer(new User("c"));
+        game.addPlayer(new User("d"));
+        Assert.assertEquals(false, game.checkSize());
+    }
+
+    @Test
     public void testAddPlayer1(){
         Assert.assertEquals(0, game.getPlayerNumber());
         game.addPlayer(user1);
@@ -51,16 +65,11 @@ public class GameTest {
         //TODO: check what happens when player size is already 4!
     }
 
-
-
     @After
     public void setNull() {
         this.game.setPlayerList(new ArrayList<>());
         this.game = null;
         this.user1 = null;
-
-
-        //this.user2 = null;
     }
 
 
