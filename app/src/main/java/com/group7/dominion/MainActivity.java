@@ -71,12 +71,13 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
 
                         ClientConnector temp = new ClientConnector();
-
+                        //TODO: get rid of logic here!! Service
                         EditText editText = findViewById(R.id.inputName);
                         String userName = editText.getText().toString();
-                        if (testServer.getGame().checkName(userName)) {
-                            User user = new User(userName);
-                            testServer.getGame().addPlayer(user);
+                        User user = new User(userName);
+
+                        if (testServer.getGame().addPlayer(user)) {
+
                             Log.d("GAME", "Player " + user.getUserName() + " added to Dominion!");
 
                             temp.connect();
