@@ -18,11 +18,21 @@ import com.group7.localtestserver.TestServer;
 
 public class startGameActivity extends AppCompatActivity {
 
+    private Button startGame;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_or_join);
         ListView playerNamesListView = findViewById(R.id.playerNamesListView);
+
+        startGame = findViewById(R.id.startGame);
+        startGame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startGame();
+            }
+        });
 
         /*ArrayAdapter<User> arrayAdapter
                 = new ArrayAdapter<User>(this, android.R.layout.simple_list_item_1 , );*/
@@ -41,4 +51,11 @@ public class startGameActivity extends AppCompatActivity {
         //TextView textView = findViewById(R.id.testTextView);
         //textView.setText(msg);
     }
+
+
+    public void startGame() {
+        Intent intent = new Intent(this, GameActivity.class);
+        startActivity(intent);
+    }
+
 }
