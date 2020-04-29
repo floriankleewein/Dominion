@@ -1,4 +1,4 @@
-package com.group7.dominion.User;
+package com.floriankleewein.commonclasses.User;
 
 import java.util.Collections;
 import java.util.LinkedList;

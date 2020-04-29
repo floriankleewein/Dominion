@@ -1,3 +1,4 @@
 rootProject.name='Dominion'
 include ':app'
 include ':localtestserver'
+include ':commonclasses'
