@@ -7,6 +7,7 @@ import com.esotericsoftware.kryonet.Server;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.Network.Game_Information;
 import com.floriankleewein.commonclasses.Network.Network_Information;
+import com.floriankleewein.commonclasses.Network.Start_Game;
 
 import java.io.IOException;
 
@@ -47,6 +48,10 @@ public class TestServer {
                 }
                 else if(object instanceof Start_Game){
                     startGame();
+                    Start_Game startGameMsg = (Start_Game) object;
+                    startGameMsg.setGame(getGame());
+                    startGameMsg.setHasGame(hasGame());
+                    con.sendTCP(startGameMsg);
                 }
 
 

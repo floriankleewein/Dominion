@@ -7,6 +7,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.floriankleewein.commonclasses.Network.Game_Information;
 import com.floriankleewein.commonclasses.Network.Network_Information;
+import com.floriankleewein.commonclasses.Network.Start_Game;
 
 import java.io.IOException;
 
@@ -28,6 +29,7 @@ public class ClientConnector {
         registerClass(MessageClass.class);
         registerClass(Game_Information.class);
         registerClass(Network_Information.class);
+        registerClass(Start_Game.class);
         client.start();
 
         //connects aau server
@@ -54,6 +56,10 @@ public class ClientConnector {
 
 
 
+
+    }
+
+    public void startGame() {
 
     }
 }

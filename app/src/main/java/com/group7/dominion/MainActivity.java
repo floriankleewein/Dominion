@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private Board board;
     SensorManager sm;
     ShakeListener shakeListener;
+    ClientConnector client;
 
     //TODO: change this
     public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
@@ -48,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
         sm = (SensorManager) getSystemService(SENSOR_SERVICE);
         sm.registerListener(shakeListener.newSensorListener(), sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
 
+        client = new ClientConnector();
+        client.connect();
     }
 
     @Override
@@ -58,7 +61,8 @@ public class MainActivity extends AppCompatActivity {
         btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                testServer.startGame(); // send to server -> start game
+                //testServer.startGame(); // send to server -> start game
+                client.startGame();
                 checkButtons();
             }
         });
@@ -70,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
 
-                        ClientConnector temp = new ClientConnector();
+
                         //TODO: get rid of logic here!! Service
                         EditText editText = findViewById(R.id.inputName);
                         String userName = editText.getText().toString();
@@ -80,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
 
                             Log.d("GAME", "Player " + user.getUserName() + " added to Dominion!");
 
-                            temp.connect();
+                            //temp.connect();
                             startActivity(new Intent(MainActivity.this, startGameActivity.class));
 
                         } else {
