@@ -17,7 +17,7 @@ public class ClientConnector {
     private static final String SERVER_IP = "143.205.174.196";
     private static final int SERVER_PORT = 53217;
     private Client client;
-    private boolean connectedToGame = false;
+    private boolean hasGame = false;
 
 
     public ClientConnector() {
@@ -65,7 +65,7 @@ public class ClientConnector {
             public void received(Connection con, Object object) {
                 if (object instanceof StartGameMsg) {
                     StartGameMsg recStartMsg = (StartGameMsg) object;
-                    connectedToGame = recStartMsg.isHasGame();
+                    hasGame = recStartMsg.isHasGame();
                     Log.d(Tag, "Created/Received Game.");
                 }
             }
@@ -90,8 +90,8 @@ public class ClientConnector {
         });
     }
 
-    public boolean isConnectedToGame() {
-        return connectedToGame;
+    public boolean hasGame() {
+        return hasGame;
     }
 }
 
