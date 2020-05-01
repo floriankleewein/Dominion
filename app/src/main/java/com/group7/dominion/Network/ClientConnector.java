@@ -5,6 +5,7 @@ import android.util.Log;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.Network.AddPlayerMsg;
 import com.floriankleewein.commonclasses.Network.BaseMessage;
 import com.floriankleewein.commonclasses.Network.GameInformationMsg;
@@ -34,6 +35,7 @@ public class ClientConnector {
         registerClass(MessageClass.class);
         registerClass(GameInformationMsg.class);
         registerClass(NetworkInformationMsg.class);
+        registerClass(Game.class);
         registerClass(StartGameMsg.class);
         registerClass(AddPlayerMsg.class);
         client.start();

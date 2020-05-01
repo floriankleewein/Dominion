@@ -31,6 +31,7 @@ public class TestServer {
         registerClass(MessageClass.class);
         registerClass(GameInformationMsg.class);
         registerClass(NetworkInformationMsg.class);
+        registerClass(Game.class);
         registerClass(StartGameMsg.class);
         registerClass(AddPlayerMsg.class);
 
