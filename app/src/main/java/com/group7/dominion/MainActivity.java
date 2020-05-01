@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.floriankleewein.commonclasses.Board.Board;
+import com.floriankleewein.commonclasses.Network.StartGameMsg;
 import com.floriankleewein.commonclasses.User.User;
 import com.group7.dominion.CheatFunction.ShakeListener;
 import com.group7.dominion.Network.ClientConnector;
@@ -24,7 +25,6 @@ import java.io.IOException;
 public class MainActivity extends AppCompatActivity {
 
     Button btnCreate, btnCon;
-    //TestServer testServer;
     private Board board;
     SensorManager sm;
     ShakeListener shakeListener;
@@ -38,20 +38,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Server Start
-        //testServer = new TestServer();
-        //testServer.startServer();
-
         btnCreate = findViewById(R.id.btn_create);
         btnCon = findViewById(R.id.btn_con);
-
 
         //Start Shake Listener
         shakeListener = new ShakeListener(getSupportFragmentManager());
         sm = (SensorManager) getSystemService(SENSOR_SERVICE);
         sm.registerListener(shakeListener.newSensorListener(), sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
-
-
     }
 
     @Override
@@ -59,73 +52,63 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 
         client = new ClientConnector();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                client.connect();
-            }
-        }).start();
 
+        client.registerCallback(StartGameMsg.class,(msg->{
+                Log.d("CALLBACK", "MOIN");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Stuff that updates the UI
+                        checkButtons();
+                    }
+                });
+        }));
+
+        checkButtons();
         btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //testServer.startGame(); // send to server -> start game
 
-                new Thread(new Runnable() {
+                Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
+                        client.connect();
                         client.startGame();
                     }
-                }).start();
-                client.waitForGame();
-                checkButtons();
+                });
 
+                thread.start();
             }
         });
 
         btnCon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new Thread(new Runnable() {
+
+               Thread thread = new  Thread(new Runnable() {
                     @Override
                     public void run() {
-
-
-                        //TODO: get rid of logic here!! Service
-                        EditText editText = findViewById(R.id.inputName);
-                        String userName = editText.getText().toString();
-
-                        //client.addUser(userName);
-                        TextView textView = findViewById(R.id.nameCheckFeedback);
-                        String[] msg = client.addUser(userName);
-                        textView.setText(msg[0]);
-                        /*if (testServer.getGame().addPlayer(user)) {
-
-                            Log.d("GAME", "Player " + user.getUserName() + " added to Dominion!");
-
-
-                            startActivity(new Intent(MainActivity.this, startGameActivity.class));
-
-                        } else {
-
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    // Stuff that updates the UI
-                                    TextView textView = findViewById(R.id.nameCheckFeedback);
-                                    textView.setText("Name nicht verfügbar. Bitte wähle einen anderen!");
-                                }
-                            });
-
-
-                            Log.d("GAME", "ERROR: Player " + userName + " already exists!");
-                        }*/
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                // Stuff that updates the
+                                EditText editText = findViewById(R.id.inputName);
+                                String userName = editText.getText().toString();
+                                TextView textView = findViewById(R.id.nameCheckFeedback);
+                                String[] msg;
+                                msg = client.addUser(userName);
+                                //textView.setText(msg[0]);
+                                textView.setText("!!!!!!!!!!!!!!!!!");
+                            }
+                        });
                         checkButtons();
                     }
-                }).start();
+                });
+               thread.start();
             }
         });
-        checkButtons();
+        //checkButtons();
+
 
         //Board board = new Board();
         //board.getActionField().pickCard(ActionType.BURGGRABEN);
@@ -141,7 +124,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void checkButtons() {
-        Log.d("TEST", "I AM CHECKING");
         if (client.hasGame() == false) {
             btnCreate.setEnabled(true);
             btnCon.setEnabled(false);

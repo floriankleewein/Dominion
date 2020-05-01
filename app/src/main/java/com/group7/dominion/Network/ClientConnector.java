@@ -1,5 +1,6 @@
 package com.group7.dominion.Network;
 
+import android.telecom.Call;
 import android.util.Log;
 
 import com.esotericsoftware.kryonet.Client;
@@ -15,6 +16,8 @@ import com.floriankleewein.commonclasses.User.User;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ClientConnector {
     private final String Tag = "CLIENT-CONNECTOR"; // Debugging only
@@ -22,7 +25,8 @@ public class ClientConnector {
     private static final int SERVER_PORT = 53217;
     private Client client;
     private boolean hasGame = false;
-
+    private Callback<StartGameMsg> callback;
+    Map<Class, Callback<BaseMessage>> callbackMap = new HashMap<>();
 
     public ClientConnector() {
         this.client = new Client();
@@ -71,13 +75,14 @@ public class ClientConnector {
 
     public void startGame() {
         Log.d(Tag, "Connection-Status: " + client.isConnected());
-        StartGameMsg startMsg = new StartGameMsg();
+        final StartGameMsg startMsg = new StartGameMsg();
         client.sendTCP(startMsg);
         client.addListener(new Listener() {
             public void received(Connection con, Object object) {
                 if (object instanceof StartGameMsg) {
                     StartGameMsg recStartMsg = (StartGameMsg) object;
                     hasGame = recStartMsg.isHasGame();
+                    callbackMap.get(StartGameMsg.class).callback(recStartMsg);
                     Log.d(Tag, "Created/Received Game." + hasGame);
                 }
             }
@@ -89,6 +94,7 @@ public class ClientConnector {
         addPlayerMsg.setPlayerName(playerName);
         client.sendTCP(addPlayerMsg);
         final String[] returnMsg = new String[1];
+
         client.addListener(new Listener() {
             public void received(Connection con, Object object) {
                 if (object instanceof AddPlayerMsg) {
@@ -105,20 +111,16 @@ public class ClientConnector {
         return returnMsg;
     }
 
-    public void waitForGame(){
-        while(!hasGame()){
-            if(hasGame()) {
-                //sorry for the ugly implementation, hopefully this can work somehow else
-            }
-        }
-    }
-
     public boolean hasGame() {
         return hasGame;
     }
 
     public Client getClient(){
         return client;
+    }
+
+    public void registerCallback(Class c, Callback<BaseMessage> callback) {
+        this.callbackMap.put(c, callback);
     }
 }
 
