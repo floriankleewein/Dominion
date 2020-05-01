@@ -22,7 +22,7 @@ import com.group7.localtestserver.TestServer;
 public class MainActivity extends AppCompatActivity {
 
     Button btnCreate, btnCon;
-    TestServer testServer;
+    //TestServer testServer;
     private Board board;
     SensorManager sm;
     ShakeListener shakeListener;
@@ -36,8 +36,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //Server Start
-        testServer = new TestServer();
-        testServer.startServer();
+        //testServer = new TestServer();
+        //testServer.startServer();
 
         btnCreate = findViewById(R.id.btn_create);
         btnCon = findViewById(R.id.btn_con);

@@ -30,7 +30,7 @@ public class ClientConnector {
         registerClass(Network_Information.class);
         client.start();
 
-        //connects to localtestserver now
+        //connects aau server
         try {
             //client.connect(5000, InetAddress.getLocalHost(), 8080); // local server
             client.connect(5000, SERVER_IP, SERVER_PORT);   // Uni server
@@ -51,6 +51,10 @@ public class ClientConnector {
                 }
             }
         });
+
+
+
+
     }
 }
 

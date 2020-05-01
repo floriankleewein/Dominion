@@ -26,6 +26,7 @@ public class TestServer {
         registerClass(MessageClass.class);
         registerClass(Game_Information.class);
         registerClass(Network_Information.class);
+        registerClass(Start_Game.class);
         server.start();
 
         try {
@@ -44,6 +45,11 @@ public class TestServer {
 
                     con.sendTCP(sendMessage);
                 }
+                else if(object instanceof Start_Game){
+                    startGame();
+                }
+
+
             }
         });
     }
