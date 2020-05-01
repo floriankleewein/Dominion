@@ -5,9 +5,9 @@ import android.util.Log;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import com.floriankleewein.commonclasses.Network.Game_Information;
-import com.floriankleewein.commonclasses.Network.Network_Information;
-import com.floriankleewein.commonclasses.Network.Start_Game;
+import com.floriankleewein.commonclasses.Network.GameInformationMsg;
+import com.floriankleewein.commonclasses.Network.NetworkInformationMsg;
+import com.floriankleewein.commonclasses.Network.StartGameMsg;
 
 import java.io.IOException;
 
@@ -27,9 +27,9 @@ public class ClientConnector {
 
     public void connect() {
         registerClass(MessageClass.class);
-        registerClass(Game_Information.class);
-        registerClass(Network_Information.class);
-        registerClass(Start_Game.class);
+        registerClass(GameInformationMsg.class);
+        registerClass(NetworkInformationMsg.class);
+        registerClass(StartGameMsg.class);
         client.start();
 
         //connects to localtestserver now
@@ -56,12 +56,12 @@ public class ClientConnector {
     }
 
     public void startGame() {
-        Start_Game start = new Start_Game();
-        client.sendTCP(start);
+        StartGameMsg startMsg = new StartGameMsg();
+        client.sendTCP(startMsg);
         client.addListener(new Listener() {
             public void received(Connection con, Object object) {
-                if (object instanceof Start_Game) {
-                    Start_Game ms = (Start_Game) object;
+                if (object instanceof StartGameMsg) {
+                    StartGameMsg ms = (StartGameMsg) object;
                     Log.d(Tag, "Created/Received Game.");
                 }
             }

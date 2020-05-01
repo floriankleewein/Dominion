@@ -5,8 +5,8 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.floriankleewein.commonclasses.Game;
-import com.floriankleewein.commonclasses.Network.Game_Information;
-import com.floriankleewein.commonclasses.Network.Network_Information;
+import com.floriankleewein.commonclasses.Network.GameInformationMsg;
+import com.floriankleewein.commonclasses.Network.NetworkInformationMsg;
 
 import java.io.IOException;
 
@@ -24,8 +24,8 @@ public class TestServer {
     public void startServer() {
         System.out.println(Tag + ", Running Server!");
         registerClass(MessageClass.class);
-        registerClass(Game_Information.class);
-        registerClass(Network_Information.class);
+        registerClass(GameInformationMsg.class);
+        registerClass(NetworkInformationMsg.class);
         server.start();
 
         try {

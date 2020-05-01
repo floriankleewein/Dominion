@@ -2,7 +2,7 @@ package com.floriankleewein.commonclasses.Network;
 
 import com.floriankleewein.commonclasses.Game;
 
-public class Start_Game {
+public class StartGameMsg {
     private boolean hasGame = false;
     private Game game;
 
