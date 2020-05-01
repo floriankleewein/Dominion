@@ -9,7 +9,6 @@ import com.floriankleewein.commonclasses.Network.AddPlayerMsg;
 import com.floriankleewein.commonclasses.Network.GameInformationMsg;
 import com.floriankleewein.commonclasses.Network.NetworkInformationMsg;
 import com.floriankleewein.commonclasses.Network.StartGameMsg;
-import com.floriankleewein.commonclasses.User.User;
 
 import java.io.IOException;
 
@@ -18,6 +17,7 @@ public class ClientConnector {
     private static final String SERVER_IP = "143.205.174.196";
     private static final int SERVER_PORT = 53217;
     private Client client;
+    private boolean connectedToGame = false;
 
 
     public ClientConnector() {
@@ -56,10 +56,6 @@ public class ClientConnector {
                 }
             }
         });
-
-
-
-
     }
 
     public void startGame() {
@@ -69,6 +65,7 @@ public class ClientConnector {
             public void received(Connection con, Object object) {
                 if (object instanceof StartGameMsg) {
                     StartGameMsg recStartMsg = (StartGameMsg) object;
+                    connectedToGame = recStartMsg.isHasGame();
                     Log.d(Tag, "Created/Received Game.");
                 }
             }
