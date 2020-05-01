@@ -56,7 +56,16 @@ public class ClientConnector {
     }
 
     public void startGame() {
-
+        Start_Game start = new Start_Game();
+        client.sendTCP(start);
+        client.addListener(new Listener() {
+            public void received(Connection con, Object object) {
+                if (object instanceof Start_Game) {
+                    Start_Game ms = (Start_Game) object;
+                    Log.d(Tag, "Created/Received Game.");
+                }
+            }
+        });
     }
 }
 
