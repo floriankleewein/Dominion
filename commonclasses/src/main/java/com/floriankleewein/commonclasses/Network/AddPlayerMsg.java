@@ -2,7 +2,7 @@ package com.floriankleewein.commonclasses.Network;
 
 import com.floriankleewein.commonclasses.User.User;
 
-public class AddPlayerMsg {
+public class AddPlayerMsg extends BaseMessage{
 
     private String playerName;
     private User user;

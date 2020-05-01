@@ -6,6 +6,7 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.floriankleewein.commonclasses.Network.AddPlayerMsg;
+import com.floriankleewein.commonclasses.Network.BaseMessage;
 import com.floriankleewein.commonclasses.Network.GameInformationMsg;
 import com.floriankleewein.commonclasses.Network.NetworkInformationMsg;
 import com.floriankleewein.commonclasses.Network.StartGameMsg;
@@ -29,6 +30,7 @@ public class ClientConnector {
     }
 
     public void connect() {
+        registerClass(BaseMessage.class);
         registerClass(MessageClass.class);
         registerClass(GameInformationMsg.class);
         registerClass(NetworkInformationMsg.class);

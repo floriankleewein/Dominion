@@ -6,6 +6,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.Network.AddPlayerMsg;
+import com.floriankleewein.commonclasses.Network.BaseMessage;
 import com.floriankleewein.commonclasses.Network.StartGameMsg;
 import com.floriankleewein.commonclasses.Network.GameInformationMsg;
 import com.floriankleewein.commonclasses.Network.NetworkInformationMsg;
@@ -26,6 +27,7 @@ public class TestServer {
 
     public void startServer() {
         System.out.println(Tag + ", Running Server!");
+        registerClass(BaseMessage.class);
         registerClass(MessageClass.class);
         registerClass(GameInformationMsg.class);
         registerClass(NetworkInformationMsg.class);

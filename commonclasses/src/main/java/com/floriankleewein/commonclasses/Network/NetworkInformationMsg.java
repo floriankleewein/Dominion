@@ -1,4 +1,4 @@
 package com.floriankleewein.commonclasses.Network;
 
-public class NetworkInformationMsg {
+public class NetworkInformationMsg extends BaseMessage{
 }
