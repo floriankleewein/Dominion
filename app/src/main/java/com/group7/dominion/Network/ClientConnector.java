@@ -68,7 +68,7 @@ public class ClientConnector {
         client.addListener(new Listener() {
             public void received(Connection con, Object object) {
                 if (object instanceof StartGameMsg) {
-                    StartGameMsg ms = (StartGameMsg) object;
+                    StartGameMsg recStartMsg = (StartGameMsg) object;
                     Log.d(Tag, "Created/Received Game.");
                 }
             }
