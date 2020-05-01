@@ -30,6 +30,7 @@ public class TestServer {
         registerClass(GameInformationMsg.class);
         registerClass(NetworkInformationMsg.class);
         registerClass(StartGameMsg.class);
+        registerClass(AddPlayerMsg.class);
 
         server.start();
 

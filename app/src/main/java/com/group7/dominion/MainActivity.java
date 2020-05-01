@@ -49,6 +49,13 @@ public class MainActivity extends AppCompatActivity {
         sm = (SensorManager) getSystemService(SENSOR_SERVICE);
         sm.registerListener(shakeListener.newSensorListener(), sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
 
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
         client = new ClientConnector();
         new Thread(new Runnable() {
             @Override
@@ -56,12 +63,6 @@ public class MainActivity extends AppCompatActivity {
                 client.connect();
             }
         }).start();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
 
         btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override

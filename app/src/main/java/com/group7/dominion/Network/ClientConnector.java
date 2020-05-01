@@ -33,6 +33,7 @@ public class ClientConnector {
         registerClass(GameInformationMsg.class);
         registerClass(NetworkInformationMsg.class);
         registerClass(StartGameMsg.class);
+        registerClass(AddPlayerMsg.class);
         client.start();
 
         //connects aau server
@@ -59,6 +60,7 @@ public class ClientConnector {
     }
 
     public void startGame() {
+        Log.d(Tag, "Connection-Status: " + client.isConnected());
         StartGameMsg startMsg = new StartGameMsg();
         client.sendTCP(startMsg);
         client.addListener(new Listener() {
