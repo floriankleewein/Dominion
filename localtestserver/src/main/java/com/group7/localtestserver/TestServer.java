@@ -13,6 +13,7 @@ import com.floriankleewein.commonclasses.Network.NetworkInformationMsg;
 import com.floriankleewein.commonclasses.User.User;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class TestServer {
 
@@ -27,6 +28,7 @@ public class TestServer {
 
     public void startServer() {
         System.out.println(Tag + ", Running Server!");
+        //Register classes
         registerClass(BaseMessage.class);
         registerClass(MessageClass.class);
         registerClass(GameInformationMsg.class);
@@ -34,7 +36,9 @@ public class TestServer {
         registerClass(Game.class);
         registerClass(StartGameMsg.class);
         registerClass(AddPlayerMsg.class);
-
+        registerClass(ArrayList.class);
+        registerClass(User.class);
+        //Start Server
         server.start();
 
         try {

@@ -11,8 +11,10 @@ import com.floriankleewein.commonclasses.Network.BaseMessage;
 import com.floriankleewein.commonclasses.Network.GameInformationMsg;
 import com.floriankleewein.commonclasses.Network.NetworkInformationMsg;
 import com.floriankleewein.commonclasses.Network.StartGameMsg;
+import com.floriankleewein.commonclasses.User.User;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class ClientConnector {
     private final String Tag = "CLIENT-CONNECTOR"; // Debugging only
@@ -31,6 +33,7 @@ public class ClientConnector {
     }
 
     public void connect() {
+        // Register classes
         registerClass(BaseMessage.class);
         registerClass(MessageClass.class);
         registerClass(GameInformationMsg.class);
@@ -38,6 +41,9 @@ public class ClientConnector {
         registerClass(Game.class);
         registerClass(StartGameMsg.class);
         registerClass(AddPlayerMsg.class);
+        registerClass(ArrayList.class);
+        registerClass(User.class);
+        // start client
         client.start();
 
         //connects aau server
