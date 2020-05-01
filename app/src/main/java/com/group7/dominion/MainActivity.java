@@ -18,6 +18,8 @@ import com.group7.dominion.CheatFunction.ShakeListener;
 import com.group7.dominion.Network.ClientConnector;
 import com.group7.localtestserver.TestServer;
 
+import java.io.IOException;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -75,8 +77,9 @@ public class MainActivity extends AppCompatActivity {
                         client.startGame();
                     }
                 }).start();
-
+                client.waitForGame();
                 checkButtons();
+
             }
         });
 

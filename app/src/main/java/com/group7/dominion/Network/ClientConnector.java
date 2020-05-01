@@ -105,8 +105,20 @@ public class ClientConnector {
         return returnMsg;
     }
 
+    public void waitForGame(){
+        while(!hasGame()){
+            if(hasGame()) {
+                //sorry for the ugly implementation, hopefully this can work somehow else
+            }
+        }
+    }
+
     public boolean hasGame() {
         return hasGame;
+    }
+
+    public Client getClient(){
+        return client;
     }
 }
 
