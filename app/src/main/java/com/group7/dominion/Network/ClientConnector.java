@@ -5,9 +5,11 @@ import android.util.Log;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import com.floriankleewein.commonclasses.Network.Game_Information;
-import com.floriankleewein.commonclasses.Network.Network_Information;
-import com.floriankleewein.commonclasses.Network.Start_Game;
+import com.floriankleewein.commonclasses.Network.AddPlayerMsg;
+import com.floriankleewein.commonclasses.Network.GameInformationMsg;
+import com.floriankleewein.commonclasses.Network.NetworkInformationMsg;
+import com.floriankleewein.commonclasses.Network.StartGameMsg;
+import com.floriankleewein.commonclasses.User.User;
 
 import java.io.IOException;
 
@@ -16,6 +18,7 @@ public class ClientConnector {
     private static final String SERVER_IP = "143.205.174.196";
     private static final int SERVER_PORT = 53217;
     private Client client;
+
 
     public ClientConnector() {
         this.client = new Client();
@@ -27,9 +30,9 @@ public class ClientConnector {
 
     public void connect() {
         registerClass(MessageClass.class);
-        registerClass(Game_Information.class);
-        registerClass(Network_Information.class);
-        registerClass(Start_Game.class);
+        registerClass(GameInformationMsg.class);
+        registerClass(NetworkInformationMsg.class);
+        registerClass(StartGameMsg.class);
         client.start();
 
         //connects aau server
@@ -60,17 +63,36 @@ public class ClientConnector {
     }
 
     public void startGame() {
-        Start_Game start = new Start_Game();
-        client.sendTCP(start);
+        StartGameMsg startMsg = new StartGameMsg();
+        client.sendTCP(startMsg);
         client.addListener(new Listener() {
             public void received(Connection con, Object object) {
-                if (object instanceof Start_Game) {
-                    Start_Game ms = (Start_Game) object;
+                if (object instanceof StartGameMsg) {
+                    StartGameMsg ms = (StartGameMsg) object;
                     Log.d(Tag, "Created/Received Game.");
                 }
             }
         });
     }
+
+    public void addUser(String playerName){
+        AddPlayerMsg addPlayerMsg = new AddPlayerMsg();
+        addPlayerMsg.setPlayerName(playerName);
+        client.sendTCP(addPlayerMsg);
+
+
+        client.addListener(new Listener() {
+            public void received(Connection con, Object object) {
+                if (object instanceof AddPlayerMsg) {
+                    AddPlayerMsg ms = (AddPlayerMsg) object;
+
+                    Log.d(Tag, "Created/Received PlayerMsg.");
+                }
+            }
+
+        });
+    }
+
 }
 
 
