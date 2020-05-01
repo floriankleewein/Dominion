@@ -90,6 +90,9 @@ public class ClientConnector {
         });
     }
 
+    public boolean isConnectedToGame() {
+        return connectedToGame;
+    }
 }
 
 
