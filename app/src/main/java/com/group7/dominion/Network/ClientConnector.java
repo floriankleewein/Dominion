@@ -66,7 +66,7 @@ public class ClientConnector {
                 if (object instanceof StartGameMsg) {
                     StartGameMsg recStartMsg = (StartGameMsg) object;
                     hasGame = recStartMsg.isHasGame();
-                    Log.d(Tag, "Created/Received Game.");
+                    Log.d(Tag, "Created/Received Game." + hasGame);
                 }
             }
         });

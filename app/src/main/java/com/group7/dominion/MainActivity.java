@@ -50,7 +50,12 @@ public class MainActivity extends AppCompatActivity {
         sm.registerListener(shakeListener.newSensorListener(), sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
 
         client = new ClientConnector();
-        client.connect();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                client.connect();
+            }
+        }).start();
     }
 
     @Override
@@ -62,7 +67,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //testServer.startGame(); // send to server -> start game
-                client.startGame();
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        client.startGame();
+                    }
+                }).start();
+
                 checkButtons();
             }
         });
@@ -125,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void checkButtons() {
+        Log.d("TEST", "I AM CHECKING");
         if (client.hasGame() == false) {
             btnCreate.setEnabled(true);
             btnCon.setEnabled(false);
