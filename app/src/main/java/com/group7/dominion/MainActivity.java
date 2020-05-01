@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //testServer.startGame(); // send to server -> start game
                 client.startGame();
-                //checkButtons();
+                checkButtons();
             }
         });
 
@@ -78,8 +78,11 @@ public class MainActivity extends AppCompatActivity {
                         //TODO: get rid of logic here!! Service
                         EditText editText = findViewById(R.id.inputName);
                         String userName = editText.getText().toString();
-                        //ser user = new User(userName);
-                        client.addUser(userName);
+
+                        //client.addUser(userName);
+                        TextView textView = findViewById(R.id.nameCheckFeedback);
+                        String[] msg = client.addUser(userName);
+                        textView.setText(msg[0]);
                         /*if (testServer.getGame().addPlayer(user)) {
 
                             Log.d("GAME", "Player " + user.getUserName() + " added to Dominion!");
@@ -101,12 +104,12 @@ public class MainActivity extends AppCompatActivity {
 
                             Log.d("GAME", "ERROR: Player " + userName + " already exists!");
                         }*/
-                        //checkButtons();
+                        checkButtons();
                     }
                 }).start();
             }
         });
-        //checkButtons();
+        checkButtons();
 
         //Board board = new Board();
         //board.getActionField().pickCard(ActionType.BURGGRABEN);
@@ -121,15 +124,15 @@ public class MainActivity extends AppCompatActivity {
     }*/
 
 
-    /*public void checkButtons() {
-        if (testServer.hasGame() == false) {
+    public void checkButtons() {
+        if (client.hasGame() == false) {
             btnCreate.setEnabled(true);
             btnCon.setEnabled(false);
         } else {
             btnCreate.setEnabled(false);
             btnCon.setEnabled(true);
         }
-    }*/
+    }
 
     public Board getBoard() {
         return board;

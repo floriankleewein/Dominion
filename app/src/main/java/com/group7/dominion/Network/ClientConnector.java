@@ -72,22 +72,25 @@ public class ClientConnector {
         });
     }
 
-    public void addUser(String playerName){
+    public String[] addUser(String playerName){
         AddPlayerMsg addPlayerMsg = new AddPlayerMsg();
         addPlayerMsg.setPlayerName(playerName);
         client.sendTCP(addPlayerMsg);
-
-
+        final String[] returnMsg = new String[1];
         client.addListener(new Listener() {
             public void received(Connection con, Object object) {
                 if (object instanceof AddPlayerMsg) {
                     AddPlayerMsg ms = (AddPlayerMsg) object;
-
-                    Log.d(Tag, "Created/Received PlayerMsg.");
+                    if(ms.isPlayerAdded()){
+                        returnMsg[0] = "Player added successfully";
+                    }else{
+                        returnMsg[0] = "Player not added(Game full or names already in use)";
+                    }
                 }
             }
 
         });
+        return returnMsg;
     }
 
     public boolean hasGame() {
