@@ -2,12 +2,12 @@ package com.floriankleewein.commonclasses.Network;
 
 import com.floriankleewein.commonclasses.User.User;
 
-public class AddPlayerMsg extends BaseMessage{
+public class AddPlayerSuccessMsg extends BaseMessage{
 
     private String playerName;
     private User user;
     private boolean playerAdded = false;
-    private String feedbackUI;
+    private int feedbackUI;
 
     public String getPlayerName() {
         return playerName;
@@ -32,10 +32,10 @@ public class AddPlayerMsg extends BaseMessage{
     public void setPlayerAdded(boolean playerAdded) {
         this.playerAdded = playerAdded;
     }
-    public void setFeedbackUI(String string){
-        this.feedbackUI = string;
+    public void setFeedbackUI(int i){
+        this.feedbackUI = i;
     }
-    public String getFeedbackUI(){
+    public int getFeedbackUI(){
         return this.feedbackUI;
     }
 }

@@ -5,7 +5,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.floriankleewein.commonclasses.Game;
-import com.floriankleewein.commonclasses.Network.AddPlayerMsg;
+import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
 import com.floriankleewein.commonclasses.Network.BaseMessage;
 import com.floriankleewein.commonclasses.Network.StartGameMsg;
 import com.floriankleewein.commonclasses.Network.GameInformationMsg;
@@ -35,7 +35,7 @@ public class TestServer {
         registerClass(NetworkInformationMsg.class);
         registerClass(Game.class);
         registerClass(StartGameMsg.class);
-        registerClass(AddPlayerMsg.class);
+        registerClass(AddPlayerSuccessMsg.class);
         registerClass(ArrayList.class);
         registerClass(User.class);
         //Start Server
@@ -64,8 +64,8 @@ public class TestServer {
                     startGameMsg.setHasGame(hasGame());
                     con.sendTCP(startGameMsg);
                 }
-                else if(object instanceof AddPlayerMsg){
-                    AddPlayerMsg addPlayerMsg = (AddPlayerMsg) object;
+                else if(object instanceof AddPlayerSuccessMsg){
+                    AddPlayerSuccessMsg addPlayerMsg = (AddPlayerSuccessMsg) object;
                     String name = addPlayerMsg.getPlayerName();
                     User player = new User(name);
                     /*if(game.addPlayer(player)) {
@@ -75,13 +75,13 @@ public class TestServer {
                     if(game.checkSize()){
                         if(game.checkName(name)){
                             game.addPlayer(player);
-                            addPlayerMsg.setFeedbackUI("spieler wurde game hinzugefügt");
+                            addPlayerMsg.setFeedbackUI(0);
                             addPlayerMsg.setPlayerAdded(true);
                         }else{
-                            addPlayerMsg.setFeedbackUI("Name bereits vergeben. Whähle einen anderen.");
+                            addPlayerMsg.setFeedbackUI(1);
                         }
                     }else{
-                        addPlayerMsg.setFeedbackUI("Maximale Spielerzahl bereits erreicht! Beitreten nicht möglich.");
+                        addPlayerMsg.setFeedbackUI(2);
                     }
                     con.sendTCP(addPlayerMsg);
                 }

@@ -1,10 +1,8 @@
 package com.group7.dominion;
 
-import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,13 +11,12 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.floriankleewein.commonclasses.Board.Board;
-import com.floriankleewein.commonclasses.Network.AddPlayerMsg;
+import com.floriankleewein.commonclasses.Network.AddPlayerNameErrorMsg;
+import com.floriankleewein.commonclasses.Network.AddPlayerSizeErrorMsg;
+import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
 import com.floriankleewein.commonclasses.Network.StartGameMsg;
-import com.floriankleewein.commonclasses.User.User;
 import com.group7.dominion.CheatFunction.ShakeListener;
 import com.group7.dominion.Network.ClientConnector;
-
-import java.io.IOException;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -80,8 +77,34 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        client.registerCallback(AddPlayerMsg.class, (msg -> {
+        client.registerCallback(AddPlayerSuccessMsg.class, (msg -> {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    TextView textView = findViewById(R.id.nameCheckFeedback);
+                    textView.setText("Spieler erfolgreich hinzugefügt!");
+                }
+            });
+        }));
 
+        client.registerCallback(AddPlayerNameErrorMsg.class, (msg -> {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    TextView textView = findViewById(R.id.nameCheckFeedback);
+                    textView.setText("Name wird bereits verwendet. Bitte wähle einen anderen.");
+                }
+            });
+        }));
+
+        client.registerCallback(AddPlayerSizeErrorMsg.class, (msg -> {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    TextView textView = findViewById(R.id.nameCheckFeedback);
+                    textView.setText("Maximale Spielerzahl bereits erreicht. Du kannst nicht beitreten.");
+                }
+            });
         }));
 
         btnCon.setOnClickListener(new View.OnClickListener() {
@@ -91,19 +114,12 @@ public class MainActivity extends AppCompatActivity {
                Thread thread = new  Thread(new Runnable() {
                     @Override
                     public void run() {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                // Stuff that updates the UI
-                                EditText editText = findViewById(R.id.inputName);
-                                String userName = editText.getText().toString();
-                                TextView textView = findViewById(R.id.nameCheckFeedback);
+                        EditText editText = findViewById(R.id.inputName);
+                        String userName = editText.getText().toString();
+                        client.addUser(userName);
+                        //textView.setText(msg[0]);
+                        //textView.setText("!!!!!!!!!!!!!!!!!");
 
-                                client.addUser(userName);
-                                //textView.setText(msg[0]);
-                                //textView.setText("!!!!!!!!!!!!!!!!!");
-                            }
-                        });
                         //checkButtons();
                     }
                 });

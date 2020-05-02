@@ -1,13 +1,14 @@
 package com.group7.dominion.Network;
 
-import android.telecom.Call;
 import android.util.Log;
 
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.floriankleewein.commonclasses.Game;
-import com.floriankleewein.commonclasses.Network.AddPlayerMsg;
+import com.floriankleewein.commonclasses.Network.AddPlayerNameErrorMsg;
+import com.floriankleewein.commonclasses.Network.AddPlayerSizeErrorMsg;
+import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
 import com.floriankleewein.commonclasses.Network.BaseMessage;
 import com.floriankleewein.commonclasses.Network.GameInformationMsg;
 import com.floriankleewein.commonclasses.Network.NetworkInformationMsg;
@@ -44,7 +45,7 @@ public class ClientConnector {
         registerClass(NetworkInformationMsg.class);
         registerClass(Game.class);
         registerClass(StartGameMsg.class);
-        registerClass(AddPlayerMsg.class);
+        registerClass(AddPlayerSuccessMsg.class);
         registerClass(ArrayList.class);
         registerClass(User.class);
         // start client
@@ -89,22 +90,27 @@ public class ClientConnector {
         });
     }
 
-    public String[] addUser(String playerName){
-        AddPlayerMsg addPlayerMsg = new AddPlayerMsg();
+    public void addUser(String playerName){
+        AddPlayerSuccessMsg addPlayerMsg = new AddPlayerSuccessMsg();
         addPlayerMsg.setPlayerName(playerName);
         client.sendTCP(addPlayerMsg);
-        final String[] returnMsg = new String[1];
 
         client.addListener(new Listener() {
             public void received(Connection con, Object object) {
-                if (object instanceof AddPlayerMsg) {
-                    AddPlayerMsg ms = (AddPlayerMsg) object;
-                    returnMsg[0] = ms.getFeedbackUI();
+                if (object instanceof AddPlayerSuccessMsg) {
+                    AddPlayerSuccessMsg ms = (AddPlayerSuccessMsg) object;
+                    if(ms.getFeedbackUI() == 0){
+                        callbackMap.get(AddPlayerSuccessMsg.class).callback(ms);
+                    }else if(ms.getFeedbackUI() == 1){
+                        callbackMap.get(AddPlayerNameErrorMsg.class).callback(ms);
+                    }else if(ms.getFeedbackUI() == 2){
+                        callbackMap.get(AddPlayerSizeErrorMsg.class).callback(ms);
+                    }
+
                 }
             }
 
         });
-        return returnMsg;
     }
 
     public boolean hasGame() {
