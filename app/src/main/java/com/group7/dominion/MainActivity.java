@@ -13,11 +13,11 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.floriankleewein.commonclasses.Board.Board;
+import com.floriankleewein.commonclasses.Network.AddPlayerMsg;
 import com.floriankleewein.commonclasses.Network.StartGameMsg;
 import com.floriankleewein.commonclasses.User.User;
 import com.group7.dominion.CheatFunction.ShakeListener;
 import com.group7.dominion.Network.ClientConnector;
-import com.group7.localtestserver.TestServer;
 
 import java.io.IOException;
 
@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
         client = new ClientConnector();
 
         client.registerCallback(StartGameMsg.class,(msg->{
-                Log.d("CALLBACK", "MOIN");
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -81,6 +80,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        client.registerCallback(AddPlayerMsg.class, (msg -> {
+
+        }));
+
         btnCon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,17 +94,17 @@ public class MainActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                // Stuff that updates the
+                                // Stuff that updates the UI
                                 EditText editText = findViewById(R.id.inputName);
                                 String userName = editText.getText().toString();
                                 TextView textView = findViewById(R.id.nameCheckFeedback);
-                                String[] msg;
-                                msg = client.addUser(userName);
+
+                                client.addUser(userName);
                                 //textView.setText(msg[0]);
-                                textView.setText("!!!!!!!!!!!!!!!!!");
+                                //textView.setText("!!!!!!!!!!!!!!!!!");
                             }
                         });
-                        checkButtons();
+                        //checkButtons();
                     }
                 });
                thread.start();

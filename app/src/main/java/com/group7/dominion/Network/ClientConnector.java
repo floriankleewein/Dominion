@@ -99,11 +99,7 @@ public class ClientConnector {
             public void received(Connection con, Object object) {
                 if (object instanceof AddPlayerMsg) {
                     AddPlayerMsg ms = (AddPlayerMsg) object;
-                    if(ms.isPlayerAdded()){
-                        returnMsg[0] = "Player added successfully";
-                    }else{
-                        returnMsg[0] = "Player not added(Game full or names already in use)";
-                    }
+                    returnMsg[0] = ms.getFeedbackUI();
                 }
             }
 

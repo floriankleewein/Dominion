@@ -68,9 +68,20 @@ public class TestServer {
                     AddPlayerMsg addPlayerMsg = (AddPlayerMsg) object;
                     String name = addPlayerMsg.getPlayerName();
                     User player = new User(name);
-                    if(game.addPlayer(player)) {
+                    /*if(game.addPlayer(player)) {
                         addPlayerMsg.setUser(player);
                         addPlayerMsg.setPlayerAdded(true);
+                    }*/
+                    if(game.checkSize()){
+                        if(game.checkName(name)){
+                            game.addPlayer(player);
+                            addPlayerMsg.setFeedbackUI("spieler wurde game hinzugefügt");
+                            addPlayerMsg.setPlayerAdded(true);
+                        }else{
+                            addPlayerMsg.setFeedbackUI("Name bereits vergeben. Whähle einen anderen.");
+                        }
+                    }else{
+                        addPlayerMsg.setFeedbackUI("Maximale Spielerzahl bereits erreicht! Beitreten nicht möglich.");
                     }
                     con.sendTCP(addPlayerMsg);
                 }

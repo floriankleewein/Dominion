@@ -7,6 +7,7 @@ public class AddPlayerMsg extends BaseMessage{
     private String playerName;
     private User user;
     private boolean playerAdded = false;
+    private String feedbackUI;
 
     public String getPlayerName() {
         return playerName;
@@ -30,6 +31,12 @@ public class AddPlayerMsg extends BaseMessage{
 
     public void setPlayerAdded(boolean playerAdded) {
         this.playerAdded = playerAdded;
+    }
+    public void setFeedbackUI(String string){
+        this.feedbackUI = string;
+    }
+    public String getFeedbackUI(){
+        return this.feedbackUI;
     }
 }
 
