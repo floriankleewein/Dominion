@@ -5,10 +5,15 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.floriankleewein.commonclasses.Game;
-import com.floriankleewein.commonclasses.Network.Game_Information;
-import com.floriankleewein.commonclasses.Network.Network_Information;
+import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
+import com.floriankleewein.commonclasses.Network.BaseMessage;
+import com.floriankleewein.commonclasses.Network.StartGameMsg;
+import com.floriankleewein.commonclasses.Network.GameInformationMsg;
+import com.floriankleewein.commonclasses.Network.NetworkInformationMsg;
+import com.floriankleewein.commonclasses.User.User;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class TestServer {
 
@@ -23,9 +28,17 @@ public class TestServer {
 
     public void startServer() {
         System.out.println(Tag + ", Running Server!");
+        //Register classes
+        registerClass(BaseMessage.class);
         registerClass(MessageClass.class);
-        registerClass(Game_Information.class);
-        registerClass(Network_Information.class);
+        registerClass(GameInformationMsg.class);
+        registerClass(NetworkInformationMsg.class);
+        registerClass(Game.class);
+        registerClass(StartGameMsg.class);
+        registerClass(AddPlayerSuccessMsg.class);
+        registerClass(ArrayList.class);
+        registerClass(User.class);
+        //Start Server
         server.start();
 
         try {
@@ -44,6 +57,36 @@ public class TestServer {
 
                     con.sendTCP(sendMessage);
                 }
+                else if(object instanceof StartGameMsg){
+                    startGame();
+                    StartGameMsg startGameMsg = (StartGameMsg) object;
+                    startGameMsg.setGame(getGame());
+                    startGameMsg.setHasGame(hasGame());
+                    con.sendTCP(startGameMsg);
+                }
+                else if(object instanceof AddPlayerSuccessMsg){
+                    AddPlayerSuccessMsg addPlayerMsg = (AddPlayerSuccessMsg) object;
+                    String name = addPlayerMsg.getPlayerName();
+                    User player = new User(name);
+                    /*if(game.addPlayer(player)) {
+                        addPlayerMsg.setUser(player);
+                        addPlayerMsg.setPlayerAdded(true);
+                    }*/
+                    if(game.checkSize()){
+                        if(game.checkName(name)){
+                            game.addPlayer(player);
+                            addPlayerMsg.setFeedbackUI(0);
+                            addPlayerMsg.setPlayerAdded(true);
+                        }else{
+                            addPlayerMsg.setFeedbackUI(1);
+                        }
+                    }else{
+                        addPlayerMsg.setFeedbackUI(2);
+                    }
+                    con.sendTCP(addPlayerMsg);
+                }
+
+
             }
         });
     }
@@ -58,6 +101,7 @@ public class TestServer {
         hasGame = true;
         System.out.println("GAME, game instanced - started");
     }
+
 
     public boolean hasGame() {
         return hasGame;

@@ -19,6 +19,8 @@ public class User {
         this.UserEmail = UserEmail;
         this.Password = Password;
     }
+    public User(){
+    }
 
     //constructor needed for user registration
     public User(String userName){
