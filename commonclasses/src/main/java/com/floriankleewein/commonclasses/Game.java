@@ -1,6 +1,7 @@
 package com.floriankleewein.commonclasses;
 
 
+import com.floriankleewein.commonclasses.CheatFunction.CheatService;
 import com.floriankleewein.commonclasses.User.User;
 
 import java.util.ArrayList;
@@ -8,12 +9,13 @@ import java.util.List;
 
 public class Game {
 
-    private List<User> playerList = new ArrayList<>();
+    private List<User> playerList = new ArrayList<User>();
+    private CheatService cheatService;
 
     //hidden class variable for Singleton pattern.
     private static Game game;
     //overwriting constructor so it cannot be instanced.
-    private Game(){}
+    public Game(){}
 
     public static synchronized Game getGame(){
         if(Game.game == null){

@@ -1,5 +1,7 @@
 package com.group7.dominion;
 
+import android.content.Intent;
+
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.floriankleewein.commonclasses.Board.Board;
+import com.floriankleewein.commonclasses.User.User;
 import com.floriankleewein.commonclasses.Network.AddPlayerNameErrorMsg;
 import com.floriankleewein.commonclasses.Network.AddPlayerSizeErrorMsg;
 import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
@@ -27,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
     ShakeListener shakeListener;
     ClientConnector client;
 
+
     //TODO: change this
     public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
 
@@ -37,6 +41,9 @@ public class MainActivity extends AppCompatActivity {
 
         btnCreate = findViewById(R.id.btn_create);
         btnCon = findViewById(R.id.btn_con);
+
+
+
 
         //Start Shake Listener
         shakeListener = new ShakeListener(getSupportFragmentManager());
