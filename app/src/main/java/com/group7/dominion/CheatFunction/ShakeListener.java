@@ -10,7 +10,7 @@ import androidx.fragment.app.FragmentManager;
 
 
 public class ShakeListener {
-    private static boolean alreadyCheated = false;
+    private  boolean alreadyCheated = false;
     private float acelVal;
     private float acelLast;
     private float shake;
@@ -41,8 +41,8 @@ public class ShakeListener {
                 float delta = acelVal - acelLast;
                 shake = shake * 0.9f + delta;
 
-                if (shake > 4 && !alreadyCheated) {
-                    alreadyCheated = true;
+                if (shake > 4 && !cheat_alert.isAdded()) {
+
                     Log.i("SHAKING!!", "PHONE GET SHAKED!");
                     cheat_alert.show(fragmentManager, "cheat");
                 }
