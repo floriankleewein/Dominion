@@ -1,4 +1,4 @@
 package com.floriankleewein.commonclasses.Network;
 
-public class AddPlayerNameErrorMsg {
+public class AddPlayerNameErrorMsg extends BaseMessage {
 }

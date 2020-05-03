@@ -49,18 +49,18 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 
         client = new ClientConnector();
+        checkButtons();
 
         client.registerCallback(StartGameMsg.class,(msg->{
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        // Stuff that updates the UI
                         checkButtons();
                     }
                 });
         }));
 
-        checkButtons();
+
         btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,17 +117,11 @@ public class MainActivity extends AppCompatActivity {
                         EditText editText = findViewById(R.id.inputName);
                         String userName = editText.getText().toString();
                         client.addUser(userName);
-                        //textView.setText(msg[0]);
-                        //textView.setText("!!!!!!!!!!!!!!!!!");
-
-                        //checkButtons();
                     }
                 });
                thread.start();
             }
         });
-        //checkButtons();
-
 
         //Board board = new Board();
         //board.getActionField().pickCard(ActionType.BURGGRABEN);

@@ -117,6 +117,10 @@ public class ClientConnector {
         return hasGame;
     }
 
+    public void setHasGame(Boolean bool){
+        this.hasGame = bool;
+    }
+
     public Client getClient(){
         return client;
     }
