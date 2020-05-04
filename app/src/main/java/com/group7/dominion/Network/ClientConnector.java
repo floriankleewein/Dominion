@@ -12,6 +12,7 @@ import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
 import com.floriankleewein.commonclasses.Network.BaseMessage;
 import com.floriankleewein.commonclasses.Network.GameInformationMsg;
 import com.floriankleewein.commonclasses.Network.NetworkInformationMsg;
+import com.floriankleewein.commonclasses.Network.ResetMsg;
 import com.floriankleewein.commonclasses.Network.StartGameMsg;
 import com.floriankleewein.commonclasses.User.User;
 
@@ -108,6 +109,20 @@ public class ClientConnector {
                     }
 
                 }
+            }
+
+        });
+    }
+
+    //for now this method only has the use, to reset the game and playerList, so we
+    //dont have to restart the server for the same purpose.
+    public void resetGame(){
+        ResetMsg msg = new ResetMsg();
+        client.sendTCP(msg);
+
+        client.addListener(new Listener() {
+            public void received(Connection con, Object object) {
+                //what happens then?
             }
 
         });

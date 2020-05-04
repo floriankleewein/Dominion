@@ -22,7 +22,7 @@ import com.group7.dominion.Network.ClientConnector;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button btnCreate, btnJoin;
+    Button btnCreate, btnJoin, btnReset;
     private Board board;
     SensorManager sm;
     ShakeListener shakeListener;
@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
         btnCreate = findViewById(R.id.btn_create);
         btnJoin = findViewById(R.id.btn_join);
+        btnReset = findViewById(R.id.btn_reset);
 
         //Start Shake Listener
         shakeListener = new ShakeListener(getSupportFragmentManager());
@@ -130,18 +131,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        btnReset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                client.resetGame();
+            }
+        });
+
         //Board board = new Board();
         //board.getActionField().pickCard(ActionType.BURGGRABEN);
     }
-
-    /*public void sendName(View v){
-        Intent intent = new Intent(this, startGameActivity.class);
-        EditText editText = findViewById(R.id.inputName);
-        String name = editText.getText().toString();
-        intent.putExtra(EXTRA_MESSAGE, name);
-        startActivity(intent);
-    }*/
-
 
     public void checkButtons() {
         if (client.hasGame() == false) {
