@@ -18,7 +18,7 @@ public class CheatAlert extends AppCompatDialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        cheatService = new CheatService(game);
+        cheatService = new CheatService(Game.getGame());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                 .setTitle("How dare you?")

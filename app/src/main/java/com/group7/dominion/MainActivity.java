@@ -24,8 +24,6 @@ public class MainActivity extends AppCompatActivity {
 
     Button btnCreate, btnJoin, btnReset;
     private Board board;
-    SensorManager sm;
-    ShakeListener shakeListener;
     ClientConnector client;
 
     //TODO: change this
@@ -41,9 +39,7 @@ public class MainActivity extends AppCompatActivity {
         btnReset = findViewById(R.id.btn_reset);
 
         //Start Shake Listener
-        shakeListener = new ShakeListener(getSupportFragmentManager());
-        sm = (SensorManager) getSystemService(SENSOR_SERVICE);
-        sm.registerListener(shakeListener.newSensorListener(), sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+
     }
 
     @Override
