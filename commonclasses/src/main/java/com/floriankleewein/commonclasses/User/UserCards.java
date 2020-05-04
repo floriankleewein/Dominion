@@ -74,6 +74,10 @@ public class UserCards {
          * For specific ActionCards
          */
     }
+    public void addDeckCardtoHandCard() {
+        this.HandCards.add(this.Deck.getLast());
+        this.Deck.removeLast();
+    }
 
 
     public LinkedList<Object> getDeck() {

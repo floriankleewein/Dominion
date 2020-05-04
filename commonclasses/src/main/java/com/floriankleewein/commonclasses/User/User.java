@@ -1,8 +1,6 @@
 package com.floriankleewein.commonclasses.User;
 
 
-
-
 public class User {
     private static long ID;
     private long UserID;
@@ -13,18 +11,18 @@ public class User {
     private GamePoints gamePoints;
     private boolean gameCreator = false;
 
-    public User(String UserName, String UserEmail, String Password) {
-        this.UserID = ID++;
-        this.UserName = UserName;
-        this.UserEmail = UserEmail;
-        this.Password = Password;
-    }
-    public User(){
+
+
+    private boolean isCheater;
+
+
+    public User() {
     }
 
     //constructor needed for user registration
-    public User(String userName){
-       this.UserName = userName;
+    public User(String userName) {
+        this.UserName = userName;
+        isCheater = false;
     }
 
     public void setUpforGame() {
@@ -80,7 +78,6 @@ public class User {
         Password = password;
     }
 
-
     public boolean isGameCreator() {
         return gameCreator;
     }
@@ -88,6 +85,15 @@ public class User {
     public void setGameCreator(boolean gameCreator) {
         this.gameCreator = gameCreator;
     }
+
+    public boolean isCheater() {
+        return isCheater;
+    }
+
+    public void setCheater(boolean cheater) {
+        isCheater = cheater;
+    }
+
 }
 
 

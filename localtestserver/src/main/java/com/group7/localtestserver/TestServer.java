@@ -7,6 +7,7 @@ import com.esotericsoftware.kryonet.Server;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
 import com.floriankleewein.commonclasses.Network.BaseMessage;
+import com.floriankleewein.commonclasses.Network.ResetMsg;
 import com.floriankleewein.commonclasses.Network.StartGameMsg;
 import com.floriankleewein.commonclasses.Network.GameInformationMsg;
 import com.floriankleewein.commonclasses.Network.NetworkInformationMsg;
@@ -38,6 +39,7 @@ public class TestServer {
         registerClass(AddPlayerSuccessMsg.class);
         registerClass(ArrayList.class);
         registerClass(User.class);
+        registerClass(ResetMsg.class);
         //Start Server
         server.start();
 
@@ -77,6 +79,7 @@ public class TestServer {
                             game.addPlayer(player);
                             addPlayerMsg.setFeedbackUI(0);
                             addPlayerMsg.setPlayerAdded(true);
+                            System.out.println("Player added: " + player.getUserName());
                         }else{
                             addPlayerMsg.setFeedbackUI(1);
                         }
@@ -84,6 +87,11 @@ public class TestServer {
                         addPlayerMsg.setFeedbackUI(2);
                     }
                     con.sendTCP(addPlayerMsg);
+                }
+                else if(object instanceof ResetMsg){
+                    reset();
+                    //ResetMsg msg = (ResetMsg) object;
+
                 }
 
 
@@ -100,6 +108,12 @@ public class TestServer {
         game = Game.getGame();
         hasGame = true;
         System.out.println("GAME, game instanced - started");
+    }
+
+    public void reset(){
+        game.getPlayerList().clear();
+        game = null;
+        System.out.println("Playerlist cleared!");
     }
 
 

@@ -4,12 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.group7.dominion.startGameActivity">
+    tools:context="com.group7.dominion.StartGameActivity">
 
     <ListView
         android:id="@+id/playerNamesListView"
         android:layout_width="0dp"
         android:layout_height="305dp"
+        android:fadingEdge="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

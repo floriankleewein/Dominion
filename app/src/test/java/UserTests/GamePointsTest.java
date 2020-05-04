@@ -16,7 +16,7 @@ public class GamePointsTest {
 
     @Before
     public void setUp() {
-        this.user = new User(UserName, UserEmail, UserPassword);
+        this.user = new User(UserName);
         this.user.setUpforGame();
     }
 

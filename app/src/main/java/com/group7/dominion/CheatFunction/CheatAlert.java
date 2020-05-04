@@ -7,9 +7,19 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatDialogFragment;
 
+import com.floriankleewein.commonclasses.CheatFunction.CheatService;
+import com.floriankleewein.commonclasses.Game;
+
 public class CheatAlert extends AppCompatDialogFragment {
+
+    CheatService cheatService;
+    private Game game;
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+        cheatService = new CheatService(Game.getGame());
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                 .setTitle("How dare you?")
                 .setMessage("You really want to cheat?")
@@ -17,6 +27,8 @@ public class CheatAlert extends AppCompatDialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //Cheat Function will be called up!!
+                        String name = "";
+                        cheatService.addCardtoUser(name);
                         dialog.cancel();
                     }
                 })

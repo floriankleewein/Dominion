@@ -2,7 +2,7 @@ package com.floriankleewein.commonclasses.Network;
 
 import com.floriankleewein.commonclasses.Game;
 
-public class StartGameMsg extends BaseMessage{
+public class StartGameMsg extends BaseMessage {
     private boolean hasGame = false;
     private Game game;
 
@@ -21,6 +21,4 @@ public class StartGameMsg extends BaseMessage{
     public void setHasGame(boolean hasGame) {
         this.hasGame = hasGame;
     }
-
-
 }

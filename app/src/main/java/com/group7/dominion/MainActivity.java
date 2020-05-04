@@ -1,5 +1,6 @@
 package com.group7.dominion;
 
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
@@ -21,10 +22,8 @@ import com.group7.dominion.Network.ClientConnector;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button btnCreate, btnCon;
+    Button btnCreate, btnJoin, btnReset;
     private Board board;
-    SensorManager sm;
-    ShakeListener shakeListener;
     ClientConnector client;
 
     //TODO: change this
@@ -36,12 +35,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         btnCreate = findViewById(R.id.btn_create);
-        btnCon = findViewById(R.id.btn_con);
+        btnJoin = findViewById(R.id.btn_join);
+        btnReset = findViewById(R.id.btn_reset);
 
         //Start Shake Listener
-        shakeListener = new ShakeListener(getSupportFragmentManager());
-        sm = (SensorManager) getSystemService(SENSOR_SERVICE);
-        sm.registerListener(shakeListener.newSensorListener(), sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+
     }
 
     @Override
@@ -83,6 +81,20 @@ public class MainActivity extends AppCompatActivity {
                 public void run() {
                     TextView textView = findViewById(R.id.nameCheckFeedback);
                     textView.setText("Spieler erfolgreich hinzugefügt!");
+
+                    /*Thread thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                wait(3);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+
+                    thread.start();*/
+                    startActivity(new Intent(MainActivity.this, StartGameActivity.class));
                 }
             });
         }));
@@ -107,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
             });
         }));
 
-        btnCon.setOnClickListener(new View.OnClickListener() {
+        btnJoin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -123,26 +135,30 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        btnReset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        client.resetGame();
+                    }
+                });
+                thread.start();
+            }
+        });
+
         //Board board = new Board();
         //board.getActionField().pickCard(ActionType.BURGGRABEN);
     }
 
-    /*public void sendName(View v){
-        Intent intent = new Intent(this, CreateOrJoinActivity.class);
-        EditText editText = findViewById(R.id.inputName);
-        String name = editText.getText().toString();
-        intent.putExtra(EXTRA_MESSAGE, name);
-        startActivity(intent);
-    }*/
-
-
     public void checkButtons() {
         if (client.hasGame() == false) {
             btnCreate.setEnabled(true);
-            btnCon.setEnabled(false);
+            btnJoin.setEnabled(false);
         } else {
             btnCreate.setEnabled(false);
-            btnCon.setEnabled(true);
+            btnJoin.setEnabled(true);
         }
     }
 
