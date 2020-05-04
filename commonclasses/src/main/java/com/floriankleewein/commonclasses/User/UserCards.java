@@ -54,14 +54,12 @@ public class UserCards {
     }
 
     public void playCard(Object PlayedCard) {
+
         this.HandCards.remove(PlayedCard);
         this.DiscardCards.add(PlayedCard);
+
     }
 
-    public void addDeckCardtoHandCard() {
-        this.HandCards.add(this.Deck.getLast());
-        this.Deck.removeLast();
-    }
 
     public void addCardtoDeck(Object newCard) {
         this.Deck.add(newCard);

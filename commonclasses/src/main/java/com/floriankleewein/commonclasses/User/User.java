@@ -1,7 +1,7 @@
 package com.floriankleewein.commonclasses.User;
 
 
-import com.floriankleewein.commonclasses.CheatFunction.CheatService;
+
 
 public class User {
     private static long ID;
@@ -13,25 +13,18 @@ public class User {
     private GamePoints gamePoints;
     private boolean gameCreator = false;
 
-
-
-    private boolean isCheater;
-
-
     public User(String UserName, String UserEmail, String Password) {
         this.UserID = ID++;
         this.UserName = UserName;
         this.UserEmail = UserEmail;
         this.Password = Password;
-        isCheater = false;
-
     }
     public User(){
     }
 
     //constructor needed for user registration
-    public User(String userName) {
-        this.UserName = userName;
+    public User(String userName){
+       this.UserName = userName;
     }
 
     public void setUpforGame() {
@@ -94,15 +87,6 @@ public class User {
 
     public void setGameCreator(boolean gameCreator) {
         this.gameCreator = gameCreator;
-    }
-
-
-    public boolean isCheater() {
-        return isCheater;
-    }
-
-    public void setCheater(boolean cheater) {
-        isCheater = cheater;
     }
 }
 
