@@ -16,7 +16,7 @@ import com.floriankleewein.commonclasses.User.User;
 import com.group7.dominion.Network.ClientConnector;
 import com.group7.localtestserver.TestServer;
 
-public class startGameActivity extends AppCompatActivity {
+public class StartGameActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

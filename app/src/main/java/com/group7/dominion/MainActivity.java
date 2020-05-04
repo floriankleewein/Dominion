@@ -1,5 +1,6 @@
 package com.group7.dominion;
 
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
@@ -21,7 +22,7 @@ import com.group7.dominion.Network.ClientConnector;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button btnCreate, btnCon;
+    Button btnCreate, btnJoin;
     private Board board;
     SensorManager sm;
     ShakeListener shakeListener;
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         btnCreate = findViewById(R.id.btn_create);
-        btnCon = findViewById(R.id.btn_con);
+        btnJoin = findViewById(R.id.btn_join);
 
         //Start Shake Listener
         shakeListener = new ShakeListener(getSupportFragmentManager());
@@ -83,6 +84,12 @@ public class MainActivity extends AppCompatActivity {
                 public void run() {
                     TextView textView = findViewById(R.id.nameCheckFeedback);
                     textView.setText("Spieler erfolgreich hinzugefügt!");
+                    try {
+                        wait(3);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    startActivity(new Intent(MainActivity.this, StartGameActivity.class));
                 }
             });
         }));
@@ -107,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
             });
         }));
 
-        btnCon.setOnClickListener(new View.OnClickListener() {
+        btnJoin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -128,7 +135,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /*public void sendName(View v){
-        Intent intent = new Intent(this, CreateOrJoinActivity.class);
+        Intent intent = new Intent(this, startGameActivity.class);
         EditText editText = findViewById(R.id.inputName);
         String name = editText.getText().toString();
         intent.putExtra(EXTRA_MESSAGE, name);
@@ -139,10 +146,10 @@ public class MainActivity extends AppCompatActivity {
     public void checkButtons() {
         if (client.hasGame() == false) {
             btnCreate.setEnabled(true);
-            btnCon.setEnabled(false);
+            btnJoin.setEnabled(false);
         } else {
             btnCreate.setEnabled(false);
-            btnCon.setEnabled(true);
+            btnJoin.setEnabled(true);
         }
     }
 

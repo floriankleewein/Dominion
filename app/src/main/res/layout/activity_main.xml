@@ -18,12 +18,12 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/btn_con"
+        android:id="@+id/btn_join"
         android:layout_width="0dp"
         android:layout_height="45dp"
         android:layout_marginEnd="40dp"
         android:layout_marginBottom="100dp"
-        android:text="Verbinden"
+        android:text="Beitreten"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
