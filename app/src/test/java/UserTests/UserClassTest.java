@@ -19,7 +19,7 @@ public class UserClassTest {
 
     @Before
     public void setUp() {
-        this.user = new User(UserName, UserEmail, UserPassword);
+        this.user = new User(UserName);
         this.user.setUpforGame();
         TestObjects = new LinkedList<>();
         TestObjects = fillwithTestCards(10);
