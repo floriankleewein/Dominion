@@ -112,6 +112,7 @@ public class TestServer {
 
     public void reset(){
         game.getPlayerList().clear();
+        game = null;
         System.out.println("Playerlist cleared!");
     }
 
