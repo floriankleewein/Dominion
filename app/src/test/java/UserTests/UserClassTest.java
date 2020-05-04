@@ -1,4 +1,4 @@
-package com.floriankleewein.commonclasses.UserTests;
+package UserTests;
 
 import com.floriankleewein.commonclasses.User.User;
 
@@ -105,23 +105,6 @@ public class UserClassTest {
 
         Assert.assertEquals(7, this.user.getUserCards().getDeck().size());
         Assert.assertEquals(5, this.user.getUserCards().getHandCards().size());
-        Assert.assertEquals(0, this.user.getUserCards().getDiscardCards().size());
-
-    }
-
-    @Test
-    public void testAddCDeckCardtoHandCards() {
-        this.user.getUserCards().getFirstCards(TestObjects);
-
-        Assert.assertEquals(5, this.user.getUserCards().getDeck().size());
-        Assert.assertEquals(5, this.user.getUserCards().getHandCards().size());
-        Assert.assertEquals(0, this.user.getUserCards().getDiscardCards().size());
-
-
-        this.user.getUserCards().addDeckCardtoHandCard();
-
-        Assert.assertEquals(4, this.user.getUserCards().getDeck().size());
-        Assert.assertEquals(6, this.user.getUserCards().getHandCards().size());
         Assert.assertEquals(0, this.user.getUserCards().getDiscardCards().size());
 
     }

@@ -1,4 +1,4 @@
-package com.floriankleewein.commonclasses.UserTests;
+package UserTests;
 
 import com.floriankleewein.commonclasses.User.User;
 
