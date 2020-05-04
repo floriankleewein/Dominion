@@ -111,9 +111,8 @@ public class TestServer {
     }
 
     public void reset(){
-        for (User u: game.getPlayerList()) {
-            game.getPlayerList().remove(u);
-        }
+        game.getPlayerList().clear();
+        System.out.println("Playerlist cleared!");
     }
 
 
