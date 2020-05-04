@@ -85,11 +85,19 @@ public class MainActivity extends AppCompatActivity {
                 public void run() {
                     TextView textView = findViewById(R.id.nameCheckFeedback);
                     textView.setText("Spieler erfolgreich hinzugefügt!");
-                    try {
-                        wait(3);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+
+                    Thread thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                wait(3);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+
+                    thread.start();
                     startActivity(new Intent(MainActivity.this, StartGameActivity.class));
                 }
             });

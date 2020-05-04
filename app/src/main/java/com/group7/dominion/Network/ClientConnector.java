@@ -49,6 +49,7 @@ public class ClientConnector {
         registerClass(AddPlayerSuccessMsg.class);
         registerClass(ArrayList.class);
         registerClass(User.class);
+        registerClass(ResetMsg.class);
         // start client
         client.start();
 

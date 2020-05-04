@@ -39,6 +39,7 @@ public class TestServer {
         registerClass(AddPlayerSuccessMsg.class);
         registerClass(ArrayList.class);
         registerClass(User.class);
+        registerClass(ResetMsg.class);
         //Start Server
         server.start();
 
