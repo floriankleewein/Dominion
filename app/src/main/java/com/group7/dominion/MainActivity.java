@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
                     TextView textView = findViewById(R.id.nameCheckFeedback);
                     textView.setText("Spieler erfolgreich hinzugefügt!");
 
-                    Thread thread = new Thread(new Runnable() {
+                    /*Thread thread = new Thread(new Runnable() {
                         @Override
                         public void run() {
                             try {
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
 
-                    thread.start();
+                    thread.start();*/
                     startActivity(new Intent(MainActivity.this, StartGameActivity.class));
                 }
             });
