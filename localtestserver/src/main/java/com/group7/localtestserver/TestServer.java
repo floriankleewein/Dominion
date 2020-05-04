@@ -79,6 +79,7 @@ public class TestServer {
                             game.addPlayer(player);
                             addPlayerMsg.setFeedbackUI(0);
                             addPlayerMsg.setPlayerAdded(true);
+                            System.out.println("Player added: " + player.getUserName());
                         }else{
                             addPlayerMsg.setFeedbackUI(1);
                         }
