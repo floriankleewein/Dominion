@@ -141,8 +141,14 @@ public class MainActivity extends AppCompatActivity {
 
         btnReset.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v){
-                client.resetGame();
+            public void onClick(View v) {
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        client.resetGame();
+                    }
+                });
+                thread.start();
             }
         });
 
