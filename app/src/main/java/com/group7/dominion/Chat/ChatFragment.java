@@ -1,6 +1,5 @@
 package com.group7.dominion.Chat;
 
-import android.media.Image;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
