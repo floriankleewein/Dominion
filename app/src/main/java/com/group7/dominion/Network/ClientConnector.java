@@ -1,5 +1,8 @@
 package com.group7.dominion.Network;
 
+import android.hardware.usb.UsbEndpoint;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import com.esotericsoftware.kryonet.Client;
@@ -13,6 +16,7 @@ import com.floriankleewein.commonclasses.Network.BaseMessage;
 import com.floriankleewein.commonclasses.Network.GameInformationMsg;
 import com.floriankleewein.commonclasses.Network.NetworkInformationMsg;
 import com.floriankleewein.commonclasses.Network.ResetMsg;
+import com.floriankleewein.commonclasses.Network.CreateGameMsg;
 import com.floriankleewein.commonclasses.Network.StartGameMsg;
 import com.floriankleewein.commonclasses.User.User;
 
@@ -21,13 +25,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ClientConnector {
+public class ClientConnector{
     private final String Tag = "CLIENT-CONNECTOR"; // Debugging only
     private static final String SERVER_IP = "143.205.174.196";
     private static final int SERVER_PORT = 53217;
     private Client client;
     private boolean hasGame = false;
-    private Callback<StartGameMsg> callback;
+    private Callback<CreateGameMsg> callback;
     Map<Class, Callback<BaseMessage>> callbackMap = new HashMap<>();
 
     public ClientConnector() {
@@ -45,11 +49,13 @@ public class ClientConnector {
         registerClass(GameInformationMsg.class);
         registerClass(NetworkInformationMsg.class);
         registerClass(Game.class);
-        registerClass(StartGameMsg.class);
+        registerClass(CreateGameMsg.class);
         registerClass(AddPlayerSuccessMsg.class);
         registerClass(ArrayList.class);
         registerClass(User.class);
         registerClass(ResetMsg.class);
+        registerClass(StartGameMsg.class);
+
         // start client
         client.start();
 
@@ -76,16 +82,16 @@ public class ClientConnector {
         });
     }
 
-    public void startGame() {
+    public void createGame() {
         Log.d(Tag, "Connection-Status: " + client.isConnected());
-        final StartGameMsg startMsg = new StartGameMsg();
+        final CreateGameMsg startMsg = new CreateGameMsg();
         client.sendTCP(startMsg);
         client.addListener(new Listener() {
             public void received(Connection con, Object object) {
-                if (object instanceof StartGameMsg) {
-                    StartGameMsg recStartMsg = (StartGameMsg) object;
+                if (object instanceof CreateGameMsg) {
+                    CreateGameMsg recStartMsg = (CreateGameMsg) object;
                     hasGame = recStartMsg.isHasGame();
-                    callbackMap.get(StartGameMsg.class).callback(recStartMsg);
+                    callbackMap.get(CreateGameMsg.class).callback(recStartMsg);
                     Log.d(Tag, "Created/Received Game." + hasGame);
                 }
             }
@@ -127,6 +133,11 @@ public class ClientConnector {
             }
 
         });
+    }
+
+    public void startGame(){
+        StartGameMsg msg = new StartGameMsg();
+        client.sendTCP(msg);
     }
 
     public boolean hasGame() {

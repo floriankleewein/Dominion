@@ -14,15 +14,18 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.esotericsoftware.kryonet.Client;
 import com.floriankleewein.commonclasses.User.User;
 import com.group7.dominion.CheatFunction.ShakeListener;
 import com.group7.dominion.Network.ClientConnector;
 import com.group7.localtestserver.TestServer;
 
 public class StartGameActivity extends AppCompatActivity {
-
+    Button btnStart;
     SensorManager sm;
     ShakeListener shakeListener;
+    //TODO: rename this
+    public static final String EXTRA_MESSAGE = "clientForNextActivity";
 
     private Button startGame;
 
@@ -30,6 +33,9 @@ public class StartGameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_or_join);
+        btnStart = findViewById(R.id.btn_start);
+
+
         ListView playerNamesListView = findViewById(R.id.playerNamesListView);
 
         startGame = findViewById(R.id.startGame);
@@ -53,8 +59,23 @@ public class StartGameActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        ClientConnector client = (ClientConnector) getIntent().getSerializableExtra(EXTRA_MESSAGE);
 
+        btnStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //TODO: FLO: for gamecreation it must be possible to pass the client to the next activity.
+                        //client.startGame();
+                    }
+                });
+
+                thread.start();
+            }
+        });
 
         //Intent intent = getIntent();
         //String msg = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
