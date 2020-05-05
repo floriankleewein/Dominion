@@ -7,6 +7,7 @@ import androidx.viewpager.widget.ViewPager;
 import android.os.Bundle;
 
 import com.google.android.material.tabs.TabLayout;
+import com.group7.dominion.Chat.ViewPagerAdapter;
 
 public class GameActivity extends AppCompatActivity {
 
