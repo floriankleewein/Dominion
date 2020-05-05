@@ -8,9 +8,10 @@ import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
 import com.floriankleewein.commonclasses.Network.BaseMessage;
 import com.floriankleewein.commonclasses.Network.ResetMsg;
-import com.floriankleewein.commonclasses.Network.StartGameMsg;
+import com.floriankleewein.commonclasses.Network.CreateGameMsg;
 import com.floriankleewein.commonclasses.Network.GameInformationMsg;
 import com.floriankleewein.commonclasses.Network.NetworkInformationMsg;
+import com.floriankleewein.commonclasses.Network.StartGameMsg;
 import com.floriankleewein.commonclasses.User.User;
 
 import java.io.IOException;
@@ -35,11 +36,13 @@ public class TestServer {
         registerClass(GameInformationMsg.class);
         registerClass(NetworkInformationMsg.class);
         registerClass(Game.class);
-        registerClass(StartGameMsg.class);
+        registerClass(CreateGameMsg.class);
         registerClass(AddPlayerSuccessMsg.class);
         registerClass(ArrayList.class);
         registerClass(User.class);
         registerClass(ResetMsg.class);
+        registerClass(StartGameMsg.class);
+
         //Start Server
         server.start();
 
@@ -59,9 +62,9 @@ public class TestServer {
 
                     con.sendTCP(sendMessage);
                 }
-                else if(object instanceof StartGameMsg){
-                    startGame();
-                    StartGameMsg startGameMsg = (StartGameMsg) object;
+                else if(object instanceof CreateGameMsg){
+                    createGame();
+                    CreateGameMsg startGameMsg = (CreateGameMsg) object;
                     startGameMsg.setGame(getGame());
                     startGameMsg.setHasGame(hasGame());
                     con.sendTCP(startGameMsg);
@@ -93,6 +96,8 @@ public class TestServer {
                     reset();
                     //ResetMsg msg = (ResetMsg) object;
 
+                }else if(object instanceof StartGameMsg){
+                    startGame();
                 }
 
 
@@ -104,11 +109,15 @@ public class TestServer {
         server.getKryo().register(regClass);
     }
 
-    public void startGame() {
+    public void createGame() {
 
         game = Game.getGame();
         hasGame = true;
         System.out.println("GAME, game instanced - started");
+    }
+
+    public void startGame(){
+        //TODO: Emanuel, trigger the first move here.
     }
 
     public void reset(){
