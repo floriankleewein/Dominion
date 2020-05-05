@@ -89,6 +89,7 @@ public class TestServer {
                     con.sendTCP(addPlayerMsg);
                 }
                 else if(object instanceof ResetMsg){
+                    System.out.println("Received Reset Message.");
                     reset();
                     //ResetMsg msg = (ResetMsg) object;
 
