@@ -1,0 +1,37 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context="com.group7.dominion.Chat.ChatFragment">
+
+   <LinearLayout
+       android:id="@+id/linearLayout"
+       android:layout_width="fill_parent"
+       android:layout_height="wrap_content"
+       android:orientation="horizontal"
+       android:layout_gravity="bottom">
+
+      <EditText
+          android:id="@+id/userInput"
+          android:layout_width="0dp"
+          android:layout_height="fill_parent"
+          android:layout_weight="1"
+          android:layout_marginLeft="5dp"
+          android:layout_marginRight="5dp"
+          android:inputType="textMultiLine"
+          android:ems="10"
+          android:hint="Schreibe eine Nachricht..." />
+
+      <ImageButton
+          android:id="@+id/sendButton"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:padding="5dp"
+          android:src="@drawable/ic_send_button"
+          style="?android:attr/buttonBarButtonStyle"/>
+
+
+   </LinearLayout>
+
+</LinearLayout>

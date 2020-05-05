@@ -1,6 +1,6 @@
 package UserTests;
 
-import com.group7.dominion.User.User;
+import com.floriankleewein.commonclasses.User.User;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -16,7 +16,7 @@ public class GamePointsTest {
 
     @Before
     public void setUp() {
-        this.user = new User(UserName, UserEmail, UserPassword);
+        this.user = new User(UserName);
         this.user.setUpforGame();
     }
 

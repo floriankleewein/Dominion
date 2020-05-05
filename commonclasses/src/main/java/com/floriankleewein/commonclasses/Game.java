@@ -1,0 +1,61 @@
+package com.floriankleewein.commonclasses;
+
+
+import com.floriankleewein.commonclasses.User.User;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Game {
+
+    private List<User> playerList = new ArrayList<>();
+    //hidden class variable for Singleton pattern.
+    private static Game game;
+    //overwriting constructor so it cannot be instanced.
+    Game(){}
+
+    public static synchronized Game getGame(){
+        if(Game.game == null){
+            Game.game = new Game();
+        }
+        return Game.game;
+    }
+
+    public List<User> getPlayerList() {
+        return playerList;
+    }
+
+    public void setPlayerList(List<User> playerList) {
+        this.playerList = playerList;
+    }
+
+    public boolean addPlayer(User user){
+        if(checkName(user.getUserName())) {
+            if (checkSize()) {
+                playerList.add(user);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean checkName(String name){
+        for (User user: playerList) {
+            if(user.getUserName().equals(name)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean checkSize(){
+        if(getPlayerNumber() < 4){
+            return true;
+        }
+        return false;
+    }
+
+    public int getPlayerNumber(){
+        return game.playerList.size();
+    }
+}
