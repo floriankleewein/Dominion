@@ -21,12 +21,11 @@ import com.floriankleewein.commonclasses.Network.StartGameMsg;
 import com.floriankleewein.commonclasses.User.User;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ClientConnector implements Parcelable {
+public class ClientConnector{
     private final String Tag = "CLIENT-CONNECTOR"; // Debugging only
     private static final String SERVER_IP = "143.205.174.196";
     private static final int SERVER_PORT = 53217;
@@ -155,15 +154,6 @@ public class ClientConnector implements Parcelable {
 
     public void registerCallback(Class c, Callback<BaseMessage> callback) {
         this.callbackMap.put(c, callback);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
     }
 }
 
