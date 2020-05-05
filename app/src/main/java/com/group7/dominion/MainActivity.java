@@ -1,9 +1,8 @@
 package com.group7.dominion;
 
 import android.content.Intent;
-import android.hardware.Sensor;
-import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,8 +14,7 @@ import com.floriankleewein.commonclasses.Board.Board;
 import com.floriankleewein.commonclasses.Network.AddPlayerNameErrorMsg;
 import com.floriankleewein.commonclasses.Network.AddPlayerSizeErrorMsg;
 import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
-import com.floriankleewein.commonclasses.Network.StartGameMsg;
-import com.group7.dominion.CheatFunction.ShakeListener;
+import com.floriankleewein.commonclasses.Network.CreateGameMsg;
 import com.group7.dominion.Network.ClientConnector;
 
 
@@ -26,8 +24,8 @@ public class MainActivity extends AppCompatActivity {
     private Board board;
     ClientConnector client;
 
-    //TODO: change this
-    public static final String EXTRA_MESSAGE = "com.example.myfirstapp.MESSAGE";
+    //TODO: rename this
+    public static final String EXTRA_MESSAGE = "clientForNextActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         client = new ClientConnector();
         checkButtons();
 
-        client.registerCallback(StartGameMsg.class,(msg->{
+        client.registerCallback(CreateGameMsg.class,(msg->{
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -67,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         client.connect();
-                        client.startGame();
+                        client.createGame();
                     }
                 });
 
@@ -94,6 +92,11 @@ public class MainActivity extends AppCompatActivity {
                     });
 
                     thread.start();*/
+
+                    //TODO: FLO: for gamecreation it must be possible to pass the client to the next activity.
+                    /*Intent intent = new Intent(MainActivity.this, StartGameActivity.class);
+                    intent.putExtra(EXTRA_MESSAGE, client);
+                    startActivity(intent);*/
                     startActivity(new Intent(MainActivity.this, StartGameActivity.class));
                 }
             });
