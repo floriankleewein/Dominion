@@ -138,6 +138,17 @@ public class ClientConnector{
     public void startGame(){
         StartGameMsg msg = new StartGameMsg();
         client.sendTCP(msg);
+
+        client.addListener(new Listener() {
+            public void received(Connection con, Object object) {
+                if (object instanceof StartGameMsg) {
+                    StartGameMsg msg = (StartGameMsg) object;
+                    callbackMap.get(StartGameMsg.class).callback(msg);
+                }
+            }
+
+        });
+
     }
 
     public boolean hasGame() {

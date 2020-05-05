@@ -15,6 +15,7 @@ import com.floriankleewein.commonclasses.Network.AddPlayerNameErrorMsg;
 import com.floriankleewein.commonclasses.Network.AddPlayerSizeErrorMsg;
 import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
 import com.floriankleewein.commonclasses.Network.CreateGameMsg;
+import com.floriankleewein.commonclasses.Network.StartGameMsg;
 import com.group7.dominion.Network.ClientConnector;
 
 
@@ -121,6 +122,8 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         }));
+
+
 
         btnJoin.setOnClickListener(new View.OnClickListener() {
             @Override

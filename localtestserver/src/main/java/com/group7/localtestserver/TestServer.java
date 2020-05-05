@@ -16,6 +16,7 @@ import com.floriankleewein.commonclasses.User.User;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class TestServer {
 
@@ -23,6 +24,7 @@ public class TestServer {
     private Game game;
     private boolean hasGame = false;
     private final String Tag = "TEST-SERVER"; // debugging only
+
 
     public TestServer() {
         server = new Server();
@@ -97,7 +99,8 @@ public class TestServer {
                     //ResetMsg msg = (ResetMsg) object;
 
                 }else if(object instanceof StartGameMsg){
-                    startGame();
+                    StartGameMsg msg = new StartGameMsg();
+                    con.sendTCP(msg);
                 }
 
 
@@ -116,9 +119,6 @@ public class TestServer {
         System.out.println("GAME, game instanced - started");
     }
 
-    public void startGame(){
-        //TODO: Emanuel, trigger the first move here.
-    }
 
     public void reset(){
         game.getPlayerList().clear();

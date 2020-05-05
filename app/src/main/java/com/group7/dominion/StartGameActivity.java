@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.esotericsoftware.kryonet.Client;
+import com.floriankleewein.commonclasses.Network.StartGameMsg;
 import com.floriankleewein.commonclasses.User.User;
 import com.group7.dominion.CheatFunction.ShakeListener;
 import com.group7.dominion.Network.ClientConnector;
@@ -38,14 +39,6 @@ public class StartGameActivity extends AppCompatActivity {
 
         ListView playerNamesListView = findViewById(R.id.playerNamesListView);
 
-        startGame = findViewById(R.id.startGame);
-        startGame.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startGame();
-            }
-        });
-
         /*ArrayAdapter<User> arrayAdapter
                 = new ArrayAdapter<User>(this, android.R.layout.simple_list_item_1 , );*/
     //TODO: adapter für die listView. wie kommt man an die userliste?
@@ -59,7 +52,17 @@ public class StartGameActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        ClientConnector client = (ClientConnector) getIntent().getSerializableExtra(EXTRA_MESSAGE);
+        /*ClientConnector client = (ClientConnector) getIntent().getSerializableExtra(EXTRA_MESSAGE);
+
+        client.registerCallback(StartGameMsg.class, (msg -> {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(StartGameActivity.this, GameActivity.class);
+                    startActivity(intent);
+                }
+            });
+        }));*/
 
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,6 +73,13 @@ public class StartGameActivity extends AppCompatActivity {
                     public void run() {
                         //TODO: FLO: for gamecreation it must be possible to pass the client to the next activity.
                         //client.startGame();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Intent intent = new Intent(StartGameActivity.this, GameActivity.class);
+                                startActivity(intent);
+                            }
+                        });
                     }
                 });
 
