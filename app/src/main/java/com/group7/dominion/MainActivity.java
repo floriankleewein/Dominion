@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         btnJoin = findViewById(R.id.btn_join);
         btnReset = findViewById(R.id.btn_reset);
 
-        //Start Shake Listener
+
 
     }
 

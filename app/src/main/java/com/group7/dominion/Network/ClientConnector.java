@@ -1,19 +1,18 @@
 package com.group7.dominion.Network;
 
-import android.hardware.usb.UsbEndpoint;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.util.Log;
 
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.floriankleewein.commonclasses.CheatFunction.CheatService;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.Network.AddPlayerNameErrorMsg;
 import com.floriankleewein.commonclasses.Network.AddPlayerSizeErrorMsg;
 import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
 import com.floriankleewein.commonclasses.Network.BaseMessage;
 import com.floriankleewein.commonclasses.Network.GameInformationMsg;
+import com.floriankleewein.commonclasses.Network.GetPlayersMsg;
 import com.floriankleewein.commonclasses.Network.NetworkInformationMsg;
 import com.floriankleewein.commonclasses.Network.ResetMsg;
 import com.floriankleewein.commonclasses.Network.CreateGameMsg;
@@ -23,9 +22,10 @@ import com.floriankleewein.commonclasses.User.User;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class ClientConnector{
+public class ClientConnector {
     private final String Tag = "CLIENT-CONNECTOR"; // Debugging only
     private static final String SERVER_IP = "143.205.174.196";
     private static final int SERVER_PORT = 53217;
@@ -55,7 +55,8 @@ public class ClientConnector{
         registerClass(User.class);
         registerClass(ResetMsg.class);
         registerClass(StartGameMsg.class);
-
+        registerClass(GetPlayersMsg.class);
+        registerClass(CheatService.class);
         // start client
         client.start();
 
@@ -98,7 +99,7 @@ public class ClientConnector{
         });
     }
 
-    public void addUser(String playerName){
+    public void addUser(String playerName) {
         AddPlayerSuccessMsg addPlayerMsg = new AddPlayerSuccessMsg();
         addPlayerMsg.setPlayerName(playerName);
         client.sendTCP(addPlayerMsg);
@@ -107,11 +108,11 @@ public class ClientConnector{
             public void received(Connection con, Object object) {
                 if (object instanceof AddPlayerSuccessMsg) {
                     AddPlayerSuccessMsg ms = (AddPlayerSuccessMsg) object;
-                    if(ms.getFeedbackUI() == 0){
+                    if (ms.getFeedbackUI() == 0) {
                         callbackMap.get(AddPlayerSuccessMsg.class).callback(ms);
-                    }else if(ms.getFeedbackUI() == 1){
+                    } else if (ms.getFeedbackUI() == 1) {
                         callbackMap.get(AddPlayerNameErrorMsg.class).callback(ms);
-                    }else if(ms.getFeedbackUI() == 2){
+                    } else if (ms.getFeedbackUI() == 2) {
                         callbackMap.get(AddPlayerSizeErrorMsg.class).callback(ms);
                     }
 
@@ -123,7 +124,7 @@ public class ClientConnector{
 
     //for now this method only has the use, to reset the game and playerList, so we
     //dont have to restart the server for the same purpose.
-    public void resetGame(){
+    public void resetGame() {
         ResetMsg msg = new ResetMsg();
         client.sendTCP(msg);
 
@@ -135,7 +136,7 @@ public class ClientConnector{
         });
     }
 
-    public void startGame(){
+    public void startGame() {
         StartGameMsg msg = new StartGameMsg();
         client.sendTCP(msg);
 
@@ -151,15 +152,36 @@ public class ClientConnector{
 
     }
 
+    public List getPlayerList() {
+        final List[] playerList = new List[1];
+
+        GetPlayersMsg Gmsg = new GetPlayersMsg();
+        //Send Message!
+        client.sendTCP(Gmsg);
+        //Wait for Message
+        client.addListener(new Listener() {
+            public void received(Connection con, Object object) {
+                if (object instanceof GetPlayersMsg) {
+                    GetPlayersMsg msg = (GetPlayersMsg) object;
+                    //Get PlayerList
+                    playerList[0] = msg.getPlayerList();
+                    callbackMap.get(GetPlayersMsg.class).callback(msg);
+                }
+            }
+        });
+
+        return playerList[0];
+    }
+
     public boolean hasGame() {
         return hasGame;
     }
 
-    public void setHasGame(Boolean bool){
+    public void setHasGame(Boolean bool) {
         this.hasGame = bool;
     }
 
-    public Client getClient(){
+    public Client getClient() {
         return client;
     }
 

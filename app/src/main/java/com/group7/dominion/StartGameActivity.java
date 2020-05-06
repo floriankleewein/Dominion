@@ -15,16 +15,21 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.esotericsoftware.kryonet.Client;
+import com.floriankleewein.commonclasses.Game;
+import com.floriankleewein.commonclasses.Network.GetPlayersMsg;
 import com.floriankleewein.commonclasses.Network.StartGameMsg;
 import com.floriankleewein.commonclasses.User.User;
 import com.group7.dominion.CheatFunction.ShakeListener;
 import com.group7.dominion.Network.ClientConnector;
 import com.group7.localtestserver.TestServer;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class StartGameActivity extends AppCompatActivity {
-    Button btnStart;
-    SensorManager sm;
-    ShakeListener shakeListener;
+    Button btnStart, btnshowPlayers;
+    ClientConnector client;
+
     //TODO: rename this
     public static final String EXTRA_MESSAGE = "clientForNextActivity";
 
@@ -35,23 +40,41 @@ public class StartGameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_or_join);
         btnStart = findViewById(R.id.btn_start);
+        btnshowPlayers = findViewById(R.id.ShowPlayer);
 
 
         ListView playerNamesListView = findViewById(R.id.playerNamesListView);
 
+
+
         /*ArrayAdapter<User> arrayAdapter
                 = new ArrayAdapter<User>(this, android.R.layout.simple_list_item_1 , );*/
-    //TODO: adapter für die listView. wie kommt man an die userliste?
+        //TODO: adapter für die listView. wie kommt man an die userliste?
 
 
-        shakeListener = new ShakeListener(getSupportFragmentManager());
-        sm = (SensorManager) getSystemService(SENSOR_SERVICE);
-        sm.registerListener(shakeListener.newSensorListener(), sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
+        client = new ClientConnector();
+
+        btnshowPlayers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        List<User> PlayerList = client.getPlayerList();
+                        if (PlayerList == null) {
+                            System.out.println("List is empty!");
+                        }
+                    }
+                });
+                thread.start();
+            }
+        });
+
         /*ClientConnector client = (ClientConnector) getIntent().getSerializableExtra(EXTRA_MESSAGE);
 
         client.registerCallback(StartGameMsg.class, (msg -> {

@@ -12,13 +12,12 @@ import com.floriankleewein.commonclasses.Game;
 
 public class CheatAlert extends AppCompatDialogFragment {
 
-    CheatService cheatService;
-    private Game game;
+    Game game;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        cheatService = new CheatService(Game.getGame());
+
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                 .setTitle("How dare you?")
@@ -26,9 +25,9 @@ public class CheatAlert extends AppCompatDialogFragment {
                 .setPositiveButton("Yes, i want to win", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //Cheat Function will be called up!!
+                        //TODO: Have to find Playername
                         String name = "";
-                        cheatService.addCardtoUser(name);
+                        game.getCheatService().addCardtoUser(name);
                         dialog.cancel();
                     }
                 })
