@@ -9,7 +9,6 @@ public class AddPlayerSuccessMsg extends BaseMessage{
     private User user;
     private boolean playerAdded = false;
     private int feedbackUI;
-    private Client client;
 
     public String getPlayerName() {
         return playerName;
@@ -41,13 +40,6 @@ public class AddPlayerSuccessMsg extends BaseMessage{
         return this.feedbackUI;
     }
 
-    public Client getClient() {
-        return client;
-    }
-
-    public void setClient(Client client) {
-        this.client = client;
-    }
 }
 
 

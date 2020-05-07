@@ -6,6 +6,8 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
 
+import com.esotericsoftware.kryonet.Client;
+import com.floriankleewein.commonclasses.Network.ClientConnector;
 import com.google.android.material.tabs.TabLayout;
 import com.group7.dominion.Chat.ViewPagerAdapter;
 

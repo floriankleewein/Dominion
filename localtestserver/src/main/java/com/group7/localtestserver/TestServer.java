@@ -49,7 +49,6 @@ public class TestServer {
         registerClass(User.class);
         registerClass(ResetMsg.class);
         registerClass(StartGameMsg.class);
-        registerClass(Client.class);
 
         //Start Server
         server.start();
@@ -90,7 +89,6 @@ public class TestServer {
                             game.addPlayer(player);
                             addPlayerMsg.setFeedbackUI(0);
                             addPlayerMsg.setPlayerAdded(true);
-                            Client client = addPlayerMsg.getClient();
                             System.out.println("Player added: " + player.getUserName());
                         }else{
                             addPlayerMsg.setFeedbackUI(1);
