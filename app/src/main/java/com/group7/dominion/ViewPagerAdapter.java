@@ -1,4 +1,4 @@
-package com.group7.dominion.Chat;
+package com.group7.dominion;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -7,7 +7,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 
-import com.group7.dominion.GameFragment;
+import com.group7.dominion.Chat.ChatFragment;
 
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
