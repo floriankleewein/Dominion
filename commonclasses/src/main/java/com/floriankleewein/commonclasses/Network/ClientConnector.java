@@ -1,23 +1,9 @@
-package com.group7.dominion.Network;
-
-import android.hardware.usb.UsbEndpoint;
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.util.Log;
+package com.floriankleewein.commonclasses.Network;
 
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.floriankleewein.commonclasses.Game;
-import com.floriankleewein.commonclasses.Network.AddPlayerNameErrorMsg;
-import com.floriankleewein.commonclasses.Network.AddPlayerSizeErrorMsg;
-import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
-import com.floriankleewein.commonclasses.Network.BaseMessage;
-import com.floriankleewein.commonclasses.Network.GameInformationMsg;
-import com.floriankleewein.commonclasses.Network.NetworkInformationMsg;
-import com.floriankleewein.commonclasses.Network.ResetMsg;
-import com.floriankleewein.commonclasses.Network.CreateGameMsg;
-import com.floriankleewein.commonclasses.Network.StartGameMsg;
 import com.floriankleewein.commonclasses.User.User;
 
 import java.io.IOException;
@@ -29,13 +15,25 @@ public class ClientConnector{
     private final String Tag = "CLIENT-CONNECTOR"; // Debugging only
     private static final String SERVER_IP = "143.205.174.196";
     private static final int SERVER_PORT = 53217;
-    private Client client;
+    private static Client client;
     private boolean hasGame = false;
     private Callback<CreateGameMsg> callback;
     Map<Class, Callback<BaseMessage>> callbackMap = new HashMap<>();
 
-    public ClientConnector() {
+    /*public ClientConnector() {
         this.client = new Client();
+    }*/
+
+    private static ClientConnector clientConnector;
+    //overwriting constructor so it cannot be instanced.
+    private ClientConnector(){}
+
+    public static synchronized ClientConnector getClientConnector(){
+        if(ClientConnector.clientConnector == null){
+            client = new Client();
+            ClientConnector.clientConnector = new ClientConnector();
+        }
+        return ClientConnector.clientConnector;
     }
 
     public void registerClass(Class regClass) {
@@ -55,6 +53,7 @@ public class ClientConnector{
         registerClass(User.class);
         registerClass(ResetMsg.class);
         registerClass(StartGameMsg.class);
+        registerClass(Client.class);
 
         // start client
         client.start();
@@ -66,7 +65,7 @@ public class ClientConnector{
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Log.d(Tag, "Connection-Status: " + client.isConnected());
+        //Log.d(Tag, "Connection-Status: " + client.isConnected());
 
         MessageClass ms = new MessageClass();
         ms.setMessage("Hello Server!");
@@ -76,14 +75,14 @@ public class ClientConnector{
             public void received(Connection con, Object object) {
                 if (object instanceof MessageClass) {
                     MessageClass ms = (MessageClass) object;
-                    Log.d(Tag, "Received response: " + ms.getMessage());
+                    //Log.d(Tag, "Received response: " + ms.getMessage());
                 }
             }
         });
     }
 
     public void createGame() {
-        Log.d(Tag, "Connection-Status: " + client.isConnected());
+        //Log.d(Tag, "Connection-Status: " + client.isConnected());
         final CreateGameMsg startMsg = new CreateGameMsg();
         client.sendTCP(startMsg);
         client.addListener(new Listener() {
@@ -92,7 +91,7 @@ public class ClientConnector{
                     CreateGameMsg recStartMsg = (CreateGameMsg) object;
                     hasGame = recStartMsg.isHasGame();
                     callbackMap.get(CreateGameMsg.class).callback(recStartMsg);
-                    Log.d(Tag, "Created/Received Game." + hasGame);
+                    //Log.d(Tag, "Created/Received Game." + hasGame);
                 }
             }
         });
@@ -101,6 +100,7 @@ public class ClientConnector{
     public void addUser(String playerName){
         AddPlayerSuccessMsg addPlayerMsg = new AddPlayerSuccessMsg();
         addPlayerMsg.setPlayerName(playerName);
+        addPlayerMsg.setClient(client);
         client.sendTCP(addPlayerMsg);
 
         client.addListener(new Listener() {

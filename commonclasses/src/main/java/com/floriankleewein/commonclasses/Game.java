@@ -12,7 +12,7 @@ public class Game {
     //hidden class variable for Singleton pattern.
     private static Game game;
     //overwriting constructor so it cannot be instanced.
-    Game(){}
+    private Game(){}
 
     public static synchronized Game getGame(){
         if(Game.game == null){
