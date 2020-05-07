@@ -1,12 +1,14 @@
 package com.group7.localtestserver;
 
 
+import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
 import com.floriankleewein.commonclasses.Network.BaseMessage;
+import com.floriankleewein.commonclasses.Network.ClientConnector;
 import com.floriankleewein.commonclasses.Network.ResetMsg;
 import com.floriankleewein.commonclasses.Network.CreateGameMsg;
 import com.floriankleewein.commonclasses.Network.GameInformationMsg;
@@ -16,7 +18,9 @@ import com.floriankleewein.commonclasses.User.User;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TestServer {
 
@@ -24,6 +28,7 @@ public class TestServer {
     private Game game;
     private boolean hasGame = false;
     private final String Tag = "TEST-SERVER"; // debugging only
+    //private Map<User, ClientConnector> userClientConnectorMap = new HashMap<>();
 
 
     public TestServer() {
