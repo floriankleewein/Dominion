@@ -2,7 +2,6 @@ package com.group7.dominion;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,8 +14,7 @@ import com.floriankleewein.commonclasses.Network.AddPlayerNameErrorMsg;
 import com.floriankleewein.commonclasses.Network.AddPlayerSizeErrorMsg;
 import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
 import com.floriankleewein.commonclasses.Network.CreateGameMsg;
-import com.floriankleewein.commonclasses.Network.StartGameMsg;
-import com.group7.dominion.Network.ClientConnector;
+import com.floriankleewein.commonclasses.Network.ClientConnector;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -36,16 +34,13 @@ public class MainActivity extends AppCompatActivity {
         btnCreate = findViewById(R.id.btn_create);
         btnJoin = findViewById(R.id.btn_join);
         btnReset = findViewById(R.id.btn_reset);
-
-        //Start Shake Listener
-
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
-        client = new ClientConnector();
+        client = ClientConnector.getClientConnector();
         checkButtons();
 
         client.registerCallback(CreateGameMsg.class,(msg->{

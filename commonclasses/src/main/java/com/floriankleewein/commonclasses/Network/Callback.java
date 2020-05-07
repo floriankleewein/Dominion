@@ -1,4 +1,4 @@
-package com.group7.dominion.Network;
+package com.floriankleewein.commonclasses.Network;
 
 public interface Callback<T> {
 

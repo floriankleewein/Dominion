@@ -6,6 +6,8 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
 
+import com.esotericsoftware.kryonet.Client;
+import com.floriankleewein.commonclasses.Network.ClientConnector;
 import com.google.android.material.tabs.TabLayout;
 import com.group7.dominion.Chat.ViewPagerAdapter;
 
@@ -33,5 +35,15 @@ public class GameActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
         viewPager.setAdapter(viewPagerAdapter);
+
+
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+
+        ClientConnector clientConnector = ClientConnector.getClientConnector();
+
     }
 }
