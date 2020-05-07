@@ -26,7 +26,7 @@ public class ClientConnector{
 
     private static ClientConnector clientConnector;
     //overwriting constructor so it cannot be instanced.
-    private ClientConnector(){}
+    ClientConnector(){}
 
     public static synchronized ClientConnector getClientConnector(){
         if(ClientConnector.clientConnector == null){
