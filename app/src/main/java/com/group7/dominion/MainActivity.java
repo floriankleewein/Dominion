@@ -34,9 +34,6 @@ public class MainActivity extends AppCompatActivity {
         btnCreate = findViewById(R.id.btn_create);
         btnJoin = findViewById(R.id.btn_join);
         btnReset = findViewById(R.id.btn_reset);
-
-        //Start Shake Listener
-
     }
 
     @Override

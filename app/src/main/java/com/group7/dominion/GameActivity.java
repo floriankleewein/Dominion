@@ -35,5 +35,15 @@ public class GameActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
 
         viewPager.setAdapter(viewPagerAdapter);
+
+
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+
+        ClientConnector clientConnector = ClientConnector.getClientConnector();
+
     }
 }

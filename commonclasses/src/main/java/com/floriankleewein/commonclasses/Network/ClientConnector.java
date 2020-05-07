@@ -59,12 +59,11 @@ public class ClientConnector{
 
         //connects aau server
         try {
-            //client.connect(5000, InetAddress.getLocalHost(), 8080); // local server
             client.connect(5000, SERVER_IP, SERVER_PORT);   // Uni server
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //Log.d(Tag, "Connection-Status: " + client.isConnected());
+        System.out.println("Connection-Status: " + client.isConnected());
 
         MessageClass ms = new MessageClass();
         ms.setMessage("Hello Server!");
@@ -74,14 +73,14 @@ public class ClientConnector{
             public void received(Connection con, Object object) {
                 if (object instanceof MessageClass) {
                     MessageClass ms = (MessageClass) object;
-                    //Log.d(Tag, "Received response: " + ms.getMessage());
+                    System.out.println("Received response: " + ms.getMessage());
                 }
             }
         });
     }
 
     public void createGame() {
-        //Log.d(Tag, "Connection-Status: " + client.isConnected());
+        System.out.println("Connection-Status: " + client.isConnected());
         final CreateGameMsg startMsg = new CreateGameMsg();
         client.sendTCP(startMsg);
         client.addListener(new Listener() {
@@ -90,7 +89,7 @@ public class ClientConnector{
                     CreateGameMsg recStartMsg = (CreateGameMsg) object;
                     hasGame = recStartMsg.isHasGame();
                     callbackMap.get(CreateGameMsg.class).callback(recStartMsg);
-                    //Log.d(Tag, "Created/Received Game." + hasGame);
+                    System.out.println("Created/Received Game." + hasGame);
                 }
             }
         });
