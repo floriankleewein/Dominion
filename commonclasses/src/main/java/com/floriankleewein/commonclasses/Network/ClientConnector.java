@@ -53,7 +53,6 @@ public class ClientConnector{
         registerClass(User.class);
         registerClass(ResetMsg.class);
         registerClass(StartGameMsg.class);
-        registerClass(Client.class);
 
         // start client
         client.start();
@@ -100,7 +99,6 @@ public class ClientConnector{
     public void addUser(String playerName){
         AddPlayerSuccessMsg addPlayerMsg = new AddPlayerSuccessMsg();
         addPlayerMsg.setPlayerName(playerName);
-        addPlayerMsg.setClient(client);
         client.sendTCP(addPlayerMsg);
 
         client.addListener(new Listener() {
