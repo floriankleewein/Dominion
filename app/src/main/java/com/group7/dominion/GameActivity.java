@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
@@ -43,5 +44,22 @@ public class GameActivity extends AppCompatActivity {
         shakeListener = new ShakeListener(getSupportFragmentManager());
         sm = (SensorManager) getSystemService(SENSOR_SERVICE);
         sm.registerListener(shakeListener.newSensorListener(), sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+
+        System.out.println(getUsername() + " is here");
+    }
+
+    public String getUsername () {
+        String str = "";
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+        if (extras != null){
+            str = extras.getString("USERNAME");
+        }
+        return str;
+    }
+
+    protected void onStart () {
+        super.onStart();
+        
     }
 }

@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
 
+import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.Network.CreateGameMsg;
 import com.floriankleewein.commonclasses.Network.GetPlayerMsg;
 import com.floriankleewein.commonclasses.Network.ReturnPlayersMsg;
@@ -34,6 +35,7 @@ public class StartGameActivity extends AppCompatActivity {
 
 
 
+
         /*ArrayAdapter<User> arrayAdapter
                 = new ArrayAdapter<User>(this, android.R.layout.simple_list_item_1 , );*/
         //TODO: adapter für die listView. wie kommt man an die userliste?
@@ -43,6 +45,7 @@ public class StartGameActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
+        putNametoNextAcitivty(getUserName());
         super.onStart();
         client = new ClientConnector();
 
@@ -60,15 +63,15 @@ public class StartGameActivity extends AppCompatActivity {
             }
         });
 
-                client.registerCallback(ReturnPlayersMsg.class, (msg -> {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            System.out.println("Got A Callback");
-                            client.getPlayerList();
-                        }
-                    });
-                }));
+        client.registerCallback(ReturnPlayersMsg.class, (msg -> {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    System.out.println("Got A Callback");
+                    client.getPlayerList();
+                }
+            });
+        }));
 
         /*ClientConnector client = (ClientConnector) getIntent().getSerializableExtra(EXTRA_MESSAGE);
 
@@ -116,6 +119,22 @@ public class StartGameActivity extends AppCompatActivity {
     public void startGame() {
         Intent intent = new Intent(this, GameActivity.class);
         startActivity(intent);
+    }
+
+    public String getUserName() {
+        String str = "";
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+                if (extras != null){
+                    str = extras.getString("USERNAME");
+                }
+        return str;
+    }
+
+    public void putNametoNextAcitivty(String Name) {
+        Intent i = new Intent(StartGameActivity.this, GameActivity.class);
+        i.putExtra("USERNAME", Name);
+        startActivity(i);
     }
 
 }

@@ -136,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
                         client.addUser(userName);
                         Intent UserNameIntent = new Intent(MainActivity.this, StartGameActivity.class);
                         UserNameIntent.putExtra("USERNAME", userName);
+                        startActivity (UserNameIntent);
                     }
                 });
                 thread.start();
