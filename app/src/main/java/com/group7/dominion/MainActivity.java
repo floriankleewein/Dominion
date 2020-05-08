@@ -22,6 +22,7 @@ import com.group7.dominion.Network.ClientConnector;
 public class MainActivity extends AppCompatActivity {
 
     Button btnCreate, btnJoin, btnReset;
+
     private Board board;
     ClientConnector client;
 
@@ -38,7 +39,6 @@ public class MainActivity extends AppCompatActivity {
         btnReset = findViewById(R.id.btn_reset);
 
 
-
     }
 
     @Override
@@ -48,13 +48,13 @@ public class MainActivity extends AppCompatActivity {
         client = new ClientConnector();
         checkButtons();
 
-        client.registerCallback(CreateGameMsg.class,(msg->{
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        checkButtons();
-                    }
-                });
+        client.registerCallback(CreateGameMsg.class, (msg -> {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    checkButtons();
+                }
+            });
         }));
 
 
@@ -124,20 +124,21 @@ public class MainActivity extends AppCompatActivity {
         }));
 
 
-
         btnJoin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-               Thread thread = new  Thread(new Runnable() {
+                Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
                         EditText editText = findViewById(R.id.inputName);
                         String userName = editText.getText().toString();
                         client.addUser(userName);
+                        Intent UserNameIntent = new Intent(MainActivity.this, StartGameActivity.class);
+                        UserNameIntent.putExtra("USERNAME", userName);
                     }
                 });
-               thread.start();
+                thread.start();
             }
         });
 

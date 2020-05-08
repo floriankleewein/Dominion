@@ -12,7 +12,8 @@ import com.floriankleewein.commonclasses.Network.AddPlayerSizeErrorMsg;
 import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
 import com.floriankleewein.commonclasses.Network.BaseMessage;
 import com.floriankleewein.commonclasses.Network.GameInformationMsg;
-import com.floriankleewein.commonclasses.Network.GetPlayersMsg;
+import com.floriankleewein.commonclasses.Network.GetPlayerMsg;
+import com.floriankleewein.commonclasses.Network.ReturnPlayersMsg;
 import com.floriankleewein.commonclasses.Network.NetworkInformationMsg;
 import com.floriankleewein.commonclasses.Network.ResetMsg;
 import com.floriankleewein.commonclasses.Network.CreateGameMsg;
@@ -22,7 +23,6 @@ import com.floriankleewein.commonclasses.User.User;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ClientConnector {
@@ -55,8 +55,9 @@ public class ClientConnector {
         registerClass(User.class);
         registerClass(ResetMsg.class);
         registerClass(StartGameMsg.class);
-        registerClass(GetPlayersMsg.class);
+        registerClass(ReturnPlayersMsg.class);
         registerClass(CheatService.class);
+        registerClass(GetPlayerMsg.class);
         // start client
         client.start();
 
@@ -152,25 +153,29 @@ public class ClientConnector {
 
     }
 
-    public List getPlayerList() {
-        final List[] playerList = new List[1];
+    public void sendMessagelayerList() {
 
-        GetPlayersMsg Gmsg = new GetPlayersMsg();
+        GetPlayerMsg msg = new GetPlayerMsg();
         //Send Message!
-        client.sendTCP(Gmsg);
-        //Wait for Message
+        client.sendTCP(msg);
+        System.out.println("Message is send");
+    }
+
+    public void getPlayerList() {
         client.addListener(new Listener() {
             public void received(Connection con, Object object) {
-                if (object instanceof GetPlayersMsg) {
-                    GetPlayersMsg msg = (GetPlayersMsg) object;
+                System.out.println("GOT THE MESSAGE");
+                if (object instanceof ReturnPlayersMsg) {
+                    ReturnPlayersMsg msg = (ReturnPlayersMsg) object;
+                    if (msg != null) {
+                        System.out.println("Game Message Object is here");
+                    } else System.out.println("NOT HERE!!");
                     //Get PlayerList
-                    playerList[0] = msg.getPlayerList();
-                    callbackMap.get(GetPlayersMsg.class).callback(msg);
+                    System.out.println(msg.getPlayerList().getPlayerList().get(0));
+                    callbackMap.get(GetPlayerMsg.class).callback(msg);
                 }
             }
         });
-
-        return playerList[0];
     }
 
     public boolean hasGame() {

@@ -11,6 +11,7 @@ import android.os.Bundle;
 import com.google.android.material.tabs.TabLayout;
 import com.group7.dominion.Chat.ViewPagerAdapter;
 import com.group7.dominion.CheatFunction.ShakeListener;
+import com.group7.dominion.Network.ClientConnector;
 
 public class GameActivity extends AppCompatActivity {
     private SensorManager sm;

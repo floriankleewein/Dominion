@@ -8,7 +8,8 @@ import com.floriankleewein.commonclasses.CheatFunction.CheatService;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
 import com.floriankleewein.commonclasses.Network.BaseMessage;
-import com.floriankleewein.commonclasses.Network.GetPlayersMsg;
+import com.floriankleewein.commonclasses.Network.GetPlayerMsg;
+import com.floriankleewein.commonclasses.Network.ReturnPlayersMsg;
 import com.floriankleewein.commonclasses.Network.ResetMsg;
 import com.floriankleewein.commonclasses.Network.CreateGameMsg;
 import com.floriankleewein.commonclasses.Network.GameInformationMsg;
@@ -18,7 +19,6 @@ import com.floriankleewein.commonclasses.User.User;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 public class TestServer {
 
@@ -46,6 +46,7 @@ public class TestServer {
         registerClass(User.class);
         registerClass(ResetMsg.class);
         registerClass(StartGameMsg.class);
+        registerClass(GetPlayerMsg.class);
         registerClass(CheatService.class);
 
         //Start Server
@@ -101,11 +102,10 @@ public class TestServer {
                 } else if (object instanceof StartGameMsg) {
                     StartGameMsg msg = new StartGameMsg();
                     con.sendTCP(msg);
-                } else if (object instanceof GetPlayersMsg) {
-                    GetPlayersMsg msg = new GetPlayersMsg();
+                } else if (object instanceof GetPlayerMsg) {
+                    ReturnPlayersMsg msg = new ReturnPlayersMsg();
                     con.sendTCP(msg);
                 }
-
             }
         });
     }

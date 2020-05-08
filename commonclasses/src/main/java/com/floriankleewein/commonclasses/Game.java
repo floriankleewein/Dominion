@@ -15,10 +15,11 @@ public class Game {
     //overwriting constructor so it cannot be instanced.
     private static CheatService cheatService;
 
-    Game(){}
+    Game() {
+    }
 
-    public static synchronized Game getGame(){
-        if(Game.game == null){
+    public static synchronized Game getGame() {
+        if (Game.game == null) {
             Game.game = new Game();
             cheatService = new CheatService(Game.game);
         }
@@ -33,8 +34,8 @@ public class Game {
         this.playerList = playerList;
     }
 
-    public boolean addPlayer(User user){
-        if(checkName(user.getUserName())) {
+    public boolean addPlayer(User user) {
+        if (checkName(user.getUserName())) {
             if (checkSize()) {
                 playerList.add(user);
                 return true;
@@ -43,27 +44,36 @@ public class Game {
         return false;
     }
 
-    public boolean checkName(String name){
-        for (User user: playerList) {
-            if(user.getUserName().equals(name)){
+    public boolean checkName(String name) {
+        for (User user : playerList) {
+            if (user.getUserName().equals(name)) {
                 return false;
             }
         }
         return true;
     }
 
-    public boolean checkSize(){
-        if(getPlayerNumber() < 4){
+    public boolean checkSize() {
+        if (getPlayerNumber() < 4) {
             return true;
         }
         return false;
     }
 
-    public int getPlayerNumber(){
+    public User findUser(String name) {
+        for (int i = 0; i < playerList.size(); i++) {
+            if (playerList.get(i).getUserName().equals(name)) {
+                return playerList.get(i);
+            }
+        }
+        return null;
+    }
+
+    public int getPlayerNumber() {
         return game.playerList.size();
     }
 
-    public CheatService getCheatService () {
+    public CheatService getCheatService() {
         return Game.cheatService;
     }
 

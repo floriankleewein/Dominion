@@ -2,29 +2,16 @@ package com.group7.dominion;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.hardware.Sensor;
-import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import com.esotericsoftware.kryonet.Client;
-import com.floriankleewein.commonclasses.Game;
-import com.floriankleewein.commonclasses.Network.GetPlayersMsg;
-import com.floriankleewein.commonclasses.Network.StartGameMsg;
-import com.floriankleewein.commonclasses.User.User;
-import com.group7.dominion.CheatFunction.ShakeListener;
+import com.floriankleewein.commonclasses.Network.CreateGameMsg;
+import com.floriankleewein.commonclasses.Network.GetPlayerMsg;
+import com.floriankleewein.commonclasses.Network.ReturnPlayersMsg;
 import com.group7.dominion.Network.ClientConnector;
-import com.group7.localtestserver.TestServer;
-
-import java.util.LinkedList;
-import java.util.List;
 
 public class StartGameActivity extends AppCompatActivity {
     Button btnStart, btnshowPlayers;
@@ -62,18 +49,26 @@ public class StartGameActivity extends AppCompatActivity {
         btnshowPlayers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        List<User> PlayerList = client.getPlayerList();
-                        if (PlayerList == null) {
-                            System.out.println("List is empty!");
-                        }
+                        client.sendMessagelayerList();
                     }
                 });
                 thread.start();
             }
         });
+
+                client.registerCallback(ReturnPlayersMsg.class, (msg -> {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            System.out.println("Got A Callback");
+                            client.getPlayerList();
+                        }
+                    });
+                }));
 
         /*ClientConnector client = (ClientConnector) getIntent().getSerializableExtra(EXTRA_MESSAGE);
 
