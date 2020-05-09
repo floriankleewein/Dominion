@@ -5,6 +5,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.floriankleewein.commonclasses.Game;
+import com.floriankleewein.commonclasses.GameLogic.GameHandler;
 import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
 import com.floriankleewein.commonclasses.Network.BaseMessage;
 import com.floriankleewein.commonclasses.Network.CreateGameMsg;
@@ -25,6 +26,7 @@ public class TestServer {
     private Game game;
     private boolean hasGame = false;
     private final String Tag = "TEST-SERVER"; // debugging only
+    private GameHandler gamehandler;
     private Map<User, Connection> userClientConnectorMap = new HashMap<>();
 
 
@@ -100,10 +102,13 @@ public class TestServer {
 
                 } else if (object instanceof StartGameMsg) {
                     StartGameMsg msg = new StartGameMsg();
-                    //Check if game started successfully
+                    //Check if game started successfully, and notify client
                     if (setupGame()) {
                         msg.setFeedbackUI(0);
-                        con.sendTCP(msg);
+                        // Send message to all clients, TODO they need to be in lobby
+                        for (Connection c: server.getConnections()) {
+                            c.sendTCP(msg);
+                        }
                     } else {
                         msg.setFeedbackUI(1);
                         con.sendTCP(msg);
@@ -120,7 +125,6 @@ public class TestServer {
     }
 
     public void createGame() {
-
         game = Game.getGame();
         hasGame = true;
         System.out.println("GAME, game instanced - started");
@@ -140,7 +144,10 @@ public class TestServer {
 
     public boolean setupGame() {
         if (hasGame()) {
-
+            gamehandler = new GameHandler(getGame());
+            for (User user: game.getPlayerList()) {
+                gamehandler.addPlayer(user);
+            }
             return true;
         } else {
             return false;
