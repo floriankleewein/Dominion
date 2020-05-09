@@ -1,25 +1,22 @@
 package com.group7.localtestserver;
 
 
-import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
 import com.floriankleewein.commonclasses.Network.BaseMessage;
-import com.floriankleewein.commonclasses.Network.ClientConnector;
-import com.floriankleewein.commonclasses.Network.ResetMsg;
 import com.floriankleewein.commonclasses.Network.CreateGameMsg;
 import com.floriankleewein.commonclasses.Network.GameInformationMsg;
 import com.floriankleewein.commonclasses.Network.NetworkInformationMsg;
+import com.floriankleewein.commonclasses.Network.ResetMsg;
 import com.floriankleewein.commonclasses.Network.StartGameMsg;
 import com.floriankleewein.commonclasses.User.User;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class TestServer {
@@ -28,7 +25,7 @@ public class TestServer {
     private Game game;
     private boolean hasGame = false;
     private final String Tag = "TEST-SERVER"; // debugging only
-    //private Map<User, ClientConnector> userClientConnectorMap = new HashMap<>();
+    private Map<User, Connection> userClientConnectorMap = new HashMap<>();
 
 
     public TestServer() {
@@ -68,15 +65,13 @@ public class TestServer {
                     sendMessage.setMessage("Hello Client! " + " from: " + con.getRemoteAddressTCP().getHostString());
 
                     con.sendTCP(sendMessage);
-                }
-                else if(object instanceof CreateGameMsg){
+                } else if (object instanceof CreateGameMsg) {
                     createGame();
                     CreateGameMsg startGameMsg = (CreateGameMsg) object;
                     startGameMsg.setGame(getGame());
                     startGameMsg.setHasGame(hasGame());
                     con.sendTCP(startGameMsg);
-                }
-                else if(object instanceof AddPlayerSuccessMsg){
+                } else if (object instanceof AddPlayerSuccessMsg) {
                     AddPlayerSuccessMsg addPlayerMsg = (AddPlayerSuccessMsg) object;
                     String name = addPlayerMsg.getPlayerName();
                     User player = new User(name);
@@ -84,28 +79,35 @@ public class TestServer {
                         addPlayerMsg.setUser(player);
                         addPlayerMsg.setPlayerAdded(true);
                     }*/
-                    if(game.checkSize()){
-                        if(game.checkName(name)){
+                    if (game.checkSize()) {
+                        if (game.checkName(name)) {
+                            userClientConnectorMap.put(player, con);
                             game.addPlayer(player);
                             addPlayerMsg.setFeedbackUI(0);
                             addPlayerMsg.setPlayerAdded(true);
                             System.out.println("Player added: " + player.getUserName());
-                        }else{
+                        } else {
                             addPlayerMsg.setFeedbackUI(1);
                         }
-                    }else{
+                    } else {
                         addPlayerMsg.setFeedbackUI(2);
                     }
                     con.sendTCP(addPlayerMsg);
-                }
-                else if(object instanceof ResetMsg){
+                } else if (object instanceof ResetMsg) {
                     System.out.println("Received Reset Message.");
                     reset();
                     //ResetMsg msg = (ResetMsg) object;
 
-                }else if(object instanceof StartGameMsg){
+                } else if (object instanceof StartGameMsg) {
                     StartGameMsg msg = new StartGameMsg();
-                    con.sendTCP(msg);
+                    //Check if game started successfully
+                    if (setupGame()) {
+                        msg.setFeedbackUI(0);
+                        con.sendTCP(msg);
+                    } else {
+                        msg.setFeedbackUI(1);
+                        con.sendTCP(msg);
+                    }
                 }
 
 
@@ -125,14 +127,24 @@ public class TestServer {
     }
 
 
-    public void reset(){
+    public void reset() {
         game.getPlayerList().clear();
+        userClientConnectorMap.clear();
         System.out.println("Playerlist cleared!");
     }
 
 
     public boolean hasGame() {
         return hasGame;
+    }
+
+    public boolean setupGame() {
+        if (hasGame()) {
+
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public Game getGame() {

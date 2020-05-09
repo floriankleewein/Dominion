@@ -44,12 +44,12 @@ public class MainActivity extends AppCompatActivity {
         checkButtons();
 
         client.registerCallback(CreateGameMsg.class,(msg->{
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        checkButtons();
-                    }
-                });
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    checkButtons();
+                }
+            });
         }));
 
 

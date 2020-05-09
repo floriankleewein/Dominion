@@ -1,7 +1,5 @@
 package com.group7.dominion;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
@@ -9,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.floriankleewein.commonclasses.Network.ClientConnector;
 import com.group7.dominion.CheatFunction.ShakeListener;
