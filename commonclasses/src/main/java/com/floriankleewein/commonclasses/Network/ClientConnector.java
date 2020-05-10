@@ -3,10 +3,12 @@ package com.floriankleewein.commonclasses.Network;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.floriankleewein.commonclasses.Chat.ChatMessage;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.User.User;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -63,9 +65,8 @@ public class ClientConnector {
         registerClass(User.class);
         registerClass(ResetMsg.class);
         registerClass(StartGameMsg.class);
-
+        registerClass(ChatMessage.class);
         registerClass(HasCheatedMessage.class);
-
         registerClass(ActivePlayerMessage.class);
         registerClass(UpdatePlayerNamesMsg.class);
 
@@ -207,6 +208,9 @@ public class ClientConnector {
         this.callbackMap.put(c, callback);
     }
 
+    public boolean isConnected() {
+        return client.isConnected();
+    }
 
 
     public void sendCheatMessage () {

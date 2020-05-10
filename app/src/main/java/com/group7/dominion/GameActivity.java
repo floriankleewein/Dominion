@@ -22,8 +22,11 @@ import com.floriankleewein.commonclasses.Game;
 
 import com.floriankleewein.commonclasses.Network.ClientConnector;
 import com.google.android.material.tabs.TabLayout;
-import com.group7.dominion.Chat.ViewPagerAdapter;
+
+
+
 import com.group7.dominion.CheatFunction.ShakeListener;
+
 
 public class GameActivity extends AppCompatActivity {
     private SensorManager sm;

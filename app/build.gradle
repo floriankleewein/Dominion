@@ -73,4 +73,6 @@ dependencies {
     implementation project(path: ':localtestserver')
 
     implementation 'com.google.android.material:material:1.0.0'
+    implementation 'com.jakewharton:butterknife:10.2.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.1'
 }

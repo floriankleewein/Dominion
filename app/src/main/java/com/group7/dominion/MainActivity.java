@@ -17,6 +17,7 @@ import com.floriankleewein.commonclasses.Network.AddPlayerSizeErrorMsg;
 import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
 import com.floriankleewein.commonclasses.Network.CreateGameMsg;
 import com.floriankleewein.commonclasses.Network.ClientConnector;
+import com.group7.localtestserver.TestServer;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -25,7 +26,9 @@ public class MainActivity extends AppCompatActivity {
 
     private Board board;
     ClientConnector client;
+
     SharedPreferences sharedPreferences;
+
 
     //TODO: rename this
     public static final String EXTRA_MESSAGE = "clientForNextActivity";
@@ -39,7 +42,9 @@ public class MainActivity extends AppCompatActivity {
         btnJoin = findViewById(R.id.btn_join);
         btnReset = findViewById(R.id.btn_reset);
 
+
         sharedPreferences = getSharedPreferences("USERNAME", Context.MODE_PRIVATE);
+
     }
 
     @Override

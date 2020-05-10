@@ -4,7 +4,11 @@ package com.group7.localtestserver;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
+
+import com.floriankleewein.commonclasses.Chat.ChatMessage;
+
 import com.floriankleewein.commonclasses.CheatFunction.CheatService;
+
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.GameLogic.GameHandler;
 import com.floriankleewein.commonclasses.Network.ActivePlayerMessage;
@@ -59,6 +63,7 @@ public class TestServer {
         registerClass(User.class);
         registerClass(ResetMsg.class);
         registerClass(StartGameMsg.class);
+        registerClass(ChatMessage.class);
         registerClass(HasCheatedMessage.class);
         registerClass(ActivePlayerMessage.class);
         registerClass(UpdatePlayerNamesMsg.class);
@@ -68,6 +73,7 @@ public class TestServer {
         server.start();
 
         try {
+            //server.bind(8080);
             server.bind(53217);
         } catch (IOException e) {
             e.printStackTrace();
@@ -105,7 +111,11 @@ public class TestServer {
                             addPlayerMsg.setFeedbackUI(0);
                             addPlayerMsg.setPlayerAdded(true);
                             System.out.println("Player added: " + player.getUserName());
-                        } else {
+
+
+           
+                         } else {
+
                             addPlayerMsg.setFeedbackUI(1);
                         }
                     } else {
@@ -141,8 +151,29 @@ public class TestServer {
                     System.out.println("Got the GetPlayerMsg");
                     ReturnPlayersMsg msg = new ReturnPlayersMsg();
                     con.sendTCP(msg);
+
+
+                }else if(object instanceof ChatMessage){
+                    ChatMessage msg = (ChatMessage) object;
+
+                    String message = msg.getMessage();
+
+                    System.out.println("Receive msg from client:" + message);
+
+                    ChatMessage responseMsg = new ChatMessage();
+                    responseMsg.setMessage(msg.getMessage());
+                    responseMsg.setSentByMe(false);
+
+
+                    for (Connection c : server.getConnections()) {
+                        if (c != con) {
+                            server.sendToTCP(c.getID(), responseMsg);
+                        }
+                    }
+
                 } else if (object instanceof HasCheatedMessage) {
                     sendCheatInformation();
+
 
                 }else if(object instanceof UpdatePlayerNamesMsg){
                     UpdatePlayerNamesMsg msg = new UpdatePlayerNamesMsg();
