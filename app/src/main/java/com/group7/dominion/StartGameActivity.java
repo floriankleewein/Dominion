@@ -77,7 +77,7 @@ public class StartGameActivity extends AppCompatActivity {
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        //TODO: FLO: for gamecreation it must be possible to pass the client to the next activity.
+
                         //client.startGame();
                         runOnUiThread(new Runnable() {
                             @Override
