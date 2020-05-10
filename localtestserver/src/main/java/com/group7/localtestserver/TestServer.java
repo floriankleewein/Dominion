@@ -49,6 +49,7 @@ public class TestServer {
         registerClass(StartGameMsg.class);
         registerClass(GetPlayerMsg.class);
         registerClass(CheatService.class);
+        registerClass(HasCheatedMessage.class);
 
         //Start Server
         server.start();

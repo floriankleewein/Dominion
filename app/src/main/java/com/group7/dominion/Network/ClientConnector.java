@@ -59,6 +59,7 @@ public class ClientConnector {
         registerClass(ReturnPlayersMsg.class);
         registerClass(CheatService.class);
         registerClass(GetPlayerMsg.class);
+        registerClass(HasCheatedMessage.class);
         // start client
         client.start();
 
