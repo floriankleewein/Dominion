@@ -1,6 +1,11 @@
 package com.floriankleewein.commonclasses.GameLogic;
 
-import com.floriankleewein.commonclasses.Cards.*;
+import com.floriankleewein.commonclasses.Board.Board;
+import com.floriankleewein.commonclasses.Cards.Card;
+import com.floriankleewein.commonclasses.Cards.EstateCard;
+import com.floriankleewein.commonclasses.Cards.EstateType;
+import com.floriankleewein.commonclasses.Cards.MoneyCard;
+import com.floriankleewein.commonclasses.Cards.MoneyType;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.User.User;
 import com.floriankleewein.commonclasses.User.UserCards;
@@ -17,10 +22,7 @@ public class GameHandler {
 
     public GameHandler(Game game) {
         this.game = game;
-    }
-
-    public void addPlayer(User user) {
-        playerList.add(user);
+        playerList.addAll(game.getPlayerList());
     }
 
     public void prepareGame() {
@@ -39,5 +41,7 @@ public class GameHandler {
                 user.setUserCards(ucards);
             }
         }
+        game.setBoard(new Board());
+        game.setPlayerList(playerList);
     }
 }

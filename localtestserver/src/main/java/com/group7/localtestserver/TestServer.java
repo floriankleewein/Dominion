@@ -145,9 +145,7 @@ public class TestServer {
     public boolean setupGame() {
         if (hasGame()) {
             gamehandler = new GameHandler(getGame());
-            for (User user: game.getPlayerList()) {
-                gamehandler.addPlayer(user);
-            }
+            gamehandler.prepareGame();
             return true;
         } else {
             return false;
