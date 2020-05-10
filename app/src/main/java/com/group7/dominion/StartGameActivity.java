@@ -38,18 +38,16 @@ public class StartGameActivity extends AppCompatActivity {
         ListView playerNamesListView = findViewById(R.id.playerNamesListView);
 
         clientConnector.getGame();
-        List<String> playerNames = new ArrayList<>();
-        ArrayAdapter<String> listViewAdapter =
-                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, playerNames);
 
-        playerNamesListView.setAdapter(listViewAdapter);
+        ArrayAdapter<String> listViewAdapter =
+                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, clientConnector.getPlayerNames());
 
         clientConnector.registerCallback(GetGameMsg.class, (msg -> {
 
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-
+                    playerNamesListView.setAdapter(listViewAdapter);
                 }
 
             });
