@@ -79,26 +79,6 @@ public class StartGameActivity extends AppCompatActivity {
         }));
 
 
-        //FKDoc: this part should actually update the listView after another player joined.
-        btnRecreate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                listViewAdapter.notifyDataSetChanged();
-                            }
-                        });
-                    }
-                });
-
-                thread.start();
-            }
-        });
-
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
