@@ -9,6 +9,8 @@ import com.floriankleewein.commonclasses.GameLogic.GameHandler;
 import com.floriankleewein.commonclasses.Network.ActivePlayerMessage;
 import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
 import com.floriankleewein.commonclasses.Network.BaseMessage;
+
+import com.floriankleewein.commonclasses.Network.UpdatePlayerNamesMsg;
 import com.floriankleewein.commonclasses.Network.CreateGameMsg;
 import com.floriankleewein.commonclasses.Network.GameInformationMsg;
 import com.floriankleewein.commonclasses.Network.NetworkInformationMsg;
@@ -50,6 +52,7 @@ public class TestServer {
         registerClass(ResetMsg.class);
         registerClass(StartGameMsg.class);
         registerClass(ActivePlayerMessage.class);
+        registerClass(UpdatePlayerNamesMsg.class);
 
         //Start Server
         server.start();
@@ -120,6 +123,13 @@ public class TestServer {
                         msg.setFeedbackUI(1);
                         con.sendTCP(msg);
                     }
+                    con.sendTCP(msg);
+                }else if(object instanceof UpdatePlayerNamesMsg){
+                    UpdatePlayerNamesMsg msg = new UpdatePlayerNamesMsg();
+                    for(User x: game.getPlayerList()){
+                        msg.getNameList().add(x.getUserName());
+                    }
+                    server.sendToAllTCP(msg);
                 }
             }
         });

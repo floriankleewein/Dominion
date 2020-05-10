@@ -17,8 +17,12 @@ public class CardUI {
     private ImageButton imageButton;
     private ImageButton infoImageButton;
     private LinearLayout linearLayout;
+    private int xPosition;
+    private int yPosition;
 
-    public CardUI(int id, Card card, Activity activity, LinearLayout linearLayout, float scale) {
+    public CardUI(int id, int xPosition, int yPosition, Card card, Activity activity, LinearLayout linearLayout, float scale) {
+        this.xPosition = xPosition;
+        this.yPosition = yPosition;
         this.linearLayout = linearLayout;
         this.card = card;
         this.imageButton = new ImageButton(activity);
@@ -142,6 +146,22 @@ public class CardUI {
 
     public void setInfoImageButton(ImageButton infoImageButton) {
         this.infoImageButton = infoImageButton;
+    }
+
+    public int getxPosition() {
+        return xPosition;
+    }
+
+    public void setxPosition(int xPosition) {
+        this.xPosition = xPosition;
+    }
+
+    public int getyPosition() {
+        return yPosition;
+    }
+
+    public void setyPosition(int yPosition) {
+        this.yPosition = yPosition;
     }
 
     public void showImage() {
