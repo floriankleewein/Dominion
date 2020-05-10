@@ -31,7 +31,6 @@ public class TestServer {
     private boolean hasGame = false;
     private final String Tag = "TEST-SERVER"; // debugging only
     //private Map<User, ClientConnector> userClientConnectorMap = new HashMap<>();
-    private List<Connection> connectionList = new ArrayList<>();
 
 
     public TestServer() {
@@ -95,8 +94,7 @@ public class TestServer {
                             addPlayerMsg.setFeedbackUI(0);
                             addPlayerMsg.setPlayerAdded(true);
                             System.out.println("Player added: " + player.getUserName());
-
-                            connectionList.add(con);
+                            
                         }else{
                             addPlayerMsg.setFeedbackUI(1);
                         }
