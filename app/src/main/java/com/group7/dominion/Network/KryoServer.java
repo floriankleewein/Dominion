@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class KryoServer {
     Server server;
-
+    // TODO This was a trial server delete after merge
     public KryoServer() {
         server = new Server();
     }

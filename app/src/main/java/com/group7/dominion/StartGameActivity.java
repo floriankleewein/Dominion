@@ -1,21 +1,38 @@
 package com.group7.dominion;
 
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.floriankleewein.commonclasses.Network.ClientConnector;
+
 import com.floriankleewein.commonclasses.Network.ClientConnector;
+
+import com.floriankleewein.commonclasses.Network.UpdatePlayerNamesMsg;
+
 import com.group7.dominion.CheatFunction.ShakeListener;
 
+import java.util.ArrayList;
+
 public class StartGameActivity extends AppCompatActivity {
+
     Button btnStart, btnshowPlayers;
     ClientConnector client;
+
+
+    Button btnStart, btnRecreate;
+    SensorManager sm;
+    ShakeListener shakeListener;
 
     //TODO: rename this
     public static final String EXTRA_MESSAGE = "clientForNextActivity";
@@ -27,11 +44,10 @@ public class StartGameActivity extends AppCompatActivity {
         btnStart = findViewById(R.id.btn_start);
         btnshowPlayers = findViewById(R.id.ShowPlayer);
 
-
-        ListView playerNamesListView = findViewById(R.id.playerNamesListView);
-
+        ClientConnector clientConnector = ClientConnector.getClientConnector();
 
 
+        
 
         /*ArrayAdapter<User> arrayAdapter
                 = new ArrayAdapter<User>(this, android.R.layout.simple_list_item_1 , );*/
@@ -46,13 +62,46 @@ public class StartGameActivity extends AppCompatActivity {
 
         ClientConnector clientConnector = ClientConnector.getClientConnector();
 
+        //FKDoc: this is the arrayList,where the names will be stored.
+        ArrayList<String> names = new ArrayList<>();
+        names.add("NAME!");
+        //FKDoc: this is the listView where the playerNames should be viewed.
+        ListView playerNamesListView = findViewById(R.id.playerNamesListView);
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                clientConnector.updatePlayerNames();
+            }
+        });
+
+        thread.start();
+        //TODO: FK: insert the names before setting the adapter.
+        //FKDoc: the listViewAdapter is used as a communication tool between the listView and the data that should be shown.
+        ArrayAdapter<String> listViewAdapter =
+                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, names);
+
+        playerNamesListView.setAdapter(listViewAdapter);
+
+        //FKDoc: thats the servercallback which is triggered after the clientConnector.getGame() call.
+        clientConnector.registerCallback(UpdatePlayerNamesMsg.class, (msg -> {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    names.clear();
+                    names.addAll(((UpdatePlayerNamesMsg)msg).getNameList());
+                    listViewAdapter.notifyDataSetChanged();
+                }
+            });
+        }));
+
+
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        //TODO: FLO: for gamecreation it must be possible to pass the client to the next activity.
+
                         //client.startGame();
                         runOnUiThread(new Runnable() {
                             @Override
@@ -71,7 +120,6 @@ public class StartGameActivity extends AppCompatActivity {
                 thread.start();
             }
         });
-
     }
 
 

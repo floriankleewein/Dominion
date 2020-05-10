@@ -1,28 +1,34 @@
 package com.group7.localtestserver;
 
 
-import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.floriankleewein.commonclasses.CheatFunction.CheatService;
 import com.floriankleewein.commonclasses.Game;
+import com.floriankleewein.commonclasses.GameLogic.GameHandler;
+import com.floriankleewein.commonclasses.Network.ActivePlayerMessage;
 import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
 import com.floriankleewein.commonclasses.Network.BaseMessage;
+
 import com.floriankleewein.commonclasses.Network.GetPlayerMsg;
 import com.floriankleewein.commonclasses.Network.HasCheatedMessage;
 import com.floriankleewein.commonclasses.Network.ReturnPlayersMsg;
 import com.floriankleewein.commonclasses.Network.ResetMsg;
+
+
+import com.floriankleewein.commonclasses.Network.UpdatePlayerNamesMsg;
+
 import com.floriankleewein.commonclasses.Network.CreateGameMsg;
 import com.floriankleewein.commonclasses.Network.GameInformationMsg;
 import com.floriankleewein.commonclasses.Network.NetworkInformationMsg;
+import com.floriankleewein.commonclasses.Network.ResetMsg;
 import com.floriankleewein.commonclasses.Network.StartGameMsg;
 import com.floriankleewein.commonclasses.User.User;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class TestServer {
@@ -31,7 +37,8 @@ public class TestServer {
     private Game game;
     private boolean hasGame = false;
     private final String Tag = "TEST-SERVER"; // debugging only
-    //private Map<User, ClientConnector> userClientConnectorMap = new HashMap<>();
+    private GameHandler gamehandler;
+    private Map<User, Connection> userClientConnectorMap = new HashMap<>();
 
 
     public TestServer() {
@@ -52,9 +59,13 @@ public class TestServer {
         registerClass(User.class);
         registerClass(ResetMsg.class);
         registerClass(StartGameMsg.class);
-        registerClass(GetPlayerMsg.class);
-        registerClass(CheatService.class);
+
+       
         registerClass(HasCheatedMessage.class);
+
+        registerClass(ActivePlayerMessage.class);
+        registerClass(UpdatePlayerNamesMsg.class);
+
 
         //Start Server
         server.start();
@@ -90,6 +101,9 @@ public class TestServer {
                     }*/
                     if (game.checkSize()) {
                         if (game.checkName(name)) {
+
+                            userClientConnectorMap.put(player, con);
+
                             game.addPlayer(player);
                             addPlayerMsg.setFeedbackUI(0);
                             addPlayerMsg.setPlayerAdded(true);
@@ -108,13 +122,38 @@ public class TestServer {
 
                 } else if (object instanceof StartGameMsg) {
                     StartGameMsg msg = new StartGameMsg();
+                    //Check if game started successfully, and notify client
+                    if (setupGame()) {
+                        msg.setFeedbackUI(0);
+                        msg.setGame(getGame());
+                        // Send message to all clients, TODO they need to be in lobby
+                        for (Connection c : server.getConnections()) {
+                            c.sendTCP(msg);
+                        }
+                        ActivePlayerMessage activePlayerMsg = new ActivePlayerMessage();
+                        activePlayerMsg.setGame(getGame());
+                        Connection activePlayerCon = userClientConnectorMap.get(game.getActivePlayer());
+                        activePlayerCon.sendTCP(activePlayerMsg);
+                    } else {
+                        msg.setFeedbackUI(1);
+                        con.sendTCP(msg);
+                    }
                     con.sendTCP(msg);
+
                 } else if (object instanceof GetPlayerMsg) {
                     System.out.println("Got the GetPlayerMsg");
                     ReturnPlayersMsg msg = new ReturnPlayersMsg();
                     con.sendTCP(msg);
                 } else if (object instanceof HasCheatedMessage) {
                     sendCheatInformation();
+
+                }else if(object instanceof UpdatePlayerNamesMsg){
+                    UpdatePlayerNamesMsg msg = new UpdatePlayerNamesMsg();
+                    for(User x: game.getPlayerList()){
+                        msg.getNameList().add(x.getUserName());
+                    }
+                    server.sendToAllTCP(msg);
+
                 }
             }
         });
@@ -125,7 +164,6 @@ public class TestServer {
     }
 
     public void createGame() {
-
         game = Game.getGame();
         hasGame = true;
         System.out.println("GAME, game instanced - started");
@@ -134,6 +172,7 @@ public class TestServer {
 
     public void reset() {
         game.getPlayerList().clear();
+        userClientConnectorMap.clear();
         System.out.println("Playerlist cleared!");
     }
 
@@ -147,6 +186,16 @@ public class TestServer {
 
     public boolean hasGame() {
         return hasGame;
+    }
+
+    public boolean setupGame() {
+        if (hasGame()) {
+            gamehandler = new GameHandler(getGame());
+            gamehandler.prepareGame();
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public Game getGame() {

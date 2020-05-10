@@ -22,10 +22,10 @@
         app:tabIndicatorColor="#fff"/>
 
     <androidx.viewpager.widget.ViewPager
-        android:layout_below="@+id/tabLayout"
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        />
+        android:layout_below="@+id/tabLayout"
+        android:layout_marginTop="-2dp"/>
 
 </RelativeLayout>

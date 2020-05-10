@@ -1,7 +1,11 @@
 package com.floriankleewein.commonclasses;
 
 
+
 import com.floriankleewein.commonclasses.CheatFunction.CheatService;
+
+import com.floriankleewein.commonclasses.Board.Board;
+
 import com.floriankleewein.commonclasses.User.User;
 
 import java.util.ArrayList;
@@ -10,13 +14,20 @@ import java.util.List;
 public class Game {
 
     private List<User> playerList = new ArrayList<>();
+    private Board board;
     //hidden class variable for Singleton pattern.
     private static Game game;
+    private User activePlayer;
+
     //overwriting constructor so it cannot be instanced.
+
     private static CheatService cheatService;
+
+   
 
     Game() {
     }
+
 
     public static synchronized Game getGame() {
         if (Game.game == null) {
@@ -26,6 +37,18 @@ public class Game {
         return Game.game;
     }
 
+    public static void setGame(Game game) {
+        Game.game = game;
+    }
+
+    public User getActivePlayer() {
+        return activePlayer;
+    }
+
+    public void setActivePlayer(User activePlayer) {
+        this.activePlayer = activePlayer;
+    }
+
     public List<User> getPlayerList() {
         return playerList;
     }
@@ -33,6 +56,16 @@ public class Game {
     public void setPlayerList(List<User> playerList) {
         this.playerList = playerList;
     }
+
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
 
     public boolean addPlayer(User user) {
         if (checkName(user.getUserName())) {
@@ -59,6 +92,7 @@ public class Game {
         }
         return false;
     }
+
 
     public User findUser(String name) {
         for (int i = 0; i < playerList.size(); i++) {

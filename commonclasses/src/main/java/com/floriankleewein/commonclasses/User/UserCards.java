@@ -17,10 +17,14 @@ public class UserCards {
     private LinkedList<Card> DiscardCards;
 
 
+
     public void getFirstCards(LinkedList<Card> GivenCards) {
         this.Deck = new LinkedList<Card>();
         this.HandCards = new LinkedList<Card>();
         this.DiscardCards = new LinkedList<Card>();
+
+
+
 
         this.Deck = GivenCards;
         shufflesCards();
