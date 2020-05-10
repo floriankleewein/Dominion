@@ -2,7 +2,6 @@ package com.group7.dominion;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
@@ -11,18 +10,12 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import com.esotericsoftware.kryonet.Client;
-import com.floriankleewein.commonclasses.Network.AddPlayerNameErrorMsg;
 import com.floriankleewein.commonclasses.Network.ClientConnector;
-import com.floriankleewein.commonclasses.Network.GetGameMsg;
-import com.floriankleewein.commonclasses.User.User;
+import com.floriankleewein.commonclasses.Network.UpdatePlayerNamesMsg;
 import com.group7.dominion.CheatFunction.ShakeListener;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 
 public class StartGameActivity extends AppCompatActivity {
     Button btnStart, btnRecreate;
@@ -55,28 +48,32 @@ public class StartGameActivity extends AppCompatActivity {
 
         //FKDoc: this is the arrayList,where the names will be stored.
         ArrayList<String> names = new ArrayList<>();
-
+        names.add("NAME!");
         //FKDoc: this is the listView where the playerNames should be viewed.
         ListView playerNamesListView = findViewById(R.id.playerNamesListView);
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                clientConnector.getGame();
+                clientConnector.updatePlayerNames();
             }
         });
-        thread.start();
 
+        thread.start();
+        //TODO: FK: insert the names before setting the adapter.
         //FKDoc: the listViewAdapter is used as a communication tool between the listView and the data that should be shown.
         ArrayAdapter<String> listViewAdapter =
                 new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, names);
 
+        playerNamesListView.setAdapter(listViewAdapter);
+
         //FKDoc: thats the servercallback which is triggered after the clientConnector.getGame() call.
-        clientConnector.registerCallback(GetGameMsg.class, (msg -> {
+        clientConnector.registerCallback(UpdatePlayerNamesMsg.class, (msg -> {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    names.addAll(((GetGameMsg)msg).getNameList());
-                    playerNamesListView.setAdapter(listViewAdapter);
+                    names.clear();
+                    names.addAll(((UpdatePlayerNamesMsg)msg).getNameList());
+                    listViewAdapter.notifyDataSetChanged();
                 }
             });
         }));

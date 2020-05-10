@@ -54,7 +54,7 @@ public class ClientConnector{
         registerClass(User.class);
         registerClass(ResetMsg.class);
         registerClass(StartGameMsg.class);
-        registerClass(GetGameMsg.class);
+        registerClass(UpdatePlayerNamesMsg.class);
 
         // start client
         client.start();
@@ -139,21 +139,16 @@ public class ClientConnector{
         });
     }
 
-    public void getGame(){
-        GetGameMsg msg = new GetGameMsg();
+    public void updatePlayerNames(){
+        UpdatePlayerNamesMsg msg = new UpdatePlayerNamesMsg();
         client.sendTCP(msg);
 
         client.addListener(new Listener() {
             public void received(Connection con, Object object) {
-                if (object instanceof GetGameMsg) {
-                    GetGameMsg msg = (GetGameMsg) object;
-                    List<User> playerList = msg.getGame().getPlayerList();
-
-                    /*for(User x: playerList){
-                        playerNames.add(x.getUserName());
-                    }*/
-
-                    callbackMap.get(GetGameMsg.class).callback(msg);
+                if (object instanceof UpdatePlayerNamesMsg) {
+                    UpdatePlayerNamesMsg msg = (UpdatePlayerNamesMsg) object;
+                    msg.setNameList(msg.getNameList());
+                    callbackMap.get(UpdatePlayerNamesMsg.class).callback(msg);
                 }
             }
 
