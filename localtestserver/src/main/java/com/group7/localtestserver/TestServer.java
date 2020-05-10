@@ -105,6 +105,7 @@ public class TestServer {
                     //Check if game started successfully, and notify client
                     if (setupGame()) {
                         msg.setFeedbackUI(0);
+                        msg.setGame(getGame());
                         // Send message to all clients, TODO they need to be in lobby
                         for (Connection c: server.getConnections()) {
                             c.sendTCP(msg);
@@ -114,8 +115,6 @@ public class TestServer {
                         con.sendTCP(msg);
                     }
                 }
-
-
             }
         });
     }
