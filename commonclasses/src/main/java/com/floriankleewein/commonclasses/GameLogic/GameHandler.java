@@ -30,7 +30,7 @@ public class GameHandler {
         if(playerList.size() > 1) {
             for (User user: playerList) {
                 //TODO change to <Card>
-                LinkedList<Object> generatedCards = new LinkedList<>();
+                LinkedList<Card> generatedCards = new LinkedList<>();
                 UserCards ucards = new UserCards();
                 for (int i = 0; i < MONEY_CARDS; i++) {
                     Card copper = new MoneyCard(0,0, MoneyType.KUPFER);
