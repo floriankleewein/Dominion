@@ -2,6 +2,7 @@ package com.group7.dominion;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
@@ -12,17 +13,19 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.esotericsoftware.kryonet.Client;
 import com.floriankleewein.commonclasses.Network.AddPlayerNameErrorMsg;
 import com.floriankleewein.commonclasses.Network.ClientConnector;
 import com.floriankleewein.commonclasses.Network.GetGameMsg;
 import com.floriankleewein.commonclasses.User.User;
 import com.group7.dominion.CheatFunction.ShakeListener;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 public class StartGameActivity extends AppCompatActivity {
-    Button btnStart;
+    Button btnStart, btnRecreate;
     SensorManager sm;
     ShakeListener shakeListener;
     //TODO: rename this
@@ -33,7 +36,9 @@ public class StartGameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_or_join);
         btnStart = findViewById(R.id.btn_start);
+        btnRecreate = findViewById(R.id.btn_recreate);
 
+        ClientConnector clientConnector = ClientConnector.getClientConnector();
 
 
 
@@ -57,19 +62,43 @@ public class StartGameActivity extends AppCompatActivity {
         });
         thread.start();
 
+        ArrayList<String> names = new ArrayList<>();
+
         ArrayAdapter<String> listViewAdapter =
-                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, clientConnector.getPlayerNames());
+                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, names);
+
+
 
         clientConnector.registerCallback(GetGameMsg.class, (msg -> {
-
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    names.addAll(((GetGameMsg)msg).getNameList());
                     playerNamesListView.setAdapter(listViewAdapter);
                 }
-
             });
         }));
+
+
+        btnRecreate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                listViewAdapter.notifyDataSetChanged();
+                            }
+                        });
+                    }
+                });
+
+                thread.start();
+            }
+        });
+
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,6 +121,5 @@ public class StartGameActivity extends AppCompatActivity {
                 thread.start();
             }
         });
-
     }
 }

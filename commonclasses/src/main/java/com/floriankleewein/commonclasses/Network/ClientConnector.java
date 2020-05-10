@@ -20,7 +20,6 @@ public class ClientConnector{
     private boolean hasGame = false;
     private Callback<CreateGameMsg> callback;
     Map<Class, Callback<BaseMessage>> callbackMap = new HashMap<>();
-    private List<String> playerNames = new ArrayList<>();
 
     /*public ClientConnector() {
         this.client = new Client();
@@ -82,12 +81,9 @@ public class ClientConnector{
         });
     }
 
-    public List<String> getPlayerNames() {
-        return playerNames;
-    }
-
-    public void setPlayerNames(ArrayList<String> playerNames) {
-        this.playerNames = playerNames;
+    public void recreateStartGameActivity(){
+        RecreateStartActivityMsg msg = new RecreateStartActivityMsg();
+        client.sendTCP(msg);
     }
 
     public void createGame() {
@@ -153,9 +149,9 @@ public class ClientConnector{
                     GetGameMsg msg = (GetGameMsg) object;
                     List<User> playerList = msg.getGame().getPlayerList();
 
-                    for(User x: playerList){
+                    /*for(User x: playerList){
                         playerNames.add(x.getUserName());
-                    }
+                    }*/
 
                     callbackMap.get(GetGameMsg.class).callback(msg);
                 }
