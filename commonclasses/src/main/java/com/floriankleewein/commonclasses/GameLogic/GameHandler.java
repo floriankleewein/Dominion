@@ -11,6 +11,7 @@ import com.floriankleewein.commonclasses.User.User;
 import com.floriankleewein.commonclasses.User.UserCards;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -28,18 +29,19 @@ public class GameHandler {
     public void prepareGame() {
         if(playerList.size() > 1) {
             for (User user: playerList) {
+                //TODO change to <Card>
+                LinkedList<Object> generatedCards = new LinkedList<>();
                 UserCards ucards = new UserCards();
                 for (int i = 0; i < MONEY_CARDS; i++) {
                     Card copper = new MoneyCard(0,0, MoneyType.KUPFER);
-                    ucards.addCardtoDeck(copper);
+                    generatedCards.add(copper);
                 }
                 for (int i = 0; i < ANWESEN_CARDS; i++) {
                     Card anwesen = new EstateCard(2,1,EstateType.ANWESEN);
-                    ucards.addCardtoDeck(anwesen);
+                    generatedCards.add(anwesen);
                 }
                 //TODO check getFirstCards
-                ucards.shufflesCards();
-                user.setUserCards(ucards);
+                ucards.getFirstCards(generatedCards);
             }
         }
         game.setBoard(new Board());
