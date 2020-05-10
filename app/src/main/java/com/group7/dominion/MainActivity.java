@@ -1,8 +1,9 @@
 package com.group7.dominion;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,15 +16,19 @@ import com.floriankleewein.commonclasses.Network.AddPlayerNameErrorMsg;
 import com.floriankleewein.commonclasses.Network.AddPlayerSizeErrorMsg;
 import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
 import com.floriankleewein.commonclasses.Network.CreateGameMsg;
-import com.floriankleewein.commonclasses.Network.StartGameMsg;
-import com.group7.dominion.Network.ClientConnector;
+import com.floriankleewein.commonclasses.Network.ClientConnector;
+import com.group7.localtestserver.TestServer;
 
 
 public class MainActivity extends AppCompatActivity {
 
     Button btnCreate, btnJoin, btnReset;
+
     private Board board;
     ClientConnector client;
+
+    SharedPreferences sharedPreferences;
+
 
     //TODO: rename this
     public static final String EXTRA_MESSAGE = "clientForNextActivity";
@@ -37,7 +42,8 @@ public class MainActivity extends AppCompatActivity {
         btnJoin = findViewById(R.id.btn_join);
         btnReset = findViewById(R.id.btn_reset);
 
-        //Start Shake Listener
+
+        sharedPreferences = getSharedPreferences("USERNAME", Context.MODE_PRIVATE);
 
     }
 
@@ -45,16 +51,19 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        client = new ClientConnector();
+        client = ClientConnector.getClientConnector();
         checkButtons();
 
+
+
         client.registerCallback(CreateGameMsg.class,(msg->{
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        checkButtons();
-                    }
-                });
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    checkButtons();
+                }
+            });
         }));
 
 
@@ -94,10 +103,6 @@ public class MainActivity extends AppCompatActivity {
 
                     thread.start();*/
 
-                    //TODO: FLO: for gamecreation it must be possible to pass the client to the next activity.
-                    /*Intent intent = new Intent(MainActivity.this, StartGameActivity.class);
-                    intent.putExtra(EXTRA_MESSAGE, client);
-                    startActivity(intent);*/
                     startActivity(new Intent(MainActivity.this, StartGameActivity.class));
                 }
             });
@@ -124,12 +129,11 @@ public class MainActivity extends AppCompatActivity {
         }));
 
 
-
         btnJoin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-               Thread thread = new  Thread(new Runnable() {
+                addUsernametoPreferences();
+                Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
                         EditText editText = findViewById(R.id.inputName);
@@ -137,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
                         client.addUser(userName);
                     }
                 });
-               thread.start();
+                thread.start();
             }
         });
 
@@ -166,6 +170,14 @@ public class MainActivity extends AppCompatActivity {
             btnCreate.setEnabled(false);
             btnJoin.setEnabled(true);
         }
+    }
+
+    public void addUsernametoPreferences () {
+        EditText editText = findViewById(R.id.inputName);
+        String userName = editText.getText().toString();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("us", userName);
+        editor.commit();
     }
 
     public Board getBoard() {

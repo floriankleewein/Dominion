@@ -1,19 +1,28 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.group7.dominion.Chat.ChatFragment">
+
+   <ListView
+       android:id="@android:id/list"
+       android:layout_width="match_parent"
+       android:layout_height="0dp"
+       android:layout_weight="1"
+       android:visibility="visible"
+       android:divider="@null"
+       android:dividerHeight="0dp"/>
 
    <LinearLayout
        android:id="@+id/linearLayout"
        android:layout_width="fill_parent"
        android:layout_height="wrap_content"
-       android:orientation="horizontal"
-       android:layout_gravity="bottom">
+       android:orientation="horizontal">
 
       <EditText
-          android:id="@+id/userInput"
+          android:id="@+id/user_input_edit_text"
           android:layout_width="0dp"
           android:layout_height="fill_parent"
           android:layout_weight="1"
@@ -21,16 +30,15 @@
           android:layout_marginRight="5dp"
           android:inputType="textMultiLine"
           android:ems="10"
-          android:hint="Schreibe eine Nachricht..." />
+          android:hint="Schreibe eine Nachricht..."/>
 
       <ImageButton
-          android:id="@+id/sendButton"
+          android:id="@+id/send_Button"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:padding="5dp"
           android:src="@drawable/ic_send_button"
           style="?android:attr/buttonBarButtonStyle"/>
-
 
    </LinearLayout>
 

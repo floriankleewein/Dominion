@@ -5,12 +5,14 @@ import android.util.Log;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
+import com.group7.localtestserver.MessageClass;
+
 
 import java.io.IOException;
 
 public class KryoServer {
     Server server;
-
+    // TODO This was a trial server delete after merge
     public KryoServer() {
         server = new Server();
     }

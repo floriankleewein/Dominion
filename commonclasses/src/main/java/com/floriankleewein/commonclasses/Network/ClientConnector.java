@@ -1,45 +1,55 @@
-package com.group7.dominion.Network;
-
-import android.hardware.usb.UsbEndpoint;
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.util.Log;
+package com.floriankleewein.commonclasses.Network;
 
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.floriankleewein.commonclasses.Chat.ChatMessage;
 import com.floriankleewein.commonclasses.Game;
-import com.floriankleewein.commonclasses.Network.AddPlayerNameErrorMsg;
-import com.floriankleewein.commonclasses.Network.AddPlayerSizeErrorMsg;
-import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
-import com.floriankleewein.commonclasses.Network.BaseMessage;
-import com.floriankleewein.commonclasses.Network.GameInformationMsg;
-import com.floriankleewein.commonclasses.Network.NetworkInformationMsg;
-import com.floriankleewein.commonclasses.Network.ResetMsg;
-import com.floriankleewein.commonclasses.Network.CreateGameMsg;
-import com.floriankleewein.commonclasses.Network.StartGameMsg;
 import com.floriankleewein.commonclasses.User.User;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class ClientConnector{
+public class ClientConnector {
     private final String Tag = "CLIENT-CONNECTOR"; // Debugging only
     private static final String SERVER_IP = "143.205.174.196";
     private static final int SERVER_PORT = 53217;
-    private Client client;
+    private static Client client;
     private boolean hasGame = false;
+
+
+    private Game game;
     private Callback<CreateGameMsg> callback;
     Map<Class, Callback<BaseMessage>> callbackMap = new HashMap<>();
 
-    public ClientConnector() {
+    /*public ClientConnector() {
         this.client = new Client();
+    }*/
+
+    private static ClientConnector clientConnector;
+
+    //overwriting constructor so it cannot be instanced.
+    ClientConnector() {
+    }
+
+    public static synchronized ClientConnector getClientConnector() {
+        if (ClientConnector.clientConnector == null) {
+            client = new Client();
+            ClientConnector.clientConnector = new ClientConnector();
+        }
+        return ClientConnector.clientConnector;
     }
 
     public void registerClass(Class regClass) {
         client.getKryo().register(regClass);
+    }
+
+    public Game getGame() {
+        return game;
     }
 
     public void connect() {
@@ -55,18 +65,22 @@ public class ClientConnector{
         registerClass(User.class);
         registerClass(ResetMsg.class);
         registerClass(StartGameMsg.class);
+        registerClass(ChatMessage.class);
+        registerClass(HasCheatedMessage.class);
+        registerClass(ActivePlayerMessage.class);
+        registerClass(UpdatePlayerNamesMsg.class);
+
 
         // start client
         client.start();
 
         //connects aau server
         try {
-            //client.connect(5000, InetAddress.getLocalHost(), 8080); // local server
             client.connect(5000, SERVER_IP, SERVER_PORT);   // Uni server
         } catch (IOException e) {
             e.printStackTrace();
         }
-        Log.d(Tag, "Connection-Status: " + client.isConnected());
+        System.out.println("Connection-Status: " + client.isConnected());
 
         MessageClass ms = new MessageClass();
         ms.setMessage("Hello Server!");
@@ -76,14 +90,19 @@ public class ClientConnector{
             public void received(Connection con, Object object) {
                 if (object instanceof MessageClass) {
                     MessageClass ms = (MessageClass) object;
-                    Log.d(Tag, "Received response: " + ms.getMessage());
+                    System.out.println("Received response: " + ms.getMessage());
                 }
             }
         });
     }
 
+    public void recreateStartGameActivity(){
+        RecreateStartActivityMsg msg = new RecreateStartActivityMsg();
+        client.sendTCP(msg);
+    }
+
     public void createGame() {
-        Log.d(Tag, "Connection-Status: " + client.isConnected());
+        System.out.println("Connection-Status: " + client.isConnected());
         final CreateGameMsg startMsg = new CreateGameMsg();
         client.sendTCP(startMsg);
         client.addListener(new Listener() {
@@ -91,14 +110,15 @@ public class ClientConnector{
                 if (object instanceof CreateGameMsg) {
                     CreateGameMsg recStartMsg = (CreateGameMsg) object;
                     hasGame = recStartMsg.isHasGame();
+                    game = recStartMsg.getGame();
                     callbackMap.get(CreateGameMsg.class).callback(recStartMsg);
-                    Log.d(Tag, "Created/Received Game." + hasGame);
+                    System.out.println("Created/Received Game." + hasGame);
                 }
             }
         });
     }
 
-    public void addUser(String playerName){
+    public void addUser(String playerName) {
         AddPlayerSuccessMsg addPlayerMsg = new AddPlayerSuccessMsg();
         addPlayerMsg.setPlayerName(playerName);
         client.sendTCP(addPlayerMsg);
@@ -107,11 +127,11 @@ public class ClientConnector{
             public void received(Connection con, Object object) {
                 if (object instanceof AddPlayerSuccessMsg) {
                     AddPlayerSuccessMsg ms = (AddPlayerSuccessMsg) object;
-                    if(ms.getFeedbackUI() == 0){
+                    if (ms.getFeedbackUI() == 0) {
                         callbackMap.get(AddPlayerSuccessMsg.class).callback(ms);
-                    }else if(ms.getFeedbackUI() == 1){
+                    } else if (ms.getFeedbackUI() == 1) {
                         callbackMap.get(AddPlayerNameErrorMsg.class).callback(ms);
-                    }else if(ms.getFeedbackUI() == 2){
+                    } else if (ms.getFeedbackUI() == 2) {
                         callbackMap.get(AddPlayerSizeErrorMsg.class).callback(ms);
                     }
 
@@ -123,13 +143,29 @@ public class ClientConnector{
 
     //for now this method only has the use, to reset the game and playerList, so we
     //dont have to restart the server for the same purpose.
-    public void resetGame(){
+    public void resetGame() {
         ResetMsg msg = new ResetMsg();
         client.sendTCP(msg);
 
         client.addListener(new Listener() {
             public void received(Connection con, Object object) {
                 //what happens then?
+            }
+
+        });
+    }
+  
+ public void updatePlayerNames(){
+        UpdatePlayerNamesMsg msg = new UpdatePlayerNamesMsg();
+        client.sendTCP(msg);
+
+        client.addListener(new Listener() {
+            public void received(Connection con, Object object) {
+                if (object instanceof UpdatePlayerNamesMsg) {
+                    UpdatePlayerNamesMsg msg = (UpdatePlayerNamesMsg) object;
+                    msg.setNameList(msg.getNameList());
+                    callbackMap.get(UpdatePlayerNamesMsg.class).callback(msg);
+                }
             }
 
         });
@@ -143,7 +179,12 @@ public class ClientConnector{
             public void received(Connection con, Object object) {
                 if (object instanceof StartGameMsg) {
                     StartGameMsg msg = (StartGameMsg) object;
-                    callbackMap.get(StartGameMsg.class).callback(msg);
+                    if(msg.getFeedbackUI() == 0) {
+                        callbackMap.get(StartGameMsg.class).callback(msg);
+                        game.setGame(msg.getGame());
+                    } else {
+                        //TODO display error in starting game
+                    }
                 }
             }
 
@@ -155,17 +196,36 @@ public class ClientConnector{
         return hasGame;
     }
 
-    public void setHasGame(Boolean bool){
+    public void setHasGame(Boolean bool) {
         this.hasGame = bool;
     }
 
-    public Client getClient(){
+    public Client getClient() {
         return client;
     }
 
     public void registerCallback(Class c, Callback<BaseMessage> callback) {
         this.callbackMap.put(c, callback);
     }
+
+    public boolean isConnected() {
+        return client.isConnected();
+    }
+
+
+    public void sendCheatMessage () {
+        HasCheatedMessage msg = new HasCheatedMessage();
+        client.sendTCP(msg);
+
+        client.addListener(new Listener() {
+            public void received(Connection con, Object object) {
+                if (object instanceof HasCheatedMessage) {
+                    HasCheatedMessage msg = (HasCheatedMessage) object;
+                    callbackMap.get(HasCheatedMessage.class).callback(msg);
+                }
+            }
+
+        });
+    }
+
 }
-
-
