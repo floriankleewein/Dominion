@@ -21,7 +21,7 @@ public class Game {
     public static synchronized Game getGame() {
         if (Game.game == null) {
             Game.game = new Game();
-            cheatService = new CheatService(Game.game);
+            cheatService.getGame();
         }
         return Game.game;
     }

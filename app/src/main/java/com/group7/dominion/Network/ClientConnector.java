@@ -153,30 +153,6 @@ public class ClientConnector {
 
     }
 
-    public void sendMessagelayerList() {
-
-        GetPlayerMsg msg = new GetPlayerMsg();
-        //Send Message!
-        client.sendTCP(msg);
-        System.out.println("Message is send");
-    }
-
-    public void getPlayerList() {
-        client.addListener(new Listener() {
-            public void received(Connection con, Object object) {
-                System.out.println("GOT THE MESSAGE");
-                if (object instanceof ReturnPlayersMsg) {
-                    ReturnPlayersMsg msg = (ReturnPlayersMsg) object;
-                    if (msg != null) {
-                        System.out.println("Game Message Object is here");
-                    } else System.out.println("NOT HERE!!");
-                    //Get PlayerList
-                    System.out.println(msg.getPlayerList().getPlayerList().get(0));
-                    callbackMap.get(GetPlayerMsg.class).callback(msg);
-                }
-            }
-        });
-    }
 
     public boolean hasGame() {
         return hasGame;

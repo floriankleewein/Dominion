@@ -103,6 +103,7 @@ public class TestServer {
                     StartGameMsg msg = new StartGameMsg();
                     con.sendTCP(msg);
                 } else if (object instanceof GetPlayerMsg) {
+                    System.out.println("Got the GetPlayerMsg");
                     ReturnPlayersMsg msg = new ReturnPlayersMsg();
                     con.sendTCP(msg);
                 }
@@ -137,3 +138,7 @@ public class TestServer {
     }
 
 }
+/*
+se2-demo.aau.at
+53200
+ */

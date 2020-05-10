@@ -45,33 +45,9 @@ public class StartGameActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-        putNametoNextAcitivty(getUserName());
         super.onStart();
         client = new ClientConnector();
 
-        btnshowPlayers.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        client.sendMessagelayerList();
-                    }
-                });
-                thread.start();
-            }
-        });
-
-        client.registerCallback(ReturnPlayersMsg.class, (msg -> {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    System.out.println("Got A Callback");
-                    client.getPlayerList();
-                }
-            });
-        }));
 
         /*ClientConnector client = (ClientConnector) getIntent().getSerializableExtra(EXTRA_MESSAGE);
 
@@ -88,7 +64,7 @@ public class StartGameActivity extends AppCompatActivity {
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                putNametoNextAcitivty(getUserName());
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -97,8 +73,11 @@ public class StartGameActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                /*
                                 Intent intent = new Intent(StartGameActivity.this, GameActivity.class);
                                 startActivity(intent);
+                                */
+
                             }
                         });
                     }
