@@ -26,7 +26,6 @@ public class GameHandler {
     }
 
     public void prepareGame() {
-        //TODO set starter cards for all players
         if(playerList.size() > 1) {
             for (User user: playerList) {
                 UserCards ucards = new UserCards();
@@ -43,5 +42,6 @@ public class GameHandler {
         }
         game.setBoard(new Board());
         game.setPlayerList(playerList);
+        game.setActivePlayer(playerList.get(0));
     }
 }

@@ -13,6 +13,7 @@ public class Game {
     private Board board;
     //hidden class variable for Singleton pattern.
     private static Game game;
+    private User activePlayer;
 
     //overwriting constructor so it cannot be instanced.
     Game() {
@@ -23,6 +24,18 @@ public class Game {
             Game.game = new Game();
         }
         return Game.game;
+    }
+
+    public static void setGame(Game game) {
+        Game.game = game;
+    }
+
+    public User getActivePlayer() {
+        return activePlayer;
+    }
+
+    public void setActivePlayer(User activePlayer) {
+        this.activePlayer = activePlayer;
     }
 
     public List<User> getPlayerList() {
