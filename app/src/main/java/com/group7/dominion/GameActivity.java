@@ -74,10 +74,11 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
         // Handle communication with Server, only send updated to server whenever card is played etc.
         ClientConnector clientConnector = ClientConnector.getClientConnector();
         Game clientGame = clientConnector.getGame();
-        clientConnector.startGame(); // Send Server Message to start game logic
+        //clientConnector.startGame(); // Send Server Message to start game logic
         // TODO display playerlist -> Check features
         // TODO create board and display cards
     }

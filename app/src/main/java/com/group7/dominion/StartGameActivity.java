@@ -30,8 +30,7 @@ public class StartGameActivity extends AppCompatActivity {
     ClientConnector client;
 
 
-    Button btnStart, btnRecreate;
-    SensorManager sm;
+    Button  btnRecreate;
     ShakeListener shakeListener;
 
     //TODO: rename this
@@ -46,14 +45,6 @@ public class StartGameActivity extends AppCompatActivity {
 
         ClientConnector clientConnector = ClientConnector.getClientConnector();
 
-
-        
-
-        /*ArrayAdapter<User> arrayAdapter
-                = new ArrayAdapter<User>(this, android.R.layout.simple_list_item_1 , );*/
-        //TODO: adapter für die listView. wie kommt man an die userliste?
-
-
     }
 
     @Override
@@ -64,7 +55,7 @@ public class StartGameActivity extends AppCompatActivity {
 
         //FKDoc: this is the arrayList,where the names will be stored.
         ArrayList<String> names = new ArrayList<>();
-        names.add("NAME!");
+
         //FKDoc: this is the listView where the playerNames should be viewed.
         ListView playerNamesListView = findViewById(R.id.playerNamesListView);
         Thread thread = new Thread(new Runnable() {
