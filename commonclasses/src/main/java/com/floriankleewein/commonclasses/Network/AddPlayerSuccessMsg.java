@@ -1,5 +1,6 @@
 package com.floriankleewein.commonclasses.Network;
 
+import com.esotericsoftware.kryonet.Client;
 import com.floriankleewein.commonclasses.User.User;
 
 public class AddPlayerSuccessMsg extends BaseMessage{
@@ -38,6 +39,7 @@ public class AddPlayerSuccessMsg extends BaseMessage{
     public int getFeedbackUI(){
         return this.feedbackUI;
     }
+
 }
 
 

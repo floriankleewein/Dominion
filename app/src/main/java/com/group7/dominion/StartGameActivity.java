@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.floriankleewein.commonclasses.Network.ClientConnector;
+import com.floriankleewein.commonclasses.Network.ClientConnector;
+import com.group7.dominion.CheatFunction.ShakeListener;
 
 public class StartGameActivity extends AppCompatActivity {
     Button btnStart, btnshowPlayers;
@@ -17,8 +19,6 @@ public class StartGameActivity extends AppCompatActivity {
 
     //TODO: rename this
     public static final String EXTRA_MESSAGE = "clientForNextActivity";
-
-    private Button startGame;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,19 +44,7 @@ public class StartGameActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-
-
-        /*ClientConnector client = (ClientConnector) getIntent().getSerializableExtra(EXTRA_MESSAGE);
-
-        client.registerCallback(StartGameMsg.class, (msg -> {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Intent intent = new Intent(StartGameActivity.this, GameActivity.class);
-                    startActivity(intent);
-                }
-            });
-        }));*/
+        ClientConnector clientConnector = ClientConnector.getClientConnector();
 
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,11 +72,6 @@ public class StartGameActivity extends AppCompatActivity {
             }
         });
 
-        //Intent intent = getIntent();
-        //String msg = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
-
-        //TextView textView = findViewById(R.id.testTextView);
-        //textView.setText(msg);
     }
 
 

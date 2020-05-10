@@ -1,11 +1,8 @@
 package com.floriankleewein.commonclasses.Network;
 
-
-
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import com.floriankleewein.commonclasses.CheatFunction.CheatService;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.User.User;
 
@@ -14,7 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ClientConnector {
+public class ClientConnector{
     private final String Tag = "CLIENT-CONNECTOR"; // Debugging only
     private static final String SERVER_IP = "143.205.174.196";
     private static final int SERVER_PORT = 53217;
@@ -23,11 +20,10 @@ public class ClientConnector {
     private Callback<CreateGameMsg> callback;
     Map<Class, Callback<BaseMessage>> callbackMap = new HashMap<>();
 
-    /*
-    public ClientConnector() {
+    /*public ClientConnector() {
         this.client = new Client();
-    }
-*/
+    }*/
+
     private static ClientConnector clientConnector;
     //overwriting constructor so it cannot be instanced.
     ClientConnector(){}
@@ -39,7 +35,6 @@ public class ClientConnector {
         }
         return ClientConnector.clientConnector;
     }
-
 
     public void registerClass(Class regClass) {
         client.getKryo().register(regClass);
@@ -58,23 +53,17 @@ public class ClientConnector {
         registerClass(User.class);
         registerClass(ResetMsg.class);
         registerClass(StartGameMsg.class);
-        registerClass(ReturnPlayersMsg.class);
-        registerClass(CheatService.class);
-        registerClass(GetPlayerMsg.class);
-        registerClass(HasCheatedMessage.class);
-
 
         // start client
         client.start();
 
         //connects aau server
         try {
-            //client.connect(5000, InetAddress.getLocalHost(), 8080); // local server
             client.connect(5000, SERVER_IP, SERVER_PORT);   // Uni server
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        System.out.println("Connection-Status: " + client.isConnected());
 
         MessageClass ms = new MessageClass();
         ms.setMessage("Hello Server!");
@@ -84,14 +73,14 @@ public class ClientConnector {
             public void received(Connection con, Object object) {
                 if (object instanceof MessageClass) {
                     MessageClass ms = (MessageClass) object;
-
+                    System.out.println("Received response: " + ms.getMessage());
                 }
             }
         });
     }
 
     public void createGame() {
-
+        System.out.println("Connection-Status: " + client.isConnected());
         final CreateGameMsg startMsg = new CreateGameMsg();
         client.sendTCP(startMsg);
         client.addListener(new Listener() {
@@ -100,13 +89,13 @@ public class ClientConnector {
                     CreateGameMsg recStartMsg = (CreateGameMsg) object;
                     hasGame = recStartMsg.isHasGame();
                     callbackMap.get(CreateGameMsg.class).callback(recStartMsg);
-
+                    System.out.println("Created/Received Game." + hasGame);
                 }
             }
         });
     }
 
-    public void addUser(String playerName) {
+    public void addUser(String playerName){
         AddPlayerSuccessMsg addPlayerMsg = new AddPlayerSuccessMsg();
         addPlayerMsg.setPlayerName(playerName);
         client.sendTCP(addPlayerMsg);
@@ -115,11 +104,11 @@ public class ClientConnector {
             public void received(Connection con, Object object) {
                 if (object instanceof AddPlayerSuccessMsg) {
                     AddPlayerSuccessMsg ms = (AddPlayerSuccessMsg) object;
-                    if (ms.getFeedbackUI() == 0) {
+                    if(ms.getFeedbackUI() == 0){
                         callbackMap.get(AddPlayerSuccessMsg.class).callback(ms);
-                    } else if (ms.getFeedbackUI() == 1) {
+                    }else if(ms.getFeedbackUI() == 1){
                         callbackMap.get(AddPlayerNameErrorMsg.class).callback(ms);
-                    } else if (ms.getFeedbackUI() == 2) {
+                    }else if(ms.getFeedbackUI() == 2){
                         callbackMap.get(AddPlayerSizeErrorMsg.class).callback(ms);
                     }
 
@@ -131,7 +120,7 @@ public class ClientConnector {
 
     //for now this method only has the use, to reset the game and playerList, so we
     //dont have to restart the server for the same purpose.
-    public void resetGame() {
+    public void resetGame(){
         ResetMsg msg = new ResetMsg();
         client.sendTCP(msg);
 
@@ -143,7 +132,7 @@ public class ClientConnector {
         });
     }
 
-    public void startGame() {
+    public void startGame(){
         StartGameMsg msg = new StartGameMsg();
         client.sendTCP(msg);
 
@@ -159,32 +148,15 @@ public class ClientConnector {
 
     }
 
-    public void sendCheatMessage () {
-        HasCheatedMessage msg = new HasCheatedMessage();
-        client.sendTCP(msg);
-
-        client.addListener(new Listener() {
-            public void received(Connection con, Object object) {
-                if (object instanceof HasCheatedMessage) {
-                    System.out.println("Got a Callback for Cheat");
-                    HasCheatedMessage msg = (HasCheatedMessage) object;
-                    callbackMap.get(HasCheatedMessage.class).callback(msg);
-                }
-            }
-
-        });
-    }
-
-
     public boolean hasGame() {
         return hasGame;
     }
 
-    public void setHasGame(Boolean bool) {
+    public void setHasGame(Boolean bool){
         this.hasGame = bool;
     }
 
-    public Client getClient() {
+    public Client getClient(){
         return client;
     }
 
@@ -194,3 +166,21 @@ public class ClientConnector {
 }
 
 
+
+    public void sendCheatMessage () {
+        HasCheatedMessage msg = new HasCheatedMessage();
+        client.sendTCP(msg);
+
+        client.addListener(new Listener() {
+                    System.out.println("Got a Callback for Cheat");
+            public void received(Connection con, Object object) {
+                if (object instanceof HasCheatedMessage) {
+                    HasCheatedMessage msg = (HasCheatedMessage) object;
+                    callbackMap.get(HasCheatedMessage.class).callback(msg);
+                }
+            }
+
+        });
+    }
+
+        registerClass(HasCheatedMessage.class);
