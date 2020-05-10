@@ -7,11 +7,19 @@ import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
 
+import com.floriankleewein.commonclasses.Network.AddPlayerNameErrorMsg;
 import com.floriankleewein.commonclasses.Network.ClientConnector;
+import com.floriankleewein.commonclasses.Network.GetGameMsg;
+import com.floriankleewein.commonclasses.User.User;
 import com.group7.dominion.CheatFunction.ShakeListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class StartGameActivity extends AppCompatActivity {
     Button btnStart;
@@ -26,11 +34,26 @@ public class StartGameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_or_join);
         btnStart = findViewById(R.id.btn_start);
 
-
+        ClientConnector clientConnector = ClientConnector.getClientConnector();
+        clientConnector.getGame();
         ListView playerNamesListView = findViewById(R.id.playerNamesListView);
+        List<String> playerNames = new ArrayList<>();
+        ArrayAdapter<String> listViewAdapter =
+                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, playerNames);
 
-        /*ArrayAdapter<User> arrayAdapter
-                = new ArrayAdapter<User>(this, android.R.layout.simple_list_item_1 , );*/
+        playerNamesListView.setAdapter(listViewAdapter);
+
+        clientConnector.registerCallback(GetGameMsg.class, (msg -> {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    
+                }
+            });
+        }));
+
+
+
     //TODO: adapter für die listView. wie kommt man an die userliste?
 
 

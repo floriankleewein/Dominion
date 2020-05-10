@@ -9,6 +9,7 @@ import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
 import com.floriankleewein.commonclasses.Network.BaseMessage;
 import com.floriankleewein.commonclasses.Network.ClientConnector;
+import com.floriankleewein.commonclasses.Network.GetGameMsg;
 import com.floriankleewein.commonclasses.Network.ResetMsg;
 import com.floriankleewein.commonclasses.Network.CreateGameMsg;
 import com.floriankleewein.commonclasses.Network.GameInformationMsg;
@@ -49,6 +50,7 @@ public class TestServer {
         registerClass(User.class);
         registerClass(ResetMsg.class);
         registerClass(StartGameMsg.class);
+        registerClass(GetGameMsg.class);
 
         //Start Server
         server.start();
@@ -106,9 +108,10 @@ public class TestServer {
                 }else if(object instanceof StartGameMsg){
                     StartGameMsg msg = new StartGameMsg();
                     con.sendTCP(msg);
+                }else if(object instanceof GetGameMsg){
+                    GetGameMsg msg = new GetGameMsg();
+                    msg.setGame(game);
                 }
-
-
             }
         });
     }

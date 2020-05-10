@@ -53,6 +53,7 @@ public class ClientConnector{
         registerClass(User.class);
         registerClass(ResetMsg.class);
         registerClass(StartGameMsg.class);
+        registerClass(GetGameMsg.class);
 
         // start client
         client.start();
@@ -127,6 +128,21 @@ public class ClientConnector{
         client.addListener(new Listener() {
             public void received(Connection con, Object object) {
                 //what happens then?
+            }
+
+        });
+    }
+
+    public void getGame(){
+        GetGameMsg msg = new GetGameMsg();
+        client.sendTCP(msg);
+
+        client.addListener(new Listener() {
+            public void received(Connection con, Object object) {
+                if (object instanceof GetGameMsg) {
+                    GetGameMsg msg = (GetGameMsg) object;
+                    callbackMap.get(GetGameMsg.class).callback(msg);
+                }
             }
 
         });
