@@ -1,5 +1,11 @@
 package com.floriankleewein.commonclasses;
 
+import com.floriankleewein.commonclasses.Cards.ActionCard;
+import com.floriankleewein.commonclasses.Cards.Card;
+import com.floriankleewein.commonclasses.Cards.EstateCard;
+import com.floriankleewein.commonclasses.Cards.EstateType;
+import com.floriankleewein.commonclasses.Cards.MoneyCard;
+import com.floriankleewein.commonclasses.Cards.MoneyType;
 import com.floriankleewein.commonclasses.CheatFunction.CheatService;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.User.User;
@@ -10,6 +16,8 @@ import org.junit.Before;
 import org.junit.Test;
 import java.util.ArrayList;
 import java.util.LinkedList;
+
+import static com.floriankleewein.commonclasses.Cards.ActionType.HEXE;
 
 
 public class CheatServiceTest {
@@ -69,10 +77,19 @@ public class CheatServiceTest {
     }
 
 
-    private LinkedList<Object> fillwithTestCards(int amountCards) {
-        LinkedList<Object> TestList = new LinkedList<>();
+    private LinkedList<Card> fillwithTestCards(int amountCards) {
+        Card one = new ActionCard(2, HEXE);
+        Card two = new EstateCard(3, 3, EstateType.PROVINZ);
+        Card three = new MoneyCard(2, 3, MoneyType.GOLD);
+
+        LinkedList<Card> TestList = new LinkedList<>();
         for (int i = 0; i < amountCards; i++) {
-            TestList.add("Card: " + i);
+            if (i > 3) {
+                TestList.add(one);
+            } else if (i < 3 && i > 6) {
+                TestList.add(two);
+            } else TestList.add(three);
+
         }
         return TestList;
     }
