@@ -1,5 +1,11 @@
 package UserTests;
 
+import com.floriankleewein.commonclasses.Cards.ActionCard;
+import com.floriankleewein.commonclasses.Cards.Card;
+import com.floriankleewein.commonclasses.Cards.EstateCard;
+import com.floriankleewein.commonclasses.Cards.EstateType;
+import com.floriankleewein.commonclasses.Cards.MoneyCard;
+import com.floriankleewein.commonclasses.Cards.MoneyType;
 import com.floriankleewein.commonclasses.User.User;
 
 import org.junit.After;
@@ -9,13 +15,16 @@ import org.junit.Test;
 
 import java.util.LinkedList;
 
+import static com.floriankleewein.commonclasses.Cards.ActionType.BURGGRABEN;
+import static com.floriankleewein.commonclasses.Cards.ActionType.HEXE;
+
 public class UserClassTest {
     static String UserName = "TestUser";
     static String UserEmail = "test@email.com";
     static String UserPassword = "TestPassword";
 
     private User user;
-    private LinkedList<Object> TestObjects;
+    private LinkedList<Card> TestObjects;
 
     @Before
     public void setUp() {
@@ -25,10 +34,19 @@ public class UserClassTest {
         TestObjects = fillwithTestCards(10);
     }
 
-    private LinkedList<Object> fillwithTestCards(int amountCards) {
-        LinkedList<Object> TestList = new LinkedList<>();
+    private LinkedList<Card> fillwithTestCards(int amountCards) {
+        Card one = new ActionCard(2, HEXE);
+        Card two = new EstateCard(3, 3, EstateType.PROVINZ);
+        Card three = new MoneyCard(2, 3, MoneyType.GOLD);
+
+        LinkedList<Card> TestList = new LinkedList<>();
         for (int i = 0; i < amountCards; i++) {
-            TestList.add("Card: " + i);
+            if (i > 3) {
+                TestList.add(one);
+            } else if (i < 3 && i > 6) {
+                TestList.add(two);
+            } else TestList.add(three);
+
         }
         return TestList;
     }
@@ -50,7 +68,7 @@ public class UserClassTest {
     @Test
     public void testPlayCard() {
         this.user.getUserCards().getFirstCards(TestObjects);
-        Object playedCard = this.user.getUserCards().getHandCards().get(0);
+        Card playedCard = this.user.getUserCards().getHandCards().get(0);
         Assert.assertEquals(5, this.user.getUserCards().getHandCards().size());
         Assert.assertEquals(0, this.user.getUserCards().getDiscardCards().size());
 
@@ -71,7 +89,7 @@ public class UserClassTest {
         Assert.assertEquals(5, this.user.getUserCards().getHandCards().size());
         Assert.assertEquals(0, this.user.getUserCards().getDiscardCards().size());
 
-        String newCard = "NEW CARD";
+        Card newCard = new ActionCard(1,BURGGRABEN);
         //Draw new Card
         this.user.getUserCards().addCardtoDeck(newCard);
         Assert.assertEquals(6, this.user.getUserCards().getDeck().size());
@@ -88,7 +106,7 @@ public class UserClassTest {
         Assert.assertEquals(5, this.user.getUserCards().getHandCards().size());
         Assert.assertEquals(0, this.user.getUserCards().getDiscardCards().size());
 
-        LinkedList<Object> newCards = fillwithTestCards(5);
+        LinkedList<Card> newCards = fillwithTestCards(5);
         this.user.getUserCards().putCardsinTheDeck(newCards);
         Assert.assertEquals(10, this.user.getUserCards().getDeck().size());
 

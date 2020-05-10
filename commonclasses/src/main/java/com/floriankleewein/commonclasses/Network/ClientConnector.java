@@ -14,12 +14,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ClientConnector{
+public class ClientConnector {
     private final String Tag = "CLIENT-CONNECTOR"; // Debugging only
     private static final String SERVER_IP = "143.205.174.196";
     private static final int SERVER_PORT = 53217;
     private static Client client;
     private boolean hasGame = false;
+
+
+    private Game game;
     private Callback<CreateGameMsg> callback;
     Map<Class, Callback<BaseMessage>> callbackMap = new HashMap<>();
 
@@ -28,11 +31,13 @@ public class ClientConnector{
     }*/
 
     private static ClientConnector clientConnector;
-    //overwriting constructor so it cannot be instanced.
-    ClientConnector(){}
 
-    public static synchronized ClientConnector getClientConnector(){
-        if(ClientConnector.clientConnector == null){
+    //overwriting constructor so it cannot be instanced.
+    ClientConnector() {
+    }
+
+    public static synchronized ClientConnector getClientConnector() {
+        if (ClientConnector.clientConnector == null) {
             client = new Client();
             ClientConnector.clientConnector = new ClientConnector();
         }
@@ -41,6 +46,10 @@ public class ClientConnector{
 
     public void registerClass(Class regClass) {
         client.getKryo().register(regClass);
+    }
+
+    public Game getGame() {
+        return game;
     }
 
     public void connect() {
@@ -57,6 +66,8 @@ public class ClientConnector{
         registerClass(ResetMsg.class);
         registerClass(StartGameMsg.class);
         registerClass(ChatMessage.class);
+        registerClass(HasCheatedMessage.class);
+        registerClass(ActivePlayerMessage.class);
         registerClass(UpdatePlayerNamesMsg.class);
 
 
@@ -66,7 +77,6 @@ public class ClientConnector{
         //connects aau server
         try {
             client.connect(5000, SERVER_IP, SERVER_PORT);   // Uni server
-            //client.connect(5000, InetAddress.getLocalHost(), 8080); // local server
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -100,6 +110,7 @@ public class ClientConnector{
                 if (object instanceof CreateGameMsg) {
                     CreateGameMsg recStartMsg = (CreateGameMsg) object;
                     hasGame = recStartMsg.isHasGame();
+                    game = recStartMsg.getGame();
                     callbackMap.get(CreateGameMsg.class).callback(recStartMsg);
                     System.out.println("Created/Received Game." + hasGame);
                 }
@@ -107,7 +118,7 @@ public class ClientConnector{
         });
     }
 
-    public void addUser(String playerName){
+    public void addUser(String playerName) {
         AddPlayerSuccessMsg addPlayerMsg = new AddPlayerSuccessMsg();
         addPlayerMsg.setPlayerName(playerName);
         client.sendTCP(addPlayerMsg);
@@ -116,11 +127,11 @@ public class ClientConnector{
             public void received(Connection con, Object object) {
                 if (object instanceof AddPlayerSuccessMsg) {
                     AddPlayerSuccessMsg ms = (AddPlayerSuccessMsg) object;
-                    if(ms.getFeedbackUI() == 0){
+                    if (ms.getFeedbackUI() == 0) {
                         callbackMap.get(AddPlayerSuccessMsg.class).callback(ms);
-                    }else if(ms.getFeedbackUI() == 1){
+                    } else if (ms.getFeedbackUI() == 1) {
                         callbackMap.get(AddPlayerNameErrorMsg.class).callback(ms);
-                    }else if(ms.getFeedbackUI() == 2){
+                    } else if (ms.getFeedbackUI() == 2) {
                         callbackMap.get(AddPlayerSizeErrorMsg.class).callback(ms);
                     }
 
@@ -132,7 +143,7 @@ public class ClientConnector{
 
     //for now this method only has the use, to reset the game and playerList, so we
     //dont have to restart the server for the same purpose.
-    public void resetGame(){
+    public void resetGame() {
         ResetMsg msg = new ResetMsg();
         client.sendTCP(msg);
 
@@ -143,8 +154,8 @@ public class ClientConnector{
 
         });
     }
-
-    public void updatePlayerNames(){
+  
+ public void updatePlayerNames(){
         UpdatePlayerNamesMsg msg = new UpdatePlayerNamesMsg();
         client.sendTCP(msg);
 
@@ -168,7 +179,12 @@ public class ClientConnector{
             public void received(Connection con, Object object) {
                 if (object instanceof StartGameMsg) {
                     StartGameMsg msg = (StartGameMsg) object;
-                    callbackMap.get(StartGameMsg.class).callback(msg);
+                    if(msg.getFeedbackUI() == 0) {
+                        callbackMap.get(StartGameMsg.class).callback(msg);
+                        game.setGame(msg.getGame());
+                    } else {
+                        //TODO display error in starting game
+                    }
                 }
             }
 
@@ -180,11 +196,11 @@ public class ClientConnector{
         return hasGame;
     }
 
-    public void setHasGame(Boolean bool){
+    public void setHasGame(Boolean bool) {
         this.hasGame = bool;
     }
 
-    public Client getClient(){
+    public Client getClient() {
         return client;
     }
 
@@ -198,3 +214,21 @@ public class ClientConnector{
 }
 
 
+
+
+    public void sendCheatMessage () {
+        HasCheatedMessage msg = new HasCheatedMessage();
+        client.sendTCP(msg);
+
+        client.addListener(new Listener() {
+            public void received(Connection con, Object object) {
+                if (object instanceof HasCheatedMessage) {
+                    HasCheatedMessage msg = (HasCheatedMessage) object;
+                    callbackMap.get(HasCheatedMessage.class).callback(msg);
+                }
+            }
+
+        });
+    }
+
+}

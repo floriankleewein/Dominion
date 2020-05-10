@@ -16,13 +16,15 @@ public class ShakeListener {
     private float shake;
     private CheatAlert cheat_alert;
     private FragmentManager fragmentManager;
+    private String Username;
 
-    public ShakeListener(FragmentManager fragmentManager) {
+    public ShakeListener(FragmentManager fragmentManager, String Username) {
         acelVal = SensorManager.GRAVITY_EARTH;
         acelLast = SensorManager.GRAVITY_EARTH;
         shake = 0.00f;
         cheat_alert = new CheatAlert();
         this.fragmentManager = fragmentManager;
+        this.Username = Username;
     }
 
 
@@ -44,6 +46,7 @@ public class ShakeListener {
                 if (shake > 4 && !alreadyCheated) {
                     alreadyCheated = true;
                     Log.i("SHAKING!!", "PHONE GET SHAKED!");
+                    cheat_alert.setName(Username);
                     cheat_alert.show(fragmentManager, "cheat");
                 }
             }

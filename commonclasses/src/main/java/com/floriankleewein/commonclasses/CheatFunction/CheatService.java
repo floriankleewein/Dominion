@@ -10,7 +10,15 @@ public class CheatService {
 
 
     private List<User> PlayerList;
+    private static CheatService cheatService;
 
+
+    public static synchronized CheatService getGame() {
+        if (CheatService.cheatService == null) {
+            cheatService = new CheatService(Game.getGame());
+        }
+        return CheatService.cheatService;
+    }
 
     public CheatService(Game game) {
         PlayerList = game.getPlayerList();

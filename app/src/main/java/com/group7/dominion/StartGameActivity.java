@@ -1,26 +1,38 @@
 package com.group7.dominion;
 
+
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+
 import android.content.Intent;
-import android.hardware.Sensor;
-import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.floriankleewein.commonclasses.Network.ClientConnector;
+
+import com.floriankleewein.commonclasses.Network.ClientConnector;
+
 import com.floriankleewein.commonclasses.Network.UpdatePlayerNamesMsg;
+
 import com.group7.dominion.CheatFunction.ShakeListener;
 
 import java.util.ArrayList;
 
 public class StartGameActivity extends AppCompatActivity {
-    Button btnStart, btnRecreate;
-    SensorManager sm;
+
+    Button btnStart, btnshowPlayers;
+    ClientConnector client;
+
+
+    Button  btnRecreate;
     ShakeListener shakeListener;
+
     //TODO: rename this
     public static final String EXTRA_MESSAGE = "clientForNextActivity";
 
@@ -29,14 +41,10 @@ public class StartGameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_or_join);
         btnStart = findViewById(R.id.btn_start);
+        btnshowPlayers = findViewById(R.id.ShowPlayer);
 
         ClientConnector clientConnector = ClientConnector.getClientConnector();
 
-
-
-        shakeListener = new ShakeListener(getSupportFragmentManager());
-        sm = (SensorManager) getSystemService(SENSOR_SERVICE);
-        sm.registerListener(shakeListener.newSensorListener(), sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     @Override
@@ -47,7 +55,7 @@ public class StartGameActivity extends AppCompatActivity {
 
         //FKDoc: this is the arrayList,where the names will be stored.
         ArrayList<String> names = new ArrayList<>();
-        names.add("NAME!");
+
         //FKDoc: this is the listView where the playerNames should be viewed.
         ListView playerNamesListView = findViewById(R.id.playerNamesListView);
         Thread thread = new Thread(new Runnable() {
@@ -81,7 +89,6 @@ public class StartGameActivity extends AppCompatActivity {
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -90,8 +97,12 @@ public class StartGameActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+
                                 Intent intent = new Intent(StartGameActivity.this, GameActivity.class);
                                 startActivity(intent);
+
+
+
                             }
                         });
                     }
@@ -100,5 +111,15 @@ public class StartGameActivity extends AppCompatActivity {
                 thread.start();
             }
         });
+    }
+
+
+    public void startGame() {
+        Intent intent = new Intent(this, GameActivity.class);
+        startActivity(intent);
+    }
+
+    public String getUserName() {
+        return getSharedPreferences("USERNAME", Context.MODE_PRIVATE).getString("us", "username");
     }
 }
