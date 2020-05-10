@@ -9,10 +9,12 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.floriankleewein.commonclasses.CheatFunction.CheatService;
 import com.floriankleewein.commonclasses.Game;
+import com.group7.dominion.Network.ClientConnector;
 
 public class CheatAlert extends AppCompatDialogFragment {
 
     Game game;
+    String name;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -26,8 +28,9 @@ public class CheatAlert extends AppCompatDialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //TODO: Have to find Playername
-                        String name = "";
-                        game.getCheatService().addCardtoUser(name);
+                        if (game != null) {
+                            game.getCheatService().addCardtoUser(name);
+                        }
                         dialog.cancel();
                     }
                 })
@@ -40,5 +43,12 @@ public class CheatAlert extends AppCompatDialogFragment {
                 });
 
         return builder.create();
+    }
+
+    public void setName (String name) {
+        this.name = name;
+    }
+    public void setGame (Game game){
+        this.game = Game.getGame();
     }
 }

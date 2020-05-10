@@ -64,7 +64,8 @@ public class StartGameActivity extends AppCompatActivity {
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                putNametoNextAcitivty(getUserName());
+
+
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -77,6 +78,8 @@ public class StartGameActivity extends AppCompatActivity {
                                 Intent intent = new Intent(StartGameActivity.this, GameActivity.class);
                                 startActivity(intent);
                                 */
+
+                                putNametoNextAcitivty(getUserName());
 
                             }
                         });
@@ -106,6 +109,7 @@ public class StartGameActivity extends AppCompatActivity {
         Bundle extras = intent.getExtras();
                 if (extras != null){
                     str = extras.getString("USERNAME");
+                    System.out.println("START GAME ACTIVITY " + str);
                 }
         return str;
     }

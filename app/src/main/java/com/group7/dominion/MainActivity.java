@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.floriankleewein.commonclasses.Board.Board;
+import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.Network.AddPlayerNameErrorMsg;
 import com.floriankleewein.commonclasses.Network.AddPlayerSizeErrorMsg;
 import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
@@ -133,10 +134,10 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         EditText editText = findViewById(R.id.inputName);
                         String userName = editText.getText().toString();
-                        client.addUser(userName);
                         Intent UserNameIntent = new Intent(MainActivity.this, StartGameActivity.class);
                         UserNameIntent.putExtra("USERNAME", userName);
                         startActivity (UserNameIntent);
+                        client.addUser(userName);
                     }
                 });
                 thread.start();

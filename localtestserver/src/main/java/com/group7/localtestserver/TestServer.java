@@ -9,6 +9,7 @@ import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
 import com.floriankleewein.commonclasses.Network.BaseMessage;
 import com.floriankleewein.commonclasses.Network.GetPlayerMsg;
+import com.floriankleewein.commonclasses.Network.HasCheatedMessage;
 import com.floriankleewein.commonclasses.Network.ReturnPlayersMsg;
 import com.floriankleewein.commonclasses.Network.ResetMsg;
 import com.floriankleewein.commonclasses.Network.CreateGameMsg;
@@ -106,6 +107,8 @@ public class TestServer {
                     System.out.println("Got the GetPlayerMsg");
                     ReturnPlayersMsg msg = new ReturnPlayersMsg();
                     con.sendTCP(msg);
+                } else if (object instanceof HasCheatedMessage) {
+                    sendCheatInformation();
                 }
             }
         });
@@ -126,6 +129,13 @@ public class TestServer {
     public void reset() {
         game.getPlayerList().clear();
         System.out.println("Playerlist cleared!");
+    }
+
+    public void sendCheatInformation() {
+        HasCheatedMessage msg = new HasCheatedMessage();
+        for (Connection con : server.getConnections()) {
+            con.sendTCP(msg);
+        }
     }
 
 

@@ -13,6 +13,7 @@ import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
 import com.floriankleewein.commonclasses.Network.BaseMessage;
 import com.floriankleewein.commonclasses.Network.GameInformationMsg;
 import com.floriankleewein.commonclasses.Network.GetPlayerMsg;
+import com.floriankleewein.commonclasses.Network.HasCheatedMessage;
 import com.floriankleewein.commonclasses.Network.ReturnPlayersMsg;
 import com.floriankleewein.commonclasses.Network.NetworkInformationMsg;
 import com.floriankleewein.commonclasses.Network.ResetMsg;
@@ -151,6 +152,11 @@ public class ClientConnector {
 
         });
 
+    }
+
+    public void sendCheatMessage () {
+        HasCheatedMessage msg = new HasCheatedMessage();
+        client.sendTCP(msg);
     }
 
 

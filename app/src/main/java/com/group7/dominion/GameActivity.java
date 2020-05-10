@@ -11,6 +11,7 @@ import android.os.Bundle;
 
 import com.google.android.material.tabs.TabLayout;
 import com.group7.dominion.Chat.ViewPagerAdapter;
+import com.group7.dominion.CheatFunction.CheatAlert;
 import com.group7.dominion.CheatFunction.ShakeListener;
 import com.group7.dominion.Network.ClientConnector;
 
@@ -41,11 +42,17 @@ public class GameActivity extends AppCompatActivity {
         viewPager.setAdapter(viewPagerAdapter);
 
 
-        shakeListener = new ShakeListener(getSupportFragmentManager());
+        shakeListener = new ShakeListener(getSupportFragmentManager(),getUsername());
         sm = (SensorManager) getSystemService(SENSOR_SERVICE);
         sm.registerListener(shakeListener.newSensorListener(), sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
 
-        System.out.println(getUsername() + " is here");
+    }
+
+
+
+    protected void onStart () {
+        super.onStart();
+        
     }
 
     public String getUsername () {
@@ -56,10 +63,5 @@ public class GameActivity extends AppCompatActivity {
             str = extras.getString("USERNAME");
         }
         return str;
-    }
-
-    protected void onStart () {
-        super.onStart();
-        
     }
 }
