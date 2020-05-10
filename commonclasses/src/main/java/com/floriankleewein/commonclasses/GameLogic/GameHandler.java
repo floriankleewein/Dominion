@@ -37,11 +37,17 @@ public class GameHandler {
                     Card anwesen = new EstateCard(2,1,EstateType.ANWESEN);
                     ucards.addCardtoDeck(anwesen);
                 }
+                //TODO check getFirstCards
+                ucards.shufflesCards();
                 user.setUserCards(ucards);
             }
         }
         game.setBoard(new Board());
         game.setPlayerList(playerList);
         game.setActivePlayer(playerList.get(0));
+    }
+
+    public void startTurn() {
+        // TODO called when Server tells client it can go and start its turn?
     }
 }
