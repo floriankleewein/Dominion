@@ -4,16 +4,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 
+import com.floriankleewein.commonclasses.Network.ClientConnector;
+import com.floriankleewein.commonclasses.Network.HasCheatedMessage;
 import com.google.android.material.tabs.TabLayout;
 import com.group7.dominion.Chat.ViewPagerAdapter;
-import com.group7.dominion.CheatFunction.CheatAlert;
 import com.group7.dominion.CheatFunction.ShakeListener;
-import com.group7.dominion.Network.ClientConnector;
 
 public class GameActivity extends AppCompatActivity {
     private SensorManager sm;
@@ -42,26 +44,21 @@ public class GameActivity extends AppCompatActivity {
         viewPager.setAdapter(viewPagerAdapter);
 
 
-        shakeListener = new ShakeListener(getSupportFragmentManager(),getUsername());
+        System.out.println(getUsername() + " is here");
+        shakeListener = new ShakeListener(getSupportFragmentManager(), getUsername());
         sm = (SensorManager) getSystemService(SENSOR_SERVICE);
         sm.registerListener(shakeListener.newSensorListener(), sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
 
     }
 
 
-
-    protected void onStart () {
+    protected void onStart() {
         super.onStart();
-        
     }
 
-    public String getUsername () {
-        String str = "";
-        Intent intent = getIntent();
-        Bundle extras = intent.getExtras();
-        if (extras != null){
-            str = extras.getString("USERNAME");
-        }
+    public String getUsername() {
+        SharedPreferences sharedPreferences = getSharedPreferences("USERNAME", Context.MODE_PRIVATE);
+        String str = sharedPreferences.getString("us", null);
         return str;
     }
 }

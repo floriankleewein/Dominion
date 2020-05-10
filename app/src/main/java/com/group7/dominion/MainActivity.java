@@ -1,8 +1,9 @@
 package com.group7.dominion;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,13 +12,11 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.floriankleewein.commonclasses.Board.Board;
-import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.Network.AddPlayerNameErrorMsg;
 import com.floriankleewein.commonclasses.Network.AddPlayerSizeErrorMsg;
 import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
 import com.floriankleewein.commonclasses.Network.CreateGameMsg;
-import com.floriankleewein.commonclasses.Network.StartGameMsg;
-import com.group7.dominion.Network.ClientConnector;
+import com.floriankleewein.commonclasses.Network.ClientConnector;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -26,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Board board;
     ClientConnector client;
+    SharedPreferences sharedPreferences;
 
     //TODO: rename this
     public static final String EXTRA_MESSAGE = "clientForNextActivity";
@@ -39,14 +39,14 @@ public class MainActivity extends AppCompatActivity {
         btnJoin = findViewById(R.id.btn_join);
         btnReset = findViewById(R.id.btn_reset);
 
-
+        sharedPreferences = getSharedPreferences("USERNAME", Context.MODE_PRIVATE);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
-        client = new ClientConnector();
+        client = ClientConnector.getClientConnector();
         checkButtons();
 
         client.registerCallback(CreateGameMsg.class, (msg -> {
@@ -128,15 +128,12 @@ public class MainActivity extends AppCompatActivity {
         btnJoin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                addUsernametoPreferences();
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
                         EditText editText = findViewById(R.id.inputName);
                         String userName = editText.getText().toString();
-                        Intent UserNameIntent = new Intent(MainActivity.this, StartGameActivity.class);
-                        UserNameIntent.putExtra("USERNAME", userName);
-                        startActivity (UserNameIntent);
                         client.addUser(userName);
                     }
                 });
@@ -169,6 +166,14 @@ public class MainActivity extends AppCompatActivity {
             btnCreate.setEnabled(false);
             btnJoin.setEnabled(true);
         }
+    }
+
+    public void addUsernametoPreferences () {
+        EditText editText = findViewById(R.id.inputName);
+        String userName = editText.getText().toString();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("us", userName);
+        editor.commit();
     }
 
     public Board getBoard() {

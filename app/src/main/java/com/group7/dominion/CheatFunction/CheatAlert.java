@@ -7,9 +7,8 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatDialogFragment;
 
-import com.floriankleewein.commonclasses.CheatFunction.CheatService;
 import com.floriankleewein.commonclasses.Game;
-import com.group7.dominion.Network.ClientConnector;
+import com.floriankleewein.commonclasses.Network.ClientConnector;
 
 public class CheatAlert extends AppCompatDialogFragment {
 
@@ -20,7 +19,6 @@ public class CheatAlert extends AppCompatDialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
 
-
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                 .setTitle("How dare you?")
                 .setMessage("You really want to cheat?")
@@ -28,10 +26,12 @@ public class CheatAlert extends AppCompatDialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //TODO: Have to find Playername
-                        if (game != null) {
-                            game.getCheatService().addCardtoUser(name);
+                        if (Game.getGame().getPlayerList().size() > 0) {
+                            Game.getGame().getCheatService().addCardtoUser(name);
                         }
+                        sendMessage();
                         dialog.cancel();
+
                     }
                 })
                 .setNegativeButton("No, im a fair Gamer", new DialogInterface.OnClickListener() {
@@ -45,10 +45,23 @@ public class CheatAlert extends AppCompatDialogFragment {
         return builder.create();
     }
 
-    public void setName (String name) {
+    private void sendMessage () {
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ClientConnector.getClientConnector().sendCheatMessage();
+            }
+        });
+
+        thread.start();
+    }
+
+    public void setName(String name) {
         this.name = name;
     }
-    public void setGame (Game game){
+
+    public void setGame(Game game) {
         this.game = Game.getGame();
     }
 }

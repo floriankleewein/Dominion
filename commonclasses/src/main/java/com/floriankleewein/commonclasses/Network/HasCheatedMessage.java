@@ -1,6 +1,7 @@
 package com.floriankleewein.commonclasses.Network;
 
 public class HasCheatedMessage extends BaseMessage {
+    /*
     String CheaterName;
 
 
@@ -11,4 +12,5 @@ public class HasCheatedMessage extends BaseMessage {
     public void setName(String name) {
         this.CheaterName = name;
     }
+     */
 }
