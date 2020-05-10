@@ -34,10 +34,28 @@ public class StartGameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_create_or_join);
         btnStart = findViewById(R.id.btn_start);
 
-        ClientConnector clientConnector = ClientConnector.getClientConnector();
-        ListView playerNamesListView = findViewById(R.id.playerNamesListView);
 
-        clientConnector.getGame();
+
+
+        shakeListener = new ShakeListener(getSupportFragmentManager());
+        sm = (SensorManager) getSystemService(SENSOR_SERVICE);
+        sm.registerListener(shakeListener.newSensorListener(), sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        ClientConnector clientConnector = ClientConnector.getClientConnector();
+
+        ListView playerNamesListView = findViewById(R.id.playerNamesListView);
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                clientConnector.getGame();
+            }
+        });
+        thread.start();
 
         ArrayAdapter<String> listViewAdapter =
                 new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, clientConnector.getPlayerNames());
@@ -52,19 +70,6 @@ public class StartGameActivity extends AppCompatActivity {
 
             });
         }));
-
-
-        shakeListener = new ShakeListener(getSupportFragmentManager());
-        sm = (SensorManager) getSystemService(SENSOR_SERVICE);
-        sm.registerListener(shakeListener.newSensorListener(), sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        ClientConnector clientConnector = ClientConnector.getClientConnector();
-
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
