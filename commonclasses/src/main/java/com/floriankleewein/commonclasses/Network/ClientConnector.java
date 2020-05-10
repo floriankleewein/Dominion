@@ -9,6 +9,7 @@ import com.floriankleewein.commonclasses.User.User;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ClientConnector{
@@ -53,6 +54,7 @@ public class ClientConnector{
         registerClass(User.class);
         registerClass(ResetMsg.class);
         registerClass(StartGameMsg.class);
+        registerClass(UpdatePlayerNamesMsg.class);
 
         // start client
         client.start();
@@ -77,6 +79,11 @@ public class ClientConnector{
                 }
             }
         });
+    }
+
+    public void recreateStartGameActivity(){
+        RecreateStartActivityMsg msg = new RecreateStartActivityMsg();
+        client.sendTCP(msg);
     }
 
     public void createGame() {
@@ -127,6 +134,22 @@ public class ClientConnector{
         client.addListener(new Listener() {
             public void received(Connection con, Object object) {
                 //what happens then?
+            }
+
+        });
+    }
+
+    public void updatePlayerNames(){
+        UpdatePlayerNamesMsg msg = new UpdatePlayerNamesMsg();
+        client.sendTCP(msg);
+
+        client.addListener(new Listener() {
+            public void received(Connection con, Object object) {
+                if (object instanceof UpdatePlayerNamesMsg) {
+                    UpdatePlayerNamesMsg msg = (UpdatePlayerNamesMsg) object;
+                    msg.setNameList(msg.getNameList());
+                    callbackMap.get(UpdatePlayerNamesMsg.class).callback(msg);
+                }
             }
 
         });
