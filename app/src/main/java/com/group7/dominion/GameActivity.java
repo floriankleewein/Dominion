@@ -24,7 +24,7 @@ import com.floriankleewein.commonclasses.Network.ClientConnector;
 import com.google.android.material.tabs.TabLayout;
 
 
-import com.group7.dominion.Chat.ViewPagerAdapter;
+
 import com.group7.dominion.CheatFunction.ShakeListener;
 
 
