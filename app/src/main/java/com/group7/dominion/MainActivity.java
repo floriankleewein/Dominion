@@ -94,10 +94,6 @@ public class MainActivity extends AppCompatActivity {
 
                     thread.start();*/
 
-                    //TODO: FLO: for gamecreation it must be possible to pass the client to the next activity.
-                    /*Intent intent = new Intent(MainActivity.this, StartGameActivity.class);
-                    intent.putExtra(EXTRA_MESSAGE, client);
-                    startActivity(intent);*/
                     startActivity(new Intent(MainActivity.this, StartGameActivity.class));
                 }
             });
