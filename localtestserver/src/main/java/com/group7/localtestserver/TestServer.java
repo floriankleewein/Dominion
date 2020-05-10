@@ -1,7 +1,6 @@
 package com.group7.localtestserver;
 
 
-import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
@@ -10,7 +9,7 @@ import com.floriankleewein.commonclasses.Chat.ChatMessage;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
 import com.floriankleewein.commonclasses.Network.BaseMessage;
-import com.floriankleewein.commonclasses.Network.ClientConnector;
+import com.floriankleewein.commonclasses.Network.UpdatePlayerNamesMsg;
 import com.floriankleewein.commonclasses.Network.ResetMsg;
 import com.floriankleewein.commonclasses.Network.CreateGameMsg;
 import com.floriankleewein.commonclasses.Network.GameInformationMsg;
@@ -20,9 +19,6 @@ import com.floriankleewein.commonclasses.User.User;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class TestServer {
 
@@ -52,6 +48,7 @@ public class TestServer {
         registerClass(ResetMsg.class);
         registerClass(StartGameMsg.class);
         registerClass(ChatMessage.class);
+        registerClass(UpdatePlayerNamesMsg.class);
 
         //Start Server
         server.start();
@@ -111,6 +108,7 @@ public class TestServer {
                 }else if(object instanceof StartGameMsg){
                     StartGameMsg msg = new StartGameMsg();
                     con.sendTCP(msg);
+
                 }else if(object instanceof ChatMessage){
                     ChatMessage msg = (ChatMessage) object;
 
@@ -128,6 +126,14 @@ public class TestServer {
                             server.sendToTCP(c.getID(), responseMsg);
                         }
                     }
+
+                }else if(object instanceof UpdatePlayerNamesMsg){
+                    UpdatePlayerNamesMsg msg = new UpdatePlayerNamesMsg();
+                    for(User x: game.getPlayerList()){
+                        msg.getNameList().add(x.getUserName());
+                    }
+                    server.sendToAllTCP(msg);
+
                 }
             }
         });

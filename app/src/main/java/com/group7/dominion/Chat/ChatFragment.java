@@ -140,7 +140,7 @@ public class ChatFragment extends ListFragment implements UserInputHandler {
             });
 
         } else {
-            Toast.makeText(getActivity(), "Nachricht senden nicht möglich. Keine Verbindung.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Nachricht senden nicht möglich! Keine Verbindung.", Toast.LENGTH_SHORT).show();
         }
     }
 
