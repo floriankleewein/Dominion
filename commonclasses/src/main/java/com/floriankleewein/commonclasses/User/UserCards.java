@@ -14,7 +14,7 @@ public class UserCards {
     private LinkedList<Object> HandCards;
     private LinkedList<Object> DiscardCards;
 
-
+    //TODO change to <Card>
     public void getFirstCards(LinkedList<Object> GivenCards) {
         this.Deck = new LinkedList<Object>();
         this.HandCards = new LinkedList<Object>();

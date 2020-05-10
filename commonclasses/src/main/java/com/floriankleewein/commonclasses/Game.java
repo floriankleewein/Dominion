@@ -1,6 +1,7 @@
 package com.floriankleewein.commonclasses;
 
 
+import com.floriankleewein.commonclasses.Board.Board;
 import com.floriankleewein.commonclasses.User.User;
 
 import java.util.ArrayList;
@@ -9,16 +10,32 @@ import java.util.List;
 public class Game {
 
     private List<User> playerList = new ArrayList<>();
+    private Board board;
     //hidden class variable for Singleton pattern.
     private static Game game;
-    //overwriting constructor so it cannot be instanced.
-    Game(){}
+    private User activePlayer;
 
-    public static synchronized Game getGame(){
-        if(Game.game == null){
+    //overwriting constructor so it cannot be instanced.
+    Game() {
+    }
+
+    public static synchronized Game getGame() {
+        if (Game.game == null) {
             Game.game = new Game();
         }
         return Game.game;
+    }
+
+    public static void setGame(Game game) {
+        Game.game = game;
+    }
+
+    public User getActivePlayer() {
+        return activePlayer;
+    }
+
+    public void setActivePlayer(User activePlayer) {
+        this.activePlayer = activePlayer;
     }
 
     public List<User> getPlayerList() {
@@ -29,8 +46,16 @@ public class Game {
         this.playerList = playerList;
     }
 
-    public boolean addPlayer(User user){
-        if(checkName(user.getUserName())) {
+    public Board getBoard() {
+        return board;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
+    public boolean addPlayer(User user) {
+        if (checkName(user.getUserName())) {
             if (checkSize()) {
                 playerList.add(user);
                 return true;
@@ -39,23 +64,23 @@ public class Game {
         return false;
     }
 
-    public boolean checkName(String name){
-        for (User user: playerList) {
-            if(user.getUserName().equals(name)){
+    public boolean checkName(String name) {
+        for (User user : playerList) {
+            if (user.getUserName().equals(name)) {
                 return false;
             }
         }
         return true;
     }
 
-    public boolean checkSize(){
-        if(getPlayerNumber() < 4){
+    public boolean checkSize() {
+        if (getPlayerNumber() < 4) {
             return true;
         }
         return false;
     }
 
-    public int getPlayerNumber(){
+    public int getPlayerNumber() {
         return game.playerList.size();
     }
 }
