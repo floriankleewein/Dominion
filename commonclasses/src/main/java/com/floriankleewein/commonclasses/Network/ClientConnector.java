@@ -9,6 +9,7 @@ import com.floriankleewein.commonclasses.User.User;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ClientConnector{
@@ -141,6 +142,12 @@ public class ClientConnector{
             public void received(Connection con, Object object) {
                 if (object instanceof GetGameMsg) {
                     GetGameMsg msg = (GetGameMsg) object;
+                    List<User> playerList = msg.getGame().getPlayerList();
+                    List<String> nameList = new ArrayList<>();
+                    for(User x: playerList){
+                        nameList.add(x.getUserName());
+                    }
+
                     callbackMap.get(GetGameMsg.class).callback(msg);
                 }
             }

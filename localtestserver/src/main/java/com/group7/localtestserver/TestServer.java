@@ -111,6 +111,7 @@ public class TestServer {
                 }else if(object instanceof GetGameMsg){
                     GetGameMsg msg = new GetGameMsg();
                     msg.setGame(game);
+                    con.sendTCP(msg);
                 }
             }
         });
