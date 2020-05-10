@@ -29,7 +29,6 @@ public class StartGameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_or_join);
         btnStart = findViewById(R.id.btn_start);
-        btnRecreate = findViewById(R.id.btn_recreate);
 
         ClientConnector clientConnector = ClientConnector.getClientConnector();
 
