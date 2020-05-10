@@ -8,17 +8,20 @@ import android.widget.ArrayAdapter;
 
 
 import com.floriankleewein.commonclasses.Chat.ChatMessage;
+import com.floriankleewein.commonclasses.Network.ClientConnector;
 
-public class ChatListAdapter<convertView> extends ArrayAdapter<ChatMessage> {
+public class ChatListAdapter extends ArrayAdapter<ChatMessage> {
 
     private Context context;
     // context in dem sich die Chatliste befindet
     private int layoutResourceId;
+    private ClientConnector client;
 
     public ChatListAdapter(Context context, int layoutResourceId) {
         super(context, layoutResourceId);
         this.context = context;
         this.layoutResourceId = layoutResourceId;
+        this.client = ClientConnector.getClientConnector();
     }
 
     @Override

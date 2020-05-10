@@ -7,6 +7,7 @@ import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.User.User;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -60,6 +61,7 @@ public class ClientConnector{
         //connects aau server
         try {
             client.connect(5000, SERVER_IP, SERVER_PORT);   // Uni server
+            //client.connect(5000, InetAddress.getLocalHost(), 8080); // local server
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -162,6 +164,10 @@ public class ClientConnector{
 
     public void registerCallback(Class c, Callback<BaseMessage> callback) {
         this.callbackMap.put(c, callback);
+    }
+
+    public boolean isConnected() {
+        return client.isConnected();
     }
 }
 

@@ -5,6 +5,8 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
+import com.esotericsoftware.minlog.Log;
+import com.floriankleewein.commonclasses.Chat.ChatMessage;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
 import com.floriankleewein.commonclasses.Network.BaseMessage;
@@ -29,6 +31,7 @@ public class TestServer {
     private boolean hasGame = false;
     private final String Tag = "TEST-SERVER"; // debugging only
     //private Map<User, ClientConnector> userClientConnectorMap = new HashMap<>();
+    private List<Connection> connectionList = new ArrayList<>();
 
 
     public TestServer() {
@@ -49,11 +52,13 @@ public class TestServer {
         registerClass(User.class);
         registerClass(ResetMsg.class);
         registerClass(StartGameMsg.class);
+        registerClass(ChatMessage.class);
 
         //Start Server
         server.start();
 
         try {
+            //server.bind(8080);
             server.bind(53217);
         } catch (IOException e) {
             e.printStackTrace();
@@ -90,6 +95,8 @@ public class TestServer {
                             addPlayerMsg.setFeedbackUI(0);
                             addPlayerMsg.setPlayerAdded(true);
                             System.out.println("Player added: " + player.getUserName());
+
+                            connectionList.add(con);
                         }else{
                             addPlayerMsg.setFeedbackUI(1);
                         }
@@ -106,9 +113,24 @@ public class TestServer {
                 }else if(object instanceof StartGameMsg){
                     StartGameMsg msg = new StartGameMsg();
                     con.sendTCP(msg);
+                }else if(object instanceof ChatMessage){
+                    ChatMessage msg = (ChatMessage) object;
+
+                    String message = msg.getMessage();
+
+                    Log.error("Receive msg from client:" + message);
+
+                    ChatMessage responseMsg = new ChatMessage();
+                    responseMsg.setMessage(msg.getMessage());
+                    responseMsg.setSentByMe(false);
+
+
+                    for (Connection c : server.getConnections()) {
+                        if (c != con) {
+                            server.sendToTCP(c.getID(), responseMsg);
+                        }
+                    }
                 }
-
-
             }
         });
     }

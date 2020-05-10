@@ -15,6 +15,7 @@ import com.floriankleewein.commonclasses.Network.AddPlayerSizeErrorMsg;
 import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
 import com.floriankleewein.commonclasses.Network.CreateGameMsg;
 import com.floriankleewein.commonclasses.Network.ClientConnector;
+import com.group7.localtestserver.TestServer;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     Button btnCreate, btnJoin, btnReset;
     private Board board;
     ClientConnector client;
+    //TestServer testServer;
 
     //TODO: rename this
     public static final String EXTRA_MESSAGE = "clientForNextActivity";
@@ -34,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
         btnCreate = findViewById(R.id.btn_create);
         btnJoin = findViewById(R.id.btn_join);
         btnReset = findViewById(R.id.btn_reset);
+
+        //this.testServer = new TestServer();
+        //testServer.startServer();
     }
 
     @Override

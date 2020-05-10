@@ -30,7 +30,7 @@
           android:layout_marginRight="5dp"
           android:inputType="textMultiLine"
           android:ems="10"
-          android:hint="Schreibe eine Nachricht..." />
+          android:hint="Schreibe eine Nachricht..."/>
 
       <ImageButton
           android:id="@+id/send_Button"
