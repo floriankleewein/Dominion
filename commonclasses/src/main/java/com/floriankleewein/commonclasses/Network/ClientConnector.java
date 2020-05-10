@@ -62,6 +62,7 @@ public class ClientConnector {
         registerClass(User.class);
         registerClass(ResetMsg.class);
         registerClass(StartGameMsg.class);
+        registerClass(ActivePlayerMessage.class);
 
         // start client
         client.start();

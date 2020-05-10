@@ -6,6 +6,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.GameLogic.GameHandler;
+import com.floriankleewein.commonclasses.Network.ActivePlayerMessage;
 import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
 import com.floriankleewein.commonclasses.Network.BaseMessage;
 import com.floriankleewein.commonclasses.Network.CreateGameMsg;
@@ -48,6 +49,7 @@ public class TestServer {
         registerClass(User.class);
         registerClass(ResetMsg.class);
         registerClass(StartGameMsg.class);
+        registerClass(ActivePlayerMessage.class);
 
         //Start Server
         server.start();
@@ -107,9 +109,13 @@ public class TestServer {
                         msg.setFeedbackUI(0);
                         msg.setGame(getGame());
                         // Send message to all clients, TODO they need to be in lobby
-                        for (Connection c: server.getConnections()) {
+                        for (Connection c : server.getConnections()) {
                             c.sendTCP(msg);
                         }
+                        ActivePlayerMessage activePlayerMsg = new ActivePlayerMessage();
+                        activePlayerMsg.setGame(getGame());
+                        Connection activePlayerCon = userClientConnectorMap.get(game.getActivePlayer());
+                        activePlayerCon.sendTCP(activePlayerMsg);
                     } else {
                         msg.setFeedbackUI(1);
                         con.sendTCP(msg);
