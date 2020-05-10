@@ -63,8 +63,12 @@ public class ClientConnector {
         registerClass(User.class);
         registerClass(ResetMsg.class);
         registerClass(StartGameMsg.class);
+
+        registerClass(HasCheatedMessage.class);
+
         registerClass(ActivePlayerMessage.class);
         registerClass(UpdatePlayerNamesMsg.class);
+
 
         // start client
         client.start();
@@ -202,6 +206,22 @@ public class ClientConnector {
     public void registerCallback(Class c, Callback<BaseMessage> callback) {
         this.callbackMap.put(c, callback);
     }
+
+
+
+    public void sendCheatMessage () {
+        HasCheatedMessage msg = new HasCheatedMessage();
+        client.sendTCP(msg);
+
+        client.addListener(new Listener() {
+            public void received(Connection con, Object object) {
+                if (object instanceof HasCheatedMessage) {
+                    HasCheatedMessage msg = (HasCheatedMessage) object;
+                    callbackMap.get(HasCheatedMessage.class).callback(msg);
+                }
+            }
+
+        });
+    }
+
 }
-
-

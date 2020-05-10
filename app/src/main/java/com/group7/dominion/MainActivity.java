@@ -1,6 +1,8 @@
 package com.group7.dominion;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -20,8 +22,10 @@ import com.floriankleewein.commonclasses.Network.ClientConnector;
 public class MainActivity extends AppCompatActivity {
 
     Button btnCreate, btnJoin, btnReset;
+
     private Board board;
     ClientConnector client;
+    SharedPreferences sharedPreferences;
 
     //TODO: rename this
     public static final String EXTRA_MESSAGE = "clientForNextActivity";
@@ -34,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
         btnCreate = findViewById(R.id.btn_create);
         btnJoin = findViewById(R.id.btn_join);
         btnReset = findViewById(R.id.btn_reset);
+
+        sharedPreferences = getSharedPreferences("USERNAME", Context.MODE_PRIVATE);
     }
 
     @Override
@@ -43,7 +49,10 @@ public class MainActivity extends AppCompatActivity {
         client = ClientConnector.getClientConnector();
         checkButtons();
 
+
+
         client.registerCallback(CreateGameMsg.class,(msg->{
+
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -115,12 +124,11 @@ public class MainActivity extends AppCompatActivity {
         }));
 
 
-
         btnJoin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-               Thread thread = new  Thread(new Runnable() {
+                addUsernametoPreferences();
+                Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
                         EditText editText = findViewById(R.id.inputName);
@@ -128,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
                         client.addUser(userName);
                     }
                 });
-               thread.start();
+                thread.start();
             }
         });
 
@@ -157,6 +165,14 @@ public class MainActivity extends AppCompatActivity {
             btnCreate.setEnabled(false);
             btnJoin.setEnabled(true);
         }
+    }
+
+    public void addUsernametoPreferences () {
+        EditText editText = findViewById(R.id.inputName);
+        String userName = editText.getText().toString();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("us", userName);
+        editor.commit();
     }
 
     public Board getBoard() {

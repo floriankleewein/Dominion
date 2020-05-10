@@ -7,6 +7,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.group7.localtestserver.MessageClass;
 
+
 import java.io.IOException;
 
 public class KryoServer {

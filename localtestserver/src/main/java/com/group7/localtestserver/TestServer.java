@@ -4,13 +4,21 @@ package com.group7.localtestserver;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
+import com.floriankleewein.commonclasses.CheatFunction.CheatService;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.GameLogic.GameHandler;
 import com.floriankleewein.commonclasses.Network.ActivePlayerMessage;
 import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
 import com.floriankleewein.commonclasses.Network.BaseMessage;
 
+import com.floriankleewein.commonclasses.Network.GetPlayerMsg;
+import com.floriankleewein.commonclasses.Network.HasCheatedMessage;
+import com.floriankleewein.commonclasses.Network.ReturnPlayersMsg;
+import com.floriankleewein.commonclasses.Network.ResetMsg;
+
+
 import com.floriankleewein.commonclasses.Network.UpdatePlayerNamesMsg;
+
 import com.floriankleewein.commonclasses.Network.CreateGameMsg;
 import com.floriankleewein.commonclasses.Network.GameInformationMsg;
 import com.floriankleewein.commonclasses.Network.NetworkInformationMsg;
@@ -51,8 +59,13 @@ public class TestServer {
         registerClass(User.class);
         registerClass(ResetMsg.class);
         registerClass(StartGameMsg.class);
+
+       
+        registerClass(HasCheatedMessage.class);
+
         registerClass(ActivePlayerMessage.class);
         registerClass(UpdatePlayerNamesMsg.class);
+
 
         //Start Server
         server.start();
@@ -88,7 +101,9 @@ public class TestServer {
                     }*/
                     if (game.checkSize()) {
                         if (game.checkName(name)) {
+
                             userClientConnectorMap.put(player, con);
+
                             game.addPlayer(player);
                             addPlayerMsg.setFeedbackUI(0);
                             addPlayerMsg.setPlayerAdded(true);
@@ -124,12 +139,21 @@ public class TestServer {
                         con.sendTCP(msg);
                     }
                     con.sendTCP(msg);
+
+                } else if (object instanceof GetPlayerMsg) {
+                    System.out.println("Got the GetPlayerMsg");
+                    ReturnPlayersMsg msg = new ReturnPlayersMsg();
+                    con.sendTCP(msg);
+                } else if (object instanceof HasCheatedMessage) {
+                    sendCheatInformation();
+
                 }else if(object instanceof UpdatePlayerNamesMsg){
                     UpdatePlayerNamesMsg msg = new UpdatePlayerNamesMsg();
                     for(User x: game.getPlayerList()){
                         msg.getNameList().add(x.getUserName());
                     }
                     server.sendToAllTCP(msg);
+
                 }
             }
         });
@@ -152,6 +176,13 @@ public class TestServer {
         System.out.println("Playerlist cleared!");
     }
 
+    public void sendCheatInformation() {
+        HasCheatedMessage msg = new HasCheatedMessage();
+        for (Connection con : server.getConnections()) {
+            con.sendTCP(msg);
+        }
+    }
+
 
     public boolean hasGame() {
         return hasGame;
@@ -172,3 +203,7 @@ public class TestServer {
     }
 
 }
+/*
+se2-demo.aau.at
+53200
+ */

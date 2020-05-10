@@ -1,7 +1,11 @@
 package com.floriankleewein.commonclasses;
 
 
+
+import com.floriankleewein.commonclasses.CheatFunction.CheatService;
+
 import com.floriankleewein.commonclasses.Board.Board;
+
 import com.floriankleewein.commonclasses.User.User;
 
 import java.util.ArrayList;
@@ -16,12 +20,19 @@ public class Game {
     private User activePlayer;
 
     //overwriting constructor so it cannot be instanced.
+
+    private static CheatService cheatService;
+
+   
+
     Game() {
     }
+
 
     public static synchronized Game getGame() {
         if (Game.game == null) {
             Game.game = new Game();
+            cheatService.getGame();
         }
         return Game.game;
     }
@@ -46,6 +57,7 @@ public class Game {
         this.playerList = playerList;
     }
 
+
     public Board getBoard() {
         return board;
     }
@@ -53,6 +65,7 @@ public class Game {
     public void setBoard(Board board) {
         this.board = board;
     }
+
 
     public boolean addPlayer(User user) {
         if (checkName(user.getUserName())) {
@@ -80,7 +93,22 @@ public class Game {
         return false;
     }
 
+
+    public User findUser(String name) {
+        for (int i = 0; i < playerList.size(); i++) {
+            if (playerList.get(i).getUserName().equals(name)) {
+                return playerList.get(i);
+            }
+        }
+        return null;
+    }
+
     public int getPlayerNumber() {
         return game.playerList.size();
     }
+
+    public CheatService getCheatService() {
+        return Game.cheatService;
+    }
+
 }
