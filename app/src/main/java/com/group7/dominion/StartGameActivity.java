@@ -53,6 +53,10 @@ public class StartGameActivity extends AppCompatActivity {
 
         ClientConnector clientConnector = ClientConnector.getClientConnector();
 
+        //FKDoc: this is the arrayList,where the names will be stored.
+        ArrayList<String> names = new ArrayList<>();
+
+        //FKDoc: this is the listView where the playerNames should be viewed.
         ListView playerNamesListView = findViewById(R.id.playerNamesListView);
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -62,13 +66,11 @@ public class StartGameActivity extends AppCompatActivity {
         });
         thread.start();
 
-        ArrayList<String> names = new ArrayList<>();
-
+        //FKDoc: the listViewAdapter is used as a communication tool between the listView and the data that should be shown.
         ArrayAdapter<String> listViewAdapter =
                 new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, names);
 
-
-
+        //FKDoc: thats the servercallback which is triggered after the clientConnector.getGame() call.
         clientConnector.registerCallback(GetGameMsg.class, (msg -> {
             runOnUiThread(new Runnable() {
                 @Override
@@ -80,6 +82,7 @@ public class StartGameActivity extends AppCompatActivity {
         }));
 
 
+        //FKDoc: this part should actually update the listView after another player joined.
         btnRecreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
