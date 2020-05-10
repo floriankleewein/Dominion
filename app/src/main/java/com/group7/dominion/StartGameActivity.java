@@ -35,8 +35,9 @@ public class StartGameActivity extends AppCompatActivity {
         btnStart = findViewById(R.id.btn_start);
 
         ClientConnector clientConnector = ClientConnector.getClientConnector();
-        clientConnector.getGame();
         ListView playerNamesListView = findViewById(R.id.playerNamesListView);
+
+        clientConnector.getGame();
         List<String> playerNames = new ArrayList<>();
         ArrayAdapter<String> listViewAdapter =
                 new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, playerNames);
@@ -44,17 +45,15 @@ public class StartGameActivity extends AppCompatActivity {
         playerNamesListView.setAdapter(listViewAdapter);
 
         clientConnector.registerCallback(GetGameMsg.class, (msg -> {
+
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    
+
                 }
+
             });
         }));
-
-
-
-    //TODO: adapter für die listView. wie kommt man an die userliste?
 
 
         shakeListener = new ShakeListener(getSupportFragmentManager());
