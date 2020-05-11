@@ -88,8 +88,7 @@ public class GameTest {
 
     @Test
     public void testGetCheatService(){
-        CheatService cheatService  = CheatService.getGame();
-
+        CheatService cheatService  = CheatService.getCheatService();
         Assert.assertEquals(cheatService, game.getCheatService());
     }
 
