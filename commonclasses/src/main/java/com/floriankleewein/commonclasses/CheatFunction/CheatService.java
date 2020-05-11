@@ -12,20 +12,24 @@ public class CheatService {
 
 
     private List<User> PlayerList;
+    private static CheatService cheatService;
 
-
-    public static synchronized CheatService getCheatService() {
+    public static synchronized CheatService getGame() {
         if (CheatService.cheatService == null) {
             cheatService = new CheatService(Game.getGame());
         }
         return CheatService.cheatService;
     }
 
+    public CheatService(Game game) {
+        PlayerList = game.getPlayerList();
+    }
+
     public User findUser(String name) {
 
-        for (int i = 0; i < Game.getGame().getPlayerList().size(); i++) {
-            if (Game.getGame().getPlayerList().get(i).equals(name)) {
-                return Game.getGame().getPlayerList().get(i);
+        for (int i = 0; i < this.PlayerList.size(); i++) {
+            if (PlayerList.get(i).getUserName().equals(name)) {
+                return PlayerList.get(i);
             }
         }
         return null;
@@ -58,6 +62,10 @@ public class CheatService {
         } else {
             user.getGamePoints().decreaseWinningPoints(5);
         }
+    }
+
+    public static CheatService getCheatService() {
+        return CheatService.cheatService;
     }
 
     /*

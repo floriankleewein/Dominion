@@ -119,8 +119,8 @@ public class CheatAlert extends AppCompatDialogFragment implements AdapterView.O
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if (!firstClick){
-            String SuspectedUserame = (String) parent.getItemAtPosition(position);
+        String SuspectedUserame = (String) parent.getItemAtPosition(position);
+        if (!firstClick && (!SuspectedUserame.equals(name))){
             sendSuspectMessage(SuspectedUserame, name);
             Objects.requireNonNull(getDialog()).cancel();
         }
