@@ -94,7 +94,7 @@ public class Game {
     }
 
     public CheatService getCheatService() {
-        return Game.cheatService;
+        return cheatService;
     }
 
 }

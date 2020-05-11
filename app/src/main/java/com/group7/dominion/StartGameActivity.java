@@ -30,7 +30,7 @@ public class StartGameActivity extends AppCompatActivity {
     ClientConnector client;
 
 
-    Button  btnRecreate;
+    Button btnRecreate;
     ShakeListener shakeListener;
 
     //TODO: rename this
@@ -79,7 +79,7 @@ public class StartGameActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     names.clear();
-                    names.addAll(((UpdatePlayerNamesMsg)msg).getNameList());
+                    names.addAll(((UpdatePlayerNamesMsg) msg).getNameList());
                     listViewAdapter.notifyDataSetChanged();
                 }
             });
@@ -100,7 +100,6 @@ public class StartGameActivity extends AppCompatActivity {
 
                                 Intent intent = new Intent(StartGameActivity.this, GameActivity.class);
                                 startActivity(intent);
-
 
 
                             }
