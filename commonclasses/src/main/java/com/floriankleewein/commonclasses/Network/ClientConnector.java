@@ -69,6 +69,7 @@ public class ClientConnector {
         registerClass(HasCheatedMessage.class);
         registerClass(ActivePlayerMessage.class);
         registerClass(UpdatePlayerNamesMsg.class);
+        registerClass(SuspectMessage.class);
 
 
         // start client
@@ -228,6 +229,13 @@ public class ClientConnector {
         msg.setName(name);
         client.sendTCP(msg);
 
+    }
+
+    public void sendSuspectUser (String SuspectUsername, String Username){
+        SuspectMessage msg = new SuspectMessage();
+        msg.setSuspectedUserName(SuspectUsername);
+        msg.setUserName(Username);
+        client.sendTCP(msg);
     }
 
 }

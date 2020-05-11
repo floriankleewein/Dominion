@@ -22,9 +22,9 @@ import com.esotericsoftware.kryonet.Client;
 import com.floriankleewein.commonclasses.Game;
 
 import com.floriankleewein.commonclasses.Network.ClientConnector;
+import com.floriankleewein.commonclasses.Network.SuspectMessage;
 import com.floriankleewein.commonclasses.Network.UpdatePlayerNamesMsg;
 import com.google.android.material.tabs.TabLayout;
-
 
 
 import com.group7.dominion.CheatFunction.ShakeListener;
@@ -59,16 +59,15 @@ public class GameActivity extends AppCompatActivity {
         viewPager.setAdapter(viewPagerAdapter);
 
 
-
         System.out.println(getUsername() + " is here");
-        sendUpdateMessage ();
-        ArrayList <String> names = new ArrayList<>();
+        sendUpdateMessage();
+        ArrayList<String> names = new ArrayList<>();
         ClientConnector.getClientConnector().registerCallback(UpdatePlayerNamesMsg.class, (msg -> {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     names.clear();
-                    names.addAll(((UpdatePlayerNamesMsg)msg).getNameList());
+                    names.addAll(((UpdatePlayerNamesMsg) msg).getNameList());
                 }
             });
         }));
@@ -77,11 +76,10 @@ public class GameActivity extends AppCompatActivity {
         sm.registerListener(shakeListener.newSensorListener(), sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
 
 
-
     }
 
 
-    public void sendUpdateMessage () {
+    public void sendUpdateMessage() {
         Thread th = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -113,8 +111,19 @@ public class GameActivity extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                   String CheaterName =  ((HasCheatedMessage) msg).getName();
-                    Toast.makeText(getApplicationContext(), CheaterName + " hat eine zusätzliche Karte gezogen..." , Toast.LENGTH_SHORT).show();
+                    String CheaterName = ((HasCheatedMessage) msg).getName();
+                    Toast.makeText(getApplicationContext(), CheaterName + " hat eine zusätzliche Karte gezogen...", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }));
+
+        clientConnector.registerCallback(SuspectMessage.class, (msg -> {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    String SuspectedUser = ((SuspectMessage) msg).getSuspectedUserName();
+                    String Username = ((SuspectMessage)msg).getUserName();
+                    Toast.makeText(getApplicationContext(), Username + " glaubt, dass " + SuspectedUser + " geschummelt hat", Toast.LENGTH_SHORT).show();
                 }
             });
         }));

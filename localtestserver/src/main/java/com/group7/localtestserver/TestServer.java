@@ -21,6 +21,7 @@ import com.floriankleewein.commonclasses.Network.ReturnPlayersMsg;
 import com.floriankleewein.commonclasses.Network.ResetMsg;
 
 
+import com.floriankleewein.commonclasses.Network.SuspectMessage;
 import com.floriankleewein.commonclasses.Network.UpdatePlayerNamesMsg;
 
 import com.floriankleewein.commonclasses.Network.CreateGameMsg;
@@ -67,6 +68,7 @@ public class TestServer {
         registerClass(HasCheatedMessage.class);
         registerClass(ActivePlayerMessage.class);
         registerClass(UpdatePlayerNamesMsg.class);
+        registerClass(SuspectMessage.class);
 
 
         //Start Server
@@ -173,6 +175,7 @@ public class TestServer {
 
                 } else if (object instanceof HasCheatedMessage) {
                     HasCheatedMessage CheatMsg = (HasCheatedMessage) object;
+                    game.getCheatService().addCardtoUser(CheatMsg.getName());
                     sendCheatInformation(CheatMsg.getName());
 
 
@@ -183,6 +186,15 @@ public class TestServer {
                     }
                     server.sendToAllTCP(msg);
 
+                }
+                else if (object instanceof SuspectMessage){
+                    SuspectMessage msg = (SuspectMessage) object;
+                    game.getCheatService().suspectUser(msg.getSuspectedUserName(),msg.getUserName());
+
+                    SuspectMessage returnmsg = new SuspectMessage();
+                    returnmsg.setUserName(msg.getUserName());
+                    returnmsg.setSuspectedUserName(msg.getSuspectedUserName());
+                    server.sendToAllTCP(returnmsg);
                 }
             }
         });

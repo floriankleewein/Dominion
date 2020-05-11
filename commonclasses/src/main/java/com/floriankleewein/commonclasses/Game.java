@@ -32,7 +32,7 @@ public class Game {
     public static synchronized Game getGame() {
         if (Game.game == null) {
             Game.game = new Game();
-          cheatService.getCheatService();
+          cheatService =  cheatService.getCheatService();
         }
         return Game.game;
     }

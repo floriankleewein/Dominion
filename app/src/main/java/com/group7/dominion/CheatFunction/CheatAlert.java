@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatDialogFragment;
 
@@ -23,12 +24,14 @@ import com.group7.dominion.GameActivity;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
-public class CheatAlert extends AppCompatDialogFragment implements AdapterView.OnItemSelectedListener, AdapterView.OnItemClickListener {
+public class CheatAlert extends AppCompatDialogFragment implements AdapterView.OnItemSelectedListener {
 
     Game game;
     String name;
     ArrayList <String> names;
+    static boolean firstClick = true;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -38,10 +41,10 @@ public class CheatAlert extends AppCompatDialogFragment implements AdapterView.O
         final Spinner sp = new Spinner(getContext());
         sp.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         sp.setAdapter(adp);
-        sp.setOnItemClickListener(this);
+        sp.setOnItemSelectedListener(this);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-                .setTitle("How dare you?")
-                .setMessage("You really want to cheat?")
+                .setTitle("Very Secret Cheat Menu")
+                .setMessage("You really want to cheat? Or do you want to suspect someone?")
                 .setView(sp)
                 .setPositiveButton("Yes, i want to win", new DialogInterface.OnClickListener() {
                     @Override
@@ -62,11 +65,6 @@ public class CheatAlert extends AppCompatDialogFragment implements AdapterView.O
                         dialog.cancel();
                     }
                 });
-
-
-
-
-
 
         return builder.create();
     }
@@ -110,6 +108,18 @@ public class CheatAlert extends AppCompatDialogFragment implements AdapterView.O
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if (!firstClick){
+            String SuspectedUserame = (String) parent.getItemAtPosition(position);
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    ClientConnector.getClientConnector().sendSuspectUser(SuspectedUserame,name);
+                }
+            });
+            thread.start();
+            Objects.requireNonNull(getDialog()).cancel();
+        }
+        firstClick = false;
 
     }
 
@@ -118,9 +128,4 @@ public class CheatAlert extends AppCompatDialogFragment implements AdapterView.O
 
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        String SuspectedUserame = (String) parent.getItemAtPosition(position);
-        CheatService.getCheatService().suspectUser(SuspectedUserame,name);
-    }
 }
