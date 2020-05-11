@@ -121,6 +121,7 @@ public class GameActivity extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    System.out.println("ReGISTERED CALLBACK");
                     String SuspectedUser = ((SuspectMessage) msg).getSuspectedUserName();
                     String Username = ((SuspectMessage)msg).getUserName();
                     Toast.makeText(getApplicationContext(), Username + " glaubt, dass " + SuspectedUser + " geschummelt hat", Toast.LENGTH_SHORT).show();

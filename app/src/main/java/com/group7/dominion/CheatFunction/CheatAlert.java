@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.ThemedSpinnerAdapter;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatDialogFragment;
@@ -90,6 +91,16 @@ public class CheatAlert extends AppCompatDialogFragment implements AdapterView.O
         return s;
     }
 
+    private void sendSuspectMessage (String SuspectedName, String name) {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ClientConnector.getClientConnector().sendSuspectUser(SuspectedName,name);
+            }
+        });
+        thread.start();
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -110,22 +121,16 @@ public class CheatAlert extends AppCompatDialogFragment implements AdapterView.O
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if (!firstClick){
             String SuspectedUserame = (String) parent.getItemAtPosition(position);
-            Thread thread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    ClientConnector.getClientConnector().sendSuspectUser(SuspectedUserame,name);
-                }
-            });
-            thread.start();
+            sendSuspectMessage(SuspectedUserame, name);
             Objects.requireNonNull(getDialog()).cancel();
         }
         firstClick = false;
-
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
     }
+
 
 }

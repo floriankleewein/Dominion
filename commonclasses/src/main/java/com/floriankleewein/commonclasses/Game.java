@@ -32,7 +32,7 @@ public class Game {
     public static synchronized Game getGame() {
         if (Game.game == null) {
             Game.game = new Game();
-          cheatService =  cheatService.getCheatService();
+          cheatService =  new CheatService();
         }
         return Game.game;
     }
@@ -108,7 +108,7 @@ public class Game {
     }
 
     public CheatService getCheatService() {
-        return Game.cheatService;
+        return cheatService;
     }
 
 }

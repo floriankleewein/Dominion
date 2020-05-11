@@ -175,7 +175,9 @@ public class TestServer {
 
                 } else if (object instanceof HasCheatedMessage) {
                     HasCheatedMessage CheatMsg = (HasCheatedMessage) object;
-                    game.getCheatService().addCardtoUser(CheatMsg.getName());
+                    /*game.getCheatService().addCardtoUser(CheatMsg.getName());
+                    Not working now because the User has now DeckCards --> Null Pointer
+                     */
                     sendCheatInformation(CheatMsg.getName());
 
 
@@ -189,12 +191,10 @@ public class TestServer {
                 }
                 else if (object instanceof SuspectMessage){
                     SuspectMessage msg = (SuspectMessage) object;
-                    game.getCheatService().suspectUser(msg.getSuspectedUserName(),msg.getUserName());
+                    System.out.println("GOT SUSPECT MESSAGE FROM" + msg.getUserName());
+                    //game.getCheatService().suspectUser(msg.getSuspectedUserName(),msg.getUserName());
 
-                    SuspectMessage returnmsg = new SuspectMessage();
-                    returnmsg.setUserName(msg.getUserName());
-                    returnmsg.setSuspectedUserName(msg.getSuspectedUserName());
-                    server.sendToAllTCP(returnmsg);
+                    sendSuspectInformation(msg.getSuspectedUserName(),msg.getUserName());
                 }
             }
         });
@@ -220,6 +220,14 @@ public class TestServer {
     public void sendCheatInformation(String CheaterName) {
         HasCheatedMessage msg = new HasCheatedMessage();
         msg.setName(CheaterName);
+        for (Connection con : server.getConnections()) {
+            con.sendTCP(msg);
+        }
+    }
+    public void sendSuspectInformation (String SuspectName, String Username){
+        SuspectMessage msg = new SuspectMessage();
+        msg.setSuspectedUserName(SuspectName);
+        msg.setUserName(Username);
         for (Connection con : server.getConnections()) {
             con.sendTCP(msg);
         }
