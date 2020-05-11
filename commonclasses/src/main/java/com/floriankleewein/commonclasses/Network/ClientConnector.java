@@ -116,6 +116,16 @@ public class ClientConnector {
                 }
             }
         });
+
+        client.addListener(new Listener() {
+            public void received(Connection con, Object object) {
+                if (object instanceof HasCheatedMessage) {
+                    HasCheatedMessage msg = (HasCheatedMessage) object;
+                    callbackMap.get(HasCheatedMessage.class).callback(msg);
+                }
+            }
+
+        });
     }
 
     public void addUser(String playerName) {
@@ -213,19 +223,11 @@ public class ClientConnector {
     }
 
 
-    public void sendCheatMessage () {
+    public void sendCheatMessage (String name) {
         HasCheatedMessage msg = new HasCheatedMessage();
+        msg.setName(name);
         client.sendTCP(msg);
 
-        client.addListener(new Listener() {
-            public void received(Connection con, Object object) {
-                if (object instanceof HasCheatedMessage) {
-                    HasCheatedMessage msg = (HasCheatedMessage) object;
-                    callbackMap.get(HasCheatedMessage.class).callback(msg);
-                }
-            }
-
-        });
     }
 
 }

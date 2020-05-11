@@ -13,6 +13,7 @@ import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.floriankleewein.commonclasses.Network.ClientConnector;
 import com.floriankleewein.commonclasses.Network.HasCheatedMessage;
@@ -84,5 +85,15 @@ public class GameActivity extends AppCompatActivity {
         //clientConnector.startGame(); // Send Server Message to start game logic
         // TODO display playerlist -> Check features
         // TODO create board and display cards
+
+        clientConnector.registerCallback(HasCheatedMessage.class, (msg -> {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                   String CheaterName =  ((HasCheatedMessage) msg).getName();
+                    Toast.makeText(getApplicationContext(), CheaterName + " hat eine zusätzliche Karte gezogen..." , Toast.LENGTH_SHORT).show();
+                }
+            });
+        }));
     }
 }

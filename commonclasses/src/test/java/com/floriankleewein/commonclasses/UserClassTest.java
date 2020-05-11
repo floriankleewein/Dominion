@@ -1,4 +1,4 @@
-package UserTests;
+package com.floriankleewein.commonclasses;
 
 import com.floriankleewein.commonclasses.Cards.ActionCard;
 import com.floriankleewein.commonclasses.Cards.Card;
@@ -6,7 +6,9 @@ import com.floriankleewein.commonclasses.Cards.EstateCard;
 import com.floriankleewein.commonclasses.Cards.EstateType;
 import com.floriankleewein.commonclasses.Cards.MoneyCard;
 import com.floriankleewein.commonclasses.Cards.MoneyType;
+import com.floriankleewein.commonclasses.User.GamePoints;
 import com.floriankleewein.commonclasses.User.User;
+import com.floriankleewein.commonclasses.User.UserCards;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -89,7 +91,7 @@ public class UserClassTest {
         Assert.assertEquals(5, this.user.getUserCards().getHandCards().size());
         Assert.assertEquals(0, this.user.getUserCards().getDiscardCards().size());
 
-        Card newCard = new ActionCard(1,BURGGRABEN);
+        Card newCard = new ActionCard(1, BURGGRABEN);
         //Draw new Card
         this.user.getUserCards().addCardtoDeck(newCard);
         Assert.assertEquals(6, this.user.getUserCards().getDeck().size());
@@ -125,6 +127,31 @@ public class UserClassTest {
         Assert.assertEquals(5, this.user.getUserCards().getHandCards().size());
         Assert.assertEquals(0, this.user.getUserCards().getDiscardCards().size());
 
+    }
+
+    //Test are only for Coverage
+    @Test
+    public void testGetterAndSetter() {
+        User user = new User();
+        UserCards TestCards = new UserCards();
+        GamePoints TestPoints = new GamePoints();
+        user.setUserID(1);
+        user.setUserName("TestUser");
+        user.setCheater(true);
+        user.setGameCreator(false);
+        user.setPassword("password");
+        user.setUserEmail("test@email.com");
+        user.setGamePoints(TestPoints);
+        user.setUserCards(TestCards);
+
+        Assert.assertEquals(1, user.getUserID());
+        Assert.assertEquals("TestUser", user.getUserName());
+        Assert.assertEquals(true, user.isCheater());
+        Assert.assertEquals(false, user.isGameCreator());
+        Assert.assertEquals("password", user.getPassword());
+        Assert.assertEquals("test@email.com", user.getUserEmail());
+        Assert.assertEquals(TestCards ,user.getUserCards());
+        Assert.assertEquals(TestPoints, user.getGamePoints());
     }
 
     @After

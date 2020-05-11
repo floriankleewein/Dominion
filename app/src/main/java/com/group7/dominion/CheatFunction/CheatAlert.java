@@ -9,6 +9,11 @@ import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.Network.ClientConnector;
+import com.floriankleewein.commonclasses.User.User;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 public class CheatAlert extends AppCompatDialogFragment {
 
@@ -17,7 +22,6 @@ public class CheatAlert extends AppCompatDialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                 .setTitle("How dare you?")
@@ -50,11 +54,16 @@ public class CheatAlert extends AppCompatDialogFragment {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                ClientConnector.getClientConnector().sendCheatMessage();
+                ClientConnector.getClientConnector().sendCheatMessage(name);
             }
         });
 
         thread.start();
+    }
+
+    public List <User> getUserinGame () {
+
+     return ClientConnector.getClientConnector().getGame().getPlayerList();
     }
 
     public void setName(String name) {

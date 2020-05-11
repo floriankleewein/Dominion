@@ -172,7 +172,8 @@ public class TestServer {
                     }
 
                 } else if (object instanceof HasCheatedMessage) {
-                    sendCheatInformation();
+                    HasCheatedMessage CheatMsg = (HasCheatedMessage) object;
+                    sendCheatInformation(CheatMsg.getName());
 
 
                 }else if(object instanceof UpdatePlayerNamesMsg){
@@ -204,8 +205,9 @@ public class TestServer {
         System.out.println("Playerlist cleared!");
     }
 
-    public void sendCheatInformation() {
+    public void sendCheatInformation(String CheaterName) {
         HasCheatedMessage msg = new HasCheatedMessage();
+        msg.setName(CheaterName);
         for (Connection con : server.getConnections()) {
             con.sendTCP(msg);
         }

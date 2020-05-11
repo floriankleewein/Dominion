@@ -12,7 +12,7 @@ public class GamePoints {
     private int PlaysAmount;
     private int BuyAmounts;
 
-    GamePoints() {
+    public GamePoints() {
         Coins = 0;
         WinningPoints = 0;
         PlaysAmount = 1;

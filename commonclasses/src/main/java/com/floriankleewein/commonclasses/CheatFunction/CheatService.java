@@ -13,7 +13,7 @@ public class CheatService {
     private static CheatService cheatService;
 
 
-    public static synchronized CheatService getGame() {
+    public static synchronized CheatService getCheatService() {
         if (CheatService.cheatService == null) {
             cheatService = new CheatService(Game.getGame());
         }
@@ -67,13 +67,5 @@ public class CheatService {
     Getter Setter
      */
 
-
-    public List<User> getPlayerList() {
-        return PlayerList;
-    }
-
-    public void setPlayerList(List<User> playerList) {
-        PlayerList = playerList;
-    }
 
 }
