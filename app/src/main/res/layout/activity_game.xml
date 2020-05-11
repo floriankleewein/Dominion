@@ -16,9 +16,11 @@
         android:id="@+id/tabLayout"
         android:layout_below="@+id/myToolbar"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="30dp"
         android:background="@color/colorPrimary"
         app:tabTextColor="#fff"
+        app:tabGravity="fill"
+        app:tabMaxWidth="0dp"
         app:tabIndicatorColor="#fff"/>
 
     <androidx.viewpager.widget.ViewPager
