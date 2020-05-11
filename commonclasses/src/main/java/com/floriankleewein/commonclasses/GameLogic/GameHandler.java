@@ -20,6 +20,7 @@ public class GameHandler {
     private List<User> playerList = new ArrayList<>();
     private final int MONEY_CARDS = 7;
     private final int ANWESEN_CARDS = 3;
+    private Board board;
 
     public GameHandler(Game game) {
         this.game = game;
@@ -27,29 +28,45 @@ public class GameHandler {
     }
 
     public void prepareGame() {
-        if(playerList.size() > 1) {
-            for (User user: playerList) {
+        if (playerList.size() > 1) {
+            for (User user : playerList) {
                 //TODO change to <Card>
                 LinkedList<Card> generatedCards = new LinkedList<>();
                 UserCards ucards = new UserCards();
                 for (int i = 0; i < MONEY_CARDS; i++) {
-                    Card copper = new MoneyCard(0,0, MoneyType.KUPFER);
+                    Card copper = new MoneyCard(0, 0, MoneyType.KUPFER);
                     generatedCards.add(copper);
                 }
                 for (int i = 0; i < ANWESEN_CARDS; i++) {
-                    Card anwesen = new EstateCard(2,1,EstateType.ANWESEN);
+                    Card anwesen = new EstateCard(2, 1, EstateType.ANWESEN);
                     generatedCards.add(anwesen);
                 }
                 //TODO check getFirstCards
                 ucards.getFirstCards(generatedCards);
             }
         }
-        //game.setBoard(new Board());
+        setBoard(new Board());
         game.setPlayerList(playerList);
         game.setActivePlayer(playerList.get(0));
     }
 
     public void startTurn() {
         // TODO called when Server tells client it can go and start its turn?
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
     }
 }
