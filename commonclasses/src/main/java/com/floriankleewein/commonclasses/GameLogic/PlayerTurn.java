@@ -15,7 +15,7 @@ public class PlayerTurn {
         this.game = game;
         this.user = user;
         this.userCards = user.getUserCards();
-        this.board = game.getBoard();
+        //this.board = game.getBoard();
     }
 
 

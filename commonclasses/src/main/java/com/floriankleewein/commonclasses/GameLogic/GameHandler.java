@@ -44,7 +44,7 @@ public class GameHandler {
                 ucards.getFirstCards(generatedCards);
             }
         }
-        game.setBoard(new Board());
+        //game.setBoard(new Board());
         game.setPlayerList(playerList);
         game.setActivePlayer(playerList.get(0));
     }
