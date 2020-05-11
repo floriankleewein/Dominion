@@ -86,12 +86,11 @@ public class GameTest {
         Assert.assertEquals(user1, game.findUser(user1.getUserName()));
     }
 
-    @Test
+    /*@Test
     public void testGetCheatService(){
         CheatService cheatService  = CheatService.getCheatService();
-
         Assert.assertEquals(cheatService, game.getCheatService());
-    }
+    }*/
 
     @Test
     public void testActivePlayer(){
