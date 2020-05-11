@@ -8,6 +8,10 @@ import android.util.Log;
 
 import androidx.fragment.app.FragmentManager;
 
+import com.floriankleewein.commonclasses.User.User;
+
+import java.util.ArrayList;
+
 
 public class ShakeListener {
     private static boolean alreadyCheated = false;
@@ -17,14 +21,16 @@ public class ShakeListener {
     private CheatAlert cheat_alert;
     private FragmentManager fragmentManager;
     private String Username;
+    private ArrayList <String> names;
 
-    public ShakeListener(FragmentManager fragmentManager, String Username) {
+    public ShakeListener(FragmentManager fragmentManager, String Username, ArrayList<String> names) {
         acelVal = SensorManager.GRAVITY_EARTH;
         acelLast = SensorManager.GRAVITY_EARTH;
         shake = 0.00f;
         cheat_alert = new CheatAlert();
         this.fragmentManager = fragmentManager;
         this.Username = Username;
+        this.names = names;
     }
 
 
@@ -47,6 +53,7 @@ public class ShakeListener {
                     alreadyCheated = true;
                     Log.i("SHAKING!!", "PHONE GET SHAKED!");
                     cheat_alert.setName(Username);
+                    cheat_alert.setNames (names);
                     cheat_alert.show(fragmentManager, "cheat");
                 }
             }
