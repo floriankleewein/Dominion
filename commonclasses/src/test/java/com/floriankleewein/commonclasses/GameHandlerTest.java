@@ -13,7 +13,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
+
 
 public class GameHandlerTest {
 
@@ -25,26 +26,30 @@ public class GameHandlerTest {
     @Before
     public void setup() {
         game = Game.getGame();
+        game.addPlayer(new User("c"));
         m_cut = new GameHandler(game);
-    }
-
-    @Test(expected = Exception.class)
-    public void checkNotEnoughPlayers() throws Exception {
-        m_cut.prepareGame();
     }
 
     @Test
     public void checkBoardBuyFields() {
+        User user1 = new User("a");
+        User user2 = new User("b");
+        game.addPlayer(user1);
+        game.addPlayer(user2);
         Board board = new Board();
         m_cut.prepareGame();
-        Assert.assertEquals(board.getBuyField().getCardsToBuy(), m_cut.getBoard().getBuyField().getCardsToBuy());
+        Assert.assertEquals(board.getBuyField().getCardsToBuy().size(), m_cut.getBoard().getBuyField().getCardsToBuy().size());
     }
 
     @Test
     public void checkBoardActionField() {
+        User user1 = new User("a");
+        User user2 = new User("b");
+        game.addPlayer(user1);
+        game.addPlayer(user2);
         Board board = new Board();
         m_cut.prepareGame();
-        Assert.assertEquals(board.getActionField().getActionCardsToBuy(), m_cut.getBoard().getActionField().getActionCardsToBuy());
+        Assert.assertEquals(board.getActionField().getActionCardsToBuy().size(), m_cut.getBoard().getActionField().getActionCardsToBuy().size());
     }
 
     @Test
@@ -54,11 +59,13 @@ public class GameHandlerTest {
         game.addPlayer(user1);
         game.addPlayer(user2);
         m_cut.prepareGame();
-        Assert.assertEquals(generateStarterHands(), m_cut.getGame().getPlayerList().get(0).getUserCards().getDeck());
+        int m_cut_starterhand = m_cut.getGame().getActivePlayer().getUserCards().getDeck().size();
+        int m_cut_deck = m_cut.getGame().getActivePlayer().getUserCards().getHandCards().size();
+        Assert.assertEquals(generateStarterCards().size(), m_cut_starterhand + m_cut_deck);
     }
 
-    private ArrayList<Card> generateStarterHands() {
-        ArrayList<Card> cards = new ArrayList<>();
+    private LinkedList<Card> generateStarterCards() {
+        LinkedList<Card> cards = new LinkedList<>();
         for (int i = 0; i < CON_COPPER; i++) {
             Card copper = new MoneyCard(0, 0, MoneyType.KUPFER);
             cards.add(copper);

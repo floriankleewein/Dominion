@@ -24,10 +24,10 @@ public class GameHandler {
 
     public GameHandler(Game game) {
         this.game = game;
-        playerList.addAll(game.getPlayerList());
     }
 
     public void prepareGame() {
+        playerList.addAll(game.getPlayerList());
         if (playerList.size() > 1) {
             for (User user : playerList) {
                 //TODO change to <Card>
@@ -41,8 +41,8 @@ public class GameHandler {
                     Card anwesen = new EstateCard(2, 1, EstateType.ANWESEN);
                     generatedCards.add(anwesen);
                 }
-                //TODO check getFirstCards
                 ucards.getFirstCards(generatedCards);
+                user.setUserCards(ucards);
             }
         }
         setBoard(new Board());
