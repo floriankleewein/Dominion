@@ -93,6 +93,12 @@ public class GameTest {
         Assert.assertEquals(cheatService, game.getCheatService());
     }
 
+    @Test
+    public void testActivePlayer(){
+        game.setActivePlayer(user1);
+        Assert.assertEquals(user1, game.getActivePlayer());
+    }
+
     @After
     public void setNull() {
         this.game.setPlayerList(new ArrayList<>());
