@@ -47,7 +47,7 @@ public class ChatListAdapter extends ArrayAdapter<ChatMessage> {
         } else {
             chatListAdapterViewHolder.messageReceivedLayout.setVisibility(View.VISIBLE);
             chatListAdapterViewHolder.messageSentLayout.setVisibility(View.GONE);
-            chatListAdapterViewHolder.messageSentTextView.setText(chatMsg.getMessage());
+            chatListAdapterViewHolder.messageReceivedTextView.setText(chatMsg.getMessage());
         }
         return convertView;
     }

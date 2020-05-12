@@ -94,6 +94,7 @@ public class ChatFragment extends ListFragment implements UserInputHandler {
                         public void received(Connection connection, Object object) {
                             if (object instanceof ChatMessage) {
                                 ChatMessage response = (ChatMessage) object;
+                                Log.d("ChatFragment", "Nachricht des anderen Spielers: " + response.getMessage());
 
                                 if (isAdded() & !response.isSentByMe()) {
                                     getActivity().runOnUiThread(new Runnable() {
