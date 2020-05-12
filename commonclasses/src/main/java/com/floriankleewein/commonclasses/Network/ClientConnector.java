@@ -8,10 +8,8 @@ import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.User.User;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ClientConnector {
@@ -56,7 +54,7 @@ public class ClientConnector {
         // Register classes
         registerClass(BaseMessage.class);
         registerClass(MessageClass.class);
-        registerClass(GameInformationMsg.class);
+        registerClass(GameUpdateMsg.class);
         registerClass(NetworkInformationMsg.class);
         registerClass(Game.class);
         registerClass(CreateGameMsg.class);
