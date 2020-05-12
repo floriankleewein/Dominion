@@ -23,8 +23,8 @@ public class GameUpdateMsg extends BaseMessage {
     }
 
     public int getVictoryPointsChange(User user) {
-        for (Map.Entry<User,Integer> entry : victoryPointsChange.entrySet()) {
-            if(entry.getKey().getUserName().equals(user.getUserName())) {
+        for (Map.Entry<User, Integer> entry : victoryPointsChange.entrySet()) {
+            if (entry.getKey().getUserName().equals(user.getUserName())) {
                 return entry.getValue();
             }
         }
@@ -32,8 +32,9 @@ public class GameUpdateMsg extends BaseMessage {
     }
 
 
-    public void setVictoryPointsChange(User user, int points) {
-        this.victoryPointsChange = victoryPointsChange;
+    public void addVictoryPointsChange(User user, int points) {
+        int pts = victoryPointsChange.get(user);
+        victoryPointsChange.replace(user, pts, pts + points);
     }
 
     public Card getPlayedCard() {

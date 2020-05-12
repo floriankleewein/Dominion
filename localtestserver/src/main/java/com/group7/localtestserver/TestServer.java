@@ -186,9 +186,18 @@ public class TestServer {
                     //game.getCheatService().suspectUser(msg.getSuspectedUserName(),msg.getUserName());
 
                     sendSuspectInformation(msg.getSuspectedUserName(),msg.getUserName());
+                } else if(object instanceof GameUpdateMsg){
+                    GameUpdateMsg gameUpdateMsg = (GameUpdateMsg) object;
+                    updateAll(gameUpdateMsg);
                 }
             }
         });
+    }
+
+    public void updateAll(GameUpdateMsg msg) {
+        setBoard(msg.getBoard());
+        game.setGame(msg.getGame());
+        gamehandler.updateGame(msg);
     }
 
     public void registerClass(Class regClass) {

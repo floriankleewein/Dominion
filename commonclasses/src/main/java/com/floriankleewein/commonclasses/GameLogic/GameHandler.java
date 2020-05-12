@@ -7,6 +7,7 @@ import com.floriankleewein.commonclasses.Cards.EstateType;
 import com.floriankleewein.commonclasses.Cards.MoneyCard;
 import com.floriankleewein.commonclasses.Cards.MoneyType;
 import com.floriankleewein.commonclasses.Game;
+import com.floriankleewein.commonclasses.Network.GameUpdateMsg;
 import com.floriankleewein.commonclasses.User.User;
 import com.floriankleewein.commonclasses.User.UserCards;
 
@@ -21,6 +22,7 @@ public class GameHandler {
     private final int MONEY_CARDS = 7;
     private final int ANWESEN_CARDS = 3;
     private Board board;
+    private Card playedCard;
 
     public GameHandler(Game game) {
         this.game = game;
@@ -50,25 +52,42 @@ public class GameHandler {
         game.setActivePlayer(playerList.get(0));
     }
 
+    public void updateGame(GameUpdateMsg msg) {
+        setGame();
+        int pts = 0;
+        for (User u : game.getPlayerList()) {
+            pts = msg.getVictoryPointsChange(u);
+            if (pts != 0) {
+                changeVictoryPoints(u, pts);
+            }
+        }
+        setPlayedCard(msg.getPlayedCard());
+    }
+
     public void startTurn() {
         // TODO called when Server tells client it can go and start its turn?
     }
 
-    public void changeVictoryPoints(User user, int points) {
+    private void changeVictoryPoints(User user, int points) {
         List<User> users = game.getPlayerList();
         for (User u : users) {
             if (u.getUserName().equals(user.getUserName())) {
                 u.getGamePoints().increaseWinningPoints(points);
             }
         }
+        game.setPlayerList(users);
     }
 
-    public Game getGame() {
-        return game;
+    private void setGame() {
+        this.game = Game.getGame();
     }
 
-    public void setGame(Game game) {
-        this.game = game;
+    public Card getPlayedCard() {
+        return playedCard;
+    }
+
+    public void setPlayedCard(Card playedCard) {
+        this.playedCard = playedCard;
     }
 
     public Board getBoard() {
