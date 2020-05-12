@@ -6,15 +6,10 @@
     android:layout_height="match_parent"
     tools:context="com.group7.dominion.GameActivity">
 
-    <include
-        android:id="@+id/myToolbar"
-        layout="@layout/toolbar"
-        />
 
     <com.google.android.material.tabs.TabLayout
 
         android:id="@+id/tabLayout"
-        android:layout_below="@+id/myToolbar"
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:background="@color/colorPrimary"

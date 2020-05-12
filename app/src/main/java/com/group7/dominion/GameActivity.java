@@ -3,7 +3,6 @@ package com.group7.dominion;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.viewpager.widget.ViewPager;
 
 
@@ -37,7 +36,7 @@ public class GameActivity extends AppCompatActivity {
     private ShakeListener shakeListener;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private Toolbar toolbar;
+    //private Toolbar toolbar;
     ViewPagerAdapter viewPagerAdapter;
 
     @Override
@@ -48,10 +47,6 @@ public class GameActivity extends AppCompatActivity {
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);
 
-        toolbar = findViewById(R.id.myToolbar);
-        setSupportActionBar(toolbar);
-
-        getSupportActionBar().setTitle("Dominion");
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 
         tabLayout.setupWithViewPager(viewPager);

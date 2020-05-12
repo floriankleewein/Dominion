@@ -12,8 +12,8 @@ import com.floriankleewein.commonclasses.Network.ClientConnector;
 
 public class ChatListAdapter extends ArrayAdapter<ChatMessage> {
 
-    private Context context;
     // context in dem sich die Chatliste befindet
+    private Context context;
     private int layoutResourceId;
     private ClientConnector client;
 

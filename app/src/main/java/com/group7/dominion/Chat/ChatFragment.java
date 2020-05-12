@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.ListFragment;
 
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,6 @@ import android.widget.Toast;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import com.esotericsoftware.minlog.Log;
 import com.floriankleewein.commonclasses.Chat.ChatMessage;
 import com.floriankleewein.commonclasses.Network.ClientConnector;
 import com.group7.dominion.R;
@@ -36,15 +36,14 @@ public class ChatFragment extends ListFragment implements UserInputHandler {
         // Required empty public constructor
     }
 
-
-    private boolean viewsInjected;
     // gibt an, ob Views mittels ButterKnife injected worden sind
+    private boolean viewsInjected;
 
-    private ChatListAdapter chatListAdapter;
     // Adapter für die Chatansicht
+    private ChatListAdapter chatListAdapter;
 
-    private Unbinder unbinder;
     // zum Unbinden von Views aus dem Fragment
+    private Unbinder unbinder;
 
     private ClientConnector client;
 
@@ -100,10 +99,11 @@ public class ChatFragment extends ListFragment implements UserInputHandler {
                                     getActivity().runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
+
+                                            // hiermit wird die Nachricht in die View eigebunden und angezeigt
                                             chatListAdapter.add(response);
                                             chatListAdapter.notifyDataSetChanged();
                                             getListView().setSelection(chatListAdapter.getCount() - 1);
-                                            // hiermit wird die Nachricht in die View eigebunden und angezeigt
                                         }
                                     });
                                 }
@@ -114,7 +114,7 @@ public class ChatFragment extends ListFragment implements UserInputHandler {
             });
             clientThread.start();
         } else {
-            Toast.makeText(getActivity(), "NOT Connected", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Not connected", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -132,15 +132,16 @@ public class ChatFragment extends ListFragment implements UserInputHandler {
             getActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+
+                    // hiermit wird die Nachricht in die View eingebunden und angezeigt
                     chatListAdapter.add(sendToOthers);
                     chatListAdapter.notifyDataSetChanged();
                     getListView().setSelection(chatListAdapter.getCount() - 1);
-                    // hiermit wird die Nachricht in die View eingebunden und angezeigt
                 }
             });
 
         } else {
-            Toast.makeText(getActivity(), "Nachricht senden nicht möglich! Keine Verbindung.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Message can't be send. No connection.", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -184,7 +185,7 @@ public class ChatFragment extends ListFragment implements UserInputHandler {
                     public void run() {
                         userInput.setText("");
 
-                        Log.error("CLIENT:", "Succesfully sent message to others.");
+                        System.out.println("CLIENT: Succesfully sent message to others.");
                     }
                 });
             } else {
