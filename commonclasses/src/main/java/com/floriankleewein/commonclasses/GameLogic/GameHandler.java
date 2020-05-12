@@ -54,6 +54,15 @@ public class GameHandler {
         // TODO called when Server tells client it can go and start its turn?
     }
 
+    public void changeVictoryPoints(User user, int points) {
+        List<User> users = game.getPlayerList();
+        for (User u : users) {
+            if (u.getUserName().equals(user.getUserName())) {
+                u.getGamePoints().increaseWinningPoints(points);
+            }
+        }
+    }
+
     public Game getGame() {
         return game;
     }

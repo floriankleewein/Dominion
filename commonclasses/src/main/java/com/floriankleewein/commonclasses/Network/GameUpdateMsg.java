@@ -5,11 +5,36 @@ import com.floriankleewein.commonclasses.Cards.Card;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.User.User;
 
+import java.util.HashMap;
+import java.util.Map;
+
+
 public class GameUpdateMsg extends BaseMessage {
     private Game game;
     private Board board;
     private User activeUser;
     private Card playedCard;
+    private Map<User, Integer> victoryPointsChange = new HashMap<>();
+
+    public GameUpdateMsg() {
+        for (User u : game.getPlayerList()) {
+            victoryPointsChange.put(u, 0);
+        }
+    }
+
+    public int getVictoryPointsChange(User user) {
+        for (Map.Entry<User,Integer> entry : victoryPointsChange.entrySet()) {
+            if(entry.getKey().getUserName().equals(user.getUserName())) {
+                return entry.getValue();
+            }
+        }
+        return 0;
+    }
+
+
+    public void setVictoryPointsChange(User user, int points) {
+        this.victoryPointsChange = victoryPointsChange;
+    }
 
     public Card getPlayedCard() {
         return playedCard;
