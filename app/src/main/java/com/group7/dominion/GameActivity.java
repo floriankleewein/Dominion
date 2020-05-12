@@ -13,6 +13,7 @@ import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.floriankleewein.commonclasses.Network.ClientConnector;
 import com.floriankleewein.commonclasses.Network.HasCheatedMessage;
@@ -21,11 +22,14 @@ import com.esotericsoftware.kryonet.Client;
 import com.floriankleewein.commonclasses.Game;
 
 import com.floriankleewein.commonclasses.Network.ClientConnector;
+import com.floriankleewein.commonclasses.Network.SuspectMessage;
+import com.floriankleewein.commonclasses.Network.UpdatePlayerNamesMsg;
 import com.google.android.material.tabs.TabLayout;
 
 
-
 import com.group7.dominion.CheatFunction.ShakeListener;
+
+import java.util.ArrayList;
 
 
 public class GameActivity extends AppCompatActivity {
@@ -55,17 +59,35 @@ public class GameActivity extends AppCompatActivity {
         viewPager.setAdapter(viewPagerAdapter);
 
 
-
         System.out.println(getUsername() + " is here");
-        shakeListener = new ShakeListener(getSupportFragmentManager(), getUsername());
+        sendUpdateMessage();
+        ArrayList<String> names = new ArrayList<>();
+        ClientConnector.getClientConnector().registerCallback(UpdatePlayerNamesMsg.class, (msg -> {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    names.clear();
+                    names.addAll(((UpdatePlayerNamesMsg) msg).getNameList());
+                }
+            });
+        }));
+        shakeListener = new ShakeListener(getSupportFragmentManager(), getUsername(), names);
         sm = (SensorManager) getSystemService(SENSOR_SERVICE);
         sm.registerListener(shakeListener.newSensorListener(), sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
-
 
 
     }
 
 
+    public void sendUpdateMessage() {
+        Thread th = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ClientConnector.getClientConnector().updatePlayerNames();
+            }
+        });
+        th.start();
+    }
 
     public String getUsername() {
         SharedPreferences sharedPreferences = getSharedPreferences("USERNAME", Context.MODE_PRIVATE);
@@ -84,5 +106,27 @@ public class GameActivity extends AppCompatActivity {
         //clientConnector.startGame(); // Send Server Message to start game logic
         // TODO display playerlist -> Check features
         // TODO create board and display cards
+
+        clientConnector.registerCallback(HasCheatedMessage.class, (msg -> {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    String CheaterName = ((HasCheatedMessage) msg).getName();
+                    Toast.makeText(getApplicationContext(), CheaterName + " hat eine zusätzliche Karte gezogen...", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }));
+
+        clientConnector.registerCallback(SuspectMessage.class, (msg -> {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    System.out.println("ReGISTERED CALLBACK");
+                    String SuspectedUser = ((SuspectMessage) msg).getSuspectedUserName();
+                    String Username = ((SuspectMessage)msg).getUserName();
+                    Toast.makeText(getApplicationContext(), Username + " glaubt, dass " + SuspectedUser + " geschummelt hat", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }));
     }
 }

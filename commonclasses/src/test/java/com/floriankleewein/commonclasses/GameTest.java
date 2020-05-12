@@ -1,5 +1,7 @@
 package com.floriankleewein.commonclasses;
 
+import com.floriankleewein.commonclasses.CheatFunction.CheatService;
+import com.floriankleewein.commonclasses.Network.ClientConnector;
 import com.floriankleewein.commonclasses.User.User;
 
 import org.junit.After;
@@ -72,12 +74,34 @@ public class GameTest {
         Assert.assertEquals(true, game.addPlayer(user1));
     }
 
+    @Test
+    public void testFindUser1(){
+        Game game = Game.getGame();
+        Assert.assertEquals(null, game.findUser("x"));
+    }
+
+    @Test
+    public void testFindUser2(){
+        game.addPlayer(user1);
+        Assert.assertEquals(user1, game.findUser(user1.getUserName()));
+    }
+
+    @Test
+    public void testGetCheatService(){
+        CheatService cheatService  = CheatService.getCheatService();
+        Assert.assertEquals(null, game.getCheatService());
+    }
+
+    @Test
+    public void testActivePlayer(){
+        game.setActivePlayer(user1);
+        Assert.assertEquals(user1, game.getActivePlayer());
+    }
+
     @After
     public void setNull() {
         this.game.setPlayerList(new ArrayList<>());
         this.game = null;
         this.user1 = null;
     }
-
-
 }

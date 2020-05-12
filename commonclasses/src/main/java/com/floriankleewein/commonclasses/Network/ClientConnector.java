@@ -69,6 +69,7 @@ public class ClientConnector {
         registerClass(HasCheatedMessage.class);
         registerClass(ActivePlayerMessage.class);
         registerClass(UpdatePlayerNamesMsg.class);
+        registerClass(SuspectMessage.class);
 
 
         // start client
@@ -96,7 +97,7 @@ public class ClientConnector {
         });
     }
 
-    public void recreateStartGameActivity(){
+    public void recreateStartGameActivity() {
         RecreateStartActivityMsg msg = new RecreateStartActivityMsg();
         client.sendTCP(msg);
     }
@@ -116,6 +117,26 @@ public class ClientConnector {
                 }
             }
         });
+
+        client.addListener(new Listener() {
+            public void received(Connection con, Object object) {
+                if (object instanceof HasCheatedMessage) {
+                    HasCheatedMessage msg = (HasCheatedMessage) object;
+                    callbackMap.get(HasCheatedMessage.class).callback(msg);
+                }
+            }
+
+        });
+
+        client.addListener(new Listener() {
+            public void received(Connection con, Object object) {
+                if (object instanceof SuspectMessage) {
+                    SuspectMessage msg = (SuspectMessage) object;
+                    callbackMap.get(SuspectMessage.class).callback(msg);
+                }
+            }
+        });
+
     }
 
     public void addUser(String playerName) {
@@ -134,7 +155,6 @@ public class ClientConnector {
                     } else if (ms.getFeedbackUI() == 2) {
                         callbackMap.get(AddPlayerSizeErrorMsg.class).callback(ms);
                     }
-
                 }
             }
 
@@ -154,8 +174,8 @@ public class ClientConnector {
 
         });
     }
-  
- public void updatePlayerNames(){
+
+    public void updatePlayerNames() {
         UpdatePlayerNamesMsg msg = new UpdatePlayerNamesMsg();
         client.sendTCP(msg);
 
@@ -171,7 +191,7 @@ public class ClientConnector {
         });
     }
 
-    public void startGame(){
+    public void startGame() {
         StartGameMsg msg = new StartGameMsg();
         client.sendTCP(msg);
 
@@ -179,7 +199,7 @@ public class ClientConnector {
             public void received(Connection con, Object object) {
                 if (object instanceof StartGameMsg) {
                     StartGameMsg msg = (StartGameMsg) object;
-                    if(msg.getFeedbackUI() == 0) {
+                    if (msg.getFeedbackUI() == 0) {
                         callbackMap.get(StartGameMsg.class).callback(msg);
                         game.setGame(msg.getGame());
                     } else {
@@ -213,19 +233,18 @@ public class ClientConnector {
     }
 
 
-    public void sendCheatMessage () {
+    public void sendCheatMessage(String name) {
         HasCheatedMessage msg = new HasCheatedMessage();
+        msg.setName(name);
         client.sendTCP(msg);
 
-        client.addListener(new Listener() {
-            public void received(Connection con, Object object) {
-                if (object instanceof HasCheatedMessage) {
-                    HasCheatedMessage msg = (HasCheatedMessage) object;
-                    callbackMap.get(HasCheatedMessage.class).callback(msg);
-                }
-            }
+    }
 
-        });
+    public void sendSuspectUser(String SuspectUsername, String Username) {
+        SuspectMessage msg = new SuspectMessage();
+        msg.setSuspectedUserName(SuspectUsername);
+        msg.setUserName(Username);
+        client.sendTCP(msg);
     }
 
 }
