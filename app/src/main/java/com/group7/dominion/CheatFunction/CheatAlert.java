@@ -2,26 +2,51 @@ package com.group7.dominion.CheatFunction;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.ThemedSpinnerAdapter;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatDialogFragment;
 
+import com.floriankleewein.commonclasses.CheatFunction.CheatService;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.Network.ClientConnector;
+import com.floriankleewein.commonclasses.User.User;
+import com.group7.dominion.GameActivity;
 
-public class CheatAlert extends AppCompatDialogFragment {
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Objects;
+
+public class CheatAlert extends AppCompatDialogFragment implements AdapterView.OnItemSelectedListener {
 
     Game game;
     String name;
+    ArrayList <String> names;
+    static boolean firstClick = true;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-
+        String[] s = parseLisToString();
+        final ArrayAdapter<String> adp = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, s);
+        final Spinner sp = new Spinner(getContext());
+        sp.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        sp.setAdapter(adp);
+        sp.setOnItemSelectedListener(this);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-                .setTitle("How dare you?")
-                .setMessage("You really want to cheat?")
+                .setTitle("Very Secret Cheat Menu")
+                .setMessage("You really want to cheat? Or do you want to suspect someone?")
+                .setView(sp)
                 .setPositiveButton("Yes, i want to win", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -45,15 +70,34 @@ public class CheatAlert extends AppCompatDialogFragment {
         return builder.create();
     }
 
-    private void sendMessage () {
+    private void sendMessage() {
 
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                ClientConnector.getClientConnector().sendCheatMessage();
+                ClientConnector.getClientConnector().sendCheatMessage(name);
             }
         });
 
+        thread.start();
+    }
+
+    public String [] parseLisToString () {
+        String [] s = new String [names.size()];
+        for (int i = 0; i < names.size() ; i++) {
+            s[i] = names.get(i);
+        }
+
+        return s;
+    }
+
+    private void sendSuspectMessage (String SuspectedName, String name) {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ClientConnector.getClientConnector().sendSuspectUser(SuspectedName,name);
+            }
+        });
         thread.start();
     }
 
@@ -64,4 +108,29 @@ public class CheatAlert extends AppCompatDialogFragment {
     public void setGame(Game game) {
         this.game = Game.getGame();
     }
+
+    public ArrayList<String> getNames() {
+        return names;
+    }
+
+    public void setNames(ArrayList<String> names) {
+        this.names = names;
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        String SuspectedUserame = (String) parent.getItemAtPosition(position);
+        if (!firstClick && (!SuspectedUserame.equals(name))){
+            sendSuspectMessage(SuspectedUserame, name);
+            Objects.requireNonNull(getDialog()).cancel();
+        }
+        firstClick = false;
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+
+
 }

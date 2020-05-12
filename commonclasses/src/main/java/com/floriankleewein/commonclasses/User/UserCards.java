@@ -1,5 +1,6 @@
 package com.floriankleewein.commonclasses.User;
 
+import com.floriankleewein.commonclasses.Cards.ActionCard;
 import com.floriankleewein.commonclasses.Cards.Card;
 
 import java.util.Collections;
@@ -17,13 +18,10 @@ public class UserCards {
     private LinkedList<Card> DiscardCards;
 
 
-
     public void getFirstCards(LinkedList<Card> GivenCards) {
         this.Deck = new LinkedList<Card>();
         this.HandCards = new LinkedList<Card>();
         this.DiscardCards = new LinkedList<Card>();
-
-
 
 
         this.Deck = GivenCards;
@@ -75,11 +73,7 @@ public class UserCards {
         this.Deck.addAll(GivenCards);
     }
 
-    public void getCard(String cardName) {
-        /**
-         * For specific ActionCards
-         */
-    }
+
     public void addDeckCardtoHandCard() {
         this.HandCards.add(this.Deck.getLast());
         this.Deck.removeLast();

@@ -10,9 +10,6 @@ public class User {
     private UserCards userCards;
     private GamePoints gamePoints;
     private boolean gameCreator = false;
-
-
-
     private boolean isCheater;
 
 

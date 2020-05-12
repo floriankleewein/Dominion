@@ -21,6 +21,7 @@ import com.floriankleewein.commonclasses.Network.ReturnPlayersMsg;
 import com.floriankleewein.commonclasses.Network.ResetMsg;
 
 
+import com.floriankleewein.commonclasses.Network.SuspectMessage;
 import com.floriankleewein.commonclasses.Network.UpdatePlayerNamesMsg;
 
 import com.floriankleewein.commonclasses.Network.CreateGameMsg;
@@ -67,6 +68,7 @@ public class TestServer {
         registerClass(HasCheatedMessage.class);
         registerClass(ActivePlayerMessage.class);
         registerClass(UpdatePlayerNamesMsg.class);
+        registerClass(SuspectMessage.class);
 
 
         //Start Server
@@ -172,7 +174,11 @@ public class TestServer {
                     }
 
                 } else if (object instanceof HasCheatedMessage) {
-                    sendCheatInformation();
+                    HasCheatedMessage CheatMsg = (HasCheatedMessage) object;
+                    /*game.getCheatService().addCardtoUser(CheatMsg.getName());
+                    Not working now because the User has now DeckCards --> Null Pointer
+                     */
+                    sendCheatInformation(CheatMsg.getName());
 
 
                 }else if(object instanceof UpdatePlayerNamesMsg){
@@ -182,6 +188,13 @@ public class TestServer {
                     }
                     server.sendToAllTCP(msg);
 
+                }
+                else if (object instanceof SuspectMessage){
+                    SuspectMessage msg = (SuspectMessage) object;
+                    System.out.println("GOT SUSPECT MESSAGE FROM" + msg.getUserName());
+                    //game.getCheatService().suspectUser(msg.getSuspectedUserName(),msg.getUserName());
+
+                    sendSuspectInformation(msg.getSuspectedUserName(),msg.getUserName());
                 }
             }
         });
@@ -204,8 +217,17 @@ public class TestServer {
         System.out.println("Playerlist cleared!");
     }
 
-    public void sendCheatInformation() {
+    public void sendCheatInformation(String CheaterName) {
         HasCheatedMessage msg = new HasCheatedMessage();
+        msg.setName(CheaterName);
+        for (Connection con : server.getConnections()) {
+            con.sendTCP(msg);
+        }
+    }
+    public void sendSuspectInformation (String SuspectName, String Username){
+        SuspectMessage msg = new SuspectMessage();
+        msg.setSuspectedUserName(SuspectName);
+        msg.setUserName(Username);
         for (Connection con : server.getConnections()) {
             con.sendTCP(msg);
         }

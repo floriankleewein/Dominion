@@ -14,7 +14,6 @@ import java.util.List;
 public class Game {
 
     private List<User> playerList = new ArrayList<>();
-    private Board board;
     //hidden class variable for Singleton pattern.
     private static Game game;
     private User activePlayer;
@@ -23,16 +22,13 @@ public class Game {
 
     private static CheatService cheatService;
 
-   
-
     Game() {
     }
-
 
     public static synchronized Game getGame() {
         if (Game.game == null) {
             Game.game = new Game();
-            cheatService.getGame();
+            cheatService.getCheatService();
         }
         return Game.game;
     }
@@ -56,16 +52,6 @@ public class Game {
     public void setPlayerList(List<User> playerList) {
         this.playerList = playerList;
     }
-
-
-    public Board getBoard() {
-        return board;
-    }
-
-    public void setBoard(Board board) {
-        this.board = board;
-    }
-
 
     public boolean addPlayer(User user) {
         if (checkName(user.getUserName())) {
@@ -108,7 +94,7 @@ public class Game {
     }
 
     public CheatService getCheatService() {
-        return Game.cheatService;
+        return cheatService;
     }
 
 }

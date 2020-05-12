@@ -6,12 +6,13 @@ import com.floriankleewein.commonclasses.User.User;
 import java.util.List;
 
 
+
+
 public class CheatService {
 
 
     private List<User> PlayerList;
     private static CheatService cheatService;
-
 
     public static synchronized CheatService getGame() {
         if (CheatService.cheatService == null) {
@@ -63,17 +64,13 @@ public class CheatService {
         }
     }
 
+    public static CheatService getCheatService() {
+        return CheatService.cheatService;
+    }
+
     /*
     Getter Setter
      */
 
-
-    public List<User> getPlayerList() {
-        return PlayerList;
-    }
-
-    public void setPlayerList(List<User> playerList) {
-        PlayerList = playerList;
-    }
 
 }
