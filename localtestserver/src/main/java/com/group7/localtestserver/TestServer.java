@@ -189,6 +189,7 @@ public class TestServer {
                 } else if(object instanceof GameUpdateMsg){
                     GameUpdateMsg gameUpdateMsg = (GameUpdateMsg) object;
                     updateAll(gameUpdateMsg);
+                    server.sendToAllTCP(gameUpdateMsg);
                 }
             }
         });
