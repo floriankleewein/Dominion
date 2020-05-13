@@ -59,8 +59,8 @@ public class GameHandlerTest {
         game.addPlayer(user1);
         game.addPlayer(user2);
         m_cut.prepareGame();
-        int m_cut_starterhand = m_cut.getGame().getActivePlayer().getUserCards().getDeck().size();
-        int m_cut_deck = m_cut.getGame().getActivePlayer().getUserCards().getHandCards().size();
+        int m_cut_starterhand = Game.getGame().getActivePlayer().getUserCards().getDeck().size();
+        int m_cut_deck = Game.getGame().getActivePlayer().getUserCards().getHandCards().size();
         Assert.assertEquals(generateStarterCards().size(), m_cut_starterhand + m_cut_deck);
     }
 
