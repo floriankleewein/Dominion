@@ -11,14 +11,12 @@ import com.floriankleewein.commonclasses.Network.GameUpdateMsg;
 import com.floriankleewein.commonclasses.User.User;
 import com.floriankleewein.commonclasses.User.UserCards;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 
 public class GameHandler {
     private Game game;
-    private List<User> playerList = new ArrayList<>();
     private final int MONEY_CARDS = 7;
     private final int ANWESEN_CARDS = 3;
     private Board board;
@@ -29,10 +27,9 @@ public class GameHandler {
     }
 
     public void prepareGame() {
-        playerList.addAll(game.getPlayerList());
+        List<User> playerList = game.getPlayerList();
         if (playerList.size() > 1) {
             for (User user : playerList) {
-                //TODO change to <Card>
                 LinkedList<Card> generatedCards = new LinkedList<>();
                 UserCards ucards = new UserCards();
                 for (int i = 0; i < MONEY_CARDS; i++) {
@@ -46,14 +43,13 @@ public class GameHandler {
                 ucards.getFirstCards(generatedCards);
                 user.setUserCards(ucards);
             }
+            setBoard(new Board());
+            game.setPlayerList(playerList);
+            game.setActivePlayer(playerList.get(0));
         }
-        setBoard(new Board());
-        game.setPlayerList(playerList);
-        game.setActivePlayer(playerList.get(0));
     }
 
-    public void updateGame(GameUpdateMsg msg) {
-        setGame();
+    private void updateVictoryPts(GameUpdateMsg msg) {
         int pts = 0;
         for (User u : game.getPlayerList()) {
             pts = msg.getVictoryPointsChange(u);
@@ -61,14 +57,14 @@ public class GameHandler {
                 changeVictoryPoints(u, pts);
             }
         }
-        setPlayedCard(msg.getPlayedCard());
     }
 
     public void setGameHandler(GameUpdateMsg msg) {
-        this.board = msg.getBoard();
+        setBoard(msg.getBoard());
         setPlayedCard(msg.getPlayedCard());
         Game.setGame(msg.getGame());
         setGame();
+        updateVictoryPts(msg);
     }
 
     public void startTurn() {
