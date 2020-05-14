@@ -14,12 +14,21 @@ public class GameUpdateMsg extends BaseMessage {
     private Board board;
     private User activeUser;
     private Card playedCard;
+    private Card clickedCard;
     private Map<User, Integer> victoryPointsChange = new HashMap<>();
 
     public GameUpdateMsg() {
         for (User u : game.getPlayerList()) {
             victoryPointsChange.put(u, 0);
         }
+    }
+
+    public Card getClickedCard() {
+        return clickedCard;
+    }
+
+    public void setClickedCard(Card clickedCard) {
+        this.clickedCard = clickedCard;
     }
 
     public int getVictoryPointsChange(User user) {

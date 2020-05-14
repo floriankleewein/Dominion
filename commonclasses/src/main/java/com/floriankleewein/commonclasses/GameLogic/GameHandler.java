@@ -1,6 +1,7 @@
 package com.floriankleewein.commonclasses.GameLogic;
 
 import com.floriankleewein.commonclasses.Board.Board;
+import com.floriankleewein.commonclasses.Cards.ActionCard;
 import com.floriankleewein.commonclasses.Cards.Card;
 import com.floriankleewein.commonclasses.Cards.EstateCard;
 import com.floriankleewein.commonclasses.Cards.EstateType;
@@ -21,6 +22,7 @@ public class GameHandler {
     private final int ANWESEN_CARDS = 3;
     private Board board;
     private Card playedCard;
+    private Card clickedCard;
 
     public GameHandler(Game game) {
         this.game = game;
@@ -49,6 +51,10 @@ public class GameHandler {
         }
     }
 
+    public void newTurn() {
+        //TODO reset MoneyPts etc.
+    }
+
     private void updateVictoryPts(GameUpdateMsg msg) {
         int pts = 0;
         for (User u : game.getPlayerList()) {
@@ -59,16 +65,40 @@ public class GameHandler {
         }
     }
 
+    public Card getClickedCard() {
+        return clickedCard;
+    }
+
+    public void setClickedCard(Card clickedCard) {
+        this.clickedCard = clickedCard;
+    }
+
     public void setGameHandler(GameUpdateMsg msg) {
         setBoard(msg.getBoard());
         setPlayedCard(msg.getPlayedCard());
+        setClickedCard(msg.getClickedCard());
         Game.setGame(msg.getGame());
         setGame();
         updateVictoryPts(msg);
     }
 
-    public void startTurn() {
-        // TODO called when Server tells client it can go and start its turn?
+    public void playCard() {
+        // TODO logic for card played
+        if (playedCard instanceof ActionCard) {
+            ActionCard card = (ActionCard) playedCard;
+        } else if (playedCard instanceof MoneyCard) {
+            MoneyCard card = (MoneyCard) playedCard;
+            getActiveUser().getGamePoints().increaseCoins(card.getWorth());
+        }
+    }
+
+    public void buyCard(Card card) {
+
+    }
+
+
+    public User getActiveUser() {
+        return game.getActivePlayer();
     }
 
     private void changeVictoryPoints(User user, int points) {
