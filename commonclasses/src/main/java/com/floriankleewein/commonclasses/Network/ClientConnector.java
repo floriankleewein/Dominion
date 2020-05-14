@@ -5,6 +5,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.floriankleewein.commonclasses.Chat.ChatMessage;
 import com.floriankleewein.commonclasses.Game;
+import com.floriankleewein.commonclasses.GameLogic.GameHandler;
 import com.floriankleewein.commonclasses.User.User;
 
 import java.io.IOException;
@@ -18,9 +19,10 @@ public class ClientConnector {
     private static final int SERVER_PORT = 53217;
     private static Client client;
     private boolean hasGame = false;
+    private GameHandler gameHandler;
 
 
-    private Game game;
+    private Game game; //TODO das sollte man evtl nicht mehr hier im Client haben... Einfach Game.getGame verwenden
     private Callback<CreateGameMsg> callback;
     Map<Class, Callback<BaseMessage>> callbackMap = new HashMap<>();
 
@@ -199,15 +201,41 @@ public class ClientConnector {
                     StartGameMsg msg = (StartGameMsg) object;
                     if (msg.getFeedbackUI() == 0) {
                         callbackMap.get(StartGameMsg.class).callback(msg);
-                        game.setGame(msg.getGame());
+                        Game.setGame(msg.getGame());
+                        gameHandler = msg.getGameHandler();
                     } else {
                         //TODO display error in starting game
                     }
                 }
             }
-
         });
+    }
 
+    /**
+     * Send Update message to Server.
+     *
+     * @param msg
+     */
+    public void sendUpdate(GameUpdateMsg msg) {
+        client.sendTCP(msg);
+
+        client.addListener(new Listener() {
+            public void received(Connection con, Object object) {
+                if (object instanceof GameUpdateMsg) {
+                    GameUpdateMsg gameUpdateMsg = (GameUpdateMsg) object;
+                    gameHandler.setGameHandler(gameUpdateMsg);
+                    callbackMap.get(GameUpdateMsg.class).callback(gameUpdateMsg);
+                }
+            }
+        });
+    }
+
+    public GameHandler getGameHandler() {
+        return gameHandler;
+    }
+
+    public void setGameHandler(GameHandler gameHandler) {
+        this.gameHandler = gameHandler;
     }
 
     public boolean hasGame() {

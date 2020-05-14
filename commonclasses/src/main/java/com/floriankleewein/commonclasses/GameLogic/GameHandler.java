@@ -64,6 +64,13 @@ public class GameHandler {
         setPlayedCard(msg.getPlayedCard());
     }
 
+    public void setGameHandler(GameUpdateMsg msg) {
+        this.board = msg.getBoard();
+        setPlayedCard(msg.getPlayedCard());
+        Game.setGame(msg.getGame());
+        setGame();
+    }
+
     public void startTurn() {
         // TODO called when Server tells client it can go and start its turn?
     }
