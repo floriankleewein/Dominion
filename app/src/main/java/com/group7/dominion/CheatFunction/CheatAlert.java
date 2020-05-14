@@ -17,18 +17,21 @@ import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.Network.ClientConnector;
 
 import java.util.List;
-import java.util.Objects;
+
 
 public class CheatAlert extends AppCompatDialogFragment implements AdapterView.OnItemSelectedListener {
 
     private String name;
     private String SuspectedUser;
     private List<String> namesList;
-    private int currentSelect;
 
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+        /**
+         * Creating the Dialog and the Spinner
+         */
 
         String[] s = parseLisToString();
         final ArrayAdapter<String> adp = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, s);
@@ -40,31 +43,21 @@ public class CheatAlert extends AppCompatDialogFragment implements AdapterView.O
                 .setTitle("Very Secret Cheat Menu")
                 .setMessage("You really want to cheat? Or do you want to suspect someone?")
                 .setView(sp)
-                .setPositiveButton("Yes, i want to win", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (Game.getGame().getPlayerList().size() > 0) {
-                            Game.getGame().getCheatService().addCardtoUser(name);
-                        }
-                        sendMessage();
-                        dialog.cancel();
+                .setPositiveButton("Give me an Extra Card", (dialog, which) -> {
+                    if (Game.getGame().getPlayerList().size() > 0) {
+                        Game.getGame().getCheatService().addCardtoUser(this.name);
+                    }
+                    sendMessage();
+                    dialog.cancel();
 
-                    }
                 })
-                .setNegativeButton("No, im a fair Gamer", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //Nothing happens
+                .setNegativeButton("Close Cheat Menu", (dialog, which) -> {
+                    dialog.cancel();
+                }).setNeutralButton("Suspect Selected User", (dialog, which) -> {
+                    if (!this.SuspectedUser.equals(this.name)) {
+                        deleteSelectedUser(SuspectedUser);
+                        sendSuspectMessage(this.SuspectedUser, name);
                         dialog.cancel();
-                    }
-                }).setNeutralButton("Suspect Selected User ", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (!SuspectedUser.equals(name)) {
-                            deleteSelectedUser(SuspectedUser);
-                            sendSuspectMessage(SuspectedUser, name);
-                            dialog.cancel();
-                        }
                     }
                 });
 
@@ -72,26 +65,24 @@ public class CheatAlert extends AppCompatDialogFragment implements AdapterView.O
         return builder.create();
     }
 
-    private void sendMessage() {
-
-        Thread thread = new Thread(() -> ClientConnector.getClientConnector().sendCheatMessage(name));
-
-        thread.start();
-    }
+    /**
+     * Methods for parsing the ArrayList to String Array for Spinner, delete User who already got suspected and sending Messages to
+     * the Server
+     */
 
     public String[] parseLisToString() {
-        String[] s = new String[namesList.size()];
-        for (int i = 0; i < namesList.size(); i++) {
-            s[i] = namesList.get(i);
+        String[] s = new String[this.namesList.size()];
+        for (int i = 0; i < this.namesList.size(); i++) {
+            s[i] = this.namesList.get(i);
         }
 
         return s;
     }
 
     private void deleteSelectedUser(String name) {
-        for (int i = 0; i < namesList.size(); i++) {
-            if (namesList.get(i).equals(name)) {
-                namesList.remove(i);
+        for (int i = 0; i < this.namesList.size(); i++) {
+            if (this.namesList.get(i).equals(name)) {
+                this.namesList.remove(i);
             }
         }
     }
@@ -101,9 +92,19 @@ public class CheatAlert extends AppCompatDialogFragment implements AdapterView.O
         thread.start();
     }
 
+    private void sendMessage() {
+
+        Thread thread = new Thread(() -> ClientConnector.getClientConnector().sendCheatMessage(this.name));
+
+        thread.start();
+    }
+
+    /**
+     * Methods for the Spinner
+     */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        SuspectedUser = (String) parent.getItemAtPosition(position);
+        this.SuspectedUser = (String) parent.getItemAtPosition(position);
     }
 
     @Override

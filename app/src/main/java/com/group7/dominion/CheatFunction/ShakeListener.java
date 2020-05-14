@@ -4,7 +4,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.util.Log;
+
 
 import androidx.fragment.app.FragmentManager;
 
@@ -13,7 +13,6 @@ import java.util.List;
 
 
 public class ShakeListener {
-    private static boolean alreadyCheated = false;
     private float acelVal;
     private float acelLast;
     private float shake;
@@ -49,8 +48,6 @@ public class ShakeListener {
                 shake = shake * 0.9f + delta;
 
                 if (shake > 4 && !cheat_alert.isAdded()) {
-                    alreadyCheated = true;
-                    Log.i("SHAKING!!", "PHONE GET SHAKED!");
                     cheat_alert.setName(Username);
                     cheat_alert.setNamesList(names);
                     cheat_alert.show(fragmentManager, "cheat");
@@ -62,7 +59,6 @@ public class ShakeListener {
 
             }
         };
-
         return sensorListener;
     }
 }
