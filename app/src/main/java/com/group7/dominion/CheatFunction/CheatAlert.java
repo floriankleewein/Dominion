@@ -2,7 +2,6 @@ package com.group7.dominion.CheatFunction;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
@@ -11,28 +10,22 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.ThemedSpinnerAdapter;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatDialogFragment;
 
-import com.floriankleewein.commonclasses.CheatFunction.CheatService;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.Network.ClientConnector;
-import com.floriankleewein.commonclasses.User.User;
-import com.group7.dominion.GameActivity;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
 public class CheatAlert extends AppCompatDialogFragment implements AdapterView.OnItemSelectedListener {
 
-    Game game;
-    String name;
-    ArrayList <String> names;
-    static boolean firstClick = true;
+    private String name;
+    private String SuspectedUser;
+    private List<String> namesList;
+    private int currentSelect;
+
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -50,7 +43,6 @@ public class CheatAlert extends AppCompatDialogFragment implements AdapterView.O
                 .setPositiveButton("Yes, i want to win", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        //TODO: Have to find Playername
                         if (Game.getGame().getPlayerList().size() > 0) {
                             Game.getGame().getCheatService().addCardtoUser(name);
                         }
@@ -65,71 +57,70 @@ public class CheatAlert extends AppCompatDialogFragment implements AdapterView.O
                         //Nothing happens
                         dialog.cancel();
                     }
+                }).setNeutralButton("Suspect Selected User ", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (!SuspectedUser.equals(name)) {
+                            deleteSelectedUser(SuspectedUser);
+                            sendSuspectMessage(SuspectedUser, name);
+                            dialog.cancel();
+                        }
+                    }
                 });
+
 
         return builder.create();
     }
 
     private void sendMessage() {
 
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                ClientConnector.getClientConnector().sendCheatMessage(name);
-            }
-        });
+        Thread thread = new Thread(() -> ClientConnector.getClientConnector().sendCheatMessage(name));
 
         thread.start();
     }
 
-    public String [] parseLisToString () {
-        String [] s = new String [names.size()];
-        for (int i = 0; i < names.size() ; i++) {
-            s[i] = names.get(i);
+    public String[] parseLisToString() {
+        String[] s = new String[namesList.size()];
+        for (int i = 0; i < namesList.size(); i++) {
+            s[i] = namesList.get(i);
         }
 
         return s;
     }
 
-    private void sendSuspectMessage (String SuspectedName, String name) {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                ClientConnector.getClientConnector().sendSuspectUser(SuspectedName,name);
+    private void deleteSelectedUser(String name) {
+        for (int i = 0; i < namesList.size(); i++) {
+            if (namesList.get(i).equals(name)) {
+                namesList.remove(i);
             }
-        });
+        }
+    }
+
+    private void sendSuspectMessage(String SuspectedName, String name) {
+        Thread thread = new Thread(() -> ClientConnector.getClientConnector().sendSuspectUser(SuspectedName, name));
         thread.start();
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        SuspectedUser = (String) parent.getItemAtPosition(position);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setGame(Game game) {
-        this.game = Game.getGame();
+    public List<String> getNamesList() {
+        return namesList;
     }
 
-    public ArrayList<String> getNames() {
-        return names;
-    }
-
-    public void setNames(ArrayList<String> names) {
-        this.names = names;
-    }
-
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        String SuspectedUserame = (String) parent.getItemAtPosition(position);
-        if (!firstClick && (!SuspectedUserame.equals(name))){
-            sendSuspectMessage(SuspectedUserame, name);
-            Objects.requireNonNull(getDialog()).cancel();
-        }
-        firstClick = false;
-    }
-
-    @Override
-    public void onNothingSelected(AdapterView<?> parent) {
-
+    public void setNamesList(List<String> namesList) {
+        this.namesList = namesList;
     }
 
 
