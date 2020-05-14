@@ -24,7 +24,7 @@ public class CheatAlert extends AppCompatDialogFragment implements AdapterView.O
     private String name;
     private String SuspectedUser;
     private List<String> namesList;
-
+    private boolean alreadyCheated = false;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -44,12 +44,14 @@ public class CheatAlert extends AppCompatDialogFragment implements AdapterView.O
                 .setMessage("You really want to cheat? Or do you want to suspect someone?")
                 .setView(sp)
                 .setPositiveButton("Give me an Extra Card", (dialog, which) -> {
-                    if (Game.getGame().getPlayerList().size() > 0) {
-                        Game.getGame().getCheatService().addCardtoUser(this.name);
+                    if (!alreadyCheated) {
+                        if (Game.getGame().getPlayerList().size() > 0) {
+                            Game.getGame().getCheatService().addCardtoUser(this.name);
+                        }
+                        alreadyCheated = true;
+                        sendMessage();
+                        dialog.cancel();
                     }
-                    sendMessage();
-                    dialog.cancel();
-
                 })
                 .setNegativeButton("Close Cheat Menu", (dialog, which) -> {
                     dialog.cancel();
