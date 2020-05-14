@@ -73,7 +73,7 @@ public class GameHandler {
         this.clickedCard = clickedCard;
     }
 
-    public void setGameHandler(GameUpdateMsg msg) {
+    public void updateGameHandler(GameUpdateMsg msg) {
         setBoard(msg.getBoard());
         setPlayedCard(msg.getPlayedCard());
         setClickedCard(msg.getClickedCard());

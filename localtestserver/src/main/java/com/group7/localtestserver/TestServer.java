@@ -189,6 +189,7 @@ public class TestServer {
                 } else if(object instanceof GameUpdateMsg){
                     GameUpdateMsg gameUpdateMsg = (GameUpdateMsg) object;
                     updateAll(gameUpdateMsg);
+                    gameUpdateMsg.setGameHandler(gamehandler);
                     server.sendToAllTCP(gameUpdateMsg);
                 }
             }
@@ -198,7 +199,7 @@ public class TestServer {
     public void updateAll(GameUpdateMsg msg) {
         setBoard(msg.getBoard());
         game.setGame(msg.getGame());
-        gamehandler.updateGame(msg);
+        gamehandler.updateGameHandler(msg);
     }
 
     public void registerClass(Class regClass) {

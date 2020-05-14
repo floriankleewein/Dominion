@@ -223,7 +223,7 @@ public class ClientConnector {
             public void received(Connection con, Object object) {
                 if (object instanceof GameUpdateMsg) {
                     GameUpdateMsg gameUpdateMsg = (GameUpdateMsg) object;
-                    gameHandler.setGameHandler(gameUpdateMsg);
+                    gameHandler.updateGameHandler(gameUpdateMsg);
                     callbackMap.get(GameUpdateMsg.class).callback(gameUpdateMsg);
                 }
             }
