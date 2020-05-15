@@ -88,7 +88,7 @@ public class GameHandler {
             ActionCard card = (ActionCard) playedCard;
         } else if (playedCard instanceof MoneyCard) {
             MoneyCard card = (MoneyCard) playedCard;
-            getActiveUser().getGamePoints().increaseCoins(card.getWorth());
+            getActiveUser().getGamePoints().modifyCoins(card.getWorth());
         }
     }
 
@@ -105,7 +105,7 @@ public class GameHandler {
         List<User> users = game.getPlayerList();
         for (User u : users) {
             if (u.getUserName().equals(user.getUserName())) {
-                u.getGamePoints().increaseWinningPoints(points);
+                u.getGamePoints().modifyWinningPoints(points);
             }
         }
         game.setPlayerList(users);
