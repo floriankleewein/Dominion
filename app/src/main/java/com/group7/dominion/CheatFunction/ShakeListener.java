@@ -4,24 +4,22 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.util.Log;
+
 
 import androidx.fragment.app.FragmentManager;
 
-import com.floriankleewein.commonclasses.User.User;
-
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class ShakeListener {
-    private static boolean alreadyCheated = false;
     private float acelVal;
     private float acelLast;
     private float shake;
     private CheatAlert cheat_alert;
     private FragmentManager fragmentManager;
     private String Username;
-    private ArrayList <String> names;
+    private List<String> names;
 
     public ShakeListener(FragmentManager fragmentManager, String Username, ArrayList<String> names) {
         acelVal = SensorManager.GRAVITY_EARTH;
@@ -49,11 +47,9 @@ public class ShakeListener {
                 float delta = acelVal - acelLast;
                 shake = shake * 0.9f + delta;
 
-                if (shake > 4 && !alreadyCheated) {
-                    alreadyCheated = true;
-                    Log.i("SHAKING!!", "PHONE GET SHAKED!");
+                if (shake > 4 && !cheat_alert.isAdded()) {
                     cheat_alert.setName(Username);
-                    cheat_alert.setNames (names);
+                    cheat_alert.setNamesList(names);
                     cheat_alert.show(fragmentManager, "cheat");
                 }
             }
@@ -63,7 +59,6 @@ public class ShakeListener {
 
             }
         };
-
         return sensorListener;
     }
 }

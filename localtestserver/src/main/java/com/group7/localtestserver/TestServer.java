@@ -4,31 +4,23 @@ package com.group7.localtestserver;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
-
+import com.floriankleewein.commonclasses.Board.Board;
 import com.floriankleewein.commonclasses.Chat.ChatMessage;
-
-import com.floriankleewein.commonclasses.CheatFunction.CheatService;
-
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.GameLogic.GameHandler;
 import com.floriankleewein.commonclasses.Network.ActivePlayerMessage;
 import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
 import com.floriankleewein.commonclasses.Network.BaseMessage;
-
+import com.floriankleewein.commonclasses.Network.CreateGameMsg;
+import com.floriankleewein.commonclasses.Network.GameUpdateMsg;
 import com.floriankleewein.commonclasses.Network.GetPlayerMsg;
 import com.floriankleewein.commonclasses.Network.HasCheatedMessage;
-import com.floriankleewein.commonclasses.Network.ReturnPlayersMsg;
-import com.floriankleewein.commonclasses.Network.ResetMsg;
-
-
-import com.floriankleewein.commonclasses.Network.SuspectMessage;
-import com.floriankleewein.commonclasses.Network.UpdatePlayerNamesMsg;
-
-import com.floriankleewein.commonclasses.Network.CreateGameMsg;
-import com.floriankleewein.commonclasses.Network.GameInformationMsg;
 import com.floriankleewein.commonclasses.Network.NetworkInformationMsg;
 import com.floriankleewein.commonclasses.Network.ResetMsg;
+import com.floriankleewein.commonclasses.Network.ReturnPlayersMsg;
 import com.floriankleewein.commonclasses.Network.StartGameMsg;
+import com.floriankleewein.commonclasses.Network.SuspectMessage;
+import com.floriankleewein.commonclasses.Network.UpdatePlayerNamesMsg;
 import com.floriankleewein.commonclasses.User.User;
 
 import java.io.IOException;
@@ -40,6 +32,7 @@ public class TestServer {
 
     private Server server;
     private Game game;
+    private Board board;
     private boolean hasGame = false;
     private final String Tag = "TEST-SERVER"; // debugging only
     private GameHandler gamehandler;
@@ -55,7 +48,7 @@ public class TestServer {
         //Register classes
         registerClass(BaseMessage.class);
         registerClass(MessageClass.class);
-        registerClass(GameInformationMsg.class);
+        registerClass(GameUpdateMsg.class);
         registerClass(NetworkInformationMsg.class);
         registerClass(Game.class);
         registerClass(CreateGameMsg.class);
@@ -136,9 +129,7 @@ public class TestServer {
                         msg.setFeedbackUI(0);
                         msg.setGame(getGame());
                         // Send message to all clients, TODO they need to be in lobby
-                        for (Connection c : server.getConnections()) {
-                            c.sendTCP(msg);
-                        }
+                        server.sendToAllTCP(msg);
                         ActivePlayerMessage activePlayerMsg = new ActivePlayerMessage();
                         activePlayerMsg.setGame(getGame());
                         Connection activePlayerCon = userClientConnectorMap.get(game.getActivePlayer());
@@ -195,9 +186,20 @@ public class TestServer {
                     //game.getCheatService().suspectUser(msg.getSuspectedUserName(),msg.getUserName());
 
                     sendSuspectInformation(msg.getSuspectedUserName(),msg.getUserName());
+                } else if(object instanceof GameUpdateMsg){
+                    GameUpdateMsg gameUpdateMsg = (GameUpdateMsg) object;
+                    updateAll(gameUpdateMsg);
+                    gameUpdateMsg.setGameHandler(gamehandler);
+                    server.sendToAllTCP(gameUpdateMsg);
                 }
             }
         });
+    }
+
+    public void updateAll(GameUpdateMsg msg) {
+        setBoard(msg.getBoard());
+        game.setGame(msg.getGame());
+        gamehandler.updateGameHandler(msg);
     }
 
     public void registerClass(Class regClass) {
@@ -238,6 +240,10 @@ public class TestServer {
         return hasGame;
     }
 
+    /**
+     * Creates Starter Deck for all players and returns true if game was created successfully.
+     * @return
+     */
     public boolean setupGame() {
         if (hasGame()) {
             gamehandler = new GameHandler(getGame());
@@ -246,6 +252,14 @@ public class TestServer {
         } else {
             return false;
         }
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
     }
 
     public Game getGame() {

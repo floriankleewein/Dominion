@@ -54,16 +54,13 @@ public class GameActivity extends AppCompatActivity {
         viewPager.setAdapter(viewPagerAdapter);
 
 
-        System.out.println(getUsername() + " is here");
+
         sendUpdateMessage();
         ArrayList<String> names = new ArrayList<>();
         ClientConnector.getClientConnector().registerCallback(UpdatePlayerNamesMsg.class, (msg -> {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    names.clear();
-                    names.addAll(((UpdatePlayerNamesMsg) msg).getNameList());
-                }
+            runOnUiThread(() -> {
+                names.clear();
+                names.addAll(((UpdatePlayerNamesMsg) msg).getNameList());
             });
         }));
         shakeListener = new ShakeListener(getSupportFragmentManager(), getUsername(), names);
@@ -116,7 +113,6 @@ public class GameActivity extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    System.out.println("ReGISTERED CALLBACK");
                     String SuspectedUser = ((SuspectMessage) msg).getSuspectedUserName();
                     String Username = ((SuspectMessage)msg).getUserName();
                     Toast.makeText(getApplicationContext(), Username + " glaubt, dass " + SuspectedUser + " geschummelt hat", Toast.LENGTH_SHORT).show();
