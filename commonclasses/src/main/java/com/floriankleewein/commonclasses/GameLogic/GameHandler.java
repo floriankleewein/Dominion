@@ -135,7 +135,7 @@ public class GameHandler {
                 case WERKSTATT:
                     break;
             }
-        } else if (playedCard instanceof MoneyCard) {
+        } else {
             MoneyCard card = (MoneyCard) playedCard;
             getActiveUser().getGamePoints().modifyCoins(card.getWorth());
         }
