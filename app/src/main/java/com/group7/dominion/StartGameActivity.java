@@ -98,7 +98,7 @@ public class StartGameActivity extends AppCompatActivity {
                             @Override
                             public void run() {
 
-                                Intent intent = new Intent(StartGameActivity.this, GameActivity.class);
+                                Intent intent = new Intent(StartGameActivity.this, DominionActivity.class);
                                 startActivity(intent);
 
 

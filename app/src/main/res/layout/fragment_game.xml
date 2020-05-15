@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:weightSum="3"
     app:columnCount="4"
-
     app:rowCount="3"
     tools:context="com.group7.dominion.GameFragment">
 
@@ -19,7 +18,7 @@
         android:layout_column="0"
         android:adjustViewBounds="true"
         android:scaleType="centerInside"
-        android:src="@drawable/gold" />
+        android:src="@drawable/gold"/>
 
     <ImageButton
         android:id="@+id/btn_silver"
@@ -63,7 +62,7 @@
         android:layout_column="1"
         android:adjustViewBounds="true"
         android:scaleType="centerInside"
-        android:src="@drawable/provinz" />
+        android:src="@drawable/provinz"/>
 
     <ImageButton
         android:id="@+id/btn_estate_A"
