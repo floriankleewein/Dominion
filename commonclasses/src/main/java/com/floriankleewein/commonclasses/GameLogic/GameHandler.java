@@ -1,6 +1,7 @@
 package com.floriankleewein.commonclasses.GameLogic;
 
 import com.floriankleewein.commonclasses.Board.Board;
+import com.floriankleewein.commonclasses.Cards.Action;
 import com.floriankleewein.commonclasses.Cards.ActionCard;
 import com.floriankleewein.commonclasses.Cards.Card;
 import com.floriankleewein.commonclasses.Cards.EstateCard;
@@ -86,14 +87,40 @@ public class GameHandler {
         // TODO logic for card played
         if (playedCard instanceof ActionCard) {
             ActionCard card = (ActionCard) playedCard;
+            Action action = card.getAction();
+            switch (card.getActionType()) {
+                case BURGGRABEN:
+                    break;
+                case DORF:
+                    break;
+                case HEXE:
+                    break;
+                case HOLZFAELLER:
+                    break;
+                case KELLER:
+                    break;
+                case MARKT:
+                    break;
+                case MILIZ:
+                    break;
+                case MINE:
+                    break;
+                case SCHMIEDE:
+                    break;
+                case WERKSTATT:
+                    break;
+            }
         } else if (playedCard instanceof MoneyCard) {
             MoneyCard card = (MoneyCard) playedCard;
             getActiveUser().getGamePoints().modifyCoins(card.getWorth());
         }
     }
 
-    public void buyCard(Card card) {
-
+    private boolean canBuyCard(Card card) {
+        if (getActiveUser().getGamePoints().getCoins() >= card.getPrice()) {
+            return true;
+        }
+        return false;
     }
 
 
