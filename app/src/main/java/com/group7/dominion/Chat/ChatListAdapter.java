@@ -35,10 +35,7 @@ public class ChatListAdapter extends ArrayAdapter<ChatMessage> {
         ChatListAdapterViewHolder chatListAdapterViewHolder = provideChatListViewHolder(convertView);
 
         ChatMessage chatMsg = getItem(position);
-        // Temporäres Testen, ob eine Nachricht in der ChatListView angezeigt wird
-        // ChatMessage ist hierbei die Message, die zwischen den Spielern ausgetauscht wird
-        // getItem(position) liefert dabei die Message, welche sich an der gegeben Position
-        // an der View befindet
+
 
         if(chatMsg.isSentByMe()) {
             chatListAdapterViewHolder.messageReceivedLayout.setVisibility(View.GONE);

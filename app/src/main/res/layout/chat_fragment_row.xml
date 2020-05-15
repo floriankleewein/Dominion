@@ -30,10 +30,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:background="#87CEEB"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:paddingRight="5dp"
+                android:background="@drawable/receive_bubble"
+                android:layout_marginTop="10dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:paddingRight="10dp"
                 android:paddingLeft="10dp"
                 android:textColor="@android:color/primary_text_light"/>
 
@@ -59,10 +60,11 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="5dp"
-                android:background="@color/colorPrimaryDark"
+                android:background="@drawable/sent_bubble"
+                android:layout_marginTop="10dp"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
-                android:paddingRight="10dp"
+                android:paddingRight="5dp"
                 android:paddingLeft="5dp"
                 android:textColor="@android:color/primary_text_dark"/>
 
