@@ -1,6 +1,7 @@
 package com.floriankleewein.commonclasses.GameLogic;
 
 import com.floriankleewein.commonclasses.Board.Board;
+import com.floriankleewein.commonclasses.Cards.Action;
 import com.floriankleewein.commonclasses.Cards.ActionCard;
 import com.floriankleewein.commonclasses.Cards.Card;
 import com.floriankleewein.commonclasses.Cards.EstateCard;
@@ -51,6 +52,10 @@ public class GameHandler {
         }
     }
 
+    public void setNewActivePlayer() {
+
+    }
+
     public void newTurn() {
         //TODO reset MoneyPts etc.
     }
@@ -79,21 +84,71 @@ public class GameHandler {
         setClickedCard(msg.getClickedCard());
         Game.setGame(msg.getGame());
         setGame();
+        if (canBuyCard(getClickedCard())) {
+            buyCard(getClickedCard());
+        }
         updateVictoryPts(msg);
     }
+
+    public void buyCard(Card card) {
+        Card boughtCard;
+        if (card instanceof ActionCard) {
+            boughtCard = getBoard().getActionField().pickCard(((ActionCard) card).getActionType());
+            getActiveUser().getUserCards().addCardtoDeck(boughtCard);
+        } else if (card instanceof EstateCard) {
+            boughtCard = getBoard().getBuyField().pickCard(((EstateCard) card).getEstateType());
+            getActiveUser().getUserCards().addCardtoDeck(boughtCard);
+            getActiveUser().getGamePoints().modifyWinningPoints(((EstateCard) boughtCard).getEstateValue());
+        } else {
+            boughtCard = getBoard().getBuyField().pickCard(((MoneyCard) card).getMoneyType());
+            getActiveUser().getUserCards().addCardtoDeck(boughtCard);
+        }
+        int oldCoins = getActiveUser().getGamePoints().getCoins();
+        getActiveUser().getGamePoints().modifyCoins(oldCoins - boughtCard.getPrice());
+    }
+
 
     public void playCard() {
         // TODO logic for card played
         if (playedCard instanceof ActionCard) {
             ActionCard card = (ActionCard) playedCard;
-        } else if (playedCard instanceof MoneyCard) {
+            Action action = card.getAction();
+            switch (card.getActionType()) {
+                case BURGGRABEN:
+                    break;
+                case DORF:
+                    break;
+                case HEXE:
+                    break;
+                case HOLZFAELLER:
+                    break;
+                case KELLER:
+                    break;
+                case MARKT:
+                    break;
+                case MILIZ:
+                    break;
+                case MINE:
+                    break;
+                case SCHMIEDE:
+                    break;
+                case WERKSTATT:
+                    break;
+            }
+        } else {
             MoneyCard card = (MoneyCard) playedCard;
             getActiveUser().getGamePoints().modifyCoins(card.getWorth());
         }
     }
 
-    public void buyCard(Card card) {
-
+    private boolean canBuyCard(Card card) {
+        if (card == null) {
+            return false;
+        }
+        if (getActiveUser().getGamePoints().getCoins() >= card.getPrice()) {
+            return true;
+        }
+        return false;
     }
 
 
