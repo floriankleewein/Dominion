@@ -19,50 +19,27 @@ public class GamePoints {
         BuyAmounts = 1;
     }
 
-    public void increaseCoins(int amountCoins) {
-        this.Coins = Coins + amountCoins;
+    public void modifyCoins(int amountCoins) {
+        this.Coins += amountCoins;
     }
 
-    public void decreaseCoins(int amountCoins) {
-        if (amountCoins <= this.Coins) {
-            this.Coins = Coins - amountCoins;
-        }
-        /**
-         * Maybe we should add an Exception if necessary
-         */
+    public void modifyWinningPoints(int wp) {
+        this.WinningPoints += wp;
     }
 
-    public void increaseWinningPoints(int wp) {
-        this.WinningPoints = WinningPoints + wp;
-    }
-
-    public void decreaseWinningPoints(int wp) {
-        this.WinningPoints = WinningPoints - wp;
-        /**
-         * No If because WinningPoints CAN be negative!
-         */
-    }
-
-    public void increasePlaysAmount(int playsAmount) {
+    public void modifyPlayAmounts(int playsAmount) {
         this.PlaysAmount += playsAmount;
     }
 
-    public void decreasePlaysAmount(int playsAmount) {
-        if (playsAmount <= this.PlaysAmount) {
-            this.PlaysAmount -= playsAmount;
-        }
-    }
-
-    public void increaseBuyAmounts(int buyAmounts) {
+    public void modifyBuyAmounts(int buyAmounts) {
         this.BuyAmounts += buyAmounts;
     }
 
-    public void decreaseBuyAmounts(int buyAmounts) {
-        if (buyAmounts <= this.BuyAmounts) {
-            this.BuyAmounts -= buyAmounts;
-        }
+    public void setPointsDefault() {
+        Coins = 0;
+        PlaysAmount = 1;
+        BuyAmounts = 1;
     }
-
 
     public int getCoins() {
         return Coins;
@@ -95,7 +72,6 @@ public class GamePoints {
     public void setBuyAmounts(int buyAmounts) {
         BuyAmounts = buyAmounts;
     }
-
 
 }
 

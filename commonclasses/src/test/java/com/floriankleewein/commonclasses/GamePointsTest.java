@@ -8,9 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class GamePointsTest {
-    static String UserName = "TestUser";
-    static String UserEmail = "test@email.com";
-    static String UserPassword = "TestPassword";
+    private static String UserName = "TestUser";
 
     private User user;
 
@@ -21,65 +19,50 @@ public class GamePointsTest {
     }
 
     @Test
-    public void testIncreaseCoins() {
-        this.user.getGamePoints().increaseCoins(1);
-        this.user.getGamePoints().increaseCoins(3);
+    public void testModifyCoins() {
+        this.user.getGamePoints().modifyCoins(6);
+        this.user.getGamePoints().modifyCoins(-2);
 
         Assert.assertEquals(4, this.user.getGamePoints().getCoins());
     }
 
     @Test
-    public void testDecreaseCoins() {
-        this.user.getGamePoints().setCoins(10);
-        this.user.getGamePoints().decreaseCoins(10);
-        Assert.assertEquals(0, this.user.getGamePoints().getCoins());
+    public void testModifyWinningPoints () {
+        this.user.getGamePoints().modifyWinningPoints(5);
+        this.user.getGamePoints().modifyWinningPoints(3);
+        this.user.getGamePoints().modifyWinningPoints(1);
+
+        Assert.assertEquals(9,this.user.getGamePoints().getWinningPoints());
     }
 
     @Test
-    public void testIncreaseWinningPoints () {
-        this.user.getGamePoints().increaseWinningPoints(1);
-        this.user.getGamePoints().increaseWinningPoints(3);
-        this.user.getGamePoints().increaseWinningPoints(6);
-
-        Assert.assertEquals(10,this.user.getGamePoints().getWinningPoints());
-    }
-
-    @Test
-    public void testDecreaseWinningPoints () {
-        this.user.getGamePoints().setWinningPoints(10);
-        this.user.getGamePoints().decreaseWinningPoints(11);
-
-        Assert.assertEquals(-1,this.user.getGamePoints().getWinningPoints());
-    }
-
-    @Test
-    public void testIncreasePlaysAmount () {
-        this.user.getGamePoints().increasePlaysAmount(1);
-        this.user.getGamePoints().increasePlaysAmount(2);
-        Assert.assertEquals(4,this.user.getGamePoints().getPlaysAmount());
+    public void testModifyPlaysAmount () {
+        this.user.getGamePoints().modifyPlayAmounts(3);
+        this.user.getGamePoints().modifyPlayAmounts(-1);
+        Assert.assertEquals(3,this.user.getGamePoints().getPlaysAmount());
         //+1 because you start with one Play Amount
     }
-    @Test
-    public void testDecreasePlaysAmount () {
-        this.user.getGamePoints().setPlaysAmount(3);
-        this.user.getGamePoints().decreasePlaysAmount(2);
-        this.user.getGamePoints().decreasePlaysAmount(1);
-        Assert.assertEquals(0,this.user.getGamePoints().getPlaysAmount());
-    }
 
     @Test
-    public void testIncreaseBuymount () {
-        this.user.getGamePoints().increaseBuyAmounts(1);
-        this.user.getGamePoints().increaseBuyAmounts(2);
-        Assert.assertEquals(4,this.user.getGamePoints().getBuyAmounts());
+    public void testModifyBuymount () {
+        this.user.getGamePoints().modifyBuyAmounts(3);
+        this.user.getGamePoints().modifyBuyAmounts(-2);
+        Assert.assertEquals(2,this.user.getGamePoints().getBuyAmounts());
         //+1 because you start with one Buy Amount
     }
     @Test
-    public void testDecreaseBuyAmount () {
+   public void testsetPointsDefault (){
+        this.user.getGamePoints().setCoins(6);
         this.user.getGamePoints().setBuyAmounts(3);
-        this.user.getGamePoints().decreaseBuyAmounts(2);
-        this.user.getGamePoints().decreaseBuyAmounts(1);
-        Assert.assertEquals(0,this.user.getGamePoints().getBuyAmounts());
+        this.user.getGamePoints().setPlaysAmount(4);
+        this.user.getGamePoints().setWinningPoints(15);
+
+        this.user.getGamePoints().setPointsDefault();
+
+        Assert.assertEquals(0,this.user.getGamePoints().getCoins());
+        Assert.assertEquals(1,this.user.getGamePoints().getBuyAmounts());
+        Assert.assertEquals(1,this.user.getGamePoints().getPlaysAmount());
+        Assert.assertEquals(15, this.user.getGamePoints().getWinningPoints());
     }
 
     @After

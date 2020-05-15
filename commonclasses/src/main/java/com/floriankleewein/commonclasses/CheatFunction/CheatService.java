@@ -58,9 +58,9 @@ public class CheatService {
         User user = findUser(UserName);
 
         if (SuspectedUser != null) {
-            SuspectedUser.getGamePoints().decreaseWinningPoints(5);
+            SuspectedUser.getGamePoints().modifyWinningPoints(-5);
         } else {
-            user.getGamePoints().decreaseWinningPoints(5);
+            user.getGamePoints().modifyWinningPoints(-5);
         }
     }
 
