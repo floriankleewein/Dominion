@@ -8,31 +8,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.floriankleewein.commonclasses.Board.Board;
 import com.floriankleewein.commonclasses.Network.AddPlayerNameErrorMsg;
 import com.floriankleewein.commonclasses.Network.AddPlayerSizeErrorMsg;
 import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
+import com.floriankleewein.commonclasses.Network.CheckButtonsMsg;
 import com.floriankleewein.commonclasses.Network.CreateGameMsg;
 import com.floriankleewein.commonclasses.Network.ClientConnector;
-import com.group7.localtestserver.TestServer;
-
 
 public class MainActivity extends AppCompatActivity {
 
     Button btnCreate, btnJoin, btnReset;
-
-    private Board board;
     ClientConnector client;
-
     SharedPreferences sharedPreferences;
-
-
-    //TODO: rename this
-    public static final String EXTRA_MESSAGE = "clientForNextActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,8 +30,6 @@ public class MainActivity extends AppCompatActivity {
         btnCreate = findViewById(R.id.btn_create);
         btnJoin = findViewById(R.id.btn_join);
         btnReset = findViewById(R.id.btn_reset);
-
-
         sharedPreferences = getSharedPreferences("USERNAME", Context.MODE_PRIVATE);
 
     }
@@ -53,20 +39,26 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 
         client = ClientConnector.getClientConnector();
-        checkButtons();
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                client.connect();
+                client.checkButtons();
+            }
+        });
+        thread.start();
 
-
-
-        client.registerCallback(CreateGameMsg.class,(msg->{
+        client.registerCallback(CheckButtonsMsg.class,(msg->{
+            CheckButtonsMsg temp = (CheckButtonsMsg)msg;
 
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    checkButtons();
+                    btnCreate.setEnabled(temp.getCreateValue());
+                    btnJoin.setEnabled(temp.getJoinValue());
                 }
             });
         }));
-
 
         btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        client.connect();
+
                         client.createGame();
                     }
                 });
@@ -83,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
                 thread.start();
             }
         });
+
 
         client.registerCallback(AddPlayerSuccessMsg.class, (msg -> {
             runOnUiThread(new Runnable() {
@@ -158,19 +151,6 @@ public class MainActivity extends AppCompatActivity {
                 thread.start();
             }
         });
-
-        //Board board = new Board();
-        //board.getActionField().pickCard(ActionType.BURGGRABEN);
-    }
-
-    public void checkButtons() {
-        if (client.hasGame() == false) {
-            btnCreate.setEnabled(true);
-            btnJoin.setEnabled(false);
-        } else {
-            btnCreate.setEnabled(false);
-            btnJoin.setEnabled(true);
-        }
     }
 
     public void addUsernametoPreferences () {
@@ -179,9 +159,5 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("us", userName);
         editor.commit();
-    }
-
-    public Board getBoard() {
-        return board;
     }
 }
