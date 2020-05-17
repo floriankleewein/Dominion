@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.group7.dominion.Chat.ChatFragment"
-    android:background="#fff">
+    android:background="#fff"
+    android:id="@+id/chatLayout">
 
    <Button
        android:id="@+id/back_Button"

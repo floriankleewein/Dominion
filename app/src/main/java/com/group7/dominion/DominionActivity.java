@@ -48,13 +48,6 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
 
         this.clientConnector = ClientConnector.getClientConnector();
 
-        clientConnector.registerCallback(ChatMessage.class, msg -> {
-            runOnUiThread(() -> {
-                String chatMessage = ((ChatMessage) msg).getMessage();
-                Toast.makeText(getApplicationContext(), "Nachricht: " + msg, Toast.LENGTH_SHORT).show();
-            });
-        });
-
         chatButton.setOnClickListener(view -> openFragment());
 
         sendUpdateMessage();
@@ -103,6 +96,13 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
                 }
             });
         }));
+
+        clientConnector.registerCallback(ChatMessage.class, msg -> {
+            runOnUiThread(() -> {
+                String chatMessage = ((ChatMessage) msg).getMessage();
+                Toast.makeText(getApplicationContext(), "Nachricht: " + chatMessage, Toast.LENGTH_SHORT).show();
+            });
+        });
     }
 
     public void sendUpdateMessage() {
@@ -119,6 +119,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         SharedPreferences sharedPreferences = getSharedPreferences("USERNAME", Context.MODE_PRIVATE);
         String str = sharedPreferences.getString("us", null);
         return str;
+    }
 
 
 
@@ -126,7 +127,6 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         if(this.chatFragment == null) {
             this.chatFragment = ChatFragment.newInstance();
         }
-
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction trans = fragmentManager.beginTransaction();
             trans.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right,
@@ -141,7 +141,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
     @Override
     public void onChatMessageArrived(String msg) {
         Toast.makeText(getApplicationContext(), "Nachricht: " + msg, Toast.LENGTH_SHORT).show();
-        onBackPressed();
         //this.trans.hide(chatFragment);
+        onBackPressed();
     }
 }

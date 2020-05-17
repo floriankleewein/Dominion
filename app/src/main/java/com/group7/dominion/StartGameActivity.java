@@ -112,12 +112,6 @@ public class StartGameActivity extends AppCompatActivity {
         });
     }
 
-
-    public void startGame() {
-        Intent intent = new Intent(this, GameActivity.class);
-        startActivity(intent);
-    }
-
     public String getUserName() {
         return getSharedPreferences("USERNAME", Context.MODE_PRIVATE).getString("us", "username");
     }
