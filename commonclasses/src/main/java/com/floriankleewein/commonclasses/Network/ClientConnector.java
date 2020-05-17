@@ -1,5 +1,7 @@
 package com.floriankleewein.commonclasses.Network;
 
+import com.esotericsoftware.minlog.Log;
+
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -18,7 +20,7 @@ public class ClientConnector {
     private static final String SERVER_IP = "143.205.174.196";
     private static final int SERVER_PORT = 53217;
     private static Client client;
-    private boolean hasGame = false;
+    //private boolean hasGame = false;
     private GameHandler gameHandler;
 
 
@@ -70,6 +72,7 @@ public class ClientConnector {
         registerClass(ActivePlayerMessage.class);
         registerClass(UpdatePlayerNamesMsg.class);
         registerClass(SuspectMessage.class);
+        registerClass(CheckButtonsMsg.class);
 
 
         // start client
@@ -110,10 +113,8 @@ public class ClientConnector {
             public void received(Connection con, Object object) {
                 if (object instanceof CreateGameMsg) {
                     CreateGameMsg recStartMsg = (CreateGameMsg) object;
-                    hasGame = recStartMsg.isHasGame();
                     game = recStartMsg.getGame();
-                    callbackMap.get(CreateGameMsg.class).callback(recStartMsg);
-                    System.out.println("Created/Received Game." + hasGame);
+                    checkButtons();
                 }
             }
         });
@@ -238,13 +239,9 @@ public class ClientConnector {
         this.gameHandler = gameHandler;
     }
 
-    public boolean hasGame() {
-        return hasGame;
-    }
+    //public boolean hasGame() {return hasGame;}
 
-    public void setHasGame(Boolean bool) {
-        this.hasGame = bool;
-    }
+    //public void setHasGame(Boolean bool) {this.hasGame = bool;}
 
     public Client getClient() {
         return client;
@@ -271,6 +268,22 @@ public class ClientConnector {
         msg.setSuspectedUserName(SuspectUsername);
         msg.setUserName(Username);
         client.sendTCP(msg);
+    }
+
+    public void checkButtons(){
+        System.out.println(("MOOOOOOOOIN"));
+        CheckButtonsMsg msg = new CheckButtonsMsg();
+        client.sendTCP(msg);
+
+        client.addListener(new Listener() {
+            public void received(Connection con, Object object) {
+                if (object instanceof CheckButtonsMsg) {
+                    CheckButtonsMsg msg = (CheckButtonsMsg) object;
+                    System.out.println("HALLO HALLO -----------------");
+                    callbackMap.get(CheckButtonsMsg.class).callback(msg);
+                }
+            }
+        });
     }
 
 }
