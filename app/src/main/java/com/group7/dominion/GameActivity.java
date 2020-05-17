@@ -12,6 +12,8 @@ import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.floriankleewein.commonclasses.Network.ClientConnector;
@@ -46,6 +48,7 @@ public class GameActivity extends AppCompatActivity {
 
         tabLayout = findViewById(R.id.tabLayout);
         viewPager = findViewById(R.id.viewPager);
+
 
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
 

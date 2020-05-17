@@ -1,5 +1,6 @@
 package com.group7.dominion.Chat;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -42,18 +44,22 @@ public class ChatFragment extends ListFragment implements UserInputHandler {
     // Adapter für die Chatansicht
     private ChatListAdapter chatListAdapter;
 
+    private OnChatMessageArrivedListener mListener;
+
+    private Button backButton;
+
     // zum Unbinden von Views aus dem Fragment
     private Unbinder unbinder;
 
     private ClientConnector client;
 
-    private Handler handler = new Handler();
+    private String responseMessage;
 
-
+    public static ChatFragment newInstance() {
+        return new ChatFragment();
+    }
 
     @BindView(R.id.user_input_edit_text) EditText userInput;
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -66,9 +72,30 @@ public class ChatFragment extends ListFragment implements UserInputHandler {
 
         this.client = ClientConnector.getClientConnector();
 
+        this.backButton = chatFragmentView.findViewById(R.id.back_Button);
+
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mListener != null) {
+                    mListener.onChatMessageArrived(responseMessage);
+                }
+            }
+        });
+
         return chatFragmentView;
     }
 
+    @Override
+    public void onAttach(@Nullable Context context) {
+        super.onAttach(context);
+
+        if (context instanceof OnChatMessageArrivedListener) {
+            mListener = (OnChatMessageArrivedListener) context;
+        } else {
+            throw new RuntimeException(context.toString() + "must implement OnChatMessageArrivedListener");
+        }
+    }
 
     @Override
     public void onDestroyView() {
@@ -95,6 +122,8 @@ public class ChatFragment extends ListFragment implements UserInputHandler {
                             if (object instanceof ChatMessage) {
                                 ChatMessage response = (ChatMessage) object;
                                 Log.d("ChatFragment", "Nachricht des anderen Spielers: " + response.getMessage());
+
+                                responseMessage = response.getMessage();
 
                                 if (isAdded() & !response.isSentByMe()) {
                                     getActivity().runOnUiThread(new Runnable() {
@@ -156,6 +185,7 @@ public class ChatFragment extends ListFragment implements UserInputHandler {
         userInput.setText("");
     }
 
+
     private class SendMessage extends AsyncTask<Void, Void, Boolean> {
         private ChatMessage sendMessage;
 
@@ -168,7 +198,7 @@ public class ChatFragment extends ListFragment implements UserInputHandler {
             Boolean messageSent;
 
             try {
-                client.getClient().sendTCP(sendMessage);
+                client.sendChatMessage(sendMessage);
                 messageSent = true;
             }catch (Exception e) {
                 e.printStackTrace();
@@ -184,7 +214,7 @@ public class ChatFragment extends ListFragment implements UserInputHandler {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        userInput.setText("");
+                        clearInput();
 
                         System.out.println("CLIENT: Succesfully sent message to others.");
                     }
@@ -193,5 +223,9 @@ public class ChatFragment extends ListFragment implements UserInputHandler {
                 Toast.makeText(getActivity(), "Message not sent.", Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    public interface OnChatMessageArrivedListener{
+        void onChatMessageArrived(String msg);
     }
 }
