@@ -11,6 +11,7 @@ import com.floriankleewein.commonclasses.GameLogic.GameHandler;
 import com.floriankleewein.commonclasses.Network.ActivePlayerMessage;
 import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
 import com.floriankleewein.commonclasses.Network.BaseMessage;
+import com.floriankleewein.commonclasses.Network.CheckButtonsMsg;
 import com.floriankleewein.commonclasses.Network.CreateGameMsg;
 import com.floriankleewein.commonclasses.Network.GameUpdateMsg;
 import com.floriankleewein.commonclasses.Network.GetPlayerMsg;
@@ -62,6 +63,7 @@ public class TestServer {
         registerClass(ActivePlayerMessage.class);
         registerClass(UpdatePlayerNamesMsg.class);
         registerClass(SuspectMessage.class);
+        registerClass(CheckButtonsMsg.class);
 
 
         //Start Server
@@ -110,7 +112,6 @@ public class TestServer {
 
            
                          } else {
-
                             addPlayerMsg.setFeedbackUI(1);
                         }
                     } else {
@@ -191,6 +192,16 @@ public class TestServer {
                     updateAll(gameUpdateMsg);
                     gameUpdateMsg.setGameHandler(gamehandler);
                     server.sendToAllTCP(gameUpdateMsg);
+                } else if(object instanceof CheckButtonsMsg){
+                    CheckButtonsMsg msg = (CheckButtonsMsg) object;
+                    if(hasGame == false){
+                        msg.setCreateValue(true);
+                        msg.setJoinValue(false);
+                    }else if(hasGame == true){
+                        msg.setCreateValue(false);
+                        msg.setJoinValue(true);
+                    }
+                    con.sendTCP(msg);
                 }
             }
         });
