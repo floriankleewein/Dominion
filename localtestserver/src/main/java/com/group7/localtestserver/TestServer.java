@@ -277,6 +277,10 @@ public class TestServer {
         return game;
     }
 
+    public Server getServer(){
+        return this.server;
+    }
+
 }
 /*
 se2-demo.aau.at
