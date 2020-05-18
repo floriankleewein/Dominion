@@ -95,10 +95,6 @@ public class TestServer {
                     AddPlayerSuccessMsg addPlayerMsg = (AddPlayerSuccessMsg) object;
                     String name = addPlayerMsg.getPlayerName();
                     User player = new User(name);
-                    /*if(game.addPlayer(player)) {
-                        addPlayerMsg.setUser(player);
-                        addPlayerMsg.setPlayerAdded(true);
-                    }*/
                     if (game.checkSize()) {
                         if (game.checkName(name)) {
 
@@ -277,6 +273,9 @@ public class TestServer {
         return game;
     }
 
+    public Server getServer() {
+        return server;
+    }
 }
 /*
 se2-demo.aau.at
