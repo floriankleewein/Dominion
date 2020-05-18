@@ -271,7 +271,6 @@ public class ClientConnector {
     }
 
     public void checkButtons(){
-        System.out.println(("MOOOOOOOOIN"));
         CheckButtonsMsg msg = new CheckButtonsMsg();
         client.sendTCP(msg);
 
@@ -279,7 +278,6 @@ public class ClientConnector {
             public void received(Connection con, Object object) {
                 if (object instanceof CheckButtonsMsg) {
                     CheckButtonsMsg msg = (CheckButtonsMsg) object;
-                    System.out.println("HALLO HALLO -----------------");
                     callbackMap.get(CheckButtonsMsg.class).callback(msg);
                 }
             }

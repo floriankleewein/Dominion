@@ -281,6 +281,9 @@ public class TestServer {
         return this.server;
     }
 
+    public Map<User, Connection> getUserClientConnectorMap() {
+        return userClientConnectorMap;
+    }
 }
 /*
 se2-demo.aau.at

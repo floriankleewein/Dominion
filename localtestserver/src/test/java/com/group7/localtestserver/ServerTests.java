@@ -16,11 +16,11 @@ public class ServerTests {
     @Before
     public void setup(){
         server = new TestServer();
+        server.startServer();
     }
 
     @Test
     public void startServerTest(){
-        server.startServer();
         Assert.assertEquals(0, server.getServer().getConnections().length);
     }
 
@@ -30,6 +30,14 @@ public class ServerTests {
         server.createGame();
         Assert.assertEquals(true, server.hasGame());
         Assert.assertEquals(Game.getGame(), server.getGame());
+    }
+
+    @Test
+    public void resetTest(){
+        server.createGame();
+        server.reset();
+        Assert.assertEquals(0, server.getGame().getPlayerList().size());
+        Assert.assertEquals(0, server.getUserClientConnectorMap().size());
     }
 
     @After
