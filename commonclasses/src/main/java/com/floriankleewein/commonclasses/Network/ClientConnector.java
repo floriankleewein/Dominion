@@ -286,4 +286,18 @@ public class ClientConnector {
         });
     }
 
+    public void sendChatMessage(ChatMessage msgToOthers) {
+        client.sendTCP(msgToOthers);
+
+        client.addListener(new Listener(){
+            @Override
+            public void received(Connection connection, Object object) {
+                if (object instanceof ChatMessage) {
+                    ChatMessage msg = (ChatMessage) object;
+                    callbackMap.get(ChatMessage.class).callback(msg);
+                }
+            }
+        });
+    }
+
 }
