@@ -1,17 +1,18 @@
 package com.floriankleewein.commonclasses.Network;
 
+import com.esotericsoftware.minlog.Log;
+
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.floriankleewein.commonclasses.Chat.ChatMessage;
 import com.floriankleewein.commonclasses.Game;
+import com.floriankleewein.commonclasses.GameLogic.GameHandler;
 import com.floriankleewein.commonclasses.User.User;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ClientConnector {
@@ -19,10 +20,11 @@ public class ClientConnector {
     private static final String SERVER_IP = "143.205.174.196";
     private static final int SERVER_PORT = 53217;
     private static Client client;
-    private boolean hasGame = false;
+    //private boolean hasGame = false;
+    private GameHandler gameHandler;
 
 
-    private Game game;
+    private Game game; //TODO das sollte man evtl nicht mehr hier im Client haben... Einfach Game.getGame verwenden
     private Callback<CreateGameMsg> callback;
     Map<Class, Callback<BaseMessage>> callbackMap = new HashMap<>();
 
@@ -56,7 +58,7 @@ public class ClientConnector {
         // Register classes
         registerClass(BaseMessage.class);
         registerClass(MessageClass.class);
-        registerClass(GameInformationMsg.class);
+        registerClass(GameUpdateMsg.class);
         registerClass(NetworkInformationMsg.class);
         registerClass(Game.class);
         registerClass(CreateGameMsg.class);
@@ -70,6 +72,7 @@ public class ClientConnector {
         registerClass(ActivePlayerMessage.class);
         registerClass(UpdatePlayerNamesMsg.class);
         registerClass(SuspectMessage.class);
+        registerClass(CheckButtonsMsg.class);
 
 
         // start client
@@ -110,10 +113,8 @@ public class ClientConnector {
             public void received(Connection con, Object object) {
                 if (object instanceof CreateGameMsg) {
                     CreateGameMsg recStartMsg = (CreateGameMsg) object;
-                    hasGame = recStartMsg.isHasGame();
                     game = recStartMsg.getGame();
-                    callbackMap.get(CreateGameMsg.class).callback(recStartMsg);
-                    System.out.println("Created/Received Game." + hasGame);
+                    checkButtons();
                 }
             }
         });
@@ -201,24 +202,46 @@ public class ClientConnector {
                     StartGameMsg msg = (StartGameMsg) object;
                     if (msg.getFeedbackUI() == 0) {
                         callbackMap.get(StartGameMsg.class).callback(msg);
-                        game.setGame(msg.getGame());
+                        Game.setGame(msg.getGame());
+                        gameHandler = msg.getGameHandler();
                     } else {
                         //TODO display error in starting game
                     }
                 }
             }
-
         });
-
     }
 
-    public boolean hasGame() {
-        return hasGame;
+    /**
+     * Send Update message to Server.
+     *
+     * @param msg
+     */
+    public void sendUpdate(GameUpdateMsg msg) {
+        client.sendTCP(msg);
+
+        client.addListener(new Listener() {
+            public void received(Connection con, Object object) {
+                if (object instanceof GameUpdateMsg) {
+                    GameUpdateMsg gameUpdateMsg = (GameUpdateMsg) object;
+                    gameHandler.updateGameHandler(gameUpdateMsg);
+                    callbackMap.get(GameUpdateMsg.class).callback(gameUpdateMsg);
+                }
+            }
+        });
     }
 
-    public void setHasGame(Boolean bool) {
-        this.hasGame = bool;
+    public GameHandler getGameHandler() {
+        return gameHandler;
     }
+
+    public void setGameHandler(GameHandler gameHandler) {
+        this.gameHandler = gameHandler;
+    }
+
+    //public boolean hasGame() {return hasGame;}
+
+    //public void setHasGame(Boolean bool) {this.hasGame = bool;}
 
     public Client getClient() {
         return client;
@@ -245,6 +268,22 @@ public class ClientConnector {
         msg.setSuspectedUserName(SuspectUsername);
         msg.setUserName(Username);
         client.sendTCP(msg);
+    }
+
+    public void checkButtons(){
+        System.out.println(("MOOOOOOOOIN"));
+        CheckButtonsMsg msg = new CheckButtonsMsg();
+        client.sendTCP(msg);
+
+        client.addListener(new Listener() {
+            public void received(Connection con, Object object) {
+                if (object instanceof CheckButtonsMsg) {
+                    CheckButtonsMsg msg = (CheckButtonsMsg) object;
+                    System.out.println("HALLO HALLO -----------------");
+                    callbackMap.get(CheckButtonsMsg.class).callback(msg);
+                }
+            }
+        });
     }
 
 }
