@@ -9,12 +9,19 @@ import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.floriankleewein.commonclasses.Board.Board;
+import com.floriankleewein.commonclasses.Cards.Card;
+import com.floriankleewein.commonclasses.Cards.MoneyCard;
+import com.floriankleewein.commonclasses.Cards.MoneyType;
 import com.floriankleewein.commonclasses.Chat.ChatMessage;
 import com.floriankleewein.commonclasses.Network.ClientConnector;
+import com.group7.dominion.Card.WitchDialog;
 import com.group7.dominion.Chat.ChatFragment;
 import android.widget.Toast;
 
@@ -37,6 +44,15 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
 
     private SensorManager sm;
     private ShakeListener shakeListener;
+
+    private FragmentManager fragmentManager;
+
+    private ImageButton buttonWitch;
+    private WitchDialog witchDialog;
+
+    private ImageButton buttonGold;
+
+    private Board board;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +78,38 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         shakeListener = new ShakeListener(getSupportFragmentManager(), getUsername(), names);
         sm = (SensorManager) getSystemService(SENSOR_SERVICE);
         sm.registerListener(shakeListener.newSensorListener(), sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+
+        fragmentManager = getSupportFragmentManager();
+
+        witchDialog = new WitchDialog();
+        buttonWitch = findViewById(R.id.btn_witch);
+        buttonWitch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickWitch();
+            }
+        });
+
+        buttonGold = findViewById(R.id.btn_gold);
+        buttonGold.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickGold();
+            }
+        });
+    }
+
+    private void onClickGold() {
+        Card card = board.getBuyField().pickCard(MoneyType.GOLD);
+        if(card == null) {
+            // Error => Stapel hat keine Karten mehr
+        } else {
+            MoneyCard moneyCard = (MoneyCard) card;
+        }
+    }
+
+    private void onClickWitch() {
+        witchDialog.show(fragmentManager, "witchDialog");
     }
 
     @Override
@@ -75,6 +123,12 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         //clientConnector.startGame(); // Send Server Message to start game logic
         // TODO display playerlist -> Check features
         // TODO create board and display cards
+
+        // Take from GameHandler getBoard here instead of this
+        //board = clientConnector.getGameHandler().getBoard();
+        // Currently
+        board = new Board();
+        witchDialog.setBoard(board);
 
         clientConnector.registerCallback(HasCheatedMessage.class, (msg -> {
             runOnUiThread(new Runnable() {
@@ -144,4 +198,6 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         //this.trans.hide(chatFragment);
         onBackPressed();
     }
+
+
 }
