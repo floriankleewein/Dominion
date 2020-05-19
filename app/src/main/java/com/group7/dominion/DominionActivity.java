@@ -17,16 +17,25 @@ import android.widget.Toast;
 
 import com.floriankleewein.commonclasses.Board.Board;
 import com.floriankleewein.commonclasses.Cards.Card;
+import com.floriankleewein.commonclasses.Cards.EstateCard;
+import com.floriankleewein.commonclasses.Cards.EstateType;
 import com.floriankleewein.commonclasses.Cards.MoneyCard;
 import com.floriankleewein.commonclasses.Cards.MoneyType;
 import com.floriankleewein.commonclasses.Chat.ChatMessage;
 import com.floriankleewein.commonclasses.Network.ClientConnector;
-import com.group7.dominion.Card.WitchDialog;
+import com.group7.dominion.Card.BurggrabenDialog;
+import com.group7.dominion.Card.DorfDialog;
+import com.group7.dominion.Card.HexeDialog;
+import com.group7.dominion.Card.HolzfaellerDialog;
+import com.group7.dominion.Card.KellerDialog;
+import com.group7.dominion.Card.MarktDialog;
+import com.group7.dominion.Card.MilizDialog;
+import com.group7.dominion.Card.MineDialog;
+import com.group7.dominion.Card.SchmiedeDialog;
+import com.group7.dominion.Card.WerkstattDialog;
 import com.group7.dominion.Chat.ChatFragment;
-import android.widget.Toast;
 
 import com.floriankleewein.commonclasses.Game;
-import com.floriankleewein.commonclasses.Network.ClientConnector;
 import com.floriankleewein.commonclasses.Network.HasCheatedMessage;
 import com.floriankleewein.commonclasses.Network.SuspectMessage;
 import com.floriankleewein.commonclasses.Network.UpdatePlayerNamesMsg;
@@ -47,10 +56,39 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
 
     private FragmentManager fragmentManager;
 
-    private ImageButton buttonWitch;
-    private WitchDialog witchDialog;
-
+    //Pop-up Info Image Buttons
+    private ImageButton buttonHexe;
+    private ImageButton buttonBurggraben;
+    private ImageButton buttonDorf;
+    private ImageButton buttonHolzfaeller;
+    private ImageButton buttonKeller;
+    private ImageButton buttonMarkt;
+    private ImageButton buttonMiliz;
+    private ImageButton buttonMine;
+    private ImageButton buttonSchmiede;
+    private ImageButton buttonWerkstatt;
     private ImageButton buttonGold;
+    private ImageButton buttonSilber;
+    private ImageButton buttonKupfer;
+    private ImageButton buttonProvinz;
+    private ImageButton buttonAnwesen;
+    private ImageButton buttonHerzogturm;
+    private ImageButton buttonFluch;
+
+    //Pop-up Info Dialogs
+    private HexeDialog hexeDialog;
+    private BurggrabenDialog burggrabenDialog;
+    private DorfDialog dorfDialog;
+    private HolzfaellerDialog holzfaellerDialog;
+    private KellerDialog kellerDialog;
+    private MarktDialog marktDialog;
+    private MilizDialog milizDialog;
+    private MineDialog mineDialog;
+    private SchmiedeDialog schmiedeDialog;
+    private WerkstattDialog werkstattDialog;
+
+
+
 
     private Board board;
 
@@ -81,15 +119,103 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
 
         fragmentManager = getSupportFragmentManager();
 
-        witchDialog = new WitchDialog();
-        buttonWitch = findViewById(R.id.btn_witch);
-        buttonWitch.setOnClickListener(new View.OnClickListener() {
+       //Hexe
+        hexeDialog = new HexeDialog();
+        buttonHexe = findViewById(R.id.btn_hexe);
+        buttonHexe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onClickWitch();
+                onClickHexe();
             }
         });
 
+        //Burggraben
+        burggrabenDialog = new BurggrabenDialog();
+        buttonBurggraben = findViewById(R.id.btn_burggraben);
+        buttonBurggraben.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickBurggraben();
+            }
+        });
+
+        //Dorf
+        dorfDialog = new DorfDialog();
+        buttonDorf = findViewById(R.id.btn_dorf);
+        buttonDorf.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickDorf();
+            }
+        });
+        //Holzfaeller
+        holzfaellerDialog = new HolzfaellerDialog();
+        buttonHolzfaeller = findViewById(R.id.btn_holzfaeller);
+        buttonHolzfaeller.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickHolzfaeller();
+            }
+        });
+        //Keller
+        kellerDialog = new KellerDialog();
+        buttonKeller = findViewById(R.id.btn_keller);
+        buttonKeller.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickKeller();
+            }
+        });
+
+        //Markt
+        marktDialog = new MarktDialog();
+        buttonMarkt = findViewById(R.id.btn_markt);
+        buttonMarkt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickMarkt();
+            }
+        });
+
+        //Miliz
+        milizDialog = new MilizDialog();
+        buttonMiliz = findViewById(R.id.btn_miliz);
+        buttonMiliz.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickMiliz();
+            }
+        });
+        //Mine
+        mineDialog = new MineDialog();
+        buttonMine = findViewById(R.id.btn_mine);
+        buttonMine.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickMine();
+            }
+        });
+
+        //Schmiede
+        schmiedeDialog = new SchmiedeDialog();
+        buttonSchmiede = findViewById(R.id.btn_schmiede);
+        buttonSchmiede.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickSchmiede();
+            }
+        });
+        //Werkstatt
+        werkstattDialog = new WerkstattDialog();
+        buttonWerkstatt = findViewById(R.id.btn_werkstatt);
+        buttonWerkstatt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickWerkstatt();
+            }
+        });
+
+        //Gold
         buttonGold = findViewById(R.id.btn_gold);
         buttonGold.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,6 +223,60 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
                 onClickGold();
             }
         });
+
+        //Silber
+        buttonSilber = findViewById(R.id.btn_silber);
+        buttonSilber.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickSilber();
+            }
+        });
+        //Kupfer
+        buttonKupfer = findViewById(R.id.btn_kupfer);
+        buttonKupfer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickKupfer();
+            }
+        });
+
+        //Provinz
+        buttonProvinz = findViewById(R.id.btn_provinz);
+        buttonAnwesen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickProvinz();
+            }
+        });
+
+        //Anwesen
+        buttonAnwesen = findViewById(R.id.btn_anwesen);
+        buttonAnwesen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickAnwesen();
+            }
+        });
+
+        //Herzogturm
+        buttonHerzogturm = findViewById(R.id.btn_herzogturm);
+        buttonHerzogturm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickHerzogturm();
+            }
+        });
+
+        //Fluch
+        buttonFluch = findViewById(R.id.btn_fluch);
+        buttonFluch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onClickFluch();
+            }
+        });
+
     }
 
     private void onClickGold() {
@@ -108,9 +288,97 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         }
     }
 
-    private void onClickWitch() {
-        witchDialog.show(fragmentManager, "witchDialog");
+    private void onClickSilber() {
+        Card card = board.getBuyField().pickCard(MoneyType.SILBER);
+        if(card == null) {
+            // Error => Stapel hat keine Karten mehr
+        } else {
+            MoneyCard moneyCard = (MoneyCard) card;
+        }
     }
+
+    private void onClickKupfer() {
+        Card card = board.getBuyField().pickCard(MoneyType.KUPFER);
+        if(card == null) {
+            // Error => Stapel hat keine Karten mehr
+        } else {
+            MoneyCard moneyCard = (MoneyCard) card;
+        }
+    }
+
+    private void onClickAnwesen() {
+        Card card = board.getBuyField().pickCard(EstateType.ANWESEN);
+        if(card == null) {
+            // Error => Stapel hat keine Karten mehr
+        } else {
+            EstateCard estateCard = (EstateCard) card;
+        }
+    }
+
+    private void onClickProvinz() {
+        Card card = board.getBuyField().pickCard(EstateType.PROVINZ);
+        if(card == null) {
+            // Error => Stapel hat keine Karten mehr
+        } else {
+            EstateCard estateCard = (EstateCard) card;
+        }
+    }
+    private void onClickHerzogturm() {
+        Card card = board.getBuyField().pickCard(EstateType.HERZOGTUM);
+        if(card == null) {
+            // Error => Stapel hat keine Karten mehr
+        } else {
+            EstateCard estateCard = (EstateCard) card;
+        }
+    }
+    private void onClickFluch() {
+        Card card = board.getBuyField().pickCard(EstateType.FLUCH);
+        if(card == null) {
+            // Error => Stapel hat keine Karten mehr
+        } else {
+            EstateCard estateCard = (EstateCard) card;
+        }
+    }
+
+    private void onClickHexe() {
+        hexeDialog.show(fragmentManager, "hexeDialog");
+    }
+
+    private void onClickBurggraben() {
+        burggrabenDialog.show(fragmentManager, "burggrabenDialog");
+    }
+
+    private void onClickDorf() {
+        dorfDialog.show(fragmentManager, "dorfDialog");
+    }
+
+    private void onClickHolzfaeller() {
+        holzfaellerDialog.show(fragmentManager, "holzfaellerDialog");
+    }
+
+    private void onClickKeller() {
+        kellerDialog.show(fragmentManager, "kellerDialog");
+    }
+
+    private void onClickMarkt() {
+        marktDialog.show(fragmentManager, "marktDialog");
+    }
+
+    private void onClickMiliz() {
+        milizDialog.show(fragmentManager, "milizDialog");
+    }
+
+    private void onClickMine() {
+        mineDialog.show(fragmentManager, "mineDialog");
+    }
+    private void onClickSchmiede() {
+        schmiedeDialog.show(fragmentManager, "schmiedeDialog");
+    }
+    private void onClickWerkstatt() {
+        werkstattDialog.show(fragmentManager, "werkstattDialog");
+    }
+
+
 
     @Override
     protected void onStart() {
@@ -128,7 +396,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         //board = clientConnector.getGameHandler().getBoard();
         // Currently
         board = new Board();
-        witchDialog.setBoard(board);
+        hexeDialog.setBoard(board);
 
         clientConnector.registerCallback(HasCheatedMessage.class, (msg -> {
             runOnUiThread(new Runnable() {

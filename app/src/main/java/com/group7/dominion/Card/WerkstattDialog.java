@@ -6,27 +6,18 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
 
 import com.floriankleewein.commonclasses.Board.Board;
-import com.floriankleewein.commonclasses.Cards.Action;
 import com.floriankleewein.commonclasses.Cards.ActionCard;
 import com.floriankleewein.commonclasses.Cards.ActionType;
 import com.floriankleewein.commonclasses.Cards.Card;
-import com.floriankleewein.commonclasses.Game;
-import com.floriankleewein.commonclasses.Network.ClientConnector;
 import com.group7.dominion.R;
-
-import java.util.List;
 
 import androidx.appcompat.app.AppCompatDialogFragment;
 
 
-public class WitchDialog extends AppCompatDialogFragment implements AdapterView.OnItemSelectedListener {
+public class WerkstattDialog extends AppCompatDialogFragment implements AdapterView.OnItemSelectedListener {
     private Board board;
 
     @Override
@@ -36,14 +27,13 @@ public class WitchDialog extends AppCompatDialogFragment implements AdapterView.
                 .setMessage("Do you want to buy this card?")
                 .setPositiveButton("Buy", (dialog, which) -> {
                     // Buy the Card
-                    Card card = this.board.getActionField().pickCard(ActionType.HEXE);
+                    Card card = this.board.getActionField().pickCard(ActionType.WERKSTATT);
                     if(card == null) {
                         //Error => Karten Type existiert nicht mehr im Stapel
                     } else {
                         ActionCard actionCard = (ActionCard) card;
                         Log.i("Action", "ActionType: " + actionCard.getActionType() +
-                                ", Card Count: "+ actionCard.getAction().getCardCount() +
-                                ", Curse Count: " + actionCard.getAction().getCurseCount());
+                                ", Card Count: "+ actionCard.getAction().getCardCount());
                     }
                 })
                 .setNegativeButton("Close", (dialog, which) -> {
@@ -52,7 +42,7 @@ public class WitchDialog extends AppCompatDialogFragment implements AdapterView.
 
         LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
 
-        View view = layoutInflater.inflate(R.layout.witch_info_dialog, null);
+        View view = layoutInflater.inflate(R.layout.werkstatt_info_dialog, null);
 
         builder.setView(view);
         return builder.create();
