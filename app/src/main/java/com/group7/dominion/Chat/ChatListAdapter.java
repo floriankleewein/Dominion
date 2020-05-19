@@ -12,8 +12,8 @@ import com.floriankleewein.commonclasses.Network.ClientConnector;
 
 public class ChatListAdapter extends ArrayAdapter<ChatMessage> {
 
-    private Context context;
     // context in dem sich die Chatliste befindet
+    private Context context;
     private int layoutResourceId;
     private ClientConnector client;
 
@@ -35,10 +35,7 @@ public class ChatListAdapter extends ArrayAdapter<ChatMessage> {
         ChatListAdapterViewHolder chatListAdapterViewHolder = provideChatListViewHolder(convertView);
 
         ChatMessage chatMsg = getItem(position);
-        // Temporäres Testen, ob eine Nachricht in der ChatListView angezeigt wird
-        // ChatMessage ist hierbei die Message, die zwischen den Spielern ausgetauscht wird
-        // getItem(position) liefert dabei die Message, welche sich an der gegeben Position
-        // an der View befindet
+
 
         if(chatMsg.isSentByMe()) {
             chatListAdapterViewHolder.messageReceivedLayout.setVisibility(View.GONE);
@@ -47,7 +44,7 @@ public class ChatListAdapter extends ArrayAdapter<ChatMessage> {
         } else {
             chatListAdapterViewHolder.messageReceivedLayout.setVisibility(View.VISIBLE);
             chatListAdapterViewHolder.messageSentLayout.setVisibility(View.GONE);
-            chatListAdapterViewHolder.messageSentTextView.setText(chatMsg.getMessage());
+            chatListAdapterViewHolder.messageReceivedTextView.setText(chatMsg.getMessage());
         }
         return convertView;
     }

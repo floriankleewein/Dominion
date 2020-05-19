@@ -1,12 +1,21 @@
 package com.group7.dominion;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.Toast;
+
+import com.floriankleewein.commonclasses.Chat.ChatMessage;
+import com.floriankleewein.commonclasses.Network.ClientConnector;
+import com.group7.dominion.Chat.ChatFragment;
 import android.widget.Toast;
 
 import com.floriankleewein.commonclasses.Game;
@@ -18,7 +27,13 @@ import com.group7.dominion.CheatFunction.ShakeListener;
 
 import java.util.ArrayList;
 
-public class DominionActivity extends AppCompatActivity {
+public class DominionActivity extends AppCompatActivity implements ChatFragment.OnChatMessageArrivedListener {
+
+    private Button chatButton;
+    private FrameLayout fragmentContainer;
+    private ChatFragment chatFragment;
+    private FragmentTransaction trans;
+    private ClientConnector clientConnector;
 
     private SensorManager sm;
     private ShakeListener shakeListener;
@@ -27,6 +42,13 @@ public class DominionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dominion);
+
+        chatButton = findViewById(R.id.chat_Button);
+        fragmentContainer = findViewById(R.id.chatFragmentContainer);
+
+        this.clientConnector = ClientConnector.getClientConnector();
+
+        chatButton.setOnClickListener(view -> openFragment());
 
         sendUpdateMessage();
         ArrayList<String> names = new ArrayList<>();
@@ -40,6 +62,10 @@ public class DominionActivity extends AppCompatActivity {
         shakeListener = new ShakeListener(getSupportFragmentManager(), getUsername(), names);
         sm = (SensorManager) getSystemService(SENSOR_SERVICE);
         sm.registerListener(shakeListener.newSensorListener(), sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+
+        if(this.chatFragment == null) {
+            this.chatFragment = ChatFragment.newInstance();
+        }
     }
 
     @Override
@@ -74,6 +100,16 @@ public class DominionActivity extends AppCompatActivity {
                 }
             });
         }));
+
+        clientConnector.registerCallback(ChatMessage.class, (msg -> {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    String ChatMessages = ((ChatMessage) msg).getMessage();
+                    Toast.makeText(getApplicationContext(), "Nachricht: " + ChatMessages, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }));
     }
 
     public void sendUpdateMessage() {
@@ -90,6 +126,27 @@ public class DominionActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("USERNAME", Context.MODE_PRIVATE);
         String str = sharedPreferences.getString("us", null);
         return str;
+    }
 
+
+
+    public void openFragment() {
+
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            FragmentTransaction trans = fragmentManager.beginTransaction();
+            trans.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right,
+                    R.anim.enter_from_right, R.anim.exit_to_right);
+
+            trans.addToBackStack(null);
+
+        trans.add(R.id.chatFragmentContainer, chatFragment, "CHAT_FRAGMENT").commit();
+
+    }
+
+    @Override
+    public void onChatMessageArrived(String msg) {
+        //Toast.makeText(getApplicationContext(), "Nachricht: " + msg, Toast.LENGTH_SHORT).show();
+        //this.trans.hide(chatFragment);
+        onBackPressed();
     }
 }
