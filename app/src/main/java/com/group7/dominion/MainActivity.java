@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
                 public void run() {
                     btnCreate.setEnabled(temp.getCreateValue());
                     btnJoin.setEnabled(temp.getJoinValue());
-                    btnCreate.setVisibility(1);
+                    //btnCreate.setVisibility(1);
                 }
             });
         }));
