@@ -62,6 +62,10 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         shakeListener = new ShakeListener(getSupportFragmentManager(), getUsername(), names);
         sm = (SensorManager) getSystemService(SENSOR_SERVICE);
         sm.registerListener(shakeListener.newSensorListener(), sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
+
+        if(this.chatFragment == null) {
+            this.chatFragment = ChatFragment.newInstance();
+        }
     }
 
     @Override
@@ -97,12 +101,15 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
             });
         }));
 
-        clientConnector.registerCallback(ChatMessage.class, msg -> {
-            runOnUiThread(() -> {
-                String chatMessage = ((ChatMessage) msg).getMessage();
-                Toast.makeText(getApplicationContext(), "Nachricht: " + chatMessage, Toast.LENGTH_SHORT).show();
+        clientConnector.registerCallback(ChatMessage.class, (msg -> {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    String ChatMessages = ((ChatMessage) msg).getMessage();
+                    Toast.makeText(getApplicationContext(), "Nachricht: " + ChatMessages, Toast.LENGTH_SHORT).show();
+                }
             });
-        });
+        }));
     }
 
     public void sendUpdateMessage() {
@@ -124,9 +131,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
 
 
     public void openFragment() {
-        if(this.chatFragment == null) {
-            this.chatFragment = ChatFragment.newInstance();
-        }
+
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction trans = fragmentManager.beginTransaction();
             trans.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right,
@@ -140,7 +145,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
 
     @Override
     public void onChatMessageArrived(String msg) {
-        Toast.makeText(getApplicationContext(), "Nachricht: " + msg, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "Nachricht: " + msg, Toast.LENGTH_SHORT).show();
         //this.trans.hide(chatFragment);
         onBackPressed();
     }
