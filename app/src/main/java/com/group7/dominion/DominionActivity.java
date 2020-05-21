@@ -88,8 +88,6 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
     private WerkstattDialog werkstattDialog;
 
 
-
-
     private Board board;
 
     @Override
@@ -129,7 +127,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
             }
         });
 
-        //Burggraben
+        /*Burggraben
         burggrabenDialog = new BurggrabenDialog();
         buttonBurggraben = findViewById(R.id.btn_burggraben);
         buttonBurggraben.setOnClickListener(new View.OnClickListener() {
@@ -275,7 +273,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
             public void onClick(View view) {
                 onClickFluch();
             }
-        });
+        });*/
 
     }
 
