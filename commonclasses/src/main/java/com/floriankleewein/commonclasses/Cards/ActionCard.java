@@ -31,6 +31,7 @@ public class ActionCard extends Card {
 
         switch(actionType){
             case BURGGRABEN:
+                setId(0);
                 action = new Action();
                 action.setCardCount(2);
                 action.setThrowEveryUserCardsUntilThreeLeft(false); // Da die einzige Angriffskarte die Miliz ist hat diese keine Wirkung auf den Spieler und somit muss der boolean für diesen Spieler false sein
@@ -38,6 +39,7 @@ public class ActionCard extends Card {
                 break;
 
             case DORF:
+                setId(1);
                 action = new Action();
                 action.setCardCount(1);
                 action.setActionCount(2);
@@ -45,6 +47,7 @@ public class ActionCard extends Card {
                 break;
 
             case HOLZFAELLER:
+                setId(2);
                 action = new Action();
                 action.setBuyCount(1);
                 action.setMoneyValue(1);
@@ -52,6 +55,7 @@ public class ActionCard extends Card {
                 break;
 
             case KELLER: //
+                setId(3);
                 action = new Action();
                 action.setActionCount(1);
                 action.setThrowAnyAmountCards(true); // Maximale Anzahl an Handkarten kann hier abgelegt werden => Input für den User der auf diese Anzahl begrenzt
@@ -60,6 +64,7 @@ public class ActionCard extends Card {
                 break;
 
             case WERKSTATT: //
+                setId(4);
                 action = new Action();
                 action.setCardCount(1);
                 action.setMaxMoneyValue(4);
@@ -67,12 +72,14 @@ public class ActionCard extends Card {
                 break;
 
             case SCHMIEDE:
+                setId(5);
                 action = new Action();
                 action.setCardCount(3);
                 // +3 Karten
                 break;
 
             case MARKT:
+                setId(6);
                 action = new Action();
                 action.setCardCount(1);
                 action.setActionCount(1);
@@ -82,6 +89,7 @@ public class ActionCard extends Card {
                 break;
 
             case HEXE: //
+                setId(7);
                 action = new Action();
                 action.setCardCount(1);
                 action.setCurseCount(1);
@@ -89,6 +97,7 @@ public class ActionCard extends Card {
                 break;
 
             case MINE: //
+                setId(8);
                 action = new Action();
                 action.setCardCount(-1);
                 action.setTakeMoneyCardThatCostThreeMoreThanOld(true);
@@ -98,7 +107,8 @@ public class ActionCard extends Card {
                 // Nimm diese Geldkarte sofort auf die Hand.
                 break;
 
-            case MILIZ: // Miliz ist eine Angriffskarte
+            case MILIZ:
+                setId(9);// Miliz ist eine Angriffskarte
                 action = new Action();
                 action.setMoneyValue(2);
                 action.setThrowEveryUserCardsUntilThreeLeft(true);
