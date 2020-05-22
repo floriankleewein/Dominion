@@ -2,6 +2,8 @@ package com.group7.dominion.Card;
 
 
 import android.content.Context;
+import android.os.AsyncTask;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -14,7 +16,10 @@ import com.floriankleewein.commonclasses.Cards.EstateCard;
 import com.floriankleewein.commonclasses.Cards.EstateType;
 import com.floriankleewein.commonclasses.Cards.MoneyCard;
 import com.floriankleewein.commonclasses.Cards.MoneyType;
+import com.floriankleewein.commonclasses.GameLogic.PlayStatus;
 import com.floriankleewein.commonclasses.Network.ClientConnector;
+import com.floriankleewein.commonclasses.Network.GameUpdateMsg;
+import com.floriankleewein.commonclasses.Network.GetGameMsg;
 import com.floriankleewein.commonclasses.User.User;
 import com.group7.dominion.DominionActivity;
 import com.group7.dominion.R;
@@ -26,28 +31,30 @@ import static com.floriankleewein.commonclasses.Cards.ActionType.HEXE;
 
 
 public class HandCardsHandler {
+    PlayStatus playStatus;
     User user;
     LinearLayout linearLayout;
     LinearLayout.LayoutParams lparams;
     private List<ImageButton> ImageButtons;
-    private List<Card> TestList;
+    private List<Card> cardList;
     Context context;
     int img_id;
 
     public HandCardsHandler(Context context) {
         this.context = context;
-        TestList = testList();
         linearLayout = ((DominionActivity) context).findViewById(R.id.LinearCards);
         lparams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         ImageButtons = new LinkedList<>();
         lparams.weight = 1;
+        playStatus = PlayStatus.NO_PLAY_PHASE;
     }
 
     public void initCards(String Username) {
+        sendMessage ();
         try {
-            //List<Card> UserCards = findUserCards(Username);
+            user.getUserCards().getHandCards();
             for (int i = 0; i < 7; i++) {
-                addCard(TestList.get(i));
+                addCard(cardList.get(i));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -55,17 +62,17 @@ public class HandCardsHandler {
     }
 
 
-    List<Card> findUserCards(String Username) {
+    void  sendMessage() {
 
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                user = ClientConnector.getClientConnector().getGame().findUser(Username);
+                ClientConnector.getClientConnector().sendGameUpdate();
             }
         });
         thread.start();
 
-        return user.getUserCards().getHandCards();
+
 
     }
 
@@ -145,8 +152,10 @@ public class HandCardsHandler {
         for (int i = 0; i < ImageButtons.size(); i++) {
             int finalI = i;
             ImageButtons.get(i).setOnClickListener(v -> {
-                System.out.println("Card with the ID is played: " + TestList.get(finalI).getId());
-                ImageButtons.get(finalI).setVisibility(View.INVISIBLE);
+                if (playStatus == PlayStatus.ACTION_PHASE) {
+                    System.out.println("Card with the ID is played: " + cardList.get(finalI).getId());
+                    ImageButtons.get(finalI).setVisibility(View.INVISIBLE);
+                }
             });
         }
     }
@@ -161,8 +170,25 @@ public class HandCardsHandler {
         ImageButtons.add(umg);
         img_id++;
     }
-    private void setImageButtonsNull () {
+
+    private void setImageButtonsNull() {
         ImageButtons.clear();
     }
+
+    private void playStatus() {
+        if (playStatus != PlayStatus.NO_PLAY_PHASE) {
+            if (playStatus == PlayStatus.ACTION_PHASE) {
+
+            }
+        }
+        //onClickListener();
+    }
+    public void registerListener (String Username) {
+        ClientConnector.getClientConnector().registerCallback(GetGameMsg.class, (msg -> {
+            System.out.println("GotGameMEssage");
+            user = ((GetGameMsg) msg).getGame().findUser(Username);
+        }));
+    }
 }
+
 

@@ -62,7 +62,6 @@ public class UserCards {
         this.DiscardCards.add(PlayedCard);
     }
 
-
     public void addCardtoDeck(Card newCard) {
         this.Deck.add(newCard);
     }

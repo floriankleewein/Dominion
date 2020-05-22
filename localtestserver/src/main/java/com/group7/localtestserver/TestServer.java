@@ -4,6 +4,7 @@ package com.group7.localtestserver;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
+import com.esotericsoftware.minlog.Log;
 import com.floriankleewein.commonclasses.Board.Board;
 import com.floriankleewein.commonclasses.Chat.ChatMessage;
 import com.floriankleewein.commonclasses.Game;
@@ -14,6 +15,7 @@ import com.floriankleewein.commonclasses.Network.BaseMessage;
 import com.floriankleewein.commonclasses.Network.CheckButtonsMsg;
 import com.floriankleewein.commonclasses.Network.CreateGameMsg;
 import com.floriankleewein.commonclasses.Network.GameUpdateMsg;
+import com.floriankleewein.commonclasses.Network.GetGameMsg;
 import com.floriankleewein.commonclasses.Network.GetPlayerMsg;
 import com.floriankleewein.commonclasses.Network.HasCheatedMessage;
 import com.floriankleewein.commonclasses.Network.NetworkInformationMsg;
@@ -64,6 +66,7 @@ public class TestServer {
         registerClass(UpdatePlayerNamesMsg.class);
         registerClass(SuspectMessage.class);
         registerClass(CheckButtonsMsg.class);
+        registerClass(GetGameMsg.class);
 
 
         //Start Server
@@ -109,9 +112,7 @@ public class TestServer {
                             addPlayerMsg.setPlayerAdded(true);
                             System.out.println("Player added: " + player.getUserName());
 
-
-           
-                         } else {
+                        } else {
                             addPlayerMsg.setFeedbackUI(1);
                         }
                     } else {
@@ -147,7 +148,7 @@ public class TestServer {
                     con.sendTCP(msg);
 
 
-                }else if(object instanceof ChatMessage){
+                } else if (object instanceof ChatMessage) {
                     ChatMessage msg = (ChatMessage) object;
 
                     String message = msg.getMessage();
@@ -173,35 +174,40 @@ public class TestServer {
                     sendCheatInformation(CheatMsg.getName());
 
 
-                }else if(object instanceof UpdatePlayerNamesMsg){
+                } else if (object instanceof UpdatePlayerNamesMsg) {
                     UpdatePlayerNamesMsg msg = new UpdatePlayerNamesMsg();
-                    for(User x: game.getPlayerList()){
+                    for (User x : game.getPlayerList()) {
                         msg.getNameList().add(x.getUserName());
                     }
                     server.sendToAllTCP(msg);
 
-                }
-                else if (object instanceof SuspectMessage){
+                } else if (object instanceof SuspectMessage) {
                     SuspectMessage msg = (SuspectMessage) object;
                     System.out.println("GOT SUSPECT MESSAGE FROM" + msg.getUserName());
                     //game.getCheatService().suspectUser(msg.getSuspectedUserName(),msg.getUserName());
 
-                    sendSuspectInformation(msg.getSuspectedUserName(),msg.getUserName());
-                } else if(object instanceof GameUpdateMsg){
+                    sendSuspectInformation(msg.getSuspectedUserName(), msg.getUserName());
+                } else if (object instanceof GameUpdateMsg) {
                     GameUpdateMsg gameUpdateMsg = (GameUpdateMsg) object;
                     updateAll(gameUpdateMsg);
                     gameUpdateMsg.setGameHandler(gamehandler);
                     server.sendToAllTCP(gameUpdateMsg);
-                } else if(object instanceof CheckButtonsMsg){
+                } else if (object instanceof CheckButtonsMsg) {
                     CheckButtonsMsg msg = (CheckButtonsMsg) object;
-                    if(hasGame == false){
+                    if (hasGame == false) {
                         msg.setCreateValue(true);
                         msg.setJoinValue(false);
-                    }else if(hasGame == true){
+                    } else if (hasGame == true) {
                         msg.setCreateValue(false);
                         msg.setJoinValue(true);
                     }
                     con.sendTCP(msg);
+                }
+                else if (object instanceof GetGameMsg) {
+                    Log.info("Got GetGameMessage");
+                    GetGameMsg msg = new GetGameMsg();
+                    msg.setGame(game);
+                    server.sendToAllTCP(game);
                 }
             }
         });
@@ -237,7 +243,8 @@ public class TestServer {
             con.sendTCP(msg);
         }
     }
-    public void sendSuspectInformation (String SuspectName, String Username){
+
+    public void sendSuspectInformation(String SuspectName, String Username) {
         SuspectMessage msg = new SuspectMessage();
         msg.setSuspectedUserName(SuspectName);
         msg.setUserName(Username);
@@ -253,6 +260,7 @@ public class TestServer {
 
     /**
      * Creates Starter Deck for all players and returns true if game was created successfully.
+     *
      * @return
      */
     public boolean setupGame() {

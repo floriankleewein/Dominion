@@ -50,8 +50,8 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dominion);
         cardsHandler = new HandCardsHandler(this);
-        cardsHandler.initCards(getUsername());
-        cardsHandler.onClickListener();
+
+
         chatButton = findViewById(R.id.chat_Button);
         fragmentContainer = findViewById(R.id.chatFragmentContainer);
 
@@ -81,7 +81,9 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
     @Override
     protected void onStart() {
         super.onStart();
-
+        cardsHandler.registerListener(getUsername());
+        cardsHandler.initCards(getUsername());
+        cardsHandler.onClickListener();
         // Handle communication with Server, only send updated to server whenever card is played etc.
 
         ClientConnector clientConnector = ClientConnector.getClientConnector();
@@ -158,11 +160,4 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         //this.trans.hide(chatFragment);
         onBackPressed();
     }
-    /**
-     *
-     * HandCards Methods
-     */
-
-
-
 }

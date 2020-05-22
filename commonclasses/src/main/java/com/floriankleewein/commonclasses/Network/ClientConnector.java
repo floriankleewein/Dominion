@@ -73,6 +73,7 @@ public class ClientConnector {
         registerClass(UpdatePlayerNamesMsg.class);
         registerClass(SuspectMessage.class);
         registerClass(CheckButtonsMsg.class);
+        registerClass(GetGameMsg.class);
 
 
         // start client
@@ -160,6 +161,11 @@ public class ClientConnector {
             }
 
         });
+    }
+
+    public void sendGameUpdate () {
+        GetGameMsg msg = new GetGameMsg();
+        client.sendTCP(msg);
     }
 
     //for now this method only has the use, to reset the game and playerList, so we
