@@ -29,6 +29,7 @@ public class GameHandler {
     /**
      * Logic for the Game, uses the singleton game to handle game logic. Creates Board, Cards for Players
      * and handles played and bought cards.
+     *
      * @param game
      */
     public GameHandler(Game game) {
@@ -87,9 +88,14 @@ public class GameHandler {
      */
     public void playCard(Card card) {
         setPlayedCard(card);
-        if (canBuyCard(getPlayedCard())) {
-            playCard();
+        playCard();
+    }
+
+    private boolean canPlayActionCard() {
+        if (getActiveUser().getGamePoints().getPlaysAmount() > 0) {
+            return true;
         }
+        return false;
     }
 
     private void updateVictoryPts(GameUpdateMsg msg) {
@@ -143,6 +149,9 @@ public class GameHandler {
     public void playCard() {
         // TODO logic for card played
         if (playedCard instanceof ActionCard) {
+            if(!canPlayActionCard()) {
+                return;
+            }
             ActionCard card = (ActionCard) playedCard;
             Action action = card.getAction();
             switch (card.getActionType()) {
