@@ -5,6 +5,9 @@ import com.esotericsoftware.minlog.Log;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.floriankleewein.commonclasses.Cards.ActionType;
+import com.floriankleewein.commonclasses.Cards.EstateType;
+import com.floriankleewein.commonclasses.Cards.MoneyType;
 import com.floriankleewein.commonclasses.Chat.ChatMessage;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.GameLogic.GameHandler;
@@ -73,7 +76,10 @@ public class ClientConnector {
         registerClass(UpdatePlayerNamesMsg.class);
         registerClass(SuspectMessage.class);
         registerClass(CheckButtonsMsg.class);
-
+        registerClass(ActionType.class);
+        registerClass(MoneyType.class);
+        registerClass(EstateType.class);
+        registerClass(HashMap.class);
 
         // start client
         client.start();
@@ -224,8 +230,9 @@ public class ClientConnector {
             public void received(Connection con, Object object) {
                 if (object instanceof GameUpdateMsg) {
                     GameUpdateMsg gameUpdateMsg = (GameUpdateMsg) object;
-                    gameHandler.updateGameHandler(gameUpdateMsg);
-                    callbackMap.get(GameUpdateMsg.class).callback(gameUpdateMsg);
+                    //gameHandler.updateGameHandler(gameUpdateMsg);/
+                    GameUpdateMsg gameUpdateMsg1 = gameHandler.updateGameHandlerTwo(gameUpdateMsg);
+                    callbackMap.get(GameUpdateMsg.class).callback(gameUpdateMsg1);
                 }
             }
         });

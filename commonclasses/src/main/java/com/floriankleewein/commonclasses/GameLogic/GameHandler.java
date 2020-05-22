@@ -3,6 +3,7 @@ package com.floriankleewein.commonclasses.GameLogic;
 import com.floriankleewein.commonclasses.Board.Board;
 import com.floriankleewein.commonclasses.Cards.Action;
 import com.floriankleewein.commonclasses.Cards.ActionCard;
+import com.floriankleewein.commonclasses.Cards.ActionType;
 import com.floriankleewein.commonclasses.Cards.Card;
 import com.floriankleewein.commonclasses.Cards.EstateCard;
 import com.floriankleewein.commonclasses.Cards.EstateType;
@@ -90,7 +91,7 @@ public class GameHandler {
         updateVictoryPts(msg);
     }
 
-    public void buyCard(Card card) {
+    private void buyCard(Card card) {
         Card boughtCard;
         if (card instanceof ActionCard) {
             boughtCard = getBoard().getActionField().pickCard(((ActionCard) card).getActionType());
@@ -107,6 +108,63 @@ public class GameHandler {
         getActiveUser().getGamePoints().modifyCoins(oldCoins - boughtCard.getPrice());
     }
 
+    public GameUpdateMsg updateGameHandlerTwo(GameUpdateMsg msg) {
+        setBoard(msg.getBoard());
+        setPlayedCard(msg.getPlayedCard());
+        Game.setGame(msg.getGame());
+        setGame();
+
+        Card boughtCard = null;
+        if (canBuyCardTwo(msg)) {
+            boughtCard = buyCardTwo(msg);
+        }
+        msg.setBoughtCard(boughtCard);
+
+        updateVictoryPts(msg);
+        return msg;
+    }
+
+    public Card buyActionCard(ActionType actionType) {
+        Card boughtCard = getBoard().getActionField().pickCard(actionType);
+        getActiveUser().getUserCards().addCardtoDeck(boughtCard);
+        calculateCoinsOnActiveUser(boughtCard);
+        return boughtCard;
+    }
+
+    public Card buyEstateCard(EstateType estateType) {
+        Card boughtCard = getBoard().getBuyField().pickCard(estateType);
+        getActiveUser().getUserCards().addCardtoDeck(boughtCard);
+        getActiveUser().getGamePoints().modifyWinningPoints(((EstateCard) boughtCard).getEstateValue());
+        calculateCoinsOnActiveUser(boughtCard);
+        return boughtCard;
+    }
+
+    public Card buyMoneyCard(MoneyType moneyType) {
+        Card boughtCard = getBoard().getBuyField().pickCard(moneyType);
+        getActiveUser().getUserCards().addCardtoDeck(boughtCard);
+        calculateCoinsOnActiveUser(boughtCard);
+        return boughtCard;
+    }
+
+    private void calculateCoinsOnActiveUser(Card boughtCard) {
+        int oldCoins = getActiveUser().getGamePoints().getCoins();
+        getActiveUser().getGamePoints().modifyCoins(oldCoins - boughtCard.getPrice());
+    }
+
+    public Card buyCardTwo(GameUpdateMsg gameUpdateMsg) {
+        if(gameUpdateMsg.getActionTypeClicked() != null) {
+            System.out.println("Bought card Type: " + gameUpdateMsg.getActionTypeClicked());
+            return buyActionCard(gameUpdateMsg.getActionTypeClicked());
+        } else if (gameUpdateMsg.getEstateTypeClicked() != null) {
+            System.out.println("Bought card Type: " + gameUpdateMsg.getEstateTypeClicked());
+            return buyEstateCard(gameUpdateMsg.getEstateTypeClicked());
+        } else if (gameUpdateMsg.getMoneyTypeClicked() != null) {
+            System.out.println("Bought card Type: " + gameUpdateMsg.getMoneyTypeClicked());
+            return buyMoneyCard(gameUpdateMsg.getMoneyTypeClicked());
+        } else {
+            return null;
+        }
+    }
 
     public void playCard() {
         // TODO logic for card played
@@ -146,6 +204,29 @@ public class GameHandler {
             return false;
         }
         if (getActiveUser().getGamePoints().getCoins() >= card.getPrice()) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean canBuyCardTwo(GameUpdateMsg gameUpdateMsg) {
+        boolean noCard = false;
+        if(gameUpdateMsg.getActionTypeClicked() != null) {
+            noCard = true;
+        } else if (gameUpdateMsg.getEstateTypeClicked() != null) {
+            noCard = true;
+        } else if (gameUpdateMsg.getMoneyTypeClicked() != null) {
+            noCard = true;
+        } else {
+            return noCard;
+        }
+
+        if(noCard) {
+            /*
+            if (getActiveUser().getGamePoints().getCoins() >= card.getPrice()) {
+                return true;
+            }
+            */
             return true;
         }
         return false;
