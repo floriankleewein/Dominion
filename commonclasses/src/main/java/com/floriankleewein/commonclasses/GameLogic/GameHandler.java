@@ -49,16 +49,42 @@ public class GameHandler {
             }
             setBoard(new Board());
             game.setPlayerList(playerList);
-            game.setActivePlayer(playerList.get(0));
+            setNewActivePlayer();
         }
     }
 
-    public void setNewActivePlayer() {
-
+    private void setNewActivePlayer() {
+        if (getActiveUser() == null) {
+            game.setActivePlayer(game.getPlayerList().get(0));
+        } else {
+            int players = game.getPlayerList().size();
+            int active = game.getPlayerList().indexOf(getActiveUser());
+            game.setActivePlayer(game.getPlayerList().get((active + 1) % players));
+        }
     }
 
+    /**
+     * Discards Hand of activeUser, draws new Cards and sets new Active User.
+     * TODO Check if players draw new cards if < 5.
+     */
     public void newTurn() {
-        //TODO reset MoneyPts etc.
+        getActiveUser().getUserCards().drawNewCards();
+        setNewActivePlayer();
+        for (User user : game.getPlayerList()) {
+            user.getGamePoints().setPointsDefault();
+        }
+    }
+
+    /**
+     * Checks if the required card can be played, and will execute it if possible.
+     *
+     * @param card
+     */
+    public void playCard(Card card) {
+        setPlayedCard(card);
+        if (canBuyCard(getPlayedCard())) {
+            playCard();
+        }
     }
 
     private void updateVictoryPts(GameUpdateMsg msg) {
