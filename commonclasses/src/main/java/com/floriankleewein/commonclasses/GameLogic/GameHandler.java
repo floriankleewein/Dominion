@@ -250,7 +250,7 @@ public class GameHandler {
         if (card == null) {
             return false;
         }
-        if (getActiveUser().getGamePoints().getCoins() >= card.getPrice()) {
+        if (getActiveUser().getGamePoints().getCoins() >= card.getPrice() && getActiveUser().getGamePoints().getBuyAmounts() > 0) {
             return true;
         }
         return false;
