@@ -9,13 +9,19 @@ import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.floriankleewein.commonclasses.Cards.ActionCard;
+import com.floriankleewein.commonclasses.Cards.Card;
 import com.floriankleewein.commonclasses.Chat.ChatMessage;
 import com.floriankleewein.commonclasses.Network.ClientConnector;
+import com.group7.dominion.Card.HandCardsHandler;
 import com.group7.dominion.Chat.ChatFragment;
+
 import android.widget.Toast;
 
 import com.floriankleewein.commonclasses.Game;
@@ -34,6 +40,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
     private ChatFragment chatFragment;
     private FragmentTransaction trans;
     private ClientConnector clientConnector;
+    private HandCardsHandler cardsHandler;
 
     private SensorManager sm;
     private ShakeListener shakeListener;
@@ -42,7 +49,9 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dominion);
-
+        cardsHandler = new HandCardsHandler(this);
+        cardsHandler.initCards(getUsername());
+        cardsHandler.onClickListener();
         chatButton = findViewById(R.id.chat_Button);
         fragmentContainer = findViewById(R.id.chatFragmentContainer);
 
@@ -63,7 +72,8 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         sm = (SensorManager) getSystemService(SENSOR_SERVICE);
         sm.registerListener(shakeListener.newSensorListener(), sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
 
-        if(this.chatFragment == null) {
+
+        if (this.chatFragment == null) {
             this.chatFragment = ChatFragment.newInstance();
         }
     }
@@ -129,15 +139,14 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
     }
 
 
-
     public void openFragment() {
 
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction trans = fragmentManager.beginTransaction();
-            trans.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right,
-                    R.anim.enter_from_right, R.anim.exit_to_right);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction trans = fragmentManager.beginTransaction();
+        trans.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right,
+                R.anim.enter_from_right, R.anim.exit_to_right);
 
-            trans.addToBackStack(null);
+        trans.addToBackStack(null);
 
         trans.add(R.id.chatFragmentContainer, chatFragment, "CHAT_FRAGMENT").commit();
 
@@ -149,4 +158,11 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         //this.trans.hide(chatFragment);
         onBackPressed();
     }
+    /**
+     *
+     * HandCards Methods
+     */
+
+
+
 }

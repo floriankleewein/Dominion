@@ -1,6 +1,6 @@
 package com.floriankleewein.commonclasses.User;
 
-import com.floriankleewein.commonclasses.Cards.ActionCard;
+
 import com.floriankleewein.commonclasses.Cards.Card;
 
 import java.util.Collections;
@@ -58,10 +58,8 @@ public class UserCards {
     }
 
     public void playCard(Card PlayedCard) {
-
         this.HandCards.remove(PlayedCard);
         this.DiscardCards.add(PlayedCard);
-
     }
 
 
@@ -74,9 +72,17 @@ public class UserCards {
     }
 
 
-    public void addDeckCardtoHandCard() {
-        this.HandCards.add(this.Deck.getLast());
-        this.Deck.removeLast();
+    public void addDeckCardtoHandCard(int amountCards) {
+
+        if (Deck.size() < 5) {
+            Deck.addAll(DiscardCards);
+            DiscardCards.clear();
+            Collections.shuffle(Deck);
+        }
+        for (int i = 0; i < amountCards; i++) {
+            this.HandCards.add(this.Deck.getLast());
+            this.Deck.removeLast();
+        }
     }
 
 

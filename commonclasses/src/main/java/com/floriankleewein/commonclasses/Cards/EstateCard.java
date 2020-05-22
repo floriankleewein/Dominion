@@ -8,6 +8,7 @@ public class EstateCard extends Card {
         super(price);
         this.estateValue = estateValue;
         this.estateType = estateType;
+        setIdEstate(estateType);
     }
 
     public int getEstateValue() {
@@ -24,5 +25,23 @@ public class EstateCard extends Card {
 
     public void setEstateType(EstateType estateType) {
         this.estateType = estateType;
+    }
+
+
+    public void setIdEstate(EstateType estateType) {
+        switch (estateType) {
+            case PROVINZ:
+                setId(10);
+                break;
+            case HERZOGTUM:
+                setId(11);
+                break;
+            case ANWESEN:
+                setId(12);
+                break;
+            case FLUCH:
+                setId(13);
+                break;
+        }
     }
 }

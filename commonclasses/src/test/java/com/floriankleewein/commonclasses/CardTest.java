@@ -7,6 +7,8 @@ import com.floriankleewein.commonclasses.Cards.EstateCard;
 import com.floriankleewein.commonclasses.Cards.EstateType;
 import com.floriankleewein.commonclasses.Cards.MoneyCard;
 import com.floriankleewein.commonclasses.Cards.MoneyType;
+import com.floriankleewein.commonclasses.Network.HasCheatedMessage;
+import com.floriankleewein.commonclasses.Network.SuspectMessage;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -143,5 +145,6 @@ public class CardTest {
         Assert.assertEquals(expectedThrowAnyAmountCards, actionCard.getAction().isThrowAnyAmountCards());
         Assert.assertEquals(expectedThrowEveryUserCardsUntilThreeLeft, actionCard.getAction().isThrowEveryUserCardsUntilThreeLeft());
     }
+
 }
 

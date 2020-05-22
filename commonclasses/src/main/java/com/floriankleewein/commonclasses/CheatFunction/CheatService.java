@@ -1,12 +1,8 @@
 package com.floriankleewein.commonclasses.CheatFunction;
-
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.User.User;
 
 import java.util.List;
-
-
-
 
 public class CheatService {
 
@@ -38,7 +34,7 @@ public class CheatService {
     public void addCardtoUser(String name) {
         User CheatUser = findUser(name);
         if (CheatUser != null && (!CheatUser.isCheater())) {
-            CheatUser.getUserCards().addDeckCardtoHandCard();
+            CheatUser.getUserCards().addDeckCardtoHandCard(1);
             CheatUser.setCheater(true);
         }
     }
@@ -71,6 +67,4 @@ public class CheatService {
     /*
     Getter Setter
      */
-
-
 }
