@@ -67,7 +67,7 @@ public class HandCardsHandler {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                ClientConnector.getClientConnector().sendGameUpdate();
+               user = ClientConnector.getClientConnector().sendGameUpdate().findUser(UserName);
             }
         });
         thread.start();
@@ -76,7 +76,6 @@ public class HandCardsHandler {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        user = ClientConnector.getClientConnector().getGame().findUser(UserName);
 
     }
 

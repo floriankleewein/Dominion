@@ -19,6 +19,14 @@ import java.util.List;
 
 
 public class GameHandler {
+    public Game getGame() {
+        return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
+
     private Game game;
     private final int MONEY_CARDS = 7;
     private final int ANWESEN_CARDS = 3;

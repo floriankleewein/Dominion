@@ -163,7 +163,7 @@ public class ClientConnector {
         });
     }
 
-    public void sendGameUpdate() {
+    public Game sendGameUpdate() {
         GetGameMsg msg = new GetGameMsg();
         client.sendTCP(msg);
 
@@ -172,11 +172,14 @@ public class ClientConnector {
                 if (object instanceof GetGameMsg) {
                     Log.info("Got Message");
                     GetGameMsg msg = (GetGameMsg) object;
-                    Game.setGame(msg.getGame());
+                    System.out.println(msg.getGm());
+                    game = msg.getGm().getGame();
+
                     callbackMap.get(GetGameMsg.class).callback(msg);
                 }
             }
         });
+        return Game.getGame();
     }
 
     //for now this method only has the use, to reset the game and playerList, so we

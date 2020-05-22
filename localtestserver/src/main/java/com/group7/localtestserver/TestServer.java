@@ -205,8 +205,10 @@ public class TestServer {
                 } else if (object instanceof GetGameMsg) {
                     Log.info("Got GetGameMessage");
                     GetGameMsg msg = new GetGameMsg();
-                    msg.setGame(game);
-                    server.sendToAllTCP(msg);
+                    if (setupGame()) {
+                        msg.setGm(gamehandler);
+                        server.sendToAllTCP(msg);
+                    }
                 }
             }
         });

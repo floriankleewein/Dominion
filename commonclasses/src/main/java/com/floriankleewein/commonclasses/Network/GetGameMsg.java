@@ -1,17 +1,19 @@
 package com.floriankleewein.commonclasses.Network;
 
 import com.floriankleewein.commonclasses.Game;
+import com.floriankleewein.commonclasses.GameLogic.GameHandler;
 
 public class GetGameMsg extends BaseMessage {
+    private GameHandler gm;
 
-    private Game game;
 
-
-    public Game getGame() {
-        return game;
+    public GameHandler getGm() {
+        return gm;
     }
 
-    public void setGame(Game game) {
-        this.game = game;
+    public void setGm(GameHandler gm) {
+        this.gm = gm;
     }
+
+
 }
