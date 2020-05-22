@@ -10,6 +10,7 @@ import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.GameLogic.GameHandler;
 import com.floriankleewein.commonclasses.Network.ActivePlayerMessage;
 import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
+import com.floriankleewein.commonclasses.Network.AllPlayersInDominionActivityMsg;
 import com.floriankleewein.commonclasses.Network.BaseMessage;
 import com.floriankleewein.commonclasses.Network.CheckButtonsMsg;
 import com.floriankleewein.commonclasses.Network.CreateGameMsg;
@@ -27,6 +28,7 @@ import com.floriankleewein.commonclasses.User.User;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class TestServer {
@@ -64,6 +66,7 @@ public class TestServer {
         registerClass(UpdatePlayerNamesMsg.class);
         registerClass(SuspectMessage.class);
         registerClass(CheckButtonsMsg.class);
+        registerClass(AllPlayersInDominionActivityMsg.class);
 
 
         //Start Server
@@ -202,6 +205,9 @@ public class TestServer {
                         msg.setJoinValue(true);
                     }
                     con.sendTCP(msg);
+                } else if(object instanceof AllPlayersInDominionActivityMsg){
+                    AllPlayersInDominionActivityMsg msg = (AllPlayersInDominionActivityMsg) object;
+                    server.sendToAllTCP(msg);
                 }
             }
         });

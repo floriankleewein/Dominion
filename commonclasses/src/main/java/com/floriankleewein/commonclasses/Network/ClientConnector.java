@@ -73,6 +73,7 @@ public class ClientConnector {
         registerClass(UpdatePlayerNamesMsg.class);
         registerClass(SuspectMessage.class);
         registerClass(CheckButtonsMsg.class);
+        registerClass(AllPlayersInDominionActivityMsg.class);
 
 
         // start client
@@ -98,6 +99,7 @@ public class ClientConnector {
                 }
             }
         });
+
     }
 
     public void recreateStartGameActivity() {
@@ -159,6 +161,16 @@ public class ClientConnector {
                 }
             }
 
+        });
+
+        client.addListener(new Listener(){
+            @Override
+            public void received(Connection connection, Object object) {
+                if (object instanceof AllPlayersInDominionActivityMsg) {
+                    AllPlayersInDominionActivityMsg msg = (AllPlayersInDominionActivityMsg) object;
+                    callbackMap.get(AllPlayersInDominionActivityMsg.class).callback(msg);
+                }
+            }
         });
     }
 
@@ -296,6 +308,12 @@ public class ClientConnector {
                 }
             }
         });
+    }
+
+    //FKDoc: this is the message which is broadcasted when startbutton is clicked. everyone lands in the dominion activity then.
+    public void allPlayersInDominionActivity(){
+        AllPlayersInDominionActivityMsg msg = new AllPlayersInDominionActivityMsg();
+        client.sendTCP(msg);
     }
 
 }
