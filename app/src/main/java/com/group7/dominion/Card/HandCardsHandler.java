@@ -144,12 +144,9 @@ public class HandCardsHandler {
     public void onClickListener() {
         for (int i = 0; i < ImageButtons.size(); i++) {
             int finalI = i;
-            ImageButtons.get(i).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    System.out.println("Card with the ID is played: " + TestList.get(finalI).getId());
-                    ImageButtons.get(finalI).setVisibility(View.INVISIBLE);
-                }
+            ImageButtons.get(i).setOnClickListener(v -> {
+                System.out.println("Card with the ID is played: " + TestList.get(finalI).getId());
+                ImageButtons.get(finalI).setVisibility(View.INVISIBLE);
             });
         }
     }
@@ -163,6 +160,9 @@ public class HandCardsHandler {
         linearLayout.addView(umg);
         ImageButtons.add(umg);
         img_id++;
+    }
+    private void setImageButtonsNull () {
+        ImageButtons.clear();
     }
 }
 

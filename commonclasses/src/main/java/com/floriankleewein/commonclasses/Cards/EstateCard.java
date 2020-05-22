@@ -31,16 +31,16 @@ public class EstateCard extends Card {
     public void setIdEstate(EstateType estateType) {
         switch (estateType) {
             case PROVINZ:
-                super.setId(10);
+                setId(10);
                 break;
             case HERZOGTUM:
-                super.setId(11);
+                setId(11);
                 break;
             case ANWESEN:
-               super.setId(12);
+                setId(12);
                 break;
             case FLUCH:
-                super.setId(13);
+                setId(13);
                 break;
         }
     }

@@ -1,12 +1,8 @@
 package com.floriankleewein.commonclasses.CheatFunction;
-
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.User.User;
 
 import java.util.List;
-
-
-
 
 public class CheatService {
 
@@ -71,6 +67,4 @@ public class CheatService {
     /*
     Getter Setter
      */
-
-
 }
