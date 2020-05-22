@@ -232,6 +232,7 @@ public class GameHandler {
                     getActiveUser().getUserCards().addDeckCardtoHandCard(action.getCardCount());
                     break;
                 case WERKSTATT:
+                    getActiveUser().getGamePoints().modifyBuyAmounts(action.getBuyCount());
                     getActiveUser().getGamePoints().modifyCoins(action.getMoneyValue());
                     break;
             }
