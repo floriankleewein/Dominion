@@ -26,6 +26,11 @@ public class GameHandler {
     private Card playedCard;
     private Card buyCard;
 
+    /**
+     * Logic for the Game, uses the singleton game to handle game logic. Creates Board, Cards for Players
+     * and handles played and bought cards.
+     * @param game
+     */
     public GameHandler(Game game) {
         this.game = game;
     }
