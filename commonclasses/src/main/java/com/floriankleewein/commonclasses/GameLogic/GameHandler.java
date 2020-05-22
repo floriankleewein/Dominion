@@ -180,7 +180,7 @@ public class GameHandler {
                     getActiveUser().getGamePoints().modifyPlayAmounts(action.getActionCount());
                     break;
                 case MARKT:
-                    getActiveUser().getUserCards().addDeckCardtoHandCard();
+                    getActiveUser().getUserCards().addDeckCardtoHandCard(action.getCardCount());
                     getActiveUser().getGamePoints().modifyBuyAmounts(action.getBuyCount());
                     getActiveUser().getGamePoints().modifyPlayAmounts(action.getActionCount());
                     getActiveUser().getGamePoints().modifyCoins(action.getMoneyValue());
