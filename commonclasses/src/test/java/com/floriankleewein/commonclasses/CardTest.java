@@ -49,7 +49,7 @@ public class CardTest {
         assertActionBooleans(actionCard, false, false, false, false);
 
         actionCard = new ActionCard(1, ActionType.HOLZFAELLER);
-        assertActionIntegers(actionCard, 0, 0, 1, 0,0,1);
+        assertActionIntegers(actionCard, 0, 0, 1, 0,0,2);
         assertActionBooleans(actionCard, false, false, false, false);
 
         actionCard = new ActionCard(1, ActionType.KELLER);
@@ -57,7 +57,7 @@ public class CardTest {
         assertActionBooleans(actionCard, false, false, true, false);
 
         actionCard = new ActionCard(1, ActionType.WERKSTATT);
-        assertActionIntegers(actionCard, 1, 0, 0, 0,4,0);
+        assertActionIntegers(actionCard, 1, 0, 0, 0,0,4);
         assertActionBooleans(actionCard, false, false, false, false);
 
         actionCard = new ActionCard(1, ActionType.SCHMIEDE);

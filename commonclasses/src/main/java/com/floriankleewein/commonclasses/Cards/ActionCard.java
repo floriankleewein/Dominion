@@ -50,8 +50,8 @@ public class ActionCard extends Card {
                 setId(2);
                 action = new Action();
                 action.setBuyCount(1);
-                action.setMoneyValue(1);
-                // +1 Kauf, +1 Geld
+                action.setMoneyValue(2);
+                // +1 Kauf, +2 Geld
                 break;
 
             case KELLER: //
@@ -67,8 +67,8 @@ public class ActionCard extends Card {
                 setId(4);
                 action = new Action();
                 action.setCardCount(1);
-                action.setMaxMoneyValue(4);
-                // Nimm dir eine Karte die bis zu 4 kostet.
+                action.setMoneyValue(4);
+                // +4 geld
                 break;
 
             case SCHMIEDE:
