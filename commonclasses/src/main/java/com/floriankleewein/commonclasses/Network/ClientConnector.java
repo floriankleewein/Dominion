@@ -99,6 +99,16 @@ public class ClientConnector {
                 }
             }
         });
+
+        client.addListener(new Listener(){
+            @Override
+            public void received(Connection connection, Object object) {
+                if (object instanceof AllPlayersInDominionActivityMsg) {
+                    AllPlayersInDominionActivityMsg msg = (AllPlayersInDominionActivityMsg) object;
+                    callbackMap.get(AllPlayersInDominionActivityMsg.class).callback(msg);
+                }
+            }
+        });
     }
 
     public void recreateStartGameActivity() {
@@ -302,16 +312,6 @@ public class ClientConnector {
     public void allPlayersInDominionActivity(){
         AllPlayersInDominionActivityMsg msg = new AllPlayersInDominionActivityMsg();
         client.sendTCP(msg);
-
-        client.addListener(new Listener(){
-            @Override
-            public void received(Connection connection, Object object) {
-                if (object instanceof AllPlayersInDominionActivityMsg) {
-                    AllPlayersInDominionActivityMsg msg = (AllPlayersInDominionActivityMsg) object;
-                    callbackMap.get(AllPlayersInDominionActivityMsg.class).callback(msg);
-                }
-            }
-        });
     }
 
 }
