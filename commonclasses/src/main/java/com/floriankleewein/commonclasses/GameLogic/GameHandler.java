@@ -156,17 +156,14 @@ public class GameHandler {
             Action action = card.getAction();
             switch (card.getActionType()) {
                 case BURGGRABEN:
-                    getActiveUser().getUserCards().addDeckCardtoHandCard(); //TODO change method
-                    getActiveUser().getUserCards().addDeckCardtoHandCard();
+                    getActiveUser().getUserCards().addDeckCardtoHandCard(action.getCardCount());
                     break;
                 case DORF:
                     getActiveUser().getGamePoints().modifyPlayAmounts(action.getActionCount());
-                    getActiveUser().getUserCards().addDeckCardtoHandCard(); //TODO if method was changed change this method to draw a number of cards
-                    getActiveUser().getUserCards().addDeckCardtoHandCard();
+                    getActiveUser().getUserCards().addDeckCardtoHandCard(action.getCardCount());
                     break;
                 case HEXE:
-                    getActiveUser().getUserCards().addDeckCardtoHandCard();
-                    getActiveUser().getUserCards().addDeckCardtoHandCard();
+                    getActiveUser().getUserCards().addDeckCardtoHandCard(action.getCardCount());
                     for (User user : game.getPlayerList()) {
                         if (!user.getUserName().equals(getActiveUser().getUserName())) {
                             user.getUserCards().addCardtoDeck(getBoard().getBuyField().pickCard(EstateType.FLUCH));
@@ -232,17 +229,17 @@ public class GameHandler {
                     }
                     break;
                 case SCHMIEDE:
-                    getActiveUser().getUserCards().addDeckCardtoHandCard();
-                    getActiveUser().getUserCards().addDeckCardtoHandCard();
-                    getActiveUser().getUserCards().addDeckCardtoHandCard();
+                    getActiveUser().getUserCards().addDeckCardtoHandCard(action.getCardCount());
                     break;
                 case WERKSTATT:
                     getActiveUser().getGamePoints().modifyCoins(action.getMoneyValue());
                     break;
             }
+            getActiveUser().getUserCards().playCard(card);
         } else {
             MoneyCard card = (MoneyCard) playedCard;
             getActiveUser().getGamePoints().modifyCoins(card.getWorth());
+            getActiveUser().getUserCards().playCard(card);
         }
     }
 
