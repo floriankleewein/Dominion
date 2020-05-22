@@ -169,18 +169,35 @@ public class GameHandler {
                     break;
                 case MINE:
                     LinkedList<Card> userCards = getActiveUser().getUserCards().getHandCards();
-                    boolean copper = false;
-                    boolean silver = false;
-                    boolean gold = false;
+                    boolean hasSilver = false;
+                    int index = -1;
                     for (Card usercard : userCards) {
                         if (usercard instanceof MoneyCard) {
-                            //if (((MoneyCard) usercard).getMoneyType())
+                            if (((MoneyCard) usercard).getMoneyType().equals(MoneyType.SILBER)) {
+                                hasSilver = true;
+                                index = userCards.indexOf(usercard);
+                            } else if (hasSilver == false && usercard instanceof MoneyCard && ((MoneyCard) usercard).getMoneyType().equals(MoneyType.KUPFER)) {
+                                index = userCards.indexOf(usercard);
+                            }
                         }
+                    }
+                    if (index >= 0) {
+                        userCards.remove(index);
+                        if (hasSilver) {
+                            userCards.add(getBoard().getBuyField().pickCard(MoneyType.GOLD));
+                        } else {
+                            userCards.add(getBoard().getBuyField().pickCard(MoneyType.SILBER));
+                        }
+                        getActiveUser().getUserCards().setHandCards(userCards);
                     }
                     break;
                 case SCHMIEDE:
+                    getActiveUser().getUserCards().addDeckCardtoHandCard();
+                    getActiveUser().getUserCards().addDeckCardtoHandCard();
+                    getActiveUser().getUserCards().addDeckCardtoHandCard();
                     break;
                 case WERKSTATT:
+                    getActiveUser().getGamePoints().modifyCoins(action.getMoneyValue());
                     break;
             }
         } else {

@@ -62,8 +62,8 @@ public class ActionCard extends Card {
             case WERKSTATT: //
                 action = new Action();
                 action.setCardCount(1);
-                action.setMaxMoneyValue(4);
-                // Nimm dir eine Karte die bis zu 4 kostet.
+                action.setMoneyValue(4);
+                // +4 geld
                 break;
 
             case SCHMIEDE:
