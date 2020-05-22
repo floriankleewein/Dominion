@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -19,6 +20,7 @@ import com.floriankleewein.commonclasses.Cards.ActionCard;
 import com.floriankleewein.commonclasses.Cards.Card;
 import com.floriankleewein.commonclasses.Chat.ChatMessage;
 import com.floriankleewein.commonclasses.Network.ClientConnector;
+import com.floriankleewein.commonclasses.Network.GetGameMsg;
 import com.group7.dominion.Card.HandCardsHandler;
 import com.group7.dominion.Chat.ChatFragment;
 
@@ -81,8 +83,8 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
     @Override
     protected void onStart() {
         super.onStart();
-        cardsHandler.registerListener(getUsername());
         cardsHandler.initCards(getUsername());
+        cardsHandler.registerListener(getUsername());
         cardsHandler.onClickListener();
         // Handle communication with Server, only send updated to server whenever card is played etc.
 

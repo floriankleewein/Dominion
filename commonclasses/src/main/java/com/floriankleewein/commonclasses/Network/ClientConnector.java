@@ -163,9 +163,20 @@ public class ClientConnector {
         });
     }
 
-    public void sendGameUpdate () {
+    public void sendGameUpdate() {
         GetGameMsg msg = new GetGameMsg();
         client.sendTCP(msg);
+
+        client.addListener(new Listener() {
+            public void received(Connection con, Object object) {
+                if (object instanceof GetGameMsg) {
+                    Log.info("Got Message");
+                    GetGameMsg msg = (GetGameMsg) object;
+                    Game.setGame(msg.getGame());
+                    callbackMap.get(GetGameMsg.class).callback(msg);
+                }
+            }
+        });
     }
 
     //for now this method only has the use, to reset the game and playerList, so we
@@ -276,7 +287,7 @@ public class ClientConnector {
         client.sendTCP(msg);
     }
 
-    public void checkButtons(){
+    public void checkButtons() {
         CheckButtonsMsg msg = new CheckButtonsMsg();
         client.sendTCP(msg);
 
@@ -293,7 +304,7 @@ public class ClientConnector {
     public void sendChatMessage(ChatMessage msgToOthers) {
         client.sendTCP(msgToOthers);
 
-        client.addListener(new Listener(){
+        client.addListener(new Listener() {
             @Override
             public void received(Connection connection, Object object) {
                 if (object instanceof ChatMessage) {

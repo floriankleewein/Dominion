@@ -202,12 +202,11 @@ public class TestServer {
                         msg.setJoinValue(true);
                     }
                     con.sendTCP(msg);
-                }
-                else if (object instanceof GetGameMsg) {
+                } else if (object instanceof GetGameMsg) {
                     Log.info("Got GetGameMessage");
                     GetGameMsg msg = new GetGameMsg();
                     msg.setGame(game);
-                    server.sendToAllTCP(game);
+                    server.sendToAllTCP(msg);
                 }
             }
         });

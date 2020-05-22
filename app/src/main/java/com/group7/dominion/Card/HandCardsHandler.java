@@ -47,14 +47,14 @@ public class HandCardsHandler {
         ImageButtons = new LinkedList<>();
         lparams.weight = 1;
         playStatus = PlayStatus.NO_PLAY_PHASE;
+        cardList = testList();
     }
 
     public void initCards(String Username) {
-        sendMessage ();
+        sendMessage(Username);
         try {
-            user.getUserCards().getHandCards();
-            for (int i = 0; i < 7; i++) {
-                addCard(cardList.get(i));
+            for (int i = 0; i < user.getUserCards().getHandCards().size(); i++) {
+                addCard(user.getUserCards().getHandCards().get(i));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -62,7 +62,7 @@ public class HandCardsHandler {
     }
 
 
-    void  sendMessage() {
+    void sendMessage(String UserName) {
 
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -71,8 +71,12 @@ public class HandCardsHandler {
             }
         });
         thread.start();
-
-
+        try {
+            thread.join();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        user = ClientConnector.getClientConnector().getGame().findUser(UserName);
 
     }
 
@@ -152,10 +156,8 @@ public class HandCardsHandler {
         for (int i = 0; i < ImageButtons.size(); i++) {
             int finalI = i;
             ImageButtons.get(i).setOnClickListener(v -> {
-                if (playStatus == PlayStatus.ACTION_PHASE) {
-                    System.out.println("Card with the ID is played: " + cardList.get(finalI).getId());
-                    ImageButtons.get(finalI).setVisibility(View.INVISIBLE);
-                }
+                System.out.println("Card with the ID is played: " + cardList.get(finalI).getId());
+                ImageButtons.get(finalI).setVisibility(View.INVISIBLE);
             });
         }
     }
@@ -183,11 +185,9 @@ public class HandCardsHandler {
         }
         //onClickListener();
     }
-    public void registerListener (String Username) {
-        ClientConnector.getClientConnector().registerCallback(GetGameMsg.class, (msg -> {
-            System.out.println("GotGameMEssage");
-            user = ((GetGameMsg) msg).getGame().findUser(Username);
-        }));
+
+    public void registerListener(String Username) {
+
     }
 }
 
