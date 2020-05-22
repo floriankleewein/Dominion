@@ -51,7 +51,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         setContentView(R.layout.activity_dominion);
         cardsHandler = new HandCardsHandler(this);
         cardsHandler.initCards(getUsername());
-        //cardsHandler.onClickListener();
+        cardsHandler.onClickListener();
         chatButton = findViewById(R.id.chat_Button);
         fragmentContainer = findViewById(R.id.chatFragmentContainer);
 
