@@ -47,8 +47,8 @@ public class ActionCard extends Card {
             case HOLZFAELLER:
                 action = new Action();
                 action.setBuyCount(1);
-                action.setMoneyValue(1);
-                // +1 Kauf, +1 Geld
+                action.setMoneyValue(2);
+                // +1 Kauf, +2 Geld
                 break;
 
             case KELLER: //
