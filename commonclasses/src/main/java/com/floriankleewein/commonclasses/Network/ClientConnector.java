@@ -73,6 +73,7 @@ public class ClientConnector {
         registerClass(UpdatePlayerNamesMsg.class);
         registerClass(SuspectMessage.class);
         registerClass(CheckButtonsMsg.class);
+        registerClass(AllPlayersInDominionActivityMsg.class);
 
 
         // start client
@@ -293,6 +294,21 @@ public class ClientConnector {
                 if (object instanceof ChatMessage) {
                     ChatMessage msg = (ChatMessage) object;
                     callbackMap.get(ChatMessage.class).callback(msg);
+                }
+            }
+        });
+    }
+
+    public void allPlayersInDominionActivity(){
+        AllPlayersInDominionActivityMsg msg = new AllPlayersInDominionActivityMsg();
+        client.sendTCP(msg);
+
+        client.addListener(new Listener(){
+            @Override
+            public void received(Connection connection, Object object) {
+                if (object instanceof AllPlayersInDominionActivityMsg) {
+                    AllPlayersInDominionActivityMsg msg = (AllPlayersInDominionActivityMsg) object;
+                    callbackMap.get(AllPlayersInDominionActivityMsg.class).callback(msg);
                 }
             }
         });
