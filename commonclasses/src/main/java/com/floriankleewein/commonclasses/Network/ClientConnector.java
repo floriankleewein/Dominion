@@ -6,6 +6,7 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.floriankleewein.commonclasses.Cards.ActionType;
+import com.floriankleewein.commonclasses.Cards.Card;
 import com.floriankleewein.commonclasses.Cards.EstateType;
 import com.floriankleewein.commonclasses.Cards.MoneyType;
 import com.floriankleewein.commonclasses.Chat.ChatMessage;
@@ -80,6 +81,7 @@ public class ClientConnector {
         registerClass(MoneyType.class);
         registerClass(EstateType.class);
         registerClass(HashMap.class);
+        registerClass(Card.class);
 
         // start client
         client.start();

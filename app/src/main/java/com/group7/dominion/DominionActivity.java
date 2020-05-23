@@ -4,11 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -18,6 +21,7 @@ import com.floriankleewein.commonclasses.Board.Board;
 import com.floriankleewein.commonclasses.Cards.ActionType;
 import com.floriankleewein.commonclasses.Cards.Card;
 import com.floriankleewein.commonclasses.Cards.MoneyCard;
+import com.floriankleewein.commonclasses.Cards.MoneyType;
 import com.floriankleewein.commonclasses.Chat.ChatMessage;
 import com.floriankleewein.commonclasses.Network.ClientConnector;
 import com.floriankleewein.commonclasses.Network.GameUpdateMsg;
@@ -55,6 +59,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
     private ActionDialogHandler actionDialogHandler;
 
     private Board board;
+    private Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,25 +117,38 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         actionDialogHandler.setClientConnector(clientConnector);
         imageButtonHandler.setClientConnector(clientConnector);
 
-        //test
-        clientConnector.registerCallback(GameUpdateMsg.class, (msg -> {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    GameUpdateMsg gameUpdateMsg1 = (GameUpdateMsg) msg;
-                    Card card = gameUpdateMsg1.getBoughtCard();
-                    if(card == null){
-                        ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
-                        errorDialogHandler.show(fragmentManager, "errorDialog");
-                    } else {
-                        MoneyCard moneyCard = (MoneyCard) card;
-                        Log.i("MoneyCard", "MoneyType: " + moneyCard.getMoneyType());
+        //ImageButtonHandler.View.invalidate()
+
+         /*   //Card card = board.getBuyField().pickCard(MoneyType.GOLD);
+            GameUpdateMsg gameUpdateMsg = new GameUpdateMsg();
+            gameUpdateMsg.setMoneyTypeClicked(MoneyType.GOLD);
+            sendUpdate(gameUpdateMsg);
+
+            clientConnector.registerCallback(GameUpdateMsg.class, (msg -> {
+                runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        GameUpdateMsg gameUpdateMsg1 = (GameUpdateMsg) msg;
+                        Card card = gameUpdateMsg1.getBoughtCard();
+                        if (card == null) {
+                            //ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
+                            //errorDialogHandler.show(fragmentManager, "errorDialog");
+                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
+                                    errorDialogHandler.show(fragmentManager, "errorDialog");
+                                }
+                            });
+                        } else {
+                            MoneyCard moneyCard = (MoneyCard) card;
+                            Log.i("MoneyCard", "MoneyType: " + moneyCard.getMoneyType());
+                        }
                     }
-                }
-            });
-        }));
-
-
+                });
+            }));
+*/
         clientConnector.registerCallback(HasCheatedMessage.class, (msg -> {
             runOnUiThread(new Runnable() {
                 @Override
@@ -197,6 +215,5 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         //this.trans.hide(chatFragment);
         onBackPressed();
     }
-
 
 }
