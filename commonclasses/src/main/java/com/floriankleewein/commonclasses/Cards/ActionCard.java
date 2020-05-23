@@ -10,6 +10,8 @@ public class ActionCard extends Card {
         this.action = calculateAction();
     }
 
+    public ActionCard () {}
+
     public Action getAction() {
         return action;
     }

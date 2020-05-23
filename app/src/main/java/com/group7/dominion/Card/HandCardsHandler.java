@@ -20,6 +20,7 @@ import com.floriankleewein.commonclasses.GameLogic.PlayStatus;
 import com.floriankleewein.commonclasses.Network.ClientConnector;
 import com.floriankleewein.commonclasses.Network.GameUpdateMsg;
 import com.floriankleewein.commonclasses.Network.GetGameMsg;
+import com.floriankleewein.commonclasses.Network.StartGameMsg;
 import com.floriankleewein.commonclasses.User.User;
 import com.group7.dominion.DominionActivity;
 import com.group7.dominion.R;
@@ -47,14 +48,15 @@ public class HandCardsHandler {
         ImageButtons = new LinkedList<>();
         lparams.weight = 1;
         playStatus = PlayStatus.NO_PLAY_PHASE;
-        cardList = testList();
+
     }
 
     public void initCards(String Username) {
         sendMessage(Username);
+        cardList = user.getUserCards().getHandCards();
         try {
-            for (int i = 0; i < user.getUserCards().getHandCards().size(); i++) {
-                addCard(user.getUserCards().getHandCards().get(i));
+            for (int i = 0; i < cardList.size(); i++) {
+                addCard(cardList.get(i));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -67,7 +69,7 @@ public class HandCardsHandler {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-               user = ClientConnector.getClientConnector().sendGameUpdate().findUser(UserName);
+                user = ClientConnector.getClientConnector().sendGameUpdate().findUser(UserName);
             }
         });
         thread.start();
@@ -119,7 +121,6 @@ public class HandCardsHandler {
         }
         return R.drawable.backofcard;
     }
-
 
     private List<Card> testList() {
         /**
@@ -186,7 +187,14 @@ public class HandCardsHandler {
     }
 
     public void registerListener(String Username) {
-
+        ClientConnector.getClientConnector().registerCallback(StartGameMsg.class, msg -> {
+            ((DominionActivity) context).runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    System.out.println("Got the Callback");
+                }
+            });
+        });
     }
 }
 

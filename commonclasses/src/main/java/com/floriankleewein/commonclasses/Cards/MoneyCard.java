@@ -11,6 +11,10 @@ public class MoneyCard extends Card {
         setIdMoney(moneyType);
     }
 
+    MoneyCard () {
+        super();
+    }
+
     public int getWorth() {
         return worth;
     }

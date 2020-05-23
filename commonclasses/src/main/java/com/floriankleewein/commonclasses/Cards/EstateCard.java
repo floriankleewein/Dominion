@@ -10,6 +10,8 @@ public class EstateCard extends Card {
         this.estateType = estateType;
         setIdEstate(estateType);
     }
+    public EstateCard () {
+    }
 
     public int getEstateValue() {
         return estateValue;

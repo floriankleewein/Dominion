@@ -110,6 +110,7 @@ public class TestServer {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        try {
         server.addListener(new Listener() {
             public void received(Connection con, Object object) {
                 if (object instanceof MessageClass) {
@@ -136,9 +137,7 @@ public class TestServer {
                     }*/
                     if (game.checkSize()) {
                         if (game.checkName(name)) {
-
                             userClientConnectorMap.put(player, con);
-
                             game.addPlayer(player);
                             addPlayerMsg.setFeedbackUI(0);
                             addPlayerMsg.setPlayerAdded(true);
@@ -244,8 +243,10 @@ public class TestServer {
                     msg.setGm(gamehandler);
                     server.sendToAllTCP(msg);
                 }
+
             }
         });
+        }catch (Exception e){e.printStackTrace();}
     }
 
     public void updateAll(GameUpdateMsg msg) {

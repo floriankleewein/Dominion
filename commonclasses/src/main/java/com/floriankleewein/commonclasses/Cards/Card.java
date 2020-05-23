@@ -6,6 +6,8 @@ public class Card {
     private int id;
     private int price;
 
+    public Card () {}
+
     public Card(int price) {
         this.price = price;
     }

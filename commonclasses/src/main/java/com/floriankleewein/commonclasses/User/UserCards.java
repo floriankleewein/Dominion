@@ -17,6 +17,7 @@ public class UserCards {
     private LinkedList<Card> HandCards;
     private LinkedList<Card> DiscardCards;
 
+    public UserCards() {}
 
     public void getFirstCards(LinkedList<Card> GivenCards) {
         this.Deck = new LinkedList<Card>();

@@ -205,7 +205,7 @@ public class ClientConnector {
                     Log.info("Got Message");
                     GetGameMsg msg = (GetGameMsg) object;
                     System.out.println(msg.getGm());
-                    //game = msg.getGm().getGame();
+                    game = msg.getGm().getGame();
 
                     callbackMap.get(GetGameMsg.class).callback(msg);
                 }
@@ -313,6 +313,15 @@ public class ClientConnector {
         msg.setName(name);
         client.sendTCP(msg);
 
+        client.addListener(new Listener() {
+            public void received(Connection con, Object object) {
+                if (object instanceof HasCheatedMessage) {
+                    HasCheatedMessage msg = (HasCheatedMessage) object;
+                    callbackMap.get(HasCheatedMessage.class).callback(msg);
+                }
+            }
+        });
+
     }
 
     public void sendSuspectUser(String SuspectUsername, String Username) {
@@ -320,6 +329,15 @@ public class ClientConnector {
         msg.setSuspectedUserName(SuspectUsername);
         msg.setUserName(Username);
         client.sendTCP(msg);
+
+        client.addListener(new Listener() {
+            public void received(Connection con, Object object) {
+                if (object instanceof SuspectMessage) {
+                    SuspectMessage msg = (SuspectMessage) object;
+                    callbackMap.get(SuspectMessage.class).callback(msg);
+                }
+            }
+        });
     }
 
     public void checkButtons() {
