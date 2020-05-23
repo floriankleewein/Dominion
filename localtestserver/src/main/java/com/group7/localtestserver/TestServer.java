@@ -206,9 +206,7 @@ public class TestServer {
 
                     } else if (object instanceof HasCheatedMessage) {
                         HasCheatedMessage CheatMsg = (HasCheatedMessage) object;
-                    /*game.getCheatService().addCardtoUser(CheatMsg.getName());
-                    Not working now because the User has now DeckCards --> Null Pointer
-                     */
+                    game.getCheatService().addCardtoUser(CheatMsg.getName());
                         sendCheatInformation(CheatMsg.getName());
 
 
@@ -222,7 +220,7 @@ public class TestServer {
                     } else if (object instanceof SuspectMessage) {
                         SuspectMessage msg = (SuspectMessage) object;
                         System.out.println("GOT SUSPECT MESSAGE FROM" + msg.getUserName());
-                        //game.getCheatService().suspectUser(msg.getSuspectedUserName(),msg.getUserName());
+                        game.getCheatService().suspectUser(msg.getSuspectedUserName(),msg.getUserName());
                         sendSuspectInformation(msg.getSuspectedUserName(), msg.getUserName());
                     } else if (object instanceof GameUpdateMsg) {
                         GameUpdateMsg gameUpdateMsg = (GameUpdateMsg) object;

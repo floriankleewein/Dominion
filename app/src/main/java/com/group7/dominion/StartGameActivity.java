@@ -83,13 +83,15 @@ public class StartGameActivity extends AppCompatActivity {
                     names.clear();
                     names.addAll(((UpdatePlayerNamesMsg) msg).getNameList());
                     listViewAdapter.notifyDataSetChanged();
-                    Thread thread1 = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            clientConnector.startGame();
-                        }
-                    });
-                    thread1.start();
+                    if (names.size() >= 1) {
+                        Thread thread1 = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                clientConnector.startGame();
+                            }
+                        });
+                        thread1.start();
+                    }
                 }
             });
         }));

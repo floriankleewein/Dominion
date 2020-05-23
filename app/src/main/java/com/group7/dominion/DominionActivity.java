@@ -132,6 +132,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
                     user = ((GetGameMsg) msg).getGm().getGame().findUser(getUsername());
                     cardsHandler.initCards (user);
                     cardsHandler.onClickListener();
+                    System.out.println(user.getUserCards().getHandCards().size() + " " + getUsername());
                 }
             });
         });

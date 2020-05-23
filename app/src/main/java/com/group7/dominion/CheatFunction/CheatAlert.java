@@ -45,9 +45,6 @@ public class CheatAlert extends AppCompatDialogFragment implements AdapterView.O
                 .setView(sp)
                 .setPositiveButton("Give me an Extra Card", (dialog, which) -> {
                     if (!alreadyCheated) {
-                        if (Game.getGame().getPlayerList().size() > 0) {
-                            Game.getGame().getCheatService().addCardtoUser(this.name);
-                        }
                         alreadyCheated = true;
                         sendMessage();
                         dialog.cancel();

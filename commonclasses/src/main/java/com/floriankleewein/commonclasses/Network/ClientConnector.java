@@ -206,7 +206,6 @@ public class ClientConnector {
                 if (object instanceof GetGameMsg) {
                     Log.info("Got Message");
                     GetGameMsg msg = (GetGameMsg) object;
-                    System.out.println(msg.getGm().getGame().getPlayerList().get(0));
                     game = msg.getGm().getGame();
                     callbackMap.get(GetGameMsg.class).callback(msg);
                 }

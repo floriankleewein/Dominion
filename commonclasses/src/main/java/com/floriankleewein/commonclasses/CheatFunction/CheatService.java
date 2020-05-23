@@ -1,4 +1,5 @@
 package com.floriankleewein.commonclasses.CheatFunction;
+
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.User.User;
 
@@ -8,14 +9,7 @@ public class CheatService {
 
 
     private List<User> PlayerList;
-    private static CheatService cheatService;
 
-    public static synchronized CheatService getGame() {
-        if (CheatService.cheatService == null) {
-            cheatService = new CheatService(Game.getGame());
-        }
-        return CheatService.cheatService;
-    }
 
     public CheatService(Game game) {
         PlayerList = game.getPlayerList();
@@ -58,10 +52,6 @@ public class CheatService {
         } else {
             user.getGamePoints().modifyWinningPoints(-5);
         }
-    }
-
-    public static CheatService getCheatService() {
-        return CheatService.cheatService;
     }
 
     /*

@@ -33,13 +33,13 @@ import static com.floriankleewein.commonclasses.Cards.ActionType.HEXE;
 
 public class HandCardsHandler {
     PlayStatus playStatus;
-    User user;
     LinearLayout linearLayout;
     LinearLayout.LayoutParams lparams;
     private List<ImageButton> ImageButtons;
     private List<Card> cardList;
     Context context;
     int img_id;
+    boolean canGetCards;
 
     public HandCardsHandler(Context context) {
         this.context = context;
@@ -48,20 +48,23 @@ public class HandCardsHandler {
         ImageButtons = new LinkedList<>();
         lparams.weight = 1;
         playStatus = PlayStatus.NO_PLAY_PHASE;
+        canGetCards = true;
 
     }
 
     public void initCards(User user) {
-        cardList = user.getUserCards().getHandCards();
-        try {
-            for (int i = 0; i < cardList.size(); i++) {
-                addCard(cardList.get(i));
+        if (canGetCards) {
+            canGetCards = false;
+            cardList = user.getUserCards().getHandCards();
+            try {
+                for (int i = 0; i < cardList.size(); i++) {
+                    addCard(cardList.get(i));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
-
 
     public void sendMessage() {
         Thread thread = new Thread(new Runnable() {
@@ -149,14 +152,22 @@ public class HandCardsHandler {
             int finalI = i;
 
             ImageButtons.get(i).setOnClickListener(v -> {
-                if ((cardList.get(finalI).getId() >=13) || (cardList.get(finalI).getId() <=10)) {
+                if ((cardList.get(finalI).getId() >= 13) || (cardList.get(finalI).getId() <= 10)) {
                     System.out.println("Card with the ID is played: " + cardList.get(finalI).getId());
                     ImageButtons.get(finalI).setVisibility(View.INVISIBLE);
+                    Thread thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ClientConnector.getClientConnector().sendGameUpdate();
+                        }
+                    });
+                    thread.start();
                 }
             });
 
         }
     }
+
     private void addCard(Card card) {
         ImageButton umg = new ImageButton(context);
         umg.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
