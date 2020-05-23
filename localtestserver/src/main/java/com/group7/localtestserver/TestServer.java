@@ -113,8 +113,7 @@ public class TestServer {
                             System.out.println("Player added: " + player.getUserName());
 
 
-           
-                         } else {
+                        } else {
                             addPlayerMsg.setFeedbackUI(1);
                         }
                     } else {
@@ -151,7 +150,7 @@ public class TestServer {
                     con.sendTCP(msg);
 
 
-                }else if(object instanceof ChatMessage){
+                } else if (object instanceof ChatMessage) {
                     ChatMessage msg = (ChatMessage) object;
 
                     String message = msg.getMessage();
@@ -177,36 +176,37 @@ public class TestServer {
                     sendCheatInformation(CheatMsg.getName());
 
 
-                }else if(object instanceof UpdatePlayerNamesMsg){
+                } else if (object instanceof UpdatePlayerNamesMsg) {
                     UpdatePlayerNamesMsg msg = new UpdatePlayerNamesMsg();
-                    for(User x: game.getPlayerList()){
+                    for (User x : game.getPlayerList()) {
                         msg.getNameList().add(x.getUserName());
                     }
                     server.sendToAllTCP(msg);
 
-                }
-                else if (object instanceof SuspectMessage){
+                } else if (object instanceof SuspectMessage) {
                     SuspectMessage msg = (SuspectMessage) object;
                     System.out.println("GOT SUSPECT MESSAGE FROM" + msg.getUserName());
                     //game.getCheatService().suspectUser(msg.getSuspectedUserName(),msg.getUserName());
 
-                    sendSuspectInformation(msg.getSuspectedUserName(),msg.getUserName());
-                } else if(object instanceof GameUpdateMsg){
+                    sendSuspectInformation(msg.getSuspectedUserName(), msg.getUserName());
+                } else if (object instanceof GameUpdateMsg) {
                     GameUpdateMsg gameUpdateMsg = (GameUpdateMsg) object;
-                    updateAll(gameUpdateMsg);
-                    gameUpdateMsg.setGameHandler(gamehandler);
-                    server.sendToAllTCP(gameUpdateMsg);
-                } else if(object instanceof CheckButtonsMsg){
+                    if (gameUpdateMsg.getGameHandler() != null) {
+                        updateAll(gameUpdateMsg);
+                        gameUpdateMsg.setGameHandler(gamehandler); // TODO take care on GameupdateMessage
+                        server.sendToAllTCP(gameUpdateMsg);
+                    }
+                } else if (object instanceof CheckButtonsMsg) {
                     CheckButtonsMsg msg = (CheckButtonsMsg) object;
-                    if(hasGame == false){
+                    if (hasGame == false) {
                         msg.setCreateValue(true);
                         msg.setJoinValue(false);
-                    }else if(hasGame == true){
+                    } else if (hasGame == true) {
                         msg.setCreateValue(false);
                         msg.setJoinValue(true);
                     }
                     con.sendTCP(msg);
-                } else if(object instanceof AllPlayersInDominionActivityMsg){
+                } else if (object instanceof AllPlayersInDominionActivityMsg) {
                     AllPlayersInDominionActivityMsg msg = (AllPlayersInDominionActivityMsg) object;
                     server.sendToAllTCP(msg);
                 }
@@ -244,7 +244,8 @@ public class TestServer {
             con.sendTCP(msg);
         }
     }
-    public void sendSuspectInformation (String SuspectName, String Username){
+
+    public void sendSuspectInformation(String SuspectName, String Username) {
         SuspectMessage msg = new SuspectMessage();
         msg.setSuspectedUserName(SuspectName);
         msg.setUserName(Username);
@@ -260,11 +261,12 @@ public class TestServer {
 
     /**
      * Creates Starter Deck for all players and returns true if game was created successfully.
+     *
      * @return
      */
     public boolean setupGame() {
         if (hasGame()) {
-            if(gamehandler == null) {
+            if (gamehandler == null) {
                 gamehandler = new GameHandler(getGame());
                 gamehandler.prepareGame();
                 return true;
