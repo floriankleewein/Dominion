@@ -5,6 +5,7 @@ import com.esotericsoftware.minlog.Log;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.floriankleewein.commonclasses.Board.ActionField;
 import com.floriankleewein.commonclasses.Board.Board;
 import com.floriankleewein.commonclasses.Board.BuyField;
 import com.floriankleewein.commonclasses.Cards.Action;
@@ -107,6 +108,7 @@ public class ClientConnector {
         registerClass(MoneyType.class);
         registerClass(CheatService.class);
         registerClass(EstateCard.class);
+        registerClass(ActionField.class);
 
         // start client
         client.start();
@@ -206,12 +208,11 @@ public class ClientConnector {
                     GetGameMsg msg = (GetGameMsg) object;
                     System.out.println(msg.getGm());
                     game = msg.getGm().getGame();
-
                     callbackMap.get(GetGameMsg.class).callback(msg);
                 }
             }
         });
-        return Game.getGame();
+        return game;
     }
 
     //for now this method only has the use, to reset the game and playerList, so we

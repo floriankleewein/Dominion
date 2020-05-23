@@ -85,8 +85,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
     protected void onStart() {
         super.onStart();
 
-        cardsHandler.initCards(getUsername());
-        cardsHandler.registerListener(getUsername());
+        cardsHandler.execute(getUsername());
         cardsHandler.onClickListener();
         // Handle communication with Server, only send updated to server whenever card is played etc.
         ClientConnector clientConnector = ClientConnector.getClientConnector();
@@ -125,6 +124,15 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
                 }
             });
         }));
+
+        ClientConnector.getClientConnector().registerCallback(GetGameMsg.class, msg -> {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    System.out.println("Got the Callback");
+                }
+            });
+        });
 
     }
 
