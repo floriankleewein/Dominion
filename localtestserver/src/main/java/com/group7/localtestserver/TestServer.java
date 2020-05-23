@@ -223,7 +223,6 @@ public class TestServer {
                         SuspectMessage msg = (SuspectMessage) object;
                         System.out.println("GOT SUSPECT MESSAGE FROM" + msg.getUserName());
                         //game.getCheatService().suspectUser(msg.getSuspectedUserName(),msg.getUserName());
-
                         sendSuspectInformation(msg.getSuspectedUserName(), msg.getUserName());
                     } else if (object instanceof GameUpdateMsg) {
                         GameUpdateMsg gameUpdateMsg = (GameUpdateMsg) object;
@@ -305,17 +304,18 @@ public class TestServer {
      * @return
      */
     public boolean setupGame() {
-        if (hasGame() && !gamehandlerCalled) {
-            gamehandlerCalled = true;
-            gamehandler = new GameHandler(getGame());
-            gamehandler.prepareGame();
-            System.out.println("GAME HANDLER INSTANCED");
-            return true;
+        if (hasGame()) {
+            if(gamehandler == null) {
+                gamehandler = new GameHandler(getGame());
+                gamehandler.prepareGame();
+                return true;
+            } else {
+                return true;
+            }
         } else {
             return false;
         }
     }
-
     public Board getBoard() {
         return board;
     }

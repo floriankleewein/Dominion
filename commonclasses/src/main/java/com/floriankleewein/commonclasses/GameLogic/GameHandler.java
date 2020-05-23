@@ -44,6 +44,8 @@ public class GameHandler {
         this.game = game;
     }
 
+    public GameHandler () {}
+
     public void prepareGame() {
         List<User> playerList = game.getPlayerList();
         if (playerList.size() > 1) {

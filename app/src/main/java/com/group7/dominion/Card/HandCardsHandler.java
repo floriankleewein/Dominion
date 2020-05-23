@@ -31,7 +31,7 @@ import java.util.List;
 import static com.floriankleewein.commonclasses.Cards.ActionType.HEXE;
 
 
-public class HandCardsHandler extends AsyncTask<String, String, Void> {
+public class HandCardsHandler{
     PlayStatus playStatus;
     User user;
     LinearLayout linearLayout;
@@ -198,11 +198,6 @@ public class HandCardsHandler extends AsyncTask<String, String, Void> {
         });
     }
 
-    @Override
-    protected Void doInBackground(String... String) {
-        initCards(String[0]);
-        return null;
-    }
 }
 
 

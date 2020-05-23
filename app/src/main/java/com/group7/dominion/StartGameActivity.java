@@ -83,15 +83,13 @@ public class StartGameActivity extends AppCompatActivity {
                     names.clear();
                     names.addAll(((UpdatePlayerNamesMsg) msg).getNameList());
                     listViewAdapter.notifyDataSetChanged();
-                    if (names.size() == 2) {
-                        Thread thread1 = new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                clientConnector.startGame();
-                            }
-                        });
-                        thread1.start();
-                    }
+                    Thread thread1 = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            clientConnector.startGame();
+                        }
+                    });
+                    thread1.start();
                 }
             });
         }));
@@ -122,7 +120,7 @@ public class StartGameActivity extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    System.out.println("Got the Callback");
+                    System.out.println("Got the Callback for StartGameMsg in StartGameAcitivity");
                 }
             });
         });

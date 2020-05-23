@@ -35,10 +35,13 @@ public class MoneyCard extends Card {
         switch (moneyType) {
             case KUPFER:
                 super.setId(14);
+                break;
             case SILBER:
                 super.setId(15);
+                break;
             case GOLD:
                 super.setId(16);
+                break;
         }
     }
 }
