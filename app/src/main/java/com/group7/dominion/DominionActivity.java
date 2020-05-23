@@ -85,7 +85,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
     protected void onStart() {
         super.onStart();
 
-        cardsHandler.initCards(getUsername());
+        cardsHandler.sendMessage(getUsername());
         cardsHandler.onClickListener();
         // Handle communication with Server, only send updated to server whenever card is played etc.
         ClientConnector clientConnector = ClientConnector.getClientConnector();

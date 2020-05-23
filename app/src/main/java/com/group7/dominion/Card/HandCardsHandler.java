@@ -31,7 +31,7 @@ import java.util.List;
 import static com.floriankleewein.commonclasses.Cards.ActionType.HEXE;
 
 
-public class HandCardsHandler{
+public class HandCardsHandler {
     PlayStatus playStatus;
     User user;
     LinearLayout linearLayout;
@@ -51,9 +51,7 @@ public class HandCardsHandler{
 
     }
 
-    public void initCards(String Username) {
-        sendMessage(Username);
-
+    private void initCards(String Username) {
         try {
             for (int i = 0; i < cardList.size(); i++) {
                 addCard(cardList.get(i));
@@ -64,8 +62,7 @@ public class HandCardsHandler{
     }
 
 
-    void sendMessage(String UserName) {
-
+    public void sendMessage(String UserName) {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -73,16 +70,8 @@ public class HandCardsHandler{
             }
         });
         thread.start();
-        try {
-            thread.join();
-            cardList = user.getUserCards().getHandCards();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
     }
-
-
     private int setRessource(Card card) {
 
         switch (card.getId()) {

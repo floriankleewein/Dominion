@@ -306,6 +306,7 @@ public class TestServer {
     public boolean setupGame() {
         if (hasGame()) {
             if(gamehandler == null) {
+                System.out.println("GameHandler instanced on Server");
                 gamehandler = new GameHandler(getGame());
                 gamehandler.prepareGame();
                 return true;
