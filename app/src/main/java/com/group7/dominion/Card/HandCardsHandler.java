@@ -51,7 +51,8 @@ public class HandCardsHandler {
 
     }
 
-    private void initCards(String Username) {
+    public void initCards(User user) {
+        cardList = user.getUserCards().getHandCards();
         try {
             for (int i = 0; i < cardList.size(); i++) {
                 addCard(cardList.get(i));
@@ -62,16 +63,17 @@ public class HandCardsHandler {
     }
 
 
-    public void sendMessage(String UserName) {
+    public void sendMessage() {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                user = ClientConnector.getClientConnector().sendGameUpdate().findUser(UserName);
+                ClientConnector.getClientConnector().sendGameUpdate();
             }
         });
         thread.start();
 
     }
+
     private int setRessource(Card card) {
 
         switch (card.getId()) {
@@ -145,13 +147,16 @@ public class HandCardsHandler {
     public void onClickListener() {
         for (int i = 0; i < ImageButtons.size(); i++) {
             int finalI = i;
+
             ImageButtons.get(i).setOnClickListener(v -> {
-                System.out.println("Card with the ID is played: " + cardList.get(finalI).getId());
-                ImageButtons.get(finalI).setVisibility(View.INVISIBLE);
+                if ((cardList.get(finalI).getId() >=13) || (cardList.get(finalI).getId() <=10)) {
+                    System.out.println("Card with the ID is played: " + cardList.get(finalI).getId());
+                    ImageButtons.get(finalI).setVisibility(View.INVISIBLE);
+                }
             });
+
         }
     }
-
     private void addCard(Card card) {
         ImageButton umg = new ImageButton(context);
         umg.setScaleType(ImageView.ScaleType.CENTER_INSIDE);

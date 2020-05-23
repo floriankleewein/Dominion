@@ -48,7 +48,7 @@ public class GameHandler {
 
     public void prepareGame() {
         List<User> playerList = game.getPlayerList();
-        if (playerList.size() > 1) {
+        if (playerList.size() >= 1) {
             for (User user : playerList) {
                 LinkedList<Card> generatedCards = new LinkedList<>();
                 UserCards ucards = new UserCards();

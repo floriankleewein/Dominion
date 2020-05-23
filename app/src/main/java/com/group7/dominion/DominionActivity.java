@@ -22,6 +22,7 @@ import com.floriankleewein.commonclasses.Chat.ChatMessage;
 import com.floriankleewein.commonclasses.Network.ClientConnector;
 import com.floriankleewein.commonclasses.Network.GetGameMsg;
 import com.floriankleewein.commonclasses.Network.StartGameMsg;
+import com.floriankleewein.commonclasses.User.User;
 import com.group7.dominion.Card.HandCardsHandler;
 import com.group7.dominion.Chat.ChatFragment;
 
@@ -44,7 +45,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
     private FragmentTransaction trans;
     private ClientConnector clientConnector;
     private HandCardsHandler cardsHandler;
-
+    private User user;
     private SensorManager sm;
     private ShakeListener shakeListener;
 
@@ -85,8 +86,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
     protected void onStart() {
         super.onStart();
 
-        cardsHandler.sendMessage(getUsername());
-        cardsHandler.onClickListener();
+
         // Handle communication with Server, only send updated to server whenever card is played etc.
         ClientConnector clientConnector = ClientConnector.getClientConnector();
         Game clientGame = clientConnector.getGame();
@@ -129,11 +129,13 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    System.out.println("Got the Callback -- For GetGameMessage");
+                    user = ((GetGameMsg) msg).getGm().getGame().findUser(getUsername());
+                    cardsHandler.initCards (user);
+                    cardsHandler.onClickListener();
                 }
             });
         });
-
+        cardsHandler.sendMessage();
     }
 
 

@@ -57,7 +57,7 @@ public class ClientConnector {
 
     public static synchronized ClientConnector getClientConnector() {
         if (ClientConnector.clientConnector == null) {
-            client = new Client();
+            client = new Client(65536, 65536);
             ClientConnector.clientConnector = new ClientConnector();
         }
         return ClientConnector.clientConnector;
@@ -206,7 +206,7 @@ public class ClientConnector {
                 if (object instanceof GetGameMsg) {
                     Log.info("Got Message");
                     GetGameMsg msg = (GetGameMsg) object;
-                    System.out.println(msg.getGm() + "msg id from GetGameMsg!!!!!!!!!!");
+                    System.out.println(msg.getGm().getGame().getPlayerList().get(0));
                     game = msg.getGm().getGame();
                     callbackMap.get(GetGameMsg.class).callback(msg);
                 }

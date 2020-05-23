@@ -1,6 +1,7 @@
 package com.group7.localtestserver;
 
 
+import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
@@ -60,7 +61,7 @@ public class TestServer {
 
 
     public TestServer() {
-        server = new Server();
+        server = new Server(65536,65536);
     }
 
     public void startServer() {
@@ -102,7 +103,6 @@ public class TestServer {
         registerClass(CheatService.class);
         registerClass(EstateCard.class);
         registerClass(ActionField.class);
-
 
         //Start Server
         server.start();
