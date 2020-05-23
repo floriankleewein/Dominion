@@ -85,6 +85,13 @@ public class StartGameActivity extends AppCompatActivity {
             });
         }));
 
+        Thread thread1 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                clientConnector.startGame();
+            }
+        });
+        thread1.start();
 
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override

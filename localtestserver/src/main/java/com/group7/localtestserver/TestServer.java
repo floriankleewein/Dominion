@@ -24,7 +24,9 @@ import com.floriankleewein.commonclasses.Network.ReturnPlayersMsg;
 import com.floriankleewein.commonclasses.Network.StartGameMsg;
 import com.floriankleewein.commonclasses.Network.SuspectMessage;
 import com.floriankleewein.commonclasses.Network.UpdatePlayerNamesMsg;
+import com.floriankleewein.commonclasses.User.GamePoints;
 import com.floriankleewein.commonclasses.User.User;
+import com.floriankleewein.commonclasses.User.UserCards;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -67,6 +69,8 @@ public class TestServer {
         registerClass(SuspectMessage.class);
         registerClass(CheckButtonsMsg.class);
         registerClass(GetGameMsg.class);
+        registerClass(UserCards.class);
+        registerClass(GamePoints.class);
 
 
         //Start Server
@@ -125,23 +129,27 @@ public class TestServer {
                     //ResetMsg msg = (ResetMsg) object;
 
                 } else if (object instanceof StartGameMsg) {
-                    StartGameMsg msg = new StartGameMsg();
-                    //Check if game started successfully, and notify client
-                    if (setupGame()) {
-                        msg.setFeedbackUI(0);
-                        msg.setGame(getGame());
-                        // Send message to all clients, TODO they need to be in lobby
-                        server.sendToAllTCP(msg);
-                        ActivePlayerMessage activePlayerMsg = new ActivePlayerMessage();
-                        activePlayerMsg.setGame(getGame());
-                        Connection activePlayerCon = userClientConnectorMap.get(game.getActivePlayer());
-                        activePlayerCon.sendTCP(activePlayerMsg);
-                    } else {
-                        msg.setFeedbackUI(1);
+                    try {
+                        StartGameMsg msg = new StartGameMsg();
+                        //Check if game started successfully, and notify client
+                        System.out.println("GOT STARTGAMEMESsAGE");
+                        if (setupGame()) {
+                            msg.setFeedbackUI(0);
+                            msg.setGame(getGame());
+                            // Send message to all clients, TODO they need to be in lobby
+                            server.sendToAllTCP(msg);
+                            ActivePlayerMessage activePlayerMsg = new ActivePlayerMessage();
+                            activePlayerMsg.setGame(getGame());
+                            Connection activePlayerCon = userClientConnectorMap.get(game.getActivePlayer());
+                            activePlayerCon.sendTCP(activePlayerMsg);
+                        } else {
+                            msg.setFeedbackUI(1);
+                            con.sendTCP(msg);
+                        }
                         con.sendTCP(msg);
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                    con.sendTCP(msg);
-
                 } else if (object instanceof GetPlayerMsg) {
                     System.out.println("Got the GetPlayerMsg");
                     ReturnPlayersMsg msg = new ReturnPlayersMsg();
@@ -205,10 +213,8 @@ public class TestServer {
                 } else if (object instanceof GetGameMsg) {
                     Log.info("Got GetGameMessage");
                     GetGameMsg msg = new GetGameMsg();
-                    if (setupGame()) {
-                        msg.setGm(gamehandler);
-                        server.sendToAllTCP(msg);
-                    }
+                    msg.setGm(gamehandler);
+                    server.sendToAllTCP(msg);
                 }
             }
         });
@@ -268,6 +274,7 @@ public class TestServer {
         if (hasGame()) {
             gamehandler = new GameHandler(getGame());
             gamehandler.prepareGame();
+            System.out.println("GAME HANDLER INSTANCED");
             return true;
         } else {
             return false;

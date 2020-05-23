@@ -8,7 +8,9 @@ import com.esotericsoftware.kryonet.Listener;
 import com.floriankleewein.commonclasses.Chat.ChatMessage;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.GameLogic.GameHandler;
+import com.floriankleewein.commonclasses.User.GamePoints;
 import com.floriankleewein.commonclasses.User.User;
+import com.floriankleewein.commonclasses.User.UserCards;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -74,6 +76,8 @@ public class ClientConnector {
         registerClass(SuspectMessage.class);
         registerClass(CheckButtonsMsg.class);
         registerClass(GetGameMsg.class);
+        registerClass(UserCards.class);
+        registerClass(GamePoints.class);
 
 
         // start client
@@ -173,7 +177,7 @@ public class ClientConnector {
                     Log.info("Got Message");
                     GetGameMsg msg = (GetGameMsg) object;
                     System.out.println(msg.getGm());
-                    game = msg.getGm().getGame();
+                    //game = msg.getGm().getGame();
 
                     callbackMap.get(GetGameMsg.class).callback(msg);
                 }
