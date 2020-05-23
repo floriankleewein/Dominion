@@ -5,9 +5,22 @@ import com.esotericsoftware.minlog.Log;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.floriankleewein.commonclasses.Board.Board;
+import com.floriankleewein.commonclasses.Board.BuyField;
+import com.floriankleewein.commonclasses.Cards.Action;
+import com.floriankleewein.commonclasses.Cards.ActionCard;
+import com.floriankleewein.commonclasses.Cards.ActionType;
+import com.floriankleewein.commonclasses.Cards.CalculationHelper;
+import com.floriankleewein.commonclasses.Cards.Card;
+import com.floriankleewein.commonclasses.Cards.EstateCard;
+import com.floriankleewein.commonclasses.Cards.EstateType;
+import com.floriankleewein.commonclasses.Cards.MoneyCard;
+import com.floriankleewein.commonclasses.Cards.MoneyType;
 import com.floriankleewein.commonclasses.Chat.ChatMessage;
+import com.floriankleewein.commonclasses.CheatFunction.CheatService;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.GameLogic.GameHandler;
+import com.floriankleewein.commonclasses.GameLogic.PlayerTurn;
 import com.floriankleewein.commonclasses.User.GamePoints;
 import com.floriankleewein.commonclasses.User.User;
 import com.floriankleewein.commonclasses.User.UserCards;
@@ -15,6 +28,7 @@ import com.floriankleewein.commonclasses.User.UserCards;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 public class ClientConnector {
@@ -78,7 +92,21 @@ public class ClientConnector {
         registerClass(GetGameMsg.class);
         registerClass(UserCards.class);
         registerClass(GamePoints.class);
-
+        registerClass(LinkedList.class);
+        registerClass(Card.class);
+        registerClass(MoneyCard.class);
+        registerClass(ActionCard.class);
+        registerClass(GameHandler.class);
+        registerClass(PlayerTurn.class);
+        registerClass(Action.class);
+        registerClass(Board.class);
+        registerClass(BuyField.class);
+        registerClass(ActionType.class);
+        registerClass(CalculationHelper.class);
+        registerClass(EstateType.class);
+        registerClass(MoneyType.class);
+        registerClass(CheatService.class);
+        registerClass(EstateCard.class);
 
         // start client
         client.start();
