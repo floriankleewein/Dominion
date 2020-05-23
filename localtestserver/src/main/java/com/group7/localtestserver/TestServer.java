@@ -132,13 +132,14 @@ public class TestServer {
                     if (setupGame()) {
                         msg.setFeedbackUI(0);
                         msg.setGame(getGame());
+                        msg.setGameHandler(gamehandler);
                         // Send message to all clients, TODO they need to be in lobby
                         server.sendToAllTCP(msg);
                         ActivePlayerMessage activePlayerMsg = new ActivePlayerMessage();
                         activePlayerMsg.setGame(getGame());
                         Connection activePlayerCon = userClientConnectorMap.get(game.getActivePlayer());
                         activePlayerCon.sendTCP(activePlayerMsg);
-                    } else {
+                    } else { // fehlerfall
                         msg.setFeedbackUI(1);
                         con.sendTCP(msg);
                     }
@@ -263,9 +264,13 @@ public class TestServer {
      */
     public boolean setupGame() {
         if (hasGame()) {
-            gamehandler = new GameHandler(getGame());
-            gamehandler.prepareGame();
-            return true;
+            if(gamehandler == null) {
+                gamehandler = new GameHandler(getGame());
+                gamehandler.prepareGame();
+                return true;
+            } else {
+                return true;
+            }
         } else {
             return false;
         }
