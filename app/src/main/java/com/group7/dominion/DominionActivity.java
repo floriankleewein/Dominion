@@ -10,25 +10,33 @@ import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.Toast;
+
 
 import com.floriankleewein.commonclasses.Board.Board;
 import com.floriankleewein.commonclasses.Cards.ActionType;
-import com.floriankleewein.commonclasses.Cards.Card;
 import com.floriankleewein.commonclasses.Cards.MoneyCard;
 import com.floriankleewein.commonclasses.Cards.MoneyType;
-import com.floriankleewein.commonclasses.Chat.ChatMessage;
-import com.floriankleewein.commonclasses.Network.ClientConnector;
 import com.floriankleewein.commonclasses.Network.GameUpdateMsg;
 import com.group7.dominion.Card.ActionDialogHandler;
 import com.group7.dominion.Card.ErrorDialogHandler;
 import com.group7.dominion.Card.ImageButtonHandler;
+import com.floriankleewein.commonclasses.Cards.ActionCard;
+import com.floriankleewein.commonclasses.Cards.Card;
+import com.floriankleewein.commonclasses.Chat.ChatMessage;
+import com.floriankleewein.commonclasses.Network.ClientConnector;
+import com.floriankleewein.commonclasses.Network.GetGameMsg;
+import com.floriankleewein.commonclasses.Network.StartGameMsg;
+import com.floriankleewein.commonclasses.User.User;
+import com.group7.dominion.Card.HandCardsHandler;
 import com.group7.dominion.Chat.ChatFragment;
+
+import android.widget.Toast;
 
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.Network.HasCheatedMessage;
@@ -45,7 +53,8 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
     private ChatFragment chatFragment;
     private FragmentTransaction trans;
     private ClientConnector clientConnector;
-
+    private HandCardsHandler cardsHandler;
+    private User user;
     private SensorManager sm;
     private ShakeListener shakeListener;
 
@@ -65,6 +74,8 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dominion);
+        cardsHandler = new HandCardsHandler(this);
+
 
         chatButton = findViewById(R.id.chat_Button);
         fragmentContainer = findViewById(R.id.chatFragmentContainer);
@@ -86,6 +97,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         sm = (SensorManager) getSystemService(SENSOR_SERVICE);
         sm.registerListener(shakeListener.newSensorListener(), sm.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_NORMAL);
 
+
         fragmentManager = getSupportFragmentManager();
 
        //Hexe
@@ -94,14 +106,19 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
 
         imageButtonHandler = new ImageButtonHandler();
         imageButtonHandler.init(this, fragmentManager);
+
+
+        if (this.chatFragment == null) {
+            this.chatFragment = ChatFragment.newInstance();
+        }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
-        // Handle communication with Server, only send updated to server whenever card is played etc.
 
+        // Handle communication with Server, only send updated to server whenever card is played etc.
         ClientConnector clientConnector = ClientConnector.getClientConnector();
         Game clientGame = clientConnector.getGame();
         //clientConnector.startGame(); // Send Server Message to start game logic
@@ -138,13 +155,30 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
             });
         }));
 
-        clientConnector.registerCallback(ChatMessage.class, msg -> {
-            runOnUiThread(() -> {
-                String chatMessage = ((ChatMessage) msg).getMessage();
-                Toast.makeText(getApplicationContext(), "Nachricht: " + chatMessage, Toast.LENGTH_SHORT).show();
+        clientConnector.registerCallback(ChatMessage.class, (msg -> {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    String ChatMessages = ((ChatMessage) msg).getMessage();
+                    Toast.makeText(getApplicationContext(), "Nachricht: " + ChatMessages, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }));
+
+        ClientConnector.getClientConnector().registerCallback(GetGameMsg.class, msg -> {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    user = ((GetGameMsg) msg).getGm().getGame().findUser(getUsername());
+                    cardsHandler.initCards (user);
+                    cardsHandler.onClickListener();
+                    System.out.println(user.getUserCards().getHandCards().size() + " " + getUsername());
+                }
             });
         });
+        cardsHandler.sendMessage();
     }
+
 
     public void sendUpdateMessage() {
         Thread th = new Thread(new Runnable() {
@@ -163,15 +197,13 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
     }
 
     public void openFragment() {
-        if(this.chatFragment == null) {
-            this.chatFragment = ChatFragment.newInstance();
-        }
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction trans = fragmentManager.beginTransaction();
-            trans.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right,
-                    R.anim.enter_from_right, R.anim.exit_to_right);
 
-            trans.addToBackStack(null);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction trans = fragmentManager.beginTransaction();
+        trans.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right,
+                R.anim.enter_from_right, R.anim.exit_to_right);
+
+        trans.addToBackStack(null);
 
         trans.add(R.id.chatFragmentContainer, chatFragment, "CHAT_FRAGMENT").commit();
 
@@ -179,7 +211,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
 
     @Override
     public void onChatMessageArrived(String msg) {
-        Toast.makeText(getApplicationContext(), "Nachricht: " + msg, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "Nachricht: " + msg, Toast.LENGTH_SHORT).show();
         //this.trans.hide(chatFragment);
         onBackPressed();
     }

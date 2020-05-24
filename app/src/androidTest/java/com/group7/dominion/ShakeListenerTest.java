@@ -1,4 +1,4 @@
-package CheatFunctionTests;
+package com.group7.dominion;
 
 public class ShakeListenerTest {
 }

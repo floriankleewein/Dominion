@@ -5,21 +5,11 @@ import com.floriankleewein.commonclasses.User.User;
 
 import java.util.List;
 
-
-
-
 public class CheatService {
 
 
     private List<User> PlayerList;
-    private static CheatService cheatService;
 
-    public static synchronized CheatService getGame() {
-        if (CheatService.cheatService == null) {
-            cheatService = new CheatService(Game.getGame());
-        }
-        return CheatService.cheatService;
-    }
 
     public CheatService(Game game) {
         PlayerList = game.getPlayerList();
@@ -38,7 +28,7 @@ public class CheatService {
     public void addCardtoUser(String name) {
         User CheatUser = findUser(name);
         if (CheatUser != null && (!CheatUser.isCheater())) {
-            CheatUser.getUserCards().addDeckCardtoHandCard();
+            CheatUser.getUserCards().addDeckCardtoHandCard(1);
             CheatUser.setCheater(true);
         }
     }
@@ -64,13 +54,7 @@ public class CheatService {
         }
     }
 
-    public static CheatService getCheatService() {
-        return CheatService.cheatService;
-    }
-
     /*
     Getter Setter
      */
-
-
 }

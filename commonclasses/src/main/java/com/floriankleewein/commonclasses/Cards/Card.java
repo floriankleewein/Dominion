@@ -1,7 +1,12 @@
 package com.floriankleewein.commonclasses.Cards;
 
 public class Card {
+
+
+    private int id;
     private int price;
+
+    public Card () {}
 
     public Card(int price) {
         this.price = price;
@@ -12,5 +17,13 @@ public class Card {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

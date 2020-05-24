@@ -16,7 +16,6 @@ sourceCompatibility = 1.8
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-
     testImplementation 'junit:junit:4.13'
     implementation 'com.esotericsoftware:kryonet:2.22.0-RC1'
 }
