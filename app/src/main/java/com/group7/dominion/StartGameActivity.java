@@ -14,6 +14,7 @@ import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.floriankleewein.commonclasses.Network.AllPlayersInDominionActivityMsg;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.Network.ClientConnector;
 
@@ -95,6 +96,17 @@ public class StartGameActivity extends AppCompatActivity {
                 }
             });
         }));
+
+        clientConnector.registerCallback(AllPlayersInDominionActivityMsg.class, (msg -> {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(StartGameActivity.this, DominionActivity.class);
+                    startActivity(intent);
+                }
+            });
+        }));
+
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,12 +115,14 @@ public class StartGameActivity extends AppCompatActivity {
                     public void run() {
 
                         //client.startGame();
+                        clientConnector.allPlayersInDominionActivity();
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
+                                //client.allPlayersInDominionActivity();
+                                //Intent intent = new Intent(StartGameActivity.this, DominionActivity.class);
+                                //startActivity(intent);
 
-                                Intent intent = new Intent(StartGameActivity.this, DominionActivity.class);
-                                startActivity(intent);
 
                             }
                         });

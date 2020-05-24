@@ -159,7 +159,7 @@ public class GameHandler {
     public void playCard() {
         // TODO logic for card played
         if (playedCard instanceof ActionCard) {
-            if(!canPlayActionCard()) {
+            if (!canPlayActionCard()) {
                 return;
             }
             ActionCard card = (ActionCard) playedCard;
@@ -197,14 +197,14 @@ public class GameHandler {
                     break;
                 case MILIZ:
                     getActiveUser().getGamePoints().modifyCoins(action.getMoneyValue());
-                    outer:
+
                     for (User user : game.getPlayerList()) {
                         if (!user.getUserName().equals(getActiveUser().getUserName()) && user.getUserCards().getHandCards().size() >= 3) {
                             LinkedList<Card> handCards = user.getUserCards().getHandCards();
                             for (Card userCard : handCards) {
                                 if (userCard instanceof ActionCard) {
                                     if (((ActionCard) userCard).getActionType().equals(ActionType.BURGGRABEN)) { // Beim Burggraben ist man geschützt vor miliz
-                                        break outer;
+                                        continue;
                                     }
                                 }
                             }
@@ -242,6 +242,7 @@ public class GameHandler {
                     getActiveUser().getUserCards().addDeckCardtoHandCard(action.getCardCount());
                     break;
                 case WERKSTATT:
+                    getActiveUser().getGamePoints().modifyBuyAmounts(action.getBuyCount());
                     getActiveUser().getGamePoints().modifyCoins(action.getMoneyValue());
                     break;
             }
