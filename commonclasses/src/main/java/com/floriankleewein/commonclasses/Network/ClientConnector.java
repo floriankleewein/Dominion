@@ -5,14 +5,31 @@ import com.esotericsoftware.minlog.Log;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.floriankleewein.commonclasses.Board.ActionField;
+import com.floriankleewein.commonclasses.Board.Board;
+import com.floriankleewein.commonclasses.Board.BuyField;
+import com.floriankleewein.commonclasses.Cards.Action;
+import com.floriankleewein.commonclasses.Cards.ActionCard;
+import com.floriankleewein.commonclasses.Cards.ActionType;
+import com.floriankleewein.commonclasses.Cards.CalculationHelper;
+import com.floriankleewein.commonclasses.Cards.Card;
+import com.floriankleewein.commonclasses.Cards.EstateCard;
+import com.floriankleewein.commonclasses.Cards.EstateType;
+import com.floriankleewein.commonclasses.Cards.MoneyCard;
+import com.floriankleewein.commonclasses.Cards.MoneyType;
 import com.floriankleewein.commonclasses.Chat.ChatMessage;
+import com.floriankleewein.commonclasses.CheatFunction.CheatService;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.GameLogic.GameHandler;
+import com.floriankleewein.commonclasses.GameLogic.PlayerTurn;
+import com.floriankleewein.commonclasses.User.GamePoints;
 import com.floriankleewein.commonclasses.User.User;
+import com.floriankleewein.commonclasses.User.UserCards;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 public class ClientConnector {
@@ -40,7 +57,7 @@ public class ClientConnector {
 
     public static synchronized ClientConnector getClientConnector() {
         if (ClientConnector.clientConnector == null) {
-            client = new Client();
+            client = new Client(65536, 65536);
             ClientConnector.clientConnector = new ClientConnector();
         }
         return ClientConnector.clientConnector;
@@ -73,6 +90,26 @@ public class ClientConnector {
         registerClass(UpdatePlayerNamesMsg.class);
         registerClass(SuspectMessage.class);
         registerClass(CheckButtonsMsg.class);
+        registerClass(GetGameMsg.class);
+        registerClass(UserCards.class);
+        registerClass(GamePoints.class);
+        registerClass(LinkedList.class);
+        registerClass(Card.class);
+        registerClass(MoneyCard.class);
+        registerClass(ActionCard.class);
+        registerClass(GameHandler.class);
+        registerClass(PlayerTurn.class);
+        registerClass(Action.class);
+        registerClass(Board.class);
+        registerClass(BuyField.class);
+        registerClass(ActionType.class);
+        registerClass(CalculationHelper.class);
+        registerClass(EstateType.class);
+        registerClass(MoneyType.class);
+        registerClass(CheatService.class);
+        registerClass(EstateCard.class);
+        registerClass(ActionField.class);
+        registerClass(AllPlayersInDominionActivityMsg.class);
 
 
         // start client
@@ -98,6 +135,7 @@ public class ClientConnector {
                 }
             }
         });
+
     }
 
     public void recreateStartGameActivity() {
@@ -160,6 +198,33 @@ public class ClientConnector {
             }
 
         });
+
+        client.addListener(new Listener(){
+            @Override
+            public void received(Connection connection, Object object) {
+                if (object instanceof AllPlayersInDominionActivityMsg) {
+                    AllPlayersInDominionActivityMsg msg = (AllPlayersInDominionActivityMsg) object;
+                    callbackMap.get(AllPlayersInDominionActivityMsg.class).callback(msg);
+                }
+            }
+        });
+    }
+
+    public Game sendGameUpdate() {
+        GetGameMsg msg = new GetGameMsg();
+        client.sendTCP(msg);
+
+        client.addListener(new Listener() {
+            public void received(Connection con, Object object) {
+                if (object instanceof GetGameMsg) {
+                    Log.info("Got Message");
+                    GetGameMsg msg = (GetGameMsg) object;
+                    game = msg.getGm().getGame();
+                    callbackMap.get(GetGameMsg.class).callback(msg);
+                }
+            }
+        });
+        return game;
     }
 
     //for now this method only has the use, to reset the game and playerList, so we
@@ -201,6 +266,7 @@ public class ClientConnector {
                 if (object instanceof StartGameMsg) {
                     StartGameMsg msg = (StartGameMsg) object;
                     if (msg.getFeedbackUI() == 0) {
+                        System.out.println("Got Game Message in ClientConnector");
                         callbackMap.get(StartGameMsg.class).callback(msg);
                         Game.setGame(msg.getGame());
                         gameHandler = msg.getGameHandler();
@@ -224,8 +290,9 @@ public class ClientConnector {
             public void received(Connection con, Object object) {
                 if (object instanceof GameUpdateMsg) {
                     GameUpdateMsg gameUpdateMsg = (GameUpdateMsg) object;
-                    gameHandler.updateGameHandler(gameUpdateMsg);
-                    callbackMap.get(GameUpdateMsg.class).callback(gameUpdateMsg);
+                    //gameHandler.updateGameHandler(gameUpdateMsg);/
+                    GameUpdateMsg gameUpdateMsg1 = gameHandler.updateGameHandlerTwo(gameUpdateMsg);
+                    callbackMap.get(GameUpdateMsg.class).callback(gameUpdateMsg1);
                 }
             }
         });
@@ -261,6 +328,15 @@ public class ClientConnector {
         msg.setName(name);
         client.sendTCP(msg);
 
+        client.addListener(new Listener() {
+            public void received(Connection con, Object object) {
+                if (object instanceof HasCheatedMessage) {
+                    HasCheatedMessage msg = (HasCheatedMessage) object;
+                    callbackMap.get(HasCheatedMessage.class).callback(msg);
+                }
+            }
+        });
+
     }
 
     public void sendSuspectUser(String SuspectUsername, String Username) {
@@ -268,10 +344,18 @@ public class ClientConnector {
         msg.setSuspectedUserName(SuspectUsername);
         msg.setUserName(Username);
         client.sendTCP(msg);
+
+        client.addListener(new Listener() {
+            public void received(Connection con, Object object) {
+                if (object instanceof SuspectMessage) {
+                    SuspectMessage msg = (SuspectMessage) object;
+                    callbackMap.get(SuspectMessage.class).callback(msg);
+                }
+            }
+        });
     }
 
-    public void checkButtons(){
-        System.out.println(("MOOOOOOOOIN"));
+    public void checkButtons() {
         CheckButtonsMsg msg = new CheckButtonsMsg();
         client.sendTCP(msg);
 
@@ -279,7 +363,6 @@ public class ClientConnector {
             public void received(Connection con, Object object) {
                 if (object instanceof CheckButtonsMsg) {
                     CheckButtonsMsg msg = (CheckButtonsMsg) object;
-                    System.out.println("HALLO HALLO -----------------");
                     callbackMap.get(CheckButtonsMsg.class).callback(msg);
                 }
             }
@@ -289,7 +372,7 @@ public class ClientConnector {
     public void sendChatMessage(ChatMessage msgToOthers) {
         client.sendTCP(msgToOthers);
 
-        client.addListener(new Listener(){
+        client.addListener(new Listener() {
             @Override
             public void received(Connection connection, Object object) {
                 if (object instanceof ChatMessage) {
@@ -298,6 +381,12 @@ public class ClientConnector {
                 }
             }
         });
+    }
+
+    //FKDoc: this is the message which is broadcasted when startbutton is clicked. everyone lands in the dominion activity then.
+    public void allPlayersInDominionActivity(){
+        AllPlayersInDominionActivityMsg msg = new AllPlayersInDominionActivityMsg();
+        client.sendTCP(msg);
     }
 
 }

@@ -2,6 +2,8 @@ package com.floriankleewein.commonclasses;
 
 
 
+
+import com.floriankleewein.commonclasses.Board.Board;
 import com.floriankleewein.commonclasses.CheatFunction.CheatService;
 import com.floriankleewein.commonclasses.User.User;
 
@@ -25,7 +27,7 @@ public class Game {
     public static synchronized Game getGame() {
         if (Game.game == null) {
             Game.game = new Game();
-            cheatService.getCheatService();
+            cheatService = new CheatService(game);
         }
         return Game.game;
     }
@@ -93,5 +95,4 @@ public class Game {
     public CheatService getCheatService() {
         return cheatService;
     }
-
 }

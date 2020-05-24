@@ -4,6 +4,8 @@ public class Board {
     private ActionField actionField;
     private BuyField buyField;
 
+    private static Board board;
+
     public Board() {
         // TODO: Vielleicht füge Maximale Kartenanzahl hinzu
         this.actionField = new ActionField();

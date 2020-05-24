@@ -14,10 +14,13 @@ import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.floriankleewein.commonclasses.Network.AllPlayersInDominionActivityMsg;
+import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.Network.ClientConnector;
 
 import com.floriankleewein.commonclasses.Network.ClientConnector;
 
+import com.floriankleewein.commonclasses.Network.StartGameMsg;
 import com.floriankleewein.commonclasses.Network.UpdatePlayerNamesMsg;
 
 import com.group7.dominion.CheatFunction.ShakeListener;
@@ -81,10 +84,26 @@ public class StartGameActivity extends AppCompatActivity {
                     names.clear();
                     names.addAll(((UpdatePlayerNamesMsg) msg).getNameList());
                     listViewAdapter.notifyDataSetChanged();
+                        Thread thread1 = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                clientConnector.startGame();
+                            }
+                        });
+                        thread1.start();
                 }
             });
         }));
 
+        clientConnector.registerCallback(AllPlayersInDominionActivityMsg.class, (msg -> {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(StartGameActivity.this, DominionActivity.class);
+                    startActivity(intent);
+                }
+            });
+        }));
 
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,12 +113,13 @@ public class StartGameActivity extends AppCompatActivity {
                     public void run() {
 
                         //client.startGame();
+                        clientConnector.allPlayersInDominionActivity();
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-
-                                Intent intent = new Intent(StartGameActivity.this, DominionActivity.class);
-                                startActivity(intent);
+                                //client.allPlayersInDominionActivity();
+                                //Intent intent = new Intent(StartGameActivity.this, DominionActivity.class);
+                                //startActivity(intent);
 
 
                             }
@@ -110,7 +130,16 @@ public class StartGameActivity extends AppCompatActivity {
                 thread.start();
             }
         });
+        ClientConnector.getClientConnector().registerCallback(StartGameMsg.class, msg -> {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    System.out.println("Got the Callback for StartGameMsg in StartGameAcitivity");
+                }
+            });
+        });
     }
+
 
     public String getUserName() {
         return getSharedPreferences("USERNAME", Context.MODE_PRIVATE).getString("us", "username");

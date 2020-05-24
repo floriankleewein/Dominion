@@ -7,6 +7,24 @@
     tools:context=".DominionActivity">
 
     <androidx.gridlayout.widget.GridLayout
+        android:id="@+id/GridCards"
+        android:layout_width="441dp"
+        android:layout_height="105dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView3"
+        tools:visibility="visible">
+
+        <LinearLayout
+            android:id="@+id/LinearCards"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            tools:visibility="visible">
+        </LinearLayout>
+    </androidx.gridlayout.widget.GridLayout>
+
+    <androidx.gridlayout.widget.GridLayout
         android:id="@+id/gridLayout"
         android:layout_width="154dp"
         android:layout_height="246dp"
@@ -380,62 +398,11 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_row="1" />
-    </androidx.gridlayout.widget.GridLayout>
-
-    <androidx.gridlayout.widget.GridLayout
-        android:id="@+id/gridLayout3"
-        android:layout_width="430dp"
-        android:layout_height="164dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginBottom="12dp"
-        app:columnCount="5"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/gridLayout2"
-        app:layout_constraintVertical_bias="1.0"
-        app:rowCount="2">
-
-        <ImageButton
-            android:id="@+id/btn_testHand1"
-            android:layout_width="51dp"
-            android:layout_height="82dp"
-            android:adjustViewBounds="true"
-            android:padding="0dp"
-            android:paddingHorizontal="0dp"
-            android:paddingVertical="0dp"
-            android:paddingStart="0dp"
-            android:paddingLeft="0dp"
-            android:paddingTop="0dp"
-            android:paddingEnd="0dp"
-            android:paddingRight="0dp"
-            android:paddingBottom="0dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/fluch"
-            app:layout_column="0"
-            app:layout_row="1" />
-
-        <ImageButton
-            android:id="@+id/btn_testHand2"
-            android:layout_width="51dp"
-            android:layout_height="82dp"
-            android:adjustViewBounds="true"
-            android:padding="0dp"
-            android:paddingHorizontal="0dp"
-            android:paddingVertical="0dp"
-            android:paddingStart="0dp"
-            android:paddingLeft="0dp"
-            android:paddingTop="0dp"
-            android:paddingEnd="0dp"
-            android:paddingRight="0dp"
-            android:paddingBottom="0dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/hexe_info"
-            app:layout_column="0"
-            app:layout_row="0" />
-
 
     </androidx.gridlayout.widget.GridLayout>
+
+
+
 
     <androidx.gridlayout.widget.GridLayout
         android:id="@+id/gridLayout4"
@@ -520,20 +487,26 @@
         android:layout_marginTop="12dp"
         android:layout_marginEnd="12dp"
         android:layout_marginBottom="8dp"
+        android:background="@drawable/receive_bubble"
         android:text="Chat"
+        android:textColor="#000"
         android:textSize="12sp"
         app:layout_constraintBottom_toTopOf="@+id/gridLayout2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/txtWinningPoints"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textColor="#000"
-        android:background="@drawable/receive_bubble"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <FrameLayout
         android:id="@+id/chatFragmentContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp" />
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

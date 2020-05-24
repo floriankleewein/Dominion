@@ -1,19 +1,36 @@
 package com.group7.localtestserver;
 
 
+import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
+import com.esotericsoftware.minlog.Log;
+import com.floriankleewein.commonclasses.Board.ActionField;
 import com.floriankleewein.commonclasses.Board.Board;
+import com.floriankleewein.commonclasses.Board.BuyField;
+import com.floriankleewein.commonclasses.Cards.Action;
+import com.floriankleewein.commonclasses.Cards.ActionCard;
+import com.floriankleewein.commonclasses.Cards.ActionType;
+import com.floriankleewein.commonclasses.Cards.CalculationHelper;
+import com.floriankleewein.commonclasses.Cards.Card;
+import com.floriankleewein.commonclasses.Cards.EstateCard;
+import com.floriankleewein.commonclasses.Cards.EstateType;
+import com.floriankleewein.commonclasses.Cards.MoneyCard;
+import com.floriankleewein.commonclasses.Cards.MoneyType;
 import com.floriankleewein.commonclasses.Chat.ChatMessage;
+import com.floriankleewein.commonclasses.CheatFunction.CheatService;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.GameLogic.GameHandler;
+import com.floriankleewein.commonclasses.GameLogic.PlayerTurn;
 import com.floriankleewein.commonclasses.Network.ActivePlayerMessage;
 import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
+import com.floriankleewein.commonclasses.Network.AllPlayersInDominionActivityMsg;
 import com.floriankleewein.commonclasses.Network.BaseMessage;
 import com.floriankleewein.commonclasses.Network.CheckButtonsMsg;
 import com.floriankleewein.commonclasses.Network.CreateGameMsg;
 import com.floriankleewein.commonclasses.Network.GameUpdateMsg;
+import com.floriankleewein.commonclasses.Network.GetGameMsg;
 import com.floriankleewein.commonclasses.Network.GetPlayerMsg;
 import com.floriankleewein.commonclasses.Network.HasCheatedMessage;
 import com.floriankleewein.commonclasses.Network.NetworkInformationMsg;
@@ -22,11 +39,15 @@ import com.floriankleewein.commonclasses.Network.ReturnPlayersMsg;
 import com.floriankleewein.commonclasses.Network.StartGameMsg;
 import com.floriankleewein.commonclasses.Network.SuspectMessage;
 import com.floriankleewein.commonclasses.Network.UpdatePlayerNamesMsg;
+import com.floriankleewein.commonclasses.User.GamePoints;
 import com.floriankleewein.commonclasses.User.User;
+import com.floriankleewein.commonclasses.User.UserCards;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.LinkedList;
 import java.util.Map;
 
 public class TestServer {
@@ -35,13 +56,14 @@ public class TestServer {
     private Game game;
     private Board board;
     private boolean hasGame = false;
+    private boolean gamehandlerCalled = false;
     private final String Tag = "TEST-SERVER"; // debugging only
     private GameHandler gamehandler;
     private Map<User, Connection> userClientConnectorMap = new HashMap<>();
 
 
     public TestServer() {
-        server = new Server();
+        server = new Server(65536, 65536);
     }
 
     public void startServer() {
@@ -64,7 +86,26 @@ public class TestServer {
         registerClass(UpdatePlayerNamesMsg.class);
         registerClass(SuspectMessage.class);
         registerClass(CheckButtonsMsg.class);
-
+        registerClass(GetGameMsg.class);
+        registerClass(UserCards.class);
+        registerClass(GamePoints.class);
+        registerClass(LinkedList.class);
+        registerClass(Card.class);
+        registerClass(MoneyCard.class);
+        registerClass(ActionCard.class);
+        registerClass(GameHandler.class);
+        registerClass(PlayerTurn.class);
+        registerClass(Action.class);
+        registerClass(Board.class);
+        registerClass(BuyField.class);
+        registerClass(ActionType.class);
+        registerClass(CalculationHelper.class);
+        registerClass(EstateType.class);
+        registerClass(MoneyType.class);
+        registerClass(CheatService.class);
+        registerClass(EstateCard.class);
+        registerClass(ActionField.class);
+        registerClass(AllPlayersInDominionActivityMsg.class);
 
         //Start Server
         server.start();
@@ -110,8 +151,7 @@ public class TestServer {
                             System.out.println("Player added: " + player.getUserName());
 
 
-           
-                         } else {
+                        } else {
                             addPlayerMsg.setFeedbackUI(1);
                         }
                     } else {
@@ -126,16 +166,18 @@ public class TestServer {
                 } else if (object instanceof StartGameMsg) {
                     StartGameMsg msg = new StartGameMsg();
                     //Check if game started successfully, and notify client
+                    System.out.println("Got the StartGameMsg on Server");
                     if (setupGame()) {
                         msg.setFeedbackUI(0);
                         msg.setGame(getGame());
+                        msg.setGameHandler(gamehandler);
                         // Send message to all clients, TODO they need to be in lobby
                         server.sendToAllTCP(msg);
                         ActivePlayerMessage activePlayerMsg = new ActivePlayerMessage();
                         activePlayerMsg.setGame(getGame());
                         Connection activePlayerCon = userClientConnectorMap.get(game.getActivePlayer());
                         activePlayerCon.sendTCP(activePlayerMsg);
-                    } else {
+                    } else { // fehlerfall
                         msg.setFeedbackUI(1);
                         con.sendTCP(msg);
                     }
@@ -147,7 +189,7 @@ public class TestServer {
                     con.sendTCP(msg);
 
 
-                }else if(object instanceof ChatMessage){
+                } else if (object instanceof ChatMessage) {
                     ChatMessage msg = (ChatMessage) object;
 
                     String message = msg.getMessage();
@@ -173,35 +215,44 @@ public class TestServer {
                     sendCheatInformation(CheatMsg.getName());
 
 
-                }else if(object instanceof UpdatePlayerNamesMsg){
+                } else if (object instanceof UpdatePlayerNamesMsg) {
                     UpdatePlayerNamesMsg msg = new UpdatePlayerNamesMsg();
-                    for(User x: game.getPlayerList()){
+                    for (User x : game.getPlayerList()) {
                         msg.getNameList().add(x.getUserName());
                     }
                     server.sendToAllTCP(msg);
 
-                }
-                else if (object instanceof SuspectMessage){
+                } else if (object instanceof SuspectMessage) {
                     SuspectMessage msg = (SuspectMessage) object;
                     System.out.println("GOT SUSPECT MESSAGE FROM" + msg.getUserName());
                     //game.getCheatService().suspectUser(msg.getSuspectedUserName(),msg.getUserName());
 
-                    sendSuspectInformation(msg.getSuspectedUserName(),msg.getUserName());
-                } else if(object instanceof GameUpdateMsg){
+                    sendSuspectInformation(msg.getSuspectedUserName(), msg.getUserName());
+                } else if (object instanceof GameUpdateMsg) {
                     GameUpdateMsg gameUpdateMsg = (GameUpdateMsg) object;
-                    updateAll(gameUpdateMsg);
-                    gameUpdateMsg.setGameHandler(gamehandler);
-                    server.sendToAllTCP(gameUpdateMsg);
-                } else if(object instanceof CheckButtonsMsg){
+                    if (gameUpdateMsg.getGameHandler() != null) {
+                        updateAll(gameUpdateMsg);
+                        gameUpdateMsg.setGameHandler(gamehandler); // TODO take care on GameupdateMessage
+                        server.sendToAllTCP(gameUpdateMsg);
+                    }
+                } else if (object instanceof CheckButtonsMsg) {
                     CheckButtonsMsg msg = (CheckButtonsMsg) object;
-                    if(hasGame == false){
+                    if (hasGame == false) {
                         msg.setCreateValue(true);
                         msg.setJoinValue(false);
-                    }else if(hasGame == true){
+                    } else if (hasGame == true) {
                         msg.setCreateValue(false);
                         msg.setJoinValue(true);
                     }
                     con.sendTCP(msg);
+                } else if (object instanceof AllPlayersInDominionActivityMsg) {
+                    AllPlayersInDominionActivityMsg msg = (AllPlayersInDominionActivityMsg) object;
+                    server.sendToAllTCP(msg);
+                } else if (object instanceof GetGameMsg) {
+                    GetGameMsg msg = new GetGameMsg();
+                    System.out.println("Got Get GameMsg on Server");
+                    msg.setGm(gamehandler);
+                    server.sendToAllTCP(msg);
                 }
             }
         });
@@ -237,7 +288,8 @@ public class TestServer {
             con.sendTCP(msg);
         }
     }
-    public void sendSuspectInformation (String SuspectName, String Username){
+
+    public void sendSuspectInformation(String SuspectName, String Username) {
         SuspectMessage msg = new SuspectMessage();
         msg.setSuspectedUserName(SuspectName);
         msg.setUserName(Username);
@@ -253,13 +305,18 @@ public class TestServer {
 
     /**
      * Creates Starter Deck for all players and returns true if game was created successfully.
+     *
      * @return
      */
     public boolean setupGame() {
         if (hasGame()) {
-            gamehandler = new GameHandler(getGame());
-            gamehandler.prepareGame();
-            return true;
+            if (gamehandler == null) {
+                gamehandler = new GameHandler(getGame());
+                gamehandler.prepareGame();
+                return true;
+            } else {
+                return true;
+            }
         } else {
             return false;
         }
