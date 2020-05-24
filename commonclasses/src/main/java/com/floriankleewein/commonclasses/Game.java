@@ -1,6 +1,9 @@
 package com.floriankleewein.commonclasses;
 
 
+
+
+import com.floriankleewein.commonclasses.Board.Board;
 import com.floriankleewein.commonclasses.CheatFunction.CheatService;
 import com.floriankleewein.commonclasses.User.User;
 
@@ -16,7 +19,7 @@ public class Game {
 
     //overwriting constructor so it cannot be instanced.
 
-    static CheatService cheatService;
+    private static CheatService cheatService;
 
     Game() {
     }
@@ -92,5 +95,4 @@ public class Game {
     public CheatService getCheatService() {
         return cheatService;
     }
-
 }

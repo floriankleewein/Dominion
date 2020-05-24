@@ -86,6 +86,11 @@ public class TestServer {
         registerClass(UpdatePlayerNamesMsg.class);
         registerClass(SuspectMessage.class);
         registerClass(CheckButtonsMsg.class);
+        registerClass(ActionType.class);
+        registerClass(MoneyType.class);
+        registerClass(EstateType.class);
+        registerClass(HashMap.class);
+        registerClass(Card.class);
 
         //Start Server
         server.start();

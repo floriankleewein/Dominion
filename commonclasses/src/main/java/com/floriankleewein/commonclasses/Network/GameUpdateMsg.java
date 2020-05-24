@@ -1,7 +1,10 @@
 package com.floriankleewein.commonclasses.Network;
 
 import com.floriankleewein.commonclasses.Board.Board;
+import com.floriankleewein.commonclasses.Cards.ActionType;
 import com.floriankleewein.commonclasses.Cards.Card;
+import com.floriankleewein.commonclasses.Cards.EstateType;
+import com.floriankleewein.commonclasses.Cards.MoneyType;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.GameLogic.GameHandler;
 import com.floriankleewein.commonclasses.User.User;
@@ -16,13 +19,20 @@ public class GameUpdateMsg extends BaseMessage {
     private User activeUser;
     private Card playedCard;
     private Card clickedCard;
+    private Card boughtCard;
     private GameHandler gameHandler;
     private Map<User, Integer> victoryPointsChange = new HashMap<>();
 
+    private MoneyType moneyTypeClicked;
+    private ActionType actionTypeClicked;
+    private EstateType estateTypeClicked;
+
     public GameUpdateMsg() {
+        /*
         for (User u : game.getPlayerList()) {
             victoryPointsChange.put(u, 0);
         }
+        */
     }
 
     public Card getClickedCard() {
@@ -85,5 +95,37 @@ public class GameUpdateMsg extends BaseMessage {
 
     public void setBoard(Board board) {
         this.board = board;
+    }
+
+    public MoneyType getMoneyTypeClicked() {
+        return moneyTypeClicked;
+    }
+
+    public void setMoneyTypeClicked(MoneyType moneyTypeClicked) {
+        this.moneyTypeClicked = moneyTypeClicked;
+    }
+
+    public ActionType getActionTypeClicked() {
+        return actionTypeClicked;
+    }
+
+    public void setActionTypeClicked(ActionType actionTypeClicked) {
+        this.actionTypeClicked = actionTypeClicked;
+    }
+
+    public EstateType getEstateTypeClicked() {
+        return estateTypeClicked;
+    }
+
+    public void setEstateTypeClicked(EstateType estateTypeClicked) {
+        this.estateTypeClicked = estateTypeClicked;
+    }
+
+    public Card getBoughtCard() {
+        return boughtCard;
+    }
+
+    public void setBoughtCard(Card boughtCard) {
+        this.boughtCard = boughtCard;
     }
 }

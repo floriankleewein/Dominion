@@ -90,6 +90,7 @@ public class ClientConnector {
         registerClass(UpdatePlayerNamesMsg.class);
         registerClass(SuspectMessage.class);
         registerClass(CheckButtonsMsg.class);
+        registerClass(HashMap.class);
         registerClass(GetGameMsg.class);
         registerClass(UserCards.class);
         registerClass(GamePoints.class);
@@ -110,6 +111,7 @@ public class ClientConnector {
         registerClass(EstateCard.class);
         registerClass(ActionField.class);
         registerClass(AllPlayersInDominionActivityMsg.class);
+
 
         // start client
         client.start();
@@ -289,8 +291,9 @@ public class ClientConnector {
             public void received(Connection con, Object object) {
                 if (object instanceof GameUpdateMsg) {
                     GameUpdateMsg gameUpdateMsg = (GameUpdateMsg) object;
-                    gameHandler.updateGameHandler(gameUpdateMsg);
-                    callbackMap.get(GameUpdateMsg.class).callback(gameUpdateMsg);
+                    //gameHandler.updateGameHandler(gameUpdateMsg);/
+                    GameUpdateMsg gameUpdateMsg1 = gameHandler.updateGameHandlerTwo(gameUpdateMsg);
+                    callbackMap.get(GameUpdateMsg.class).callback(gameUpdateMsg1);
                 }
             }
         });

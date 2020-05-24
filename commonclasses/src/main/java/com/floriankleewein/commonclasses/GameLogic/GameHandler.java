@@ -138,7 +138,7 @@ public class GameHandler {
         updateVictoryPts(msg);
     }
 
-    public void buyCard(Card card) {
+    private void buyCard(Card card) {
         Card boughtCard;
         if (card instanceof ActionCard) {
             boughtCard = getBoard().getActionField().pickCard(((ActionCard) card).getActionType());
@@ -155,6 +155,64 @@ public class GameHandler {
         getActiveUser().getGamePoints().modifyCoins(oldCoins - boughtCard.getPrice());
     }
 
+    public GameUpdateMsg updateGameHandlerTwo(GameUpdateMsg msg) {
+        setBoard(msg.getBoard());
+        setPlayedCard(msg.getPlayedCard());
+        Game.setGame(msg.getGame());
+        setGame();
+
+        Card boughtCard = null;
+        if (canBuyCardTwo(msg)) {
+            boughtCard = buyCardTwo(msg);
+        }
+        msg.setBoughtCard(boughtCard);
+
+        updateVictoryPts(msg);
+        return msg;
+    }
+
+    //LKDoc: new buy methods cause I can't cast on Cards - ActionType has only ActionCard and not Card
+    public Card buyActionCard(ActionType actionType) {
+        Card boughtCard = getBoard().getActionField().pickCard(actionType);
+        getActiveUser().getUserCards().addCardtoDeck(boughtCard);
+        calculateCoinsOnActiveUser(boughtCard);
+        return boughtCard;
+    }
+
+    public Card buyEstateCard(EstateType estateType) {
+        Card boughtCard = getBoard().getBuyField().pickCard(estateType);
+        getActiveUser().getUserCards().addCardtoDeck(boughtCard);
+        getActiveUser().getGamePoints().modifyWinningPoints(((EstateCard) boughtCard).getEstateValue());
+        calculateCoinsOnActiveUser(boughtCard);
+        return boughtCard;
+    }
+
+    public Card buyMoneyCard(MoneyType moneyType) {
+        Card boughtCard = getBoard().getBuyField().pickCard(moneyType);
+        getActiveUser().getUserCards().addCardtoDeck(boughtCard);
+        calculateCoinsOnActiveUser(boughtCard);
+        return boughtCard;
+    }
+
+    private void calculateCoinsOnActiveUser(Card boughtCard) {
+        int oldCoins = getActiveUser().getGamePoints().getCoins();
+        getActiveUser().getGamePoints().modifyCoins(oldCoins - boughtCard.getPrice());
+    }
+
+    public Card buyCardTwo(GameUpdateMsg gameUpdateMsg) {
+        if(gameUpdateMsg.getActionTypeClicked() != null) {
+            System.out.println("Bought card Type: " + gameUpdateMsg.getActionTypeClicked());
+            return buyActionCard(gameUpdateMsg.getActionTypeClicked());
+        } else if (gameUpdateMsg.getEstateTypeClicked() != null) {
+            System.out.println("Bought card Type: " + gameUpdateMsg.getEstateTypeClicked());
+            return buyEstateCard(gameUpdateMsg.getEstateTypeClicked());
+        } else if (gameUpdateMsg.getMoneyTypeClicked() != null) {
+            System.out.println("Bought card Type: " + gameUpdateMsg.getMoneyTypeClicked());
+            return buyMoneyCard(gameUpdateMsg.getMoneyTypeClicked());
+        } else {
+            return null;
+        }
+    }
 
     public void playCard() {
         // TODO logic for card played
@@ -259,6 +317,29 @@ public class GameHandler {
             return false;
         }
         if (getActiveUser().getGamePoints().getCoins() >= card.getPrice() && getActiveUser().getGamePoints().getBuyAmounts() > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean canBuyCardTwo(GameUpdateMsg gameUpdateMsg) {
+        boolean noCard = false;
+        if(gameUpdateMsg.getActionTypeClicked() != null) {
+            noCard = true;
+        } else if (gameUpdateMsg.getEstateTypeClicked() != null) {
+            noCard = true;
+        } else if (gameUpdateMsg.getMoneyTypeClicked() != null) {
+            noCard = true;
+        } else {
+            return noCard;
+        }
+
+        if(noCard) {
+            /*
+            if (getActiveUser().getGamePoints().getCoins() >= card.getPrice()) {
+                return true;
+            }
+            */
             return true;
         }
         return false;
