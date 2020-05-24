@@ -96,50 +96,34 @@ public class TestServer {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        try {
-            server.addListener(new Listener() {
-                public void received(Connection con, Object object) {
-                    if (object instanceof MessageClass) {
-                        MessageClass recMessage = (MessageClass) object;
-                        System.out.println(Tag + ", Received Message " + recMessage.getMessage());
+        server.addListener(new Listener() {
+            public void received(Connection con, Object object) {
+                if (object instanceof MessageClass) {
+                    MessageClass recMessage = (MessageClass) object;
+                    System.out.println(Tag + ", Received Message " + recMessage.getMessage());
 
-                        MessageClass sendMessage = new MessageClass();
-                        sendMessage.setMessage("Hello Client! " + " from: " + con.getRemoteAddressTCP().getHostString());
+                    MessageClass sendMessage = new MessageClass();
+                    sendMessage.setMessage("Hello Client! " + " from: " + con.getRemoteAddressTCP().getHostString());
 
-                        con.sendTCP(sendMessage);
-                    } else if (object instanceof CreateGameMsg) {
-                        createGame();
-                        CreateGameMsg startGameMsg = (CreateGameMsg) object;
-                        startGameMsg.setGame(getGame());
-                        startGameMsg.setHasGame(hasGame());
-                        con.sendTCP(startGameMsg);
-                    } else if (object instanceof AddPlayerSuccessMsg) {
-                        AddPlayerSuccessMsg addPlayerMsg = (AddPlayerSuccessMsg) object;
-                        String name = addPlayerMsg.getPlayerName();
-                        User player = new User(name);
+                    con.sendTCP(sendMessage);
+                } else if (object instanceof CreateGameMsg) {
+                    createGame();
+                    CreateGameMsg startGameMsg = (CreateGameMsg) object;
+                    startGameMsg.setGame(getGame());
+                    startGameMsg.setHasGame(hasGame());
+                    con.sendTCP(startGameMsg);
+                } else if (object instanceof AddPlayerSuccessMsg) {
+                    AddPlayerSuccessMsg addPlayerMsg = (AddPlayerSuccessMsg) object;
+                    String name = addPlayerMsg.getPlayerName();
+                    User player = new User(name);
                     /*if(game.addPlayer(player)) {
                         addPlayerMsg.setUser(player);
                         addPlayerMsg.setPlayerAdded(true);
                     }*/
-                        if (game.checkSize()) {
-                            if (game.checkName(name)) {
-                                userClientConnectorMap.put(player, con);
-                                game.addPlayer(player);
-                                addPlayerMsg.setFeedbackUI(0);
-                                addPlayerMsg.setPlayerAdded(true);
-                                System.out.println("Player added: " + player.getUserName());
+                    if (game.checkSize()) {
+                        if (game.checkName(name)) {
 
-                            } else {
-                                addPlayerMsg.setFeedbackUI(1);
-                            }
-                        } else {
-                            addPlayerMsg.setFeedbackUI(2);
-                        }
-                        con.sendTCP(addPlayerMsg);
-                    } else if (object instanceof ResetMsg) {
-                        System.out.println("Received Reset Message.");
-                        reset();
-                        //ResetMsg msg = (ResetMsg) object;
+                            userClientConnectorMap.put(player, con);
 
                             game.addPlayer(player);
                             addPlayerMsg.setFeedbackUI(0);
@@ -174,35 +158,40 @@ public class TestServer {
                         activePlayerCon.sendTCP(activePlayerMsg);
                     } else { // fehlerfall
                         msg.setFeedbackUI(1);
-                    } else if (object instanceof GetPlayerMsg) {
-                        System.out.println("Got the GetPlayerMsg");
-                        ReturnPlayersMsg msg = new ReturnPlayersMsg();
                         con.sendTCP(msg);
+                    }
+                    con.sendTCP(msg);
 
+                } else if (object instanceof GetPlayerMsg) {
+                    System.out.println("Got the GetPlayerMsg");
+                    ReturnPlayersMsg msg = new ReturnPlayersMsg();
+                    con.sendTCP(msg);
 
-                    } else if (object instanceof ChatMessage) {
-                        ChatMessage msg = (ChatMessage) object;
 
                 } else if (object instanceof ChatMessage) {
                     ChatMessage msg = (ChatMessage) object;
 
-                        System.out.println("Receive msg from client:" + message);
+                    String message = msg.getMessage();
 
-                        ChatMessage responseMsg = new ChatMessage();
-                        responseMsg.setMessage(msg.getMessage());
-                        responseMsg.setSentByMe(false);
+                    System.out.println("Receive msg from client:" + message);
+
+                    ChatMessage responseMsg = new ChatMessage();
+                    responseMsg.setMessage(msg.getMessage());
+                    responseMsg.setSentByMe(false);
 
 
-                        for (Connection c : server.getConnections()) {
-                            if (c != con) {
-                                server.sendToTCP(c.getID(), responseMsg);
-                            }
+                    for (Connection c : server.getConnections()) {
+                        if (c != con) {
+                            server.sendToTCP(c.getID(), responseMsg);
                         }
+                    }
 
-                    } else if (object instanceof HasCheatedMessage) {
-                        HasCheatedMessage CheatMsg = (HasCheatedMessage) object;
-                    game.getCheatService().addCardtoUser(CheatMsg.getName());
-                        sendCheatInformation(CheatMsg.getName());
+                } else if (object instanceof HasCheatedMessage) {
+                    HasCheatedMessage CheatMsg = (HasCheatedMessage) object;
+                    /*game.getCheatService().addCardtoUser(CheatMsg.getName());
+                    Not working now because the User has now DeckCards --> Null Pointer
+                     */
+                    sendCheatInformation(CheatMsg.getName());
 
 
                 } else if (object instanceof UpdatePlayerNamesMsg) {
@@ -210,6 +199,7 @@ public class TestServer {
                     for (User x : game.getPlayerList()) {
                         msg.getNameList().add(x.getUserName());
                     }
+                    server.sendToAllTCP(msg);
 
                 } else if (object instanceof SuspectMessage) {
                     SuspectMessage msg = (SuspectMessage) object;
@@ -305,6 +295,7 @@ public class TestServer {
             return false;
         }
     }
+
     public Board getBoard() {
         return board;
     }
