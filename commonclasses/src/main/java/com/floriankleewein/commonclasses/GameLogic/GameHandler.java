@@ -124,6 +124,7 @@ public class GameHandler {
         return msg;
     }
 
+    //LKDoc: new buy methods cause I can't cast on Cards - ActionType has only ActionCard and not Card
     public Card buyActionCard(ActionType actionType) {
         Card boughtCard = getBoard().getActionField().pickCard(actionType);
         getActiveUser().getUserCards().addCardtoDeck(boughtCard);

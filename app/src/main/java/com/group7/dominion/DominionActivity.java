@@ -117,38 +117,6 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         actionDialogHandler.setClientConnector(clientConnector);
         imageButtonHandler.setClientConnector(clientConnector);
 
-        //ImageButtonHandler.View.invalidate()
-
-         /*   //Card card = board.getBuyField().pickCard(MoneyType.GOLD);
-            GameUpdateMsg gameUpdateMsg = new GameUpdateMsg();
-            gameUpdateMsg.setMoneyTypeClicked(MoneyType.GOLD);
-            sendUpdate(gameUpdateMsg);
-
-            clientConnector.registerCallback(GameUpdateMsg.class, (msg -> {
-                runOnUiThread(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        GameUpdateMsg gameUpdateMsg1 = (GameUpdateMsg) msg;
-                        Card card = gameUpdateMsg1.getBoughtCard();
-                        if (card == null) {
-                            //ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
-                            //errorDialogHandler.show(fragmentManager, "errorDialog");
-                            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
-                                    errorDialogHandler.show(fragmentManager, "errorDialog");
-                                }
-                            });
-                        } else {
-                            MoneyCard moneyCard = (MoneyCard) card;
-                            Log.i("MoneyCard", "MoneyType: " + moneyCard.getMoneyType());
-                        }
-                    }
-                });
-            }));
-*/
         clientConnector.registerCallback(HasCheatedMessage.class, (msg -> {
             runOnUiThread(new Runnable() {
                 @Override
