@@ -63,7 +63,7 @@ public class TestServer {
 
 
     public TestServer() {
-        server = new Server(65536,65536);
+        server = new Server(65536, 65536);
     }
 
     public void startServer() {

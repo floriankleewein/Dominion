@@ -68,7 +68,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
     private ActionDialogHandler actionDialogHandler;
 
     private Board board;
-    private Handler handler = new Handler();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +100,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
 
         fragmentManager = getSupportFragmentManager();
 
-       //Hexe
+        //Hexe
         actionDialogHandler = new ActionDialogHandler();
         actionDialogHandler.init(this, fragmentManager);
 
@@ -170,7 +170,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
                 @Override
                 public void run() {
                     user = ((GetGameMsg) msg).getGm().getGame().findUser(getUsername());
-                    cardsHandler.initCards (user);
+                    cardsHandler.initCards(user);
                     cardsHandler.onClickListener();
                     System.out.println(user.getUserCards().getHandCards().size() + " " + getUsername());
                 }
