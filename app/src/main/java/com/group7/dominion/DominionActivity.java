@@ -101,6 +101,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         fragmentManager = getSupportFragmentManager();
 
         //Hexe
+
         actionDialogHandler = new ActionDialogHandler();
         actionDialogHandler.init(this, fragmentManager);
 
@@ -131,6 +132,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         // board = new Board();
         //actionDialogHandler.setBoard(board);
         //imageButtonHandler.setBoard(board);
+
         actionDialogHandler.setClientConnector(clientConnector);
         imageButtonHandler.setClientConnector(clientConnector);
 
@@ -172,7 +174,6 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
                     user = ((GetGameMsg) msg).getGm().getGame().findUser(getUsername());
                     cardsHandler.initCards(user);
                     cardsHandler.onClickListener();
-                    System.out.println(user.getUserCards().getHandCards().size() + " " + getUsername());
                 }
             });
         });

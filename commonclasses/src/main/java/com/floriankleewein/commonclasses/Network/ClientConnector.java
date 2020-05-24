@@ -90,7 +90,6 @@ public class ClientConnector {
         registerClass(UpdatePlayerNamesMsg.class);
         registerClass(SuspectMessage.class);
         registerClass(CheckButtonsMsg.class);
-        registerClass(HashMap.class);
         registerClass(GetGameMsg.class);
         registerClass(UserCards.class);
         registerClass(GamePoints.class);

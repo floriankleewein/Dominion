@@ -86,11 +86,26 @@ public class TestServer {
         registerClass(UpdatePlayerNamesMsg.class);
         registerClass(SuspectMessage.class);
         registerClass(CheckButtonsMsg.class);
-        registerClass(ActionType.class);
-        registerClass(MoneyType.class);
-        registerClass(EstateType.class);
-        registerClass(HashMap.class);
+        registerClass(GetGameMsg.class);
+        registerClass(UserCards.class);
+        registerClass(GamePoints.class);
+        registerClass(LinkedList.class);
         registerClass(Card.class);
+        registerClass(MoneyCard.class);
+        registerClass(ActionCard.class);
+        registerClass(GameHandler.class);
+        registerClass(PlayerTurn.class);
+        registerClass(Action.class);
+        registerClass(Board.class);
+        registerClass(BuyField.class);
+        registerClass(ActionType.class);
+        registerClass(CalculationHelper.class);
+        registerClass(EstateType.class);
+        registerClass(MoneyType.class);
+        registerClass(CheatService.class);
+        registerClass(EstateCard.class);
+        registerClass(ActionField.class);
+        registerClass(AllPlayersInDominionActivityMsg.class);
 
         //Start Server
         server.start();
@@ -151,6 +166,7 @@ public class TestServer {
                 } else if (object instanceof StartGameMsg) {
                     StartGameMsg msg = new StartGameMsg();
                     //Check if game started successfully, and notify client
+                    System.out.println("Got the StartGameMsg on Server");
                     if (setupGame()) {
                         msg.setFeedbackUI(0);
                         msg.setGame(getGame());
@@ -231,6 +247,11 @@ public class TestServer {
                     con.sendTCP(msg);
                 } else if (object instanceof AllPlayersInDominionActivityMsg) {
                     AllPlayersInDominionActivityMsg msg = (AllPlayersInDominionActivityMsg) object;
+                    server.sendToAllTCP(msg);
+                } else if (object instanceof GetGameMsg) {
+                    GetGameMsg msg = new GetGameMsg();
+                    System.out.println("Got Get GameMsg on Server");
+                    msg.setGm(gamehandler);
                     server.sendToAllTCP(msg);
                 }
             }
