@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -19,6 +20,9 @@ import com.floriankleewein.commonclasses.Cards.ActionCard;
 import com.floriankleewein.commonclasses.Cards.Card;
 import com.floriankleewein.commonclasses.Chat.ChatMessage;
 import com.floriankleewein.commonclasses.Network.ClientConnector;
+import com.floriankleewein.commonclasses.Network.GetGameMsg;
+import com.floriankleewein.commonclasses.Network.StartGameMsg;
+import com.floriankleewein.commonclasses.User.User;
 import com.group7.dominion.Card.HandCardsHandler;
 import com.group7.dominion.Chat.ChatFragment;
 
@@ -41,7 +45,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
     private FragmentTransaction trans;
     private ClientConnector clientConnector;
     private HandCardsHandler cardsHandler;
-
+    private User user;
     private SensorManager sm;
     private ShakeListener shakeListener;
 
@@ -50,8 +54,8 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dominion);
         cardsHandler = new HandCardsHandler(this);
-        cardsHandler.initCards(getUsername());
-        cardsHandler.onClickListener();
+
+
         chatButton = findViewById(R.id.chat_Button);
         fragmentContainer = findViewById(R.id.chatFragmentContainer);
 
@@ -82,8 +86,8 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
     protected void onStart() {
         super.onStart();
 
-        // Handle communication with Server, only send updated to server whenever card is played etc.
 
+        // Handle communication with Server, only send updated to server whenever card is played etc.
         ClientConnector clientConnector = ClientConnector.getClientConnector();
         Game clientGame = clientConnector.getGame();
         //clientConnector.startGame(); // Send Server Message to start game logic
@@ -120,7 +124,21 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
                 }
             });
         }));
+
+        ClientConnector.getClientConnector().registerCallback(GetGameMsg.class, msg -> {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    user = ((GetGameMsg) msg).getGm().getGame().findUser(getUsername());
+                    cardsHandler.initCards (user);
+                    cardsHandler.onClickListener();
+                    System.out.println(user.getUserCards().getHandCards().size() + " " + getUsername());
+                }
+            });
+        });
+        cardsHandler.sendMessage();
     }
+
 
     public void sendUpdateMessage() {
         Thread th = new Thread(new Runnable() {
@@ -158,11 +176,4 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         //this.trans.hide(chatFragment);
         onBackPressed();
     }
-    /**
-     *
-     * HandCards Methods
-     */
-
-
-
 }

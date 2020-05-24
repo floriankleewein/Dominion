@@ -17,6 +17,7 @@ public class UserCards {
     private LinkedList<Card> HandCards;
     private LinkedList<Card> DiscardCards;
 
+    public UserCards() {}
 
     public void getFirstCards(LinkedList<Card> GivenCards) {
         this.Deck = new LinkedList<Card>();
@@ -61,7 +62,6 @@ public class UserCards {
         this.HandCards.remove(PlayedCard);
         this.DiscardCards.add(PlayedCard);
     }
-
 
     public void addCardtoDeck(Card newCard) {
         this.Deck.add(newCard);

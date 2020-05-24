@@ -15,10 +15,12 @@ import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.floriankleewein.commonclasses.Network.AllPlayersInDominionActivityMsg;
+import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.Network.ClientConnector;
 
 import com.floriankleewein.commonclasses.Network.ClientConnector;
 
+import com.floriankleewein.commonclasses.Network.StartGameMsg;
 import com.floriankleewein.commonclasses.Network.UpdatePlayerNamesMsg;
 
 import com.group7.dominion.CheatFunction.ShakeListener;
@@ -82,6 +84,15 @@ public class StartGameActivity extends AppCompatActivity {
                     names.clear();
                     names.addAll(((UpdatePlayerNamesMsg) msg).getNameList());
                     listViewAdapter.notifyDataSetChanged();
+                    if (names.size() >= 1) {
+                        Thread thread1 = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                clientConnector.startGame();
+                            }
+                        });
+                        thread1.start();
+                    }
                 }
             });
         }));
@@ -121,7 +132,16 @@ public class StartGameActivity extends AppCompatActivity {
                 thread.start();
             }
         });
+        ClientConnector.getClientConnector().registerCallback(StartGameMsg.class, msg -> {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    System.out.println("Got the Callback for StartGameMsg in StartGameAcitivity");
+                }
+            });
+        });
     }
+
 
     public String getUserName() {
         return getSharedPreferences("USERNAME", Context.MODE_PRIVATE).getString("us", "username");

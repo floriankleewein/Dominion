@@ -19,6 +19,14 @@ import java.util.List;
 
 
 public class GameHandler {
+    public Game getGame() {
+        return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
+
     private Game game;
     private final int MONEY_CARDS = 7;
     private final int ANWESEN_CARDS = 3;
@@ -36,9 +44,11 @@ public class GameHandler {
         this.game = game;
     }
 
+    public GameHandler () {}
+
     public void prepareGame() {
         List<User> playerList = game.getPlayerList();
-        if (playerList.size() > 1) {
+        if (playerList.size() >= 1) {
             for (User user : playerList) {
                 LinkedList<Card> generatedCards = new LinkedList<>();
                 UserCards ucards = new UserCards();
@@ -180,7 +190,7 @@ public class GameHandler {
                     getActiveUser().getGamePoints().modifyPlayAmounts(action.getActionCount());
                     break;
                 case MARKT:
-                    getActiveUser().getUserCards().addDeckCardtoHandCard(action.getCardCount());
+                    getActiveUser().getUserCards().addDeckCardtoHandCard(1);
                     getActiveUser().getGamePoints().modifyBuyAmounts(action.getBuyCount());
                     getActiveUser().getGamePoints().modifyPlayAmounts(action.getActionCount());
                     getActiveUser().getGamePoints().modifyCoins(action.getMoneyValue());
