@@ -69,6 +69,98 @@ public class TestServer {
     public void startServer() {
         System.out.println(Tag + ", Running Server!");
         //Register classes
+        registerClasses();
+
+        //Start Server
+        server.start();
+
+        try {
+            //server.bind(8080);
+            server.bind(53217);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //adds all listeners. cyclic problem still here.
+        addListeners();
+    }
+
+    public void updateAll(GameUpdateMsg msg) {
+        setBoard(msg.getBoard());
+        game.setGame(msg.getGame());
+        gamehandler.updateGameHandler(msg);
+    }
+
+    public void registerClass(Class regClass) {
+        server.getKryo().register(regClass);
+    }
+
+    public void createGame() {
+        game = Game.getGame();
+        hasGame = true;
+        System.out.println("GAME, game instanced - started");
+    }
+
+
+    public void reset() {
+        game.getPlayerList().clear();
+        userClientConnectorMap.clear();
+        System.out.println("Playerlist cleared!");
+    }
+
+    public void sendCheatInformation(String CheaterName) {
+        HasCheatedMessage msg = new HasCheatedMessage();
+        msg.setName(CheaterName);
+        for (Connection con : server.getConnections()) {
+            con.sendTCP(msg);
+        }
+    }
+
+    public void sendSuspectInformation(String SuspectName, String Username) {
+        SuspectMessage msg = new SuspectMessage();
+        msg.setSuspectedUserName(SuspectName);
+        msg.setUserName(Username);
+        for (Connection con : server.getConnections()) {
+            con.sendTCP(msg);
+        }
+    }
+
+
+    public boolean hasGame() {
+        return hasGame;
+    }
+
+    /**
+     * Creates Starter Deck for all players and returns true if game was created successfully.
+     *
+     * @return
+     */
+    public boolean setupGame() {
+        if (hasGame()) {
+            if (gamehandler == null) {
+                gamehandler = new GameHandler(getGame());
+                gamehandler.prepareGame();
+                return true;
+            } else {
+                return true;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public void registerClasses(){
         registerClass(BaseMessage.class);
         registerClass(MessageClass.class);
         registerClass(GameUpdateMsg.class);
@@ -106,16 +198,10 @@ public class TestServer {
         registerClass(EstateCard.class);
         registerClass(ActionField.class);
         registerClass(AllPlayersInDominionActivityMsg.class);
+        registerClass(HashMap.class);
+    }
 
-        //Start Server
-        server.start();
-
-        try {
-            //server.bind(8080);
-            server.bind(53217);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void addListeners(){
         server.addListener(new Listener() {
             public void received(Connection con, Object object) {
                 if (object instanceof MessageClass) {
@@ -255,83 +341,6 @@ public class TestServer {
             }
         });
     }
-
-    public void updateAll(GameUpdateMsg msg) {
-        setBoard(msg.getBoard());
-        game.setGame(msg.getGame());
-        gamehandler.updateGameHandler(msg);
-    }
-
-    public void registerClass(Class regClass) {
-        server.getKryo().register(regClass);
-    }
-
-    public void createGame() {
-        game = Game.getGame();
-        hasGame = true;
-        System.out.println("GAME, game instanced - started");
-    }
-
-
-    public void reset() {
-        game.getPlayerList().clear();
-        userClientConnectorMap.clear();
-        System.out.println("Playerlist cleared!");
-    }
-
-    public void sendCheatInformation(String CheaterName) {
-        HasCheatedMessage msg = new HasCheatedMessage();
-        msg.setName(CheaterName);
-        for (Connection con : server.getConnections()) {
-            con.sendTCP(msg);
-        }
-    }
-
-    public void sendSuspectInformation(String SuspectName, String Username) {
-        SuspectMessage msg = new SuspectMessage();
-        msg.setSuspectedUserName(SuspectName);
-        msg.setUserName(Username);
-        for (Connection con : server.getConnections()) {
-            con.sendTCP(msg);
-        }
-    }
-
-
-    public boolean hasGame() {
-        return hasGame;
-    }
-
-    /**
-     * Creates Starter Deck for all players and returns true if game was created successfully.
-     *
-     * @return
-     */
-    public boolean setupGame() {
-        if (hasGame()) {
-            if (gamehandler == null) {
-                gamehandler = new GameHandler(getGame());
-                gamehandler.prepareGame();
-                return true;
-            } else {
-                return true;
-            }
-        } else {
-            return false;
-        }
-    }
-
-    public Board getBoard() {
-        return board;
-    }
-
-    public void setBoard(Board board) {
-        this.board = board;
-    }
-
-    public Game getGame() {
-        return game;
-    }
-
 }
 /*
 se2-demo.aau.at
