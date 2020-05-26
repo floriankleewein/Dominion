@@ -80,6 +80,128 @@ public class TestServer {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        //adds all listeners. cyclic problem still here.
+        addListeners();
+    }
+
+    public void updateAll(GameUpdateMsg msg) {
+        setBoard(msg.getBoard());
+        game.setGame(msg.getGame());
+        gamehandler.updateGameHandler(msg);
+    }
+
+    public void registerClass(Class regClass) {
+        server.getKryo().register(regClass);
+    }
+
+    public void createGame() {
+        game = Game.getGame();
+        hasGame = true;
+        System.out.println("GAME, game instanced - started");
+    }
+
+
+    public void reset() {
+        game.getPlayerList().clear();
+        userClientConnectorMap.clear();
+        System.out.println("Playerlist cleared!");
+    }
+
+    public void sendCheatInformation(String CheaterName) {
+        HasCheatedMessage msg = new HasCheatedMessage();
+        msg.setName(CheaterName);
+        for (Connection con : server.getConnections()) {
+            con.sendTCP(msg);
+        }
+    }
+
+    public void sendSuspectInformation(String SuspectName, String Username) {
+        SuspectMessage msg = new SuspectMessage();
+        msg.setSuspectedUserName(SuspectName);
+        msg.setUserName(Username);
+        for (Connection con : server.getConnections()) {
+            con.sendTCP(msg);
+        }
+    }
+
+
+    public boolean hasGame() {
+        return hasGame;
+    }
+
+    /**
+     * Creates Starter Deck for all players and returns true if game was created successfully.
+     *
+     * @return
+     */
+    public boolean setupGame() {
+        if (hasGame()) {
+            if (gamehandler == null) {
+                gamehandler = new GameHandler(getGame());
+                gamehandler.prepareGame();
+                return true;
+            } else {
+                return true;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public void registerClasses(){
+        registerClass(BaseMessage.class);
+        registerClass(MessageClass.class);
+        registerClass(GameUpdateMsg.class);
+        registerClass(NetworkInformationMsg.class);
+        registerClass(Game.class);
+        registerClass(CreateGameMsg.class);
+        registerClass(AddPlayerSuccessMsg.class);
+        registerClass(ArrayList.class);
+        registerClass(User.class);
+        registerClass(ResetMsg.class);
+        registerClass(StartGameMsg.class);
+        registerClass(ChatMessage.class);
+        registerClass(HasCheatedMessage.class);
+        registerClass(ActivePlayerMessage.class);
+        registerClass(UpdatePlayerNamesMsg.class);
+        registerClass(SuspectMessage.class);
+        registerClass(CheckButtonsMsg.class);
+        registerClass(GetGameMsg.class);
+        registerClass(UserCards.class);
+        registerClass(GamePoints.class);
+        registerClass(LinkedList.class);
+        registerClass(Card.class);
+        registerClass(MoneyCard.class);
+        registerClass(ActionCard.class);
+        registerClass(GameHandler.class);
+        registerClass(PlayerTurn.class);
+        registerClass(Action.class);
+        registerClass(Board.class);
+        registerClass(BuyField.class);
+        registerClass(ActionType.class);
+        registerClass(CalculationHelper.class);
+        registerClass(EstateType.class);
+        registerClass(MoneyType.class);
+        registerClass(CheatService.class);
+        registerClass(EstateCard.class);
+        registerClass(ActionField.class);
+        registerClass(AllPlayersInDominionActivityMsg.class);
+        registerClass(HashMap.class);
+    }
+
+    public void addListeners(){
         server.addListener(new Listener() {
             public void received(Connection con, Object object) {
                 if (object instanceof MessageClass) {
@@ -220,123 +342,6 @@ public class TestServer {
                 }
             }
         });
-    }
-
-    public void updateAll(GameUpdateMsg msg) {
-        setBoard(msg.getBoard());
-        game.setGame(msg.getGame());
-        gamehandler.updateGameHandler(msg);
-    }
-
-    public void registerClass(Class regClass) {
-        server.getKryo().register(regClass);
-    }
-
-    public void createGame() {
-        game = Game.getGame();
-        hasGame = true;
-        System.out.println("GAME, game instanced - started");
-    }
-
-
-    public void reset() {
-        game.getPlayerList().clear();
-        userClientConnectorMap.clear();
-        System.out.println("Playerlist cleared!");
-    }
-
-    public void sendCheatInformation(String CheaterName) {
-        HasCheatedMessage msg = new HasCheatedMessage();
-        msg.setName(CheaterName);
-        for (Connection con : server.getConnections()) {
-            con.sendTCP(msg);
-        }
-    }
-
-    public void sendSuspectInformation(String SuspectName, String Username) {
-        SuspectMessage msg = new SuspectMessage();
-        msg.setSuspectedUserName(SuspectName);
-        msg.setUserName(Username);
-        for (Connection con : server.getConnections()) {
-            con.sendTCP(msg);
-        }
-    }
-
-
-    public boolean hasGame() {
-        return hasGame;
-    }
-
-    /**
-     * Creates Starter Deck for all players and returns true if game was created successfully.
-     *
-     * @return
-     */
-    public boolean setupGame() {
-        if (hasGame()) {
-            if (gamehandler == null) {
-                gamehandler = new GameHandler(getGame());
-                gamehandler.prepareGame();
-                return true;
-            } else {
-                return true;
-            }
-        } else {
-            return false;
-        }
-    }
-
-    public Board getBoard() {
-        return board;
-    }
-
-    public void setBoard(Board board) {
-        this.board = board;
-    }
-
-    public Game getGame() {
-        return game;
-    }
-
-    public void registerClasses(){
-        registerClass(BaseMessage.class);
-        registerClass(MessageClass.class);
-        registerClass(GameUpdateMsg.class);
-        registerClass(NetworkInformationMsg.class);
-        registerClass(Game.class);
-        registerClass(CreateGameMsg.class);
-        registerClass(AddPlayerSuccessMsg.class);
-        registerClass(ArrayList.class);
-        registerClass(User.class);
-        registerClass(ResetMsg.class);
-        registerClass(StartGameMsg.class);
-        registerClass(ChatMessage.class);
-        registerClass(HasCheatedMessage.class);
-        registerClass(ActivePlayerMessage.class);
-        registerClass(UpdatePlayerNamesMsg.class);
-        registerClass(SuspectMessage.class);
-        registerClass(CheckButtonsMsg.class);
-        registerClass(GetGameMsg.class);
-        registerClass(UserCards.class);
-        registerClass(GamePoints.class);
-        registerClass(LinkedList.class);
-        registerClass(Card.class);
-        registerClass(MoneyCard.class);
-        registerClass(ActionCard.class);
-        registerClass(GameHandler.class);
-        registerClass(PlayerTurn.class);
-        registerClass(Action.class);
-        registerClass(Board.class);
-        registerClass(BuyField.class);
-        registerClass(ActionType.class);
-        registerClass(CalculationHelper.class);
-        registerClass(EstateType.class);
-        registerClass(MoneyType.class);
-        registerClass(CheatService.class);
-        registerClass(EstateCard.class);
-        registerClass(ActionField.class);
-        registerClass(AllPlayersInDominionActivityMsg.class);
-        registerClass(HashMap.class);
     }
 }
 /*
