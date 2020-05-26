@@ -79,7 +79,7 @@ public class NotEnoughRessourcesMsg extends BaseMessage {
         if (isNotEnougAP()) return 1;
         else if (isNotEnoughBP()) return 2;
         else if (isNotEnoughMoney()) return 3;
-        else return 4;
+        else if (isOtherError()) return 4;
     }
 
 }
