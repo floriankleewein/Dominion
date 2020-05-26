@@ -11,7 +11,6 @@ public class NotEnoughRessourcesMsg extends BaseMessage {
     boolean notEnoughMoney = false;
     boolean notEnougAP = false;
     boolean notEnoughBP = false;
-    boolean otherError = false;
 
     public NotEnoughRessourcesMsg() {
 
@@ -19,6 +18,7 @@ public class NotEnoughRessourcesMsg extends BaseMessage {
 
     /**
      * 1 = not enough ActionPts, 2 = Not Enough BuyPts, 3 = Not Enough Money, 4 = Any Other Error
+     *
      * @param errorNumber
      */
     public NotEnoughRessourcesMsg(int errorNumber) {
@@ -33,17 +33,8 @@ public class NotEnoughRessourcesMsg extends BaseMessage {
                 setNotEnoughMoney(true);
                 break;
             default:
-                setOtherError(true);
                 break;
         }
-    }
-
-    public boolean isOtherError() {
-        return otherError;
-    }
-
-    public void setOtherError(boolean otherError) {
-        this.otherError = otherError;
     }
 
     public boolean isNotEnoughMoney() {
@@ -73,13 +64,14 @@ public class NotEnoughRessourcesMsg extends BaseMessage {
     /**
      * Checks which error got triggered, 1 = Not enough Action Pts, 2 = Not enough Buy Pts,
      * 3 = Not Enough Money, 4 = Any Other Error.
+     *
      * @return
      */
     public int checkError() {
         if (isNotEnougAP()) return 1;
         else if (isNotEnoughBP()) return 2;
         else if (isNotEnoughMoney()) return 3;
-        else if (isOtherError()) return 4;
+        else return 4;
     }
 
 }
