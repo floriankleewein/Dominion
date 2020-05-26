@@ -369,18 +369,10 @@ public class ClientConnector {
         });
     }
 
+    // hiermit wird eine ChatMessage über TCP an die anderen Spieler versendet
+    // @param msgToOthers -> message die versendet wird
     public void sendChatMessage(ChatMessage msgToOthers) {
         client.sendTCP(msgToOthers);
-
-        client.addListener(new Listener() {
-            @Override
-            public void received(Connection connection, Object object) {
-                if (object instanceof ChatMessage) {
-                    ChatMessage msg = (ChatMessage) object;
-                    callbackMap.get(ChatMessage.class).callback(msg);
-                }
-            }
-        });
     }
 
     //FKDoc: this is the message which is broadcasted when startbutton is clicked. everyone lands in the dominion activity then.

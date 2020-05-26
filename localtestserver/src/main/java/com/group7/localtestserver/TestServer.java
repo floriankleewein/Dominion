@@ -190,22 +190,20 @@ public class TestServer {
 
 
                 } else if (object instanceof ChatMessage) {
+                    //aktuelle Nachricht filtern
                     ChatMessage msg = (ChatMessage) object;
 
-                    String message = msg.getMessage();
+                    //logging der empfangenen Nachricht
+                    System.out.println(Tag + " -> received msg from: " + msg.getPlayerName());
 
-                    System.out.println("Receive msg from client:" + message);
-
-                    ChatMessage responseMsg = new ChatMessage();
+                    /*ChatMessage responseMsg = new ChatMessage();
                     responseMsg.setMessage(msg.getMessage());
-                    responseMsg.setSentByMe(false);
+                    responseMsg.setSentByMe(false); */
 
+                    msg.setSentByMe(false);
 
-                    for (Connection c : server.getConnections()) {
-                        if (c != con) {
-                            server.sendToTCP(c.getID(), responseMsg);
-                        }
-                    }
+                    //sende die Nachricht an die anderen Spieler
+                    server.sendToAllTCP(msg);
 
                 } else if (object instanceof HasCheatedMessage) {
                     HasCheatedMessage CheatMsg = (HasCheatedMessage) object;

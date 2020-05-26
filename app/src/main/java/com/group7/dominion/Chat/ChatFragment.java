@@ -55,6 +55,8 @@ public class ChatFragment extends ListFragment implements UserInputHandler {
 
     private String responseMessage;
 
+    private String playerName;
+
     public static ChatFragment newInstance() {
         return new ChatFragment();
     }
@@ -70,6 +72,7 @@ public class ChatFragment extends ListFragment implements UserInputHandler {
         unbinder = ButterKnife.bind(this, chatFragmentView);
         viewsInjected = true;
 
+        this.playerName = getArguments().getString("playerName");
         this.client = ClientConnector.getClientConnector();
 
         this.backButton = chatFragmentView.findViewById(R.id.back_Button);
@@ -156,6 +159,7 @@ public class ChatFragment extends ListFragment implements UserInputHandler {
             ChatMessage sendToOthers = new ChatMessage();
             sendToOthers.setMessage(this.getMessagetoBeSent());
             sendToOthers.setSentByMe(true);
+            sendToOthers.setPlayerName(playerName);
 
             new SendMessage(sendToOthers).execute();
 
@@ -186,7 +190,9 @@ public class ChatFragment extends ListFragment implements UserInputHandler {
     }
 
 
+    //realisiert das Senden einer ChatMessage mit Hilfe eines ASYNC TASK
     private class SendMessage extends AsyncTask<Void, Void, Boolean> {
+
         private ChatMessage sendMessage;
 
         SendMessage(ChatMessage msg) {
@@ -225,6 +231,7 @@ public class ChatFragment extends ListFragment implements UserInputHandler {
         }
     }
 
+    //Callback, um zum Spiel zurückkehren zu können
     public interface OnChatMessageArrivedListener{
         void onChatMessageArrived(String msg);
     }
