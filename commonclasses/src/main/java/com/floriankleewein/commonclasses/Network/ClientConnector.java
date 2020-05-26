@@ -110,6 +110,7 @@ public class ClientConnector {
         registerClass(EstateCard.class);
         registerClass(ActionField.class);
         registerClass(AllPlayersInDominionActivityMsg.class);
+        registerClass(HashMap.class);
 
 
         // start client
