@@ -33,6 +33,7 @@ import com.floriankleewein.commonclasses.Network.GameUpdateMsg;
 import com.floriankleewein.commonclasses.Network.GetGameMsg;
 import com.floriankleewein.commonclasses.Network.GetPlayerMsg;
 import com.floriankleewein.commonclasses.Network.HasCheatedMessage;
+import com.floriankleewein.commonclasses.Network.Messages.NotEnoughRessourcesMsg;
 import com.floriankleewein.commonclasses.Network.NetworkInformationMsg;
 import com.floriankleewein.commonclasses.Network.ResetMsg;
 import com.floriankleewein.commonclasses.Network.ReturnPlayersMsg;
@@ -199,6 +200,7 @@ public class TestServer {
         registerClass(ActionField.class);
         registerClass(AllPlayersInDominionActivityMsg.class);
         registerClass(HashMap.class);
+        registerClass(NotEnoughRessourcesMsg.class);
     }
 
     public void addListeners(){

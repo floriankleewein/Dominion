@@ -22,6 +22,7 @@ import com.floriankleewein.commonclasses.CheatFunction.CheatService;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.GameLogic.GameHandler;
 import com.floriankleewein.commonclasses.GameLogic.PlayerTurn;
+import com.floriankleewein.commonclasses.Network.Messages.NotEnoughRessourcesMsg;
 import com.floriankleewein.commonclasses.User.GamePoints;
 import com.floriankleewein.commonclasses.User.User;
 import com.floriankleewein.commonclasses.User.UserCards;
@@ -392,6 +393,7 @@ public class ClientConnector {
         registerClass(ActionField.class);
         registerClass(AllPlayersInDominionActivityMsg.class);
         registerClass(HashMap.class);
+        registerClass(NotEnoughRessourcesMsg.class);
     }
 
 }
