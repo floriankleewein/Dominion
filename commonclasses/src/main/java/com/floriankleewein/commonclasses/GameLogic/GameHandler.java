@@ -33,6 +33,7 @@ public class GameHandler {
     private Board board;
     private Card playedCard;
     private Card buyCard;
+    private PlayStatus turnState;
 
     /**
      * Logic for the Game, uses the singleton game to handle game logic. Creates Board, Cards for Players
@@ -44,7 +45,8 @@ public class GameHandler {
         this.game = game;
     }
 
-    public GameHandler () {}
+    public GameHandler() {
+    }
 
     public void prepareGame() {
         List<User> playerList = game.getPlayerList();
@@ -66,6 +68,7 @@ public class GameHandler {
             setBoard(new Board());
             game.setPlayerList(playerList);
             setNewActivePlayer();
+            setTurnState(PlayStatus.ACTION_PHASE);
         }
     }
 
@@ -77,6 +80,7 @@ public class GameHandler {
             int active = game.getPlayerList().indexOf(getActiveUser());
             game.setActivePlayer(game.getPlayerList().get((active + 1) % players));
         }
+        setTurnState(PlayStatus.ACTION_PHASE);
     }
 
     /**
@@ -88,6 +92,40 @@ public class GameHandler {
         setNewActivePlayer();
         for (User user : game.getPlayerList()) {
             user.getGamePoints().setPointsDefault();
+        }
+    }
+
+    /**
+     * Change Turn Phase, if end of turn setPlay Status to noPlayPhase
+     * Can be checked everytime since only if turn phase status is set will it change to the next phase.
+     *
+     * @return
+     */
+    public PlayStatus changeTurnStatus() {
+        if (getTurnState() == null) return null;
+        else if (getTurnState().equals(PlayStatus.ACTION_PHASE)) return PlayStatus.BUY_PHASE;
+        else if (getTurnState().equals(PlayStatus.BUY_PHASE)) return PlayStatus.NO_PLAY_PHASE;
+        else return PlayStatus.NO_PLAY_PHASE;
+    }
+
+    /**
+     * In case enums are not working over KryoNet
+     *
+     * @param i
+     */
+    public void setTurnState(int i) {
+        switch (i) {
+            case 1:
+                setTurnState(PlayStatus.ACTION_PHASE);
+                break;
+            case 2:
+                setTurnState(PlayStatus.BUY_PHASE);
+                break;
+            case 3:
+                setTurnState(PlayStatus.NO_PLAY_PHASE);
+                break;
+            default:
+                return;
         }
     }
 
@@ -140,6 +178,7 @@ public class GameHandler {
 
     private void buyCard(Card card) {
         Card boughtCard;
+        //if(!getTurnState().equals(PlayStatus.BUY_PHASE)) return; // TODO throw error message to client here NotEnoughRessourcesMsg
         if (card instanceof ActionCard) {
             boughtCard = getBoard().getActionField().pickCard(((ActionCard) card).getActionType());
             getActiveUser().getUserCards().addCardtoDeck(boughtCard);
@@ -200,7 +239,7 @@ public class GameHandler {
     }
 
     public Card buyCardTwo(GameUpdateMsg gameUpdateMsg) {
-        if(gameUpdateMsg.getActionTypeClicked() != null) {
+        if (gameUpdateMsg.getActionTypeClicked() != null) {
             System.out.println("Bought card Type: " + gameUpdateMsg.getActionTypeClicked());
             return buyActionCard(gameUpdateMsg.getActionTypeClicked());
         } else if (gameUpdateMsg.getEstateTypeClicked() != null) {
@@ -324,7 +363,7 @@ public class GameHandler {
 
     private boolean canBuyCardTwo(GameUpdateMsg gameUpdateMsg) {
         boolean noCard = false;
-        if(gameUpdateMsg.getActionTypeClicked() != null) {
+        if (gameUpdateMsg.getActionTypeClicked() != null) {
             noCard = true;
         } else if (gameUpdateMsg.getEstateTypeClicked() != null) {
             noCard = true;
@@ -334,7 +373,7 @@ public class GameHandler {
             return noCard;
         }
 
-        if(noCard) {
+        if (noCard) {
             /*
             if (getActiveUser().getGamePoints().getCoins() >= card.getPrice()) {
                 return true;
@@ -345,6 +384,13 @@ public class GameHandler {
         return false;
     }
 
+    public PlayStatus getTurnState() {
+        return turnState;
+    }
+
+    public void setTurnState(PlayStatus turnState) {
+        this.turnState = turnState;
+    }
 
     public User getActiveUser() {
         return game.getActivePlayer();

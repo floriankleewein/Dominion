@@ -125,6 +125,16 @@ public class TestServer {
         }
     }
 
+    /**
+     * Can be used to send ErrorMessages to the active User in the game.
+     * @param errorNumber
+     */
+    public void sendErrorMessage(int errorNumber) {
+        NotEnoughRessourcesMsg msg = new NotEnoughRessourcesMsg(errorNumber); // 1 = notenoughAp, 2 = notEnough BP, 3 = not Enough Money, else just failure
+        Connection con = userClientConnectorMap.get(gamehandler.getActiveUser());
+        con.sendTCP(msg);
+    }
+
 
     public boolean hasGame() {
         return hasGame;
