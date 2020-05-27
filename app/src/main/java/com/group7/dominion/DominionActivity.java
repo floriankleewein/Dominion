@@ -177,6 +177,8 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
                 }
             });
         });
+
+
         cardsHandler.sendMessage();
     }
 

@@ -84,6 +84,7 @@ public class StartGameActivity extends AppCompatActivity {
                     names.clear();
                     names.addAll(((UpdatePlayerNamesMsg) msg).getNameList());
                     listViewAdapter.notifyDataSetChanged();
+                    if (names.size() == 2) {
                         Thread thread1 = new Thread(new Runnable() {
                             @Override
                             public void run() {
@@ -91,6 +92,7 @@ public class StartGameActivity extends AppCompatActivity {
                             }
                         });
                         thread1.start();
+                    }
                 }
             });
         }));

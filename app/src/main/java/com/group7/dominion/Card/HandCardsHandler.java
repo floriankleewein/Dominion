@@ -16,6 +16,7 @@ import com.floriankleewein.commonclasses.Cards.EstateCard;
 import com.floriankleewein.commonclasses.Cards.EstateType;
 import com.floriankleewein.commonclasses.Cards.MoneyCard;
 import com.floriankleewein.commonclasses.Cards.MoneyType;
+import com.floriankleewein.commonclasses.GameLogic.GameHandler;
 import com.floriankleewein.commonclasses.GameLogic.PlayStatus;
 import com.floriankleewein.commonclasses.Network.ClientConnector;
 import com.floriankleewein.commonclasses.Network.GameUpdateMsg;
@@ -32,14 +33,14 @@ import static com.floriankleewein.commonclasses.Cards.ActionType.HEXE;
 
 
 public class HandCardsHandler {
-    PlayStatus playStatus;
-    LinearLayout linearLayout;
-    LinearLayout.LayoutParams lparams;
+    private PlayStatus playStatus;
+    private LinearLayout linearLayout;
+    private LinearLayout.LayoutParams lparams;
     private List<ImageButton> ImageButtons;
     private List<Card> cardList;
-    Context context;
-    int img_id;
-    boolean canGetCards;
+    private Context context;
+    private int img_id;
+    private boolean canGetCards;
 
     public HandCardsHandler(Context context) {
         this.context = context;
@@ -150,9 +151,27 @@ public class HandCardsHandler {
     public void onClickListener() {
         for (int i = 0; i < ImageButtons.size(); i++) {
             int finalI = i;
-
             ImageButtons.get(i).setOnClickListener(v -> {
                 if ((cardList.get(finalI).getId() >= 13) || (cardList.get(finalI).getId() <= 10)) {
+                    System.out.println("Card with the ID is played: " + cardList.get(finalI).getId());
+                    linearLayout.removeView(ImageButtons.get(finalI));
+                    Thread thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ClientConnector.getClientConnector().sendGameUpdate();
+                        }
+                    });
+                    thread.start();
+                }
+            });
+        }
+    }
+
+    public void setOnClickListenerActionCards () {
+        for (int i = 0; i < ImageButtons.size(); i++) {
+            int finalI = i;
+            ImageButtons.get(i).setOnClickListener(v -> {
+                if ((cardList.get(finalI).getId() <= 10)) {
                     System.out.println("Card with the ID is played: " + cardList.get(finalI).getId());
                     ImageButtons.get(finalI).setVisibility(View.INVISIBLE);
                     Thread thread = new Thread(new Runnable() {
@@ -164,8 +183,30 @@ public class HandCardsHandler {
                     thread.start();
                 }
             });
-
         }
+    }
+
+    public void setonClickListenerMoneyCards () {
+        for (int i = 0; i < ImageButtons.size(); i++) {
+            int finalI = i;
+            ImageButtons.get(i).setOnClickListener(v -> {
+                if ((cardList.get(finalI).getId() >= 14)) {
+                    System.out.println("Card with the ID is played: " + cardList.get(finalI).getId());
+                    linearLayout.removeView(ImageButtons.get(finalI));
+                    Thread thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ClientConnector.getClientConnector().sendGameUpdate();
+                        }
+                    });
+                    thread.start();
+                }
+            });
+        }
+    }
+
+    public void getnewHandCards () {
+        linearLayout.removeAllViews();
     }
 
     private void addCard(Card card) {
@@ -177,19 +218,6 @@ public class HandCardsHandler {
         linearLayout.addView(umg);
         ImageButtons.add(umg);
         img_id++;
-    }
-
-    private void setImageButtonsNull() {
-        ImageButtons.clear();
-    }
-
-    private void playStatus() {
-        if (playStatus != PlayStatus.NO_PLAY_PHASE) {
-            if (playStatus == PlayStatus.ACTION_PHASE) {
-
-            }
-        }
-        //onClickListener();
     }
 
     public void registerListener(String Username) {
