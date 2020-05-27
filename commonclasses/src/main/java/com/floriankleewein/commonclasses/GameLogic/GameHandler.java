@@ -140,7 +140,7 @@ public class GameHandler {
     }
 
     private boolean canPlayActionCard() {
-        if (getActiveUser().getGamePoints().getPlaysAmount() > 0) {
+        if (getActiveUser().getGamePoints().getPlaysAmount() > 0 && turnState.equals(PlayStatus.ACTION_PHASE)) {
             return true;
         }
         return false;
@@ -254,7 +254,6 @@ public class GameHandler {
     }
 
     public void playCard() {
-        // TODO logic for card played
         if (playedCard instanceof ActionCard) {
             if (!canPlayActionCard()) {
                 return;
@@ -344,7 +343,7 @@ public class GameHandler {
                     break;
             }
             getActiveUser().getUserCards().playCard(card);
-        } else {
+        } else if (playedCard instanceof MoneyCard){
             MoneyCard card = (MoneyCard) playedCard;
             getActiveUser().getGamePoints().modifyCoins(card.getWorth());
             getActiveUser().getUserCards().playCard(card);
@@ -355,7 +354,8 @@ public class GameHandler {
         if (card == null) {
             return false;
         }
-        if (getActiveUser().getGamePoints().getCoins() >= card.getPrice() && getActiveUser().getGamePoints().getBuyAmounts() > 0) {
+        if (getActiveUser().getGamePoints().getCoins() >= card.getPrice() && getActiveUser().getGamePoints().getBuyAmounts() > 0 && !getTurnState().equals(PlayStatus.NO_PLAY_PHASE)) {
+            setTurnState(PlayStatus.BUY_PHASE);
             return true;
         }
         return false;

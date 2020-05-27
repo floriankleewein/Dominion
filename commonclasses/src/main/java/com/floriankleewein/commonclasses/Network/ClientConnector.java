@@ -256,8 +256,9 @@ public class ClientConnector {
                 if (object instanceof GameUpdateMsg) {
                     GameUpdateMsg gameUpdateMsg = (GameUpdateMsg) object;
                     //gameHandler.updateGameHandler(gameUpdateMsg);/
-                    GameUpdateMsg gameUpdateMsg1 = gameHandler.updateGameHandlerTwo(gameUpdateMsg);
-                    callbackMap.get(GameUpdateMsg.class).callback(gameUpdateMsg1);
+                    setGameHandler(msg.getGameHandler());
+                    //GameUpdateMsg gameUpdateMsg1 = gameHandler.updateGameHandlerTwo(gameUpdateMsg);
+                    callbackMap.get(GameUpdateMsg.class).callback(gameUpdateMsg);
                 }
             }
         });
