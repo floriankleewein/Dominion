@@ -176,7 +176,8 @@ public class GameHandler {
         updateVictoryPts(msg);
     }
 
-    private void buyCard(Card card) {
+    public void buyCard(Card card) {
+        //if(!canBuyCard(card)) return; // check if card can be bought
         Card boughtCard;
         //if(!getTurnState().equals(PlayStatus.BUY_PHASE)) return; // TODO throw error message to client here NotEnoughRessourcesMsg
         if (card instanceof ActionCard) {

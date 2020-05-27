@@ -1,11 +1,9 @@
 package com.group7.localtestserver;
 
 
-import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
-import com.esotericsoftware.minlog.Log;
 import com.floriankleewein.commonclasses.Board.ActionField;
 import com.floriankleewein.commonclasses.Board.Board;
 import com.floriankleewein.commonclasses.Board.BuyField;
@@ -33,6 +31,7 @@ import com.floriankleewein.commonclasses.Network.GameUpdateMsg;
 import com.floriankleewein.commonclasses.Network.GetGameMsg;
 import com.floriankleewein.commonclasses.Network.GetPlayerMsg;
 import com.floriankleewein.commonclasses.Network.HasCheatedMessage;
+import com.floriankleewein.commonclasses.Network.Messages.NewTurnMessage;
 import com.floriankleewein.commonclasses.Network.Messages.NotEnoughRessourcesMsg;
 import com.floriankleewein.commonclasses.Network.NetworkInformationMsg;
 import com.floriankleewein.commonclasses.Network.ResetMsg;
@@ -47,7 +46,6 @@ import com.floriankleewein.commonclasses.User.UserCards;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -60,7 +58,7 @@ public class TestServer {
     private boolean gamehandlerCalled = false;
     private final String Tag = "TEST-SERVER"; // debugging only
     private GameHandler gamehandler;
-    private Map<User, Connection> userClientConnectorMap = new HashMap<>();
+    private Map<User, Connection> userConnections = new HashMap<>();
 
 
     public TestServer() {
@@ -104,7 +102,7 @@ public class TestServer {
 
     public void reset() {
         game.getPlayerList().clear();
-        userClientConnectorMap.clear();
+        userConnections.clear();
         System.out.println("Playerlist cleared!");
     }
 
@@ -131,7 +129,7 @@ public class TestServer {
      */
     public void sendErrorMessage(int errorNumber) {
         NotEnoughRessourcesMsg msg = new NotEnoughRessourcesMsg(errorNumber); // 1 = notenoughAp, 2 = notEnough BP, 3 = not Enough Money, else just failure
-        Connection con = userClientConnectorMap.get(gamehandler.getActiveUser());
+        Connection con = userConnections.get(gamehandler.getActiveUser());
         con.sendTCP(msg);
     }
 
@@ -241,7 +239,7 @@ public class TestServer {
                     if (game.checkSize()) {
                         if (game.checkName(name)) {
 
-                            userClientConnectorMap.put(player, con);
+                            userConnections.put(player, con);
 
                             game.addPlayer(player);
                             addPlayerMsg.setFeedbackUI(0);
@@ -273,7 +271,7 @@ public class TestServer {
                         server.sendToAllTCP(msg);
                         ActivePlayerMessage activePlayerMsg = new ActivePlayerMessage();
                         activePlayerMsg.setGame(getGame());
-                        Connection activePlayerCon = userClientConnectorMap.get(game.getActivePlayer());
+                        Connection activePlayerCon = userConnections.get(game.getActivePlayer());
                         activePlayerCon.sendTCP(activePlayerMsg);
                     } else { // fehlerfall
                         msg.setFeedbackUI(1);
@@ -351,6 +349,14 @@ public class TestServer {
                     System.out.println("Got Get GameMsg on Server");
                     msg.setGm(gamehandler);
                     server.sendToAllTCP(msg);
+                } else if (object instanceof NewTurnMessage) {
+                    gamehandler.newTurn();
+                    ActivePlayerMessage msg = new ActivePlayerMessage();
+                    msg.setGame(gamehandler.getGame());
+                    server.sendToAllTCP(msg); // Todo check if sending to new active player is enough
+                    // OR
+//                    Connection activeCon = userConnections.get(game.getActivePlayer());
+//                    activeCon.sendTCP(msg);
                 }
             }
         });
