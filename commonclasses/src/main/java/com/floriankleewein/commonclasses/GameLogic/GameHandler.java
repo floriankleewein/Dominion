@@ -345,11 +345,31 @@ public class GameHandler {
             }
             getActiveUser().getUserCards().playCard(card);
         } else if (playedCard instanceof MoneyCard){
+            if(isNoPlayPhase()) return;
+            if(isActionPhase())  {
+                setTurnState(PlayStatus.BUY_PHASE);
+            }
             MoneyCard card = (MoneyCard) playedCard;
             getActiveUser().getGamePoints().modifyCoins(card.getWorth());
             getActiveUser().getUserCards().playCard(card);
         }
     }
+
+    private boolean isActionPhase() {
+        if(turnState.equals(PlayStatus.ACTION_PHASE)) return true;
+        return false;
+    }
+
+    private boolean isBuyPhase() {
+        if(turnState.equals(PlayStatus.BUY_PHASE)) return true;
+        return false;
+    }
+
+    private boolean isNoPlayPhase() {
+        if(turnState.equals(PlayStatus.NO_PLAY_PHASE)) return true;
+        return false;
+    }
+
 
     private boolean canBuyCard(Card card) {
         if (card == null) {
