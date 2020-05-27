@@ -73,43 +73,7 @@ public class ClientConnector {
 
     public void connect() {
         // Register classes
-        registerClass(BaseMessage.class);
-        registerClass(MessageClass.class);
-        registerClass(GameUpdateMsg.class);
-        registerClass(NetworkInformationMsg.class);
-        registerClass(Game.class);
-        registerClass(CreateGameMsg.class);
-        registerClass(AddPlayerSuccessMsg.class);
-        registerClass(ArrayList.class);
-        registerClass(User.class);
-        registerClass(ResetMsg.class);
-        registerClass(StartGameMsg.class);
-        registerClass(ChatMessage.class);
-        registerClass(HasCheatedMessage.class);
-        registerClass(ActivePlayerMessage.class);
-        registerClass(UpdatePlayerNamesMsg.class);
-        registerClass(SuspectMessage.class);
-        registerClass(CheckButtonsMsg.class);
-        registerClass(GetGameMsg.class);
-        registerClass(UserCards.class);
-        registerClass(GamePoints.class);
-        registerClass(LinkedList.class);
-        registerClass(Card.class);
-        registerClass(MoneyCard.class);
-        registerClass(ActionCard.class);
-        registerClass(GameHandler.class);
-        registerClass(PlayerTurn.class);
-        registerClass(Action.class);
-        registerClass(Board.class);
-        registerClass(BuyField.class);
-        registerClass(ActionType.class);
-        registerClass(CalculationHelper.class);
-        registerClass(EstateType.class);
-        registerClass(MoneyType.class);
-        registerClass(CheatService.class);
-        registerClass(EstateCard.class);
-        registerClass(ActionField.class);
-        registerClass(AllPlayersInDominionActivityMsg.class);
+        registerClasses();
 
 
         // start client
@@ -387,6 +351,47 @@ public class ClientConnector {
     public void allPlayersInDominionActivity(){
         AllPlayersInDominionActivityMsg msg = new AllPlayersInDominionActivityMsg();
         client.sendTCP(msg);
+    }
+
+    public void registerClasses(){
+        registerClass(BaseMessage.class);
+        registerClass(MessageClass.class);
+        registerClass(GameUpdateMsg.class);
+        registerClass(NetworkInformationMsg.class);
+        registerClass(Game.class);
+        registerClass(CreateGameMsg.class);
+        registerClass(AddPlayerSuccessMsg.class);
+        registerClass(ArrayList.class);
+        registerClass(User.class);
+        registerClass(ResetMsg.class);
+        registerClass(StartGameMsg.class);
+        registerClass(ChatMessage.class);
+        registerClass(HasCheatedMessage.class);
+        registerClass(ActivePlayerMessage.class);
+        registerClass(UpdatePlayerNamesMsg.class);
+        registerClass(SuspectMessage.class);
+        registerClass(CheckButtonsMsg.class);
+        registerClass(GetGameMsg.class);
+        registerClass(UserCards.class);
+        registerClass(GamePoints.class);
+        registerClass(LinkedList.class);
+        registerClass(Card.class);
+        registerClass(MoneyCard.class);
+        registerClass(ActionCard.class);
+        registerClass(GameHandler.class);
+        registerClass(PlayerTurn.class);
+        registerClass(Action.class);
+        registerClass(Board.class);
+        registerClass(BuyField.class);
+        registerClass(ActionType.class);
+        registerClass(CalculationHelper.class);
+        registerClass(EstateType.class);
+        registerClass(MoneyType.class);
+        registerClass(CheatService.class);
+        registerClass(EstateCard.class);
+        registerClass(ActionField.class);
+        registerClass(AllPlayersInDominionActivityMsg.class);
+        registerClass(HashMap.class);
     }
 
 }
