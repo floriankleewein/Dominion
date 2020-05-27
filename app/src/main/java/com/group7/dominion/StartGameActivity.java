@@ -36,18 +36,12 @@ public class StartGameActivity extends AppCompatActivity {
     Button btnRecreate;
     ShakeListener shakeListener;
 
-    //TODO: rename this
-    public static final String EXTRA_MESSAGE = "clientForNextActivity";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_or_join);
         btnStart = findViewById(R.id.btn_start);
         btnshowPlayers = findViewById(R.id.ShowPlayer);
-
-        ClientConnector clientConnector = ClientConnector.getClientConnector();
-
     }
 
     @Override
@@ -69,7 +63,7 @@ public class StartGameActivity extends AppCompatActivity {
         });
 
         thread.start();
-        //TODO: FK: insert the names before setting the adapter.
+
         //FKDoc: the listViewAdapter is used as a communication tool between the listView and the data that should be shown.
         ArrayAdapter<String> listViewAdapter =
                 new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, names);

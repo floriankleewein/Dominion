@@ -46,7 +46,6 @@ import com.floriankleewein.commonclasses.User.UserCards;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -222,10 +221,7 @@ public class TestServer {
                     AddPlayerSuccessMsg addPlayerMsg = (AddPlayerSuccessMsg) object;
                     String name = addPlayerMsg.getPlayerName();
                     User player = new User(name);
-                    /*if(game.addPlayer(player)) {
-                        addPlayerMsg.setUser(player);
-                        addPlayerMsg.setPlayerAdded(true);
-                    }*/
+
                     if (game.checkSize()) {
                         if (game.checkName(name)) {
 
@@ -247,7 +243,6 @@ public class TestServer {
                 } else if (object instanceof ResetMsg) {
                     System.out.println("Received Reset Message.");
                     reset();
-                    //ResetMsg msg = (ResetMsg) object;
 
                 } else if (object instanceof StartGameMsg) {
                     StartGameMsg msg = new StartGameMsg();
@@ -326,7 +321,7 @@ public class TestServer {
                     if (hasGame == false) {
                         msg.setCreateValue(true);
                         msg.setJoinValue(false);
-                    } else if (hasGame == true) {
+                    } else if (hasGame) {
                         msg.setCreateValue(false);
                         msg.setJoinValue(true);
                     }
