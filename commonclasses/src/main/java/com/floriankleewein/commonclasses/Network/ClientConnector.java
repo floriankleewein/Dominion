@@ -22,6 +22,7 @@ import com.floriankleewein.commonclasses.CheatFunction.CheatService;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.GameLogic.GameHandler;
 import com.floriankleewein.commonclasses.GameLogic.PlayerTurn;
+import com.floriankleewein.commonclasses.Network.Messages.NotEnoughRessourcesMsg;
 import com.floriankleewein.commonclasses.User.GamePoints;
 import com.floriankleewein.commonclasses.User.User;
 import com.floriankleewein.commonclasses.User.UserCards;
@@ -255,8 +256,9 @@ public class ClientConnector {
                 if (object instanceof GameUpdateMsg) {
                     GameUpdateMsg gameUpdateMsg = (GameUpdateMsg) object;
                     //gameHandler.updateGameHandler(gameUpdateMsg);/
-                    GameUpdateMsg gameUpdateMsg1 = gameHandler.updateGameHandlerTwo(gameUpdateMsg);
-                    callbackMap.get(GameUpdateMsg.class).callback(gameUpdateMsg1);
+                    setGameHandler(msg.getGameHandler());
+                    //GameUpdateMsg gameUpdateMsg1 = gameHandler.updateGameHandlerTwo(gameUpdateMsg);
+                    callbackMap.get(GameUpdateMsg.class).callback(gameUpdateMsg);
                 }
             }
         });
@@ -392,6 +394,7 @@ public class ClientConnector {
         registerClass(ActionField.class);
         registerClass(AllPlayersInDominionActivityMsg.class);
         registerClass(HashMap.class);
+        registerClass(NotEnoughRessourcesMsg.class);
     }
 
 }

@@ -7,6 +7,7 @@ import com.floriankleewein.commonclasses.Cards.EstateType;
 import com.floriankleewein.commonclasses.Cards.MoneyType;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.GameLogic.GameHandler;
+import com.floriankleewein.commonclasses.GameLogic.PlayStatus;
 import com.floriankleewein.commonclasses.User.User;
 
 import java.util.HashMap;
@@ -21,6 +22,7 @@ public class GameUpdateMsg extends BaseMessage {
     private Card clickedCard;
     private Card boughtCard;
     private GameHandler gameHandler;
+    private PlayStatus turnStatus;
     private Map<User, Integer> victoryPointsChange = new HashMap<>();
 
     private MoneyType moneyTypeClicked;
@@ -33,6 +35,14 @@ public class GameUpdateMsg extends BaseMessage {
             victoryPointsChange.put(u, 0);
         }
         */
+    }
+
+    public PlayStatus getTurnStatus() {
+        return turnStatus;
+    }
+
+    public void setTurnStatus(PlayStatus turnStatus) {
+        this.turnStatus = turnStatus;
     }
 
     public Card getClickedCard() {

@@ -33,6 +33,7 @@ import com.floriankleewein.commonclasses.Network.GameUpdateMsg;
 import com.floriankleewein.commonclasses.Network.GetGameMsg;
 import com.floriankleewein.commonclasses.Network.GetPlayerMsg;
 import com.floriankleewein.commonclasses.Network.HasCheatedMessage;
+import com.floriankleewein.commonclasses.Network.Messages.NotEnoughRessourcesMsg;
 import com.floriankleewein.commonclasses.Network.NetworkInformationMsg;
 import com.floriankleewein.commonclasses.Network.ResetMsg;
 import com.floriankleewein.commonclasses.Network.ReturnPlayersMsg;
@@ -124,6 +125,16 @@ public class TestServer {
         }
     }
 
+    /**
+     * Can be used to send ErrorMessages to the active User in the game.
+     * @param errorNumber
+     */
+    public void sendErrorMessage(int errorNumber) {
+        NotEnoughRessourcesMsg msg = new NotEnoughRessourcesMsg(errorNumber); // 1 = notenoughAp, 2 = notEnough BP, 3 = not Enough Money, else just failure
+        Connection con = userClientConnectorMap.get(gamehandler.getActiveUser());
+        con.sendTCP(msg);
+    }
+
 
     public boolean hasGame() {
         return hasGame;
@@ -199,6 +210,7 @@ public class TestServer {
         registerClass(ActionField.class);
         registerClass(AllPlayersInDominionActivityMsg.class);
         registerClass(HashMap.class);
+        registerClass(NotEnoughRessourcesMsg.class);
     }
 
     public void addListeners(){
