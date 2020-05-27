@@ -211,14 +211,14 @@ public class GameHandler {
     }
 
     //LKDoc: new buy methods cause I can't cast on Cards - ActionType has only ActionCard and not Card
-    public Card buyActionCard(ActionType actionType) {
+    public Card buyCard(ActionType actionType) {
         Card boughtCard = getBoard().getActionField().pickCard(actionType);
         getActiveUser().getUserCards().addCardtoDeck(boughtCard);
         calculateCoinsOnActiveUser(boughtCard);
         return boughtCard;
     }
 
-    public Card buyEstateCard(EstateType estateType) {
+    public Card buyCard(EstateType estateType) {
         Card boughtCard = getBoard().getBuyField().pickCard(estateType);
         getActiveUser().getUserCards().addCardtoDeck(boughtCard);
         getActiveUser().getGamePoints().modifyWinningPoints(((EstateCard) boughtCard).getEstateValue());
@@ -226,7 +226,7 @@ public class GameHandler {
         return boughtCard;
     }
 
-    public Card buyMoneyCard(MoneyType moneyType) {
+    public Card buyCard(MoneyType moneyType) {
         Card boughtCard = getBoard().getBuyField().pickCard(moneyType);
         getActiveUser().getUserCards().addCardtoDeck(boughtCard);
         calculateCoinsOnActiveUser(boughtCard);
@@ -241,13 +241,13 @@ public class GameHandler {
     public Card buyCardTwo(GameUpdateMsg gameUpdateMsg) {
         if (gameUpdateMsg.getActionTypeClicked() != null) {
             System.out.println("Bought card Type: " + gameUpdateMsg.getActionTypeClicked());
-            return buyActionCard(gameUpdateMsg.getActionTypeClicked());
+            return buyCard(gameUpdateMsg.getActionTypeClicked());
         } else if (gameUpdateMsg.getEstateTypeClicked() != null) {
             System.out.println("Bought card Type: " + gameUpdateMsg.getEstateTypeClicked());
-            return buyEstateCard(gameUpdateMsg.getEstateTypeClicked());
+            return buyCard(gameUpdateMsg.getEstateTypeClicked());
         } else if (gameUpdateMsg.getMoneyTypeClicked() != null) {
             System.out.println("Bought card Type: " + gameUpdateMsg.getMoneyTypeClicked());
-            return buyMoneyCard(gameUpdateMsg.getMoneyTypeClicked());
+            return buyCard(gameUpdateMsg.getMoneyTypeClicked());
         } else {
             return null;
         }
