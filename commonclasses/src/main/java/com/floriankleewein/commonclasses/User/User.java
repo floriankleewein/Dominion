@@ -23,6 +23,7 @@ public class User {
     public User(String userName) {
         this.UserName = userName;
         isCheater = false;
+        setUpforGame();
     }
 
     public void setUpforGame() {

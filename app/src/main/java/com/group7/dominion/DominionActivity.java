@@ -58,6 +58,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
     private User user;
     private SensorManager sm;
     private ShakeListener shakeListener;
+    private Button nextTurnbtn;
 
     private FragmentManager fragmentManager;
 
@@ -113,6 +114,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         if (this.chatFragment == null) {
             this.chatFragment = ChatFragment.newInstance();
         }
+        nextTurnbtn = findViewById(R.id.NextTurnBtn);
     }
 
     @Override
@@ -172,9 +174,16 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    user = ((GetGameMsg) msg).getGm().getGame().findUser(getUsername());
-                    cardsHandler.initCards(user);
-                    cardsHandler.onClickListener();
+                    user = ((GetGameMsg) msg).getGm().getGame().getActivePlayer();
+                    System.out.println( "*******"+user.getPlayStatus()+ "******");
+                    if (user.getUserName().equals(getUsername())) {
+                        cardsHandler.initCards(user);
+                        if (user.getPlayStatus() == PlayStatus.ACTION_PHASE) {
+                            cardsHandler.onClickListenerActionPhase();
+                        } else if (user.getPlayStatus() == PlayStatus.PLAY_COINS) {
+                            cardsHandler.onClickListenerBuyPhase();
+                        }
+                    }
                 }
             });
         });
@@ -183,21 +192,26 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    user = ((GameUpdateMsg)msg).getActiveUser();
-                    cardsHandler.initCards(user);
-                    if (((GameUpdateMsg) msg).getTurnStatus() == PlayStatus.ACTION_PHASE){
-                        cardsHandler.onClickListenerActionPhase();
-                    }
-                    else if (((GameUpdateMsg) msg).getTurnStatus() == PlayStatus.BUY_PHASE){
-                        cardsHandler.onClickListenerBuyPhase();
-                    }
+                    user = ((GameUpdateMsg) msg).getGameHandler().getGame().getActivePlayer();
                 }
             });
         });
 
+        nextTurnbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        GameUpdateMsg msg = new GameUpdateMsg();
+                        msg.getActiveUser().setPlayStatus(PlayStatus.BUY_PHASE);
+                        ClientConnector.getClientConnector().sendUpdate(msg);
+                    }
+                });
+            }
+        });
         cardsHandler.sendMessage();
     }
-
 
     public void sendUpdateMessage() {
         Thread th = new Thread(new Runnable() {

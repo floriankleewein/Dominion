@@ -177,7 +177,7 @@ public class HandCardsHandler {
             int finalI = i;
 
             ImageButtons.get(i).setOnClickListener(v -> {
-                if ((cardList.get(finalI).getId() >= 10)) {
+                if ((cardList.get(finalI).getId() <= 10)) {
                     System.out.println("Card with the ID is played: " + cardList.get(finalI).getId());
                     ImageButtons.get(finalI).setVisibility(View.INVISIBLE);
                     Thread thread = new Thread(new Runnable() {
@@ -199,7 +199,7 @@ public class HandCardsHandler {
             int finalI = i;
 
             ImageButtons.get(i).setOnClickListener(v -> {
-                if ((cardList.get(finalI).getId() <= 10)) {
+                if ((cardList.get(finalI).getId() >= 14)) {
                     System.out.println("Card with the ID is played: " + cardList.get(finalI).getId());
                     ImageButtons.get(finalI).setVisibility(View.INVISIBLE);
                     Thread thread = new Thread(new Runnable() {

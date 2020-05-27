@@ -19,6 +19,8 @@ import com.group7.dominion.R;
 import androidx.appcompat.app.AppCompatDialogFragment;
 import androidx.fragment.app.FragmentManager;
 
+import java.util.Objects;
+
 
 public class ActionDialogHandler extends AppCompatDialogFragment {
     //private Board board;
@@ -52,7 +54,7 @@ public class ActionDialogHandler extends AppCompatDialogFragment {
                     sendUpdate(gameUpdateMsg);
 
                     clientConnector.registerCallback(GameUpdateMsg.class, (msg -> {
-                        getActivity().runOnUiThread(new Runnable() {
+                        requireActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 GameUpdateMsg gameUpdateMsg1 = (GameUpdateMsg) msg;

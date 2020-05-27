@@ -55,7 +55,7 @@ public class GameHandler {
                 LinkedList<Card> generatedCards = new LinkedList<>();
                 UserCards ucards = new UserCards();
                 for (int i = 0; i < MONEY_CARDS; i++) {
-                    Card copper = new MoneyCard(0, 0, MoneyType.KUPFER);
+                    Card copper = new MoneyCard(0, 1, MoneyType.KUPFER);
                     generatedCards.add(copper);
                 }
                 for (int i = 0; i < ANWESEN_CARDS; i++) {
@@ -68,7 +68,6 @@ public class GameHandler {
             setBoard(new Board());
             game.setPlayerList(playerList);
             setNewActivePlayer();
-            setTurnState(PlayStatus.ACTION_PHASE);
         }
     }
 
@@ -80,7 +79,12 @@ public class GameHandler {
             int active = game.getPlayerList().indexOf(getActiveUser());
             game.setActivePlayer(game.getPlayerList().get((active + 1) % players));
         }
-        setTurnState(PlayStatus.ACTION_PHASE);
+        if (checkHandCards()){
+            getActiveUser().setPlayStatus(PlayStatus.ACTION_PHASE);
+        }
+        else {
+            getActiveUser().setPlayStatus(PlayStatus.PLAY_COINS);
+        }
     }
 
     /**
@@ -345,10 +349,9 @@ public class GameHandler {
             getActiveUser().getUserCards().playCard(card);
         } else if (playedCard instanceof MoneyCard) {
             MoneyCard card = (MoneyCard) playedCard;
-            if (getActiveUser() != null) {
-                getActiveUser().getGamePoints().modifyCoins(card.getWorth());
-                getActiveUser().getUserCards().playCard(card);
-            }
+            getActiveUser().getGamePoints().modifyCoins(card.getWorth());
+            getActiveUser().getUserCards().playCard(card);
+
         }
     }
 
@@ -359,6 +362,8 @@ public class GameHandler {
         if (getActiveUser().getGamePoints().getCoins() >= card.getPrice() && getActiveUser().getGamePoints().getBuyAmounts() > 0 && !getTurnState().equals(PlayStatus.NO_PLAY_PHASE)) {
             setTurnState(PlayStatus.BUY_PHASE);
             return true;
+        } else if (getActiveUser().getGamePoints().getBuyAmounts() == 0) {
+            setTurnState(PlayStatus.NO_PLAY_PHASE);
         }
         return false;
     }
@@ -406,6 +411,15 @@ public class GameHandler {
             }
         }
         game.setPlayerList(users);
+    }
+
+    public boolean checkHandCards() {
+        for (int i = 0; i < getActiveUser().getUserCards().getHandCards().size(); i++) {
+            if (getActiveUser().getUserCards().getHandCards().get(i) instanceof ActionCard) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void setGame() {

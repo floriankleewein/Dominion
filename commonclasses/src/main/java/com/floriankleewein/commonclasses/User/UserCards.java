@@ -97,7 +97,6 @@ public class UserCards {
     public LinkedList<Card> getHandCards() {
         return HandCards;
     }
-
     public void setHandCards(LinkedList<Card> handCards) {
         HandCards = handCards;
     }
