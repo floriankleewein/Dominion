@@ -22,6 +22,7 @@ import com.floriankleewein.commonclasses.Board.Board;
 import com.floriankleewein.commonclasses.Cards.ActionType;
 import com.floriankleewein.commonclasses.Cards.MoneyCard;
 import com.floriankleewein.commonclasses.Cards.MoneyType;
+import com.floriankleewein.commonclasses.GameLogic.PlayStatus;
 import com.floriankleewein.commonclasses.Network.GameUpdateMsg;
 import com.group7.dominion.Card.ActionDialogHandler;
 import com.group7.dominion.Card.ErrorDialogHandler;
@@ -178,6 +179,21 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
             });
         });
 
+        ClientConnector.getClientConnector().registerCallback(GameUpdateMsg.class, msg -> {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    user = ((GameUpdateMsg)msg).getActiveUser();
+                    cardsHandler.initCards(user);
+                    if (((GameUpdateMsg) msg).getTurnStatus() == PlayStatus.ACTION_PHASE){
+                        cardsHandler.onClickListenerActionPhase();
+                    }
+                    else if (((GameUpdateMsg) msg).getTurnStatus() == PlayStatus.BUY_PHASE){
+                        cardsHandler.onClickListenerBuyPhase();
+                    }
+                }
+            });
+        });
 
         cardsHandler.sendMessage();
     }

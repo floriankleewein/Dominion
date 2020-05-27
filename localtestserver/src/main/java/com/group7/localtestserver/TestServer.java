@@ -22,6 +22,7 @@ import com.floriankleewein.commonclasses.Chat.ChatMessage;
 import com.floriankleewein.commonclasses.CheatFunction.CheatService;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.GameLogic.GameHandler;
+import com.floriankleewein.commonclasses.GameLogic.PlayStatus;
 import com.floriankleewein.commonclasses.GameLogic.PlayerTurn;
 import com.floriankleewein.commonclasses.Network.ActivePlayerMessage;
 import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
@@ -127,6 +128,7 @@ public class TestServer {
 
     /**
      * Can be used to send ErrorMessages to the active User in the game.
+     *
      * @param errorNumber
      */
     public void sendErrorMessage(int errorNumber) {
@@ -171,7 +173,7 @@ public class TestServer {
         return game;
     }
 
-    public void registerClasses(){
+    public void registerClasses() {
         registerClass(BaseMessage.class);
         registerClass(MessageClass.class);
         registerClass(GameUpdateMsg.class);
@@ -211,9 +213,11 @@ public class TestServer {
         registerClass(AllPlayersInDominionActivityMsg.class);
         registerClass(HashMap.class);
         registerClass(NotEnoughRessourcesMsg.class);
+        registerClass(PlayStatus.class);
+        registerClass(PlayerTurn.class);
     }
 
-    public void addListeners(){
+    public void addListeners() {
         server.addListener(new Listener() {
             public void received(Connection con, Object object) {
                 if (object instanceof MessageClass) {
@@ -327,9 +331,13 @@ public class TestServer {
 
                     sendSuspectInformation(msg.getSuspectedUserName(), msg.getUserName());
                 } else if (object instanceof GameUpdateMsg) {
-                    GameUpdateMsg gameUpdateMsg = (GameUpdateMsg) object;
-                    if (gameUpdateMsg.getGameHandler() != null) {
-                        updateAll(gameUpdateMsg);
+                    if (gamehandler != null) {
+                        GameUpdateMsg gameUpdateMsg = (GameUpdateMsg) object;
+                        GameUpdateMsgHelper helper = new GameUpdateMsgHelper();
+                        helper.setGameHandler(gamehandler);
+                        helper.handleGameUpdateMsg(gameUpdateMsg);
+                        gamehandler = helper.getGameHandler();
+                        //updateAll(gameUpdateMsg);
                         gameUpdateMsg.setGameHandler(gamehandler); // TODO take care on GameupdateMessage
                         server.sendToAllTCP(gameUpdateMsg);
                     }

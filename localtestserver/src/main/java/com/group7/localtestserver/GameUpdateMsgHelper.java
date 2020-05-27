@@ -9,11 +9,13 @@ public class GameUpdateMsgHelper {
 
     GameHandler gameHandler;
 
-    GameUpdateMsgHelper (GameHandler gm) {this.gameHandler = gm;}
 
     public void handleGameUpdateMsg (GameUpdateMsg msg) {
         if (msg.getBoughtCard() != null) {
-
+            gameHandler.buyCard(msg.getBoughtCard());
+        }
+        else if (msg.getPlayedCard() != null) {
+            gameHandler.playCard(msg.getPlayedCard());
         }
     }
     public GameHandler getGameHandler() {

@@ -16,7 +16,6 @@ import com.floriankleewein.commonclasses.Cards.EstateCard;
 import com.floriankleewein.commonclasses.Cards.EstateType;
 import com.floriankleewein.commonclasses.Cards.MoneyCard;
 import com.floriankleewein.commonclasses.Cards.MoneyType;
-import com.floriankleewein.commonclasses.GameLogic.GameHandler;
 import com.floriankleewein.commonclasses.GameLogic.PlayStatus;
 import com.floriankleewein.commonclasses.Network.ClientConnector;
 import com.floriankleewein.commonclasses.Network.GameUpdateMsg;
@@ -33,14 +32,14 @@ import static com.floriankleewein.commonclasses.Cards.ActionType.HEXE;
 
 
 public class HandCardsHandler {
-    private PlayStatus playStatus;
-    private LinearLayout linearLayout;
-    private LinearLayout.LayoutParams lparams;
+    PlayStatus playStatus;
+    LinearLayout linearLayout;
+    LinearLayout.LayoutParams lparams;
     private List<ImageButton> ImageButtons;
     private List<Card> cardList;
-    private Context context;
-    private int img_id;
-    private boolean canGetCards;
+    Context context;
+    int img_id;
+    boolean canGetCards;
 
     public HandCardsHandler(Context context) {
         this.context = context;
@@ -151,14 +150,42 @@ public class HandCardsHandler {
     public void onClickListener() {
         for (int i = 0; i < ImageButtons.size(); i++) {
             int finalI = i;
+
             ImageButtons.get(i).setOnClickListener(v -> {
                 if ((cardList.get(finalI).getId() >= 13) || (cardList.get(finalI).getId() <= 10)) {
                     System.out.println("Card with the ID is played: " + cardList.get(finalI).getId());
-                    linearLayout.removeView(ImageButtons.get(finalI));
+                    ImageButtons.get(finalI).setVisibility(View.INVISIBLE);
                     Thread thread = new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            ClientConnector.getClientConnector().sendGameUpdate();
+                            GameUpdateMsg msg = new GameUpdateMsg();
+                            msg.setPlayedCard(cardList.get(finalI));
+                            ClientConnector.getClientConnector().sendUpdate(msg);
+                        }
+                    });
+                    thread.start();
+                }
+            });
+
+        }
+
+
+    }
+
+    public void onClickListenerActionPhase() {
+        for (int i = 0; i < ImageButtons.size(); i++) {
+            int finalI = i;
+
+            ImageButtons.get(i).setOnClickListener(v -> {
+                if ((cardList.get(finalI).getId() >= 10)) {
+                    System.out.println("Card with the ID is played: " + cardList.get(finalI).getId());
+                    ImageButtons.get(finalI).setVisibility(View.INVISIBLE);
+                    Thread thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            GameUpdateMsg msg = new GameUpdateMsg();
+                            msg.setPlayedCard(cardList.get(finalI));
+                            ClientConnector.getClientConnector().sendUpdate(msg);
                         }
                     });
                     thread.start();
@@ -167,9 +194,10 @@ public class HandCardsHandler {
         }
     }
 
-    public void setOnClickListenerActionCards () {
+    public void onClickListenerBuyPhase () {
         for (int i = 0; i < ImageButtons.size(); i++) {
             int finalI = i;
+
             ImageButtons.get(i).setOnClickListener(v -> {
                 if ((cardList.get(finalI).getId() <= 10)) {
                     System.out.println("Card with the ID is played: " + cardList.get(finalI).getId());
@@ -177,36 +205,16 @@ public class HandCardsHandler {
                     Thread thread = new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            ClientConnector.getClientConnector().sendGameUpdate();
+                            GameUpdateMsg msg = new GameUpdateMsg();
+                            msg.setPlayedCard(cardList.get(finalI));
+                            ClientConnector.getClientConnector().sendUpdate(msg);
                         }
                     });
                     thread.start();
                 }
             });
         }
-    }
 
-    public void setonClickListenerMoneyCards () {
-        for (int i = 0; i < ImageButtons.size(); i++) {
-            int finalI = i;
-            ImageButtons.get(i).setOnClickListener(v -> {
-                if ((cardList.get(finalI).getId() >= 14)) {
-                    System.out.println("Card with the ID is played: " + cardList.get(finalI).getId());
-                    linearLayout.removeView(ImageButtons.get(finalI));
-                    Thread thread = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            ClientConnector.getClientConnector().sendGameUpdate();
-                        }
-                    });
-                    thread.start();
-                }
-            });
-        }
-    }
-
-    public void getnewHandCards () {
-        linearLayout.removeAllViews();
     }
 
     private void addCard(Card card) {
@@ -219,6 +227,11 @@ public class HandCardsHandler {
         ImageButtons.add(umg);
         img_id++;
     }
+
+    private void setImageButtonsNull() {
+        ImageButtons.clear();
+    }
+
 
     public void registerListener(String Username) {
         ClientConnector.getClientConnector().registerCallback(StartGameMsg.class, msg -> {

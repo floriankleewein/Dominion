@@ -21,6 +21,7 @@ import com.floriankleewein.commonclasses.Chat.ChatMessage;
 import com.floriankleewein.commonclasses.CheatFunction.CheatService;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.GameLogic.GameHandler;
+import com.floriankleewein.commonclasses.GameLogic.PlayStatus;
 import com.floriankleewein.commonclasses.GameLogic.PlayerTurn;
 import com.floriankleewein.commonclasses.Network.Messages.NotEnoughRessourcesMsg;
 import com.floriankleewein.commonclasses.User.GamePoints;
@@ -395,6 +396,8 @@ public class ClientConnector {
         registerClass(AllPlayersInDominionActivityMsg.class);
         registerClass(HashMap.class);
         registerClass(NotEnoughRessourcesMsg.class);
+        registerClass(PlayStatus.class);
+        registerClass(PlayerTurn.class);
     }
 
 }

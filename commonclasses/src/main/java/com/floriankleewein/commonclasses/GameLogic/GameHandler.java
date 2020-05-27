@@ -176,7 +176,7 @@ public class GameHandler {
         updateVictoryPts(msg);
     }
 
-    private void buyCard(Card card) {
+    public void buyCard(Card card) {
         Card boughtCard;
         //if(!getTurnState().equals(PlayStatus.BUY_PHASE)) return; // TODO throw error message to client here NotEnoughRessourcesMsg
         if (card instanceof ActionCard) {
@@ -343,10 +343,12 @@ public class GameHandler {
                     break;
             }
             getActiveUser().getUserCards().playCard(card);
-        } else if (playedCard instanceof MoneyCard){
+        } else if (playedCard instanceof MoneyCard) {
             MoneyCard card = (MoneyCard) playedCard;
-            getActiveUser().getGamePoints().modifyCoins(card.getWorth());
-            getActiveUser().getUserCards().playCard(card);
+            if (getActiveUser() != null) {
+                getActiveUser().getGamePoints().modifyCoins(card.getWorth());
+                getActiveUser().getUserCards().playCard(card);
+            }
         }
     }
 
