@@ -157,6 +157,13 @@ public class CardLogic {
         if (isReplaceMoneyCard()) {
             replaceOldMoneyCard();
         }
+        gameHandler.getActiveUser().getUserCards().playCard(card);
+    }
+
+    public void doCardLogic(MoneyCard card) {
+        setVariables(card);
+        modifyMoneyAmount();
+        gameHandler.getActiveUser().getUserCards().playCard(card);
     }
 
 
@@ -211,14 +218,15 @@ public class CardLogic {
 
     private void makePlayersDropCards() {
         for (User u : gameHandler.getGame().getPlayerList()) {
-            if (!u.equals(gameHandler.getActiveUser()) && !u.getUserCards().hasMoat() && u.getUserCards().getHandCards().size() > 3) {
-                for (int i = 0; i < 3; i++) {
+            if (!u.equals(gameHandler.getActiveUser()) && !u.getUserCards().hasMoat()) {
+                while (u.getUserCards().getHandCards().size() > 3) {
                     Collections.shuffle(u.getUserCards().getHandCards());
                     u.getUserCards().playCard(u.getUserCards().getHandCards().getLast());
                 }
             }
         }
     }
+
 
     private void cursePlayers() {
         for (User u : gameHandler.getGame().getPlayerList()) {
@@ -229,10 +237,6 @@ public class CardLogic {
         }
     }
 
-    public void doCardLogic(MoneyCard card) {
-        setVariables(card);
-        modifyMoneyAmount();
-    }
 
     private void modifyMoneyAmount() {
         gameHandler.getActiveUser().getGamePoints().modifyCoins(moneyValue);

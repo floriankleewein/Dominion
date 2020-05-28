@@ -138,19 +138,18 @@ public class GameHandler {
         }
     }
 
-    /**
-     * Obsolete - created new overloaded methods for playing cards.
-     *
-     * @param card
-     */
+
     public void playCard(Card card) {
         setPlayedCard(card);
-        playCard();
+        if (card instanceof ActionCard) playCard((ActionCard) card);
+        else if (card instanceof MoneyCard) playCard((MoneyCard) card);
     }
 
     public void playCard(ActionCard card) {
-        if (!isActionPhase()) return;
-        cardLogic.doCardLogic(card);
+        if (canPlayActionCard()) {
+            cardLogic.doCardLogic(card);
+            getActiveUser().getGamePoints().modifyPlayAmounts(-1);
+        }
     }
 
     public void playCard(MoneyCard card) {
@@ -158,6 +157,7 @@ public class GameHandler {
         else {
             setTurnState(PlayStatus.BUY_PHASE);
             cardLogic.doCardLogic(card);
+            getActiveUser().getGamePoints().modifyPlayAmounts(-1);
         }
     }
 
@@ -206,6 +206,7 @@ public class GameHandler {
         getActiveUser().getUserCards().addCardtoDeck(boughtCard);
         int oldCoins = getActiveUser().getGamePoints().getCoins();
         getActiveUser().getGamePoints().modifyCoins(oldCoins - boughtCard.getPrice());
+        getActiveUser().getGamePoints().modifyBuyAmounts(-1);
     }
 
     public void buyCard(EstateCard card) {
@@ -216,6 +217,7 @@ public class GameHandler {
         getActiveUser().getGamePoints().modifyWinningPoints(((EstateCard) boughtCard).getEstateValue());
         int oldCoins = getActiveUser().getGamePoints().getCoins();
         getActiveUser().getGamePoints().modifyCoins(oldCoins - boughtCard.getPrice());
+        getActiveUser().getGamePoints().modifyBuyAmounts(-1);
     }
 
     public void buyCard(MoneyCard card) {
@@ -225,30 +227,17 @@ public class GameHandler {
         getActiveUser().getUserCards().addCardtoDeck(boughtCard);
         int oldCoins = getActiveUser().getGamePoints().getCoins();
         getActiveUser().getGamePoints().modifyCoins(oldCoins - boughtCard.getPrice());
+        getActiveUser().getGamePoints().modifyBuyAmounts(-1);
     }
 
-    /**
-     * obsolete - replaced with overloaded methods to remove cyclic complexity and unreadable gibberish
-     *
-     * @param card
-     */
     public void buyCard(Card card) {
-        //if(!canBuyCard(card)) return; // check if card can be bought
-        Card boughtCard;
-        //if(!getTurnState().equals(PlayStatus.BUY_PHASE)) return; // TODO throw error message to client here NotEnoughRessourcesMsg
-        if (card instanceof ActionCard) {
-            boughtCard = getBoard().getActionField().pickCard(((ActionCard) card).getActionType());
-            getActiveUser().getUserCards().addCardtoDeck(boughtCard);
-        } else if (card instanceof EstateCard) {
-            boughtCard = getBoard().getBuyField().pickCard(((EstateCard) card).getEstateType());
-            getActiveUser().getUserCards().addCardtoDeck(boughtCard);
-            getActiveUser().getGamePoints().modifyWinningPoints(((EstateCard) boughtCard).getEstateValue());
+        if (card instanceof MoneyCard) {
+            buyCard((MoneyCard) card);
+        } else if (card instanceof ActionCard) {
+            buyCard((ActionCard) card);
         } else {
-            boughtCard = getBoard().getBuyField().pickCard(((MoneyCard) card).getMoneyType());
-            getActiveUser().getUserCards().addCardtoDeck(boughtCard);
+            buyCard((EstateCard) card);
         }
-        int oldCoins = getActiveUser().getGamePoints().getCoins();
-        getActiveUser().getGamePoints().modifyCoins(oldCoins - boughtCard.getPrice());
     }
 
     public GameUpdateMsg updateGameHandlerTwo(GameUpdateMsg msg) {
@@ -310,110 +299,6 @@ public class GameHandler {
         }
     }
 
-
-    /**
-     * obsolete - use cardLogic playCard()
-     */
-    public void playCard() {
-        if (playedCard instanceof ActionCard) {
-            if (!canPlayActionCard()) {
-                return;
-            }
-            ActionCard card = (ActionCard) playedCard;
-            Action action = card.getAction();
-            switch (card.getActionType()) {
-                case BURGGRABEN:
-                    getActiveUser().getUserCards().addDeckCardtoHandCard(action.getCardCount());
-                    break;
-                case DORF:
-                    getActiveUser().getGamePoints().modifyPlayAmounts(action.getActionCount());
-                    getActiveUser().getUserCards().addDeckCardtoHandCard(action.getCardCount());
-                    break;
-                case HEXE:
-                    getActiveUser().getUserCards().addDeckCardtoHandCard(action.getCardCount());
-                    for (User user : game.getPlayerList()) {
-                        if (!user.getUserName().equals(getActiveUser().getUserName())) {
-                            user.getUserCards().addCardtoDeck(getBoard().getBuyField().pickCard(EstateType.FLUCH));
-                            user.getGamePoints().modifyWinningPoints(-1);
-                        }
-                    }
-                    break;
-                case HOLZFAELLER:
-                    getActiveUser().getGamePoints().modifyBuyAmounts(action.getBuyCount());
-                    getActiveUser().getGamePoints().modifyCoins(action.getMoneyValue());
-                    break;
-                case KELLER:
-                    //TODO discard/draw card other time
-                    getActiveUser().getGamePoints().modifyPlayAmounts(action.getActionCount());
-                    break;
-                case MARKT:
-                    getActiveUser().getUserCards().addDeckCardtoHandCard(1);
-                    getActiveUser().getGamePoints().modifyBuyAmounts(action.getBuyCount());
-                    getActiveUser().getGamePoints().modifyPlayAmounts(action.getActionCount());
-                    getActiveUser().getGamePoints().modifyCoins(action.getMoneyValue());
-                    break;
-                case MILIZ:
-                    getActiveUser().getGamePoints().modifyCoins(action.getMoneyValue());
-
-                    for (User user : game.getPlayerList()) {
-                        if (!user.getUserName().equals(getActiveUser().getUserName()) && user.getUserCards().getHandCards().size() >= 3) {
-                            LinkedList<Card> handCards = user.getUserCards().getHandCards();
-                            for (Card userCard : handCards) {
-                                if (userCard instanceof ActionCard) {
-                                    if (((ActionCard) userCard).getActionType().equals(ActionType.BURGGRABEN)) { // Beim Burggraben ist man geschützt vor miliz
-                                        continue;
-                                    }
-                                }
-                            }
-                            for (int i = 0; i < 3; i++) {
-                                user.getUserCards().playCard(handCards.getLast());
-                            }
-                        }
-                    }
-                    break;
-                case MINE:
-                    LinkedList<Card> userCards = getActiveUser().getUserCards().getHandCards();
-                    boolean hasSilver = false;
-                    int index = -1;
-                    for (Card usercard : userCards) {
-                        if (usercard instanceof MoneyCard) {
-                            if (((MoneyCard) usercard).getMoneyType().equals(MoneyType.SILBER)) {
-                                hasSilver = true;
-                                index = userCards.indexOf(usercard);
-                            } else if (hasSilver == false && usercard instanceof MoneyCard && ((MoneyCard) usercard).getMoneyType().equals(MoneyType.KUPFER)) {
-                                index = userCards.indexOf(usercard);
-                            }
-                        }
-                    }
-                    if (index >= 0) {
-                        userCards.remove(index);
-                        if (hasSilver) {
-                            userCards.add(getBoard().getBuyField().pickCard(MoneyType.GOLD));
-                        } else {
-                            userCards.add(getBoard().getBuyField().pickCard(MoneyType.SILBER));
-                        }
-                        getActiveUser().getUserCards().setHandCards(userCards);
-                    }
-                    break;
-                case SCHMIEDE:
-                    getActiveUser().getUserCards().addDeckCardtoHandCard(action.getCardCount());
-                    break;
-                case WERKSTATT:
-                    getActiveUser().getGamePoints().modifyBuyAmounts(action.getBuyCount());
-                    getActiveUser().getGamePoints().modifyCoins(action.getMoneyValue());
-                    break;
-            }
-            getActiveUser().getUserCards().playCard(card);
-        } else if (playedCard instanceof MoneyCard) {
-            if (isNoPlayPhase()) return;
-            if (isActionPhase()) {
-                setTurnState(PlayStatus.BUY_PHASE);
-            }
-            MoneyCard card = (MoneyCard) playedCard;
-            getActiveUser().getGamePoints().modifyCoins(card.getWorth());
-            getActiveUser().getUserCards().playCard(card);
-        }
-    }
 
     private boolean isActionPhase() {
         if (turnState.equals(PlayStatus.ACTION_PHASE)) return true;
