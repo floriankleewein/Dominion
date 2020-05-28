@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.hardware.Sensor;
@@ -14,14 +13,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
-
-import com.floriankleewein.commonclasses.Board.Board;
-import com.floriankleewein.commonclasses.Cards.ActionType;
-import com.floriankleewein.commonclasses.Cards.MoneyCard;
-import com.floriankleewein.commonclasses.Cards.MoneyType;
 import com.floriankleewein.commonclasses.GameLogic.PlayStatus;
 import com.floriankleewein.commonclasses.Network.GameUpdateMsg;
 import com.group7.dominion.Card.ActionDialogHandler;
@@ -68,8 +61,6 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
 
     //Pop-up Info Dialogs
     private ActionDialogHandler actionDialogHandler;
-
-    private Board board;
 
 
     @Override
@@ -128,13 +119,6 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         //clientConnector.startGame(); // Send Server Message to start game logic
         // TODO display playerlist -> Check features
         // TODO create board and display cards
-
-        // Take from GameHandler getBoard here instead of this
-        //board = clientConnector.getGameHandler().getBoard();
-        // Currently
-        // board = new Board();
-        //actionDialogHandler.setBoard(board);
-        //imageButtonHandler.setBoard(board);
 
         actionDialogHandler.setClientConnector(clientConnector);
         imageButtonHandler.setClientConnector(clientConnector);
