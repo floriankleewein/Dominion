@@ -9,6 +9,7 @@ import com.floriankleewein.commonclasses.GameLogic.CardLogic;
 import com.floriankleewein.commonclasses.GameLogic.GameHandler;
 import com.floriankleewein.commonclasses.User.User;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -266,6 +267,14 @@ public class CardLogicTest {
         Assert.assertEquals(3, gh.getActiveUser().getGamePoints().getCoins());
         Assert.assertEquals(5, gh.getActiveUser().getUserCards().getHandCards().size());
     }
+
+    @After
+    public void teardown() {
+        m_cut = null;
+        gh = null;
+        Game.setGame(null);
+    }
+
     private void init() {
         gh = new GameHandler(Game.getGame());
         Game.getGame().addPlayer(new User("Flo"));

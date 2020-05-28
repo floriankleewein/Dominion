@@ -111,10 +111,21 @@ public class GameHandler {
      * @return
      */
     public PlayStatus changeTurnStatus() {
-        if (getTurnState() == null) return null;
-        else if (getTurnState().equals(PlayStatus.ACTION_PHASE)) return PlayStatus.BUY_PHASE;
-        else if (getTurnState().equals(PlayStatus.BUY_PHASE)) return PlayStatus.NO_PLAY_PHASE;
-        else return PlayStatus.NO_PLAY_PHASE;
+        if (getTurnState() == null) {
+            return null;
+        }
+        else if (getTurnState().equals(PlayStatus.ACTION_PHASE)) {
+            setTurnState(PlayStatus.BUY_PHASE);
+            return PlayStatus.BUY_PHASE;
+        }
+        else if (getTurnState().equals(PlayStatus.BUY_PHASE)) {
+            setTurnState(PlayStatus.NO_PLAY_PHASE);
+            return PlayStatus.NO_PLAY_PHASE;
+        }
+        else {
+            setTurnState(PlayStatus.NO_PLAY_PHASE);
+            return PlayStatus.NO_PLAY_PHASE;
+        }
     }
 
     /**
@@ -146,6 +157,7 @@ public class GameHandler {
     }
 
     public void playCard(ActionCard card) {
+        setPlayedCard(card);
         if (canPlayActionCard()) {
             cardLogic.doCardLogic(card);
             getActiveUser().getGamePoints().modifyPlayAmounts(-1);
@@ -153,6 +165,7 @@ public class GameHandler {
     }
 
     public void playCard(MoneyCard card) {
+        setPlayedCard(card);
         if (isNoPlayPhase()) return;
         else {
             setTurnState(PlayStatus.BUY_PHASE);
@@ -205,7 +218,7 @@ public class GameHandler {
         boughtCard = getBoard().getActionField().pickCard(card.getActionType());
         getActiveUser().getUserCards().addCardtoDeck(boughtCard);
         int oldCoins = getActiveUser().getGamePoints().getCoins();
-        getActiveUser().getGamePoints().modifyCoins(oldCoins - boughtCard.getPrice());
+        getActiveUser().getGamePoints().setCoins(oldCoins - boughtCard.getPrice());
         getActiveUser().getGamePoints().modifyBuyAmounts(-1);
     }
 
@@ -216,7 +229,7 @@ public class GameHandler {
         getActiveUser().getUserCards().addCardtoDeck(boughtCard);
         getActiveUser().getGamePoints().modifyWinningPoints(((EstateCard) boughtCard).getEstateValue());
         int oldCoins = getActiveUser().getGamePoints().getCoins();
-        getActiveUser().getGamePoints().modifyCoins(oldCoins - boughtCard.getPrice());
+        getActiveUser().getGamePoints().setCoins(oldCoins - boughtCard.getPrice());
         getActiveUser().getGamePoints().modifyBuyAmounts(-1);
     }
 
@@ -226,7 +239,7 @@ public class GameHandler {
         boughtCard = getBoard().getBuyField().pickCard(card.getMoneyType());
         getActiveUser().getUserCards().addCardtoDeck(boughtCard);
         int oldCoins = getActiveUser().getGamePoints().getCoins();
-        getActiveUser().getGamePoints().modifyCoins(oldCoins - boughtCard.getPrice());
+        getActiveUser().getGamePoints().setCoins(oldCoins - boughtCard.getPrice());
         getActiveUser().getGamePoints().modifyBuyAmounts(-1);
     }
 
