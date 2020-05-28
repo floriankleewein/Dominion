@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
 import com.floriankleewein.commonclasses.Cards.Card;
 import com.floriankleewein.commonclasses.Cards.EstateCard;
@@ -18,7 +17,6 @@ import com.group7.dominion.R;
 import androidx.fragment.app.FragmentManager;
 
 public class ImageButtonHandler {
-    //private Board board;
     private ClientConnector clientConnector;
 
     private ImageButton buttonGold;
@@ -94,7 +92,6 @@ public class ImageButtonHandler {
     }
 
     private void onClickGold(Activity activity, FragmentManager fragmentManager) {
-        //Card card = board.getBuyField().pickCard(MoneyType.GOLD);
         GameUpdateMsg gameUpdateMsg = new GameUpdateMsg();
         gameUpdateMsg.setMoneyTypeClicked(MoneyType.GOLD);
         sendUpdate(gameUpdateMsg);
@@ -118,7 +115,6 @@ public class ImageButtonHandler {
     }
 
     private void onClickSilber(Activity activity, FragmentManager fragmentManager) {
-        //Card card = board.getBuyField().pickCard(MoneyType.SILBER);
         GameUpdateMsg gameUpdateMsg = new GameUpdateMsg();
         gameUpdateMsg.setMoneyTypeClicked(MoneyType.SILBER);
         sendUpdate(gameUpdateMsg);
@@ -143,7 +139,6 @@ public class ImageButtonHandler {
     }
 
     private void onClickKupfer(Activity activity, FragmentManager fragmentManager) {
-        //Card card = board.getBuyField().pickCard(MoneyType.KUPFER);
         GameUpdateMsg gameUpdateMsg = new GameUpdateMsg();
         gameUpdateMsg.setMoneyTypeClicked(MoneyType.KUPFER);
         sendUpdate(gameUpdateMsg);
@@ -167,7 +162,6 @@ public class ImageButtonHandler {
     }
 
     private void onClickAnwesen(Activity activity, FragmentManager fragmentManager) {
-        //Card card = board.getBuyField().pickCard(EstateType.ANWESEN);
         GameUpdateMsg gameUpdateMsg = new GameUpdateMsg();
         gameUpdateMsg.setEstateTypeClicked(EstateType.ANWESEN);
         sendUpdate(gameUpdateMsg);
@@ -191,7 +185,6 @@ public class ImageButtonHandler {
     }
 
     private void onClickProvinz(Activity activity, FragmentManager fragmentManager) {
-        //Card card = board.getBuyField().pickCard(EstateType.PROVINZ);
         GameUpdateMsg gameUpdateMsg = new GameUpdateMsg();
         gameUpdateMsg.setEstateTypeClicked(EstateType.PROVINZ);
         sendUpdate(gameUpdateMsg);
@@ -215,7 +208,6 @@ public class ImageButtonHandler {
     }
 
     private void onClickHerzogturm(Activity activity, FragmentManager fragmentManager) {
-        //Card card = board.getBuyField().pickCard(EstateType.HERZOGTUM);
         GameUpdateMsg gameUpdateMsg = new GameUpdateMsg();
         gameUpdateMsg.setEstateTypeClicked(EstateType.HERZOGTUM);
         sendUpdate(gameUpdateMsg);
@@ -239,7 +231,6 @@ public class ImageButtonHandler {
     }
 
     private void onClickFluch(Activity activity, FragmentManager fragmentManager) {
-        //Card card = board.getBuyField().pickCard(EstateType.FLUCH);
         GameUpdateMsg gameUpdateMsg = new GameUpdateMsg();
         gameUpdateMsg.setEstateTypeClicked(EstateType.FLUCH);
         sendUpdate(gameUpdateMsg);
@@ -271,16 +262,6 @@ public class ImageButtonHandler {
         });
         th.start();
     }
-
-    /*
-    public Board getBoard() {
-        return board;
-    }
-
-    public void setBoard(Board board) {
-        this.board = board;
-    }
-    */
 
     public ClientConnector getClientConnector() {
         return clientConnector;

@@ -47,8 +47,7 @@ public class ActionDialogHandler extends AppCompatDialogFragment {
                 .setTitle("Buy Action Card")
                 .setMessage("Do you want to buy this card?")
                 .setPositiveButton("Buy", (dialog, which) -> {
-                    // Buy the Card
-                    //Card card = this.board.getActionField().pickCard(actionType);
+                    //LKDoc: Buy the Card
                     GameUpdateMsg gameUpdateMsg = new GameUpdateMsg();
                     gameUpdateMsg.setActionTypeClicked(actionType);
                     sendUpdate(gameUpdateMsg);
@@ -232,16 +231,6 @@ public class ActionDialogHandler extends AppCompatDialogFragment {
         });
         th.start();
     }
-
-    /*
-    public Board getBoard() {
-        return board;
-    }
-
-    public void setBoard(Board board) {
-        this.board = board;
-    }
-    */
 
     public ClientConnector getClientConnector() {
         return clientConnector;
