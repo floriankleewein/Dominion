@@ -19,6 +19,7 @@ import com.floriankleewein.commonclasses.Cards.MoneyCard;
 import com.floriankleewein.commonclasses.Cards.MoneyType;
 import com.floriankleewein.commonclasses.Chat.ChatMessage;
 import com.floriankleewein.commonclasses.CheatFunction.CheatService;
+import com.floriankleewein.commonclasses.ClassRegistration;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.GameLogic.GameHandler;
 import com.floriankleewein.commonclasses.GameLogic.PlayerTurn;
@@ -75,7 +76,6 @@ public class ClientConnector {
         // Register classes
         registerClasses();
 
-
         // start client
         client.start();
 
@@ -86,20 +86,6 @@ public class ClientConnector {
             e.printStackTrace();
         }
         System.out.println("Connection-Status: " + client.isConnected());
-
-        MessageClass ms = new MessageClass();
-        ms.setMessage("Hello Server!");
-        client.sendTCP(ms);
-
-        client.addListener(new Listener() {
-            public void received(Connection con, Object object) {
-                if (object instanceof MessageClass) {
-                    MessageClass ms = (MessageClass) object;
-                    System.out.println("Received response: " + ms.getMessage());
-                }
-            }
-        });
-
     }
 
     public void recreateStartGameActivity() {
@@ -354,7 +340,7 @@ public class ClientConnector {
     }
 
     public void registerClasses(){
-        registerClass(BaseMessage.class);
+        /*registerClass(BaseMessage.class);
         registerClass(MessageClass.class);
         registerClass(GameUpdateMsg.class);
         registerClass(NetworkInformationMsg.class);
@@ -391,7 +377,11 @@ public class ClientConnector {
         registerClass(EstateCard.class);
         registerClass(ActionField.class);
         registerClass(AllPlayersInDominionActivityMsg.class);
-        registerClass(HashMap.class);
+        registerClass(HashMap.class);*/
+
+        ClassRegistration reg = new ClassRegistration();
+        reg.registerAllClassesForClient(client);
+
     }
 
 }

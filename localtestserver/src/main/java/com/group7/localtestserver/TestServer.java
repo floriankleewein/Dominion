@@ -20,6 +20,7 @@ import com.floriankleewein.commonclasses.Cards.MoneyCard;
 import com.floriankleewein.commonclasses.Cards.MoneyType;
 import com.floriankleewein.commonclasses.Chat.ChatMessage;
 import com.floriankleewein.commonclasses.CheatFunction.CheatService;
+import com.floriankleewein.commonclasses.ClassRegistration;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.GameLogic.GameHandler;
 import com.floriankleewein.commonclasses.GameLogic.PlayerTurn;
@@ -160,7 +161,7 @@ public class TestServer {
     }
 
     public void registerClasses(){
-        registerClass(BaseMessage.class);
+        /*registerClass(BaseMessage.class);
         registerClass(MessageClass.class);
         registerClass(GameUpdateMsg.class);
         registerClass(NetworkInformationMsg.class);
@@ -197,21 +198,17 @@ public class TestServer {
         registerClass(EstateCard.class);
         registerClass(ActionField.class);
         registerClass(AllPlayersInDominionActivityMsg.class);
-        registerClass(HashMap.class);
+        registerClass(HashMap.class);*/
+
+        ClassRegistration reg = new ClassRegistration();
+        reg.registerAllClassesForServer(server);
     }
 
     public void addListeners(){
         server.addListener(new Listener() {
             public void received(Connection con, Object object) {
-                if (object instanceof MessageClass) {
-                    MessageClass recMessage = (MessageClass) object;
-                    System.out.println(Tag + ", Received Message " + recMessage.getMessage());
 
-                    MessageClass sendMessage = new MessageClass();
-                    sendMessage.setMessage("Hello Client! " + " from: " + con.getRemoteAddressTCP().getHostString());
-
-                    con.sendTCP(sendMessage);
-                } else if (object instanceof CreateGameMsg) {
+               if (object instanceof CreateGameMsg) {
                     createGame();
                     CreateGameMsg startGameMsg = (CreateGameMsg) object;
                     startGameMsg.setGame(getGame());
