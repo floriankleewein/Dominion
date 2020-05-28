@@ -3,6 +3,8 @@ package com.floriankleewein.commonclasses;
 import com.floriankleewein.commonclasses.Cards.ActionCard;
 import com.floriankleewein.commonclasses.Cards.ActionType;
 import com.floriankleewein.commonclasses.Cards.Card;
+import com.floriankleewein.commonclasses.Cards.MoneyCard;
+import com.floriankleewein.commonclasses.Cards.MoneyType;
 import com.floriankleewein.commonclasses.GameLogic.CardLogic;
 import com.floriankleewein.commonclasses.GameLogic.GameHandler;
 import com.floriankleewein.commonclasses.User.User;
@@ -25,8 +27,16 @@ public class CardLogicTest {
     }
 
     @Test
-    public void checkVariablesMine() { //TODO fix a bit
+    public void checkVariablesMine() {
         Card card = new ActionCard(5, ActionType.MINE);
+        m_cut.setVariables(card);
+        Assert.assertEquals(true, m_cut.isReplaceMoneyCard());
+    }
+
+    @Test
+    public void checkEffectsMine() { // TODO get privateTest for fixed hand to test logic
+        Card card = new ActionCard(5, ActionType.MINE);
+        addCardtoHand(card);
         m_cut.setVariables(card);
         Assert.assertEquals(true, m_cut.isReplaceMoneyCard());
     }
@@ -206,6 +216,56 @@ public class CardLogicTest {
         Assert.assertEquals(2, gh.getActiveUser().getGamePoints().getPlaysAmount());
     }
 
+    @Test
+    public void checkVariablesCopper() {
+        Card card = new MoneyCard(0, 1, MoneyType.KUPFER);
+        m_cut.setVariables(card);
+        Assert.assertEquals(1, m_cut.getMoneyValue());
+    }
+
+    @Test
+    public void checkVariablesSilver() {
+        Card card = new MoneyCard(3, 2, MoneyType.GOLD);
+        m_cut.setVariables(card);
+        Assert.assertEquals(2, m_cut.getMoneyValue());
+    }
+
+    @Test
+    public void checkVariablesGold() {
+        Card card = new MoneyCard(6, 3, MoneyType.KUPFER);
+        m_cut.setVariables(card);
+        Assert.assertEquals(3, m_cut.getMoneyValue());
+    }
+
+    @Test
+    public void checkEffectsCopper() {
+        Card card = new MoneyCard(0, 1, MoneyType.KUPFER);
+        addCardtoHand(card);
+        Assert.assertEquals(0, gh.getActiveUser().getGamePoints().getCoins());
+        m_cut.doCardLogic(card);
+        Assert.assertEquals(1, gh.getActiveUser().getGamePoints().getCoins());
+        Assert.assertEquals(5, gh.getActiveUser().getUserCards().getHandCards().size());
+    }
+
+    @Test
+    public void checkEffectsSilver() {
+        Card card = new MoneyCard(3, 2, MoneyType.SILBER);
+        addCardtoHand(card);
+        Assert.assertEquals(0, gh.getActiveUser().getGamePoints().getCoins());
+        m_cut.doCardLogic(card);
+        Assert.assertEquals(2, gh.getActiveUser().getGamePoints().getCoins());
+        Assert.assertEquals(5, gh.getActiveUser().getUserCards().getHandCards().size());
+    }
+
+    @Test
+    public void checkEffectsGold() {
+        Card card = new MoneyCard(6, 3, MoneyType.KUPFER);
+        addCardtoHand(card);
+        Assert.assertEquals(0, gh.getActiveUser().getGamePoints().getCoins());
+        m_cut.doCardLogic(card);
+        Assert.assertEquals(3, gh.getActiveUser().getGamePoints().getCoins());
+        Assert.assertEquals(5, gh.getActiveUser().getUserCards().getHandCards().size());
+    }
     private void init() {
         gh = new GameHandler(Game.getGame());
         Game.getGame().addPlayer(new User("Flo"));
