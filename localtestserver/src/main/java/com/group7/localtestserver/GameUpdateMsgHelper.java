@@ -24,7 +24,6 @@ public class GameUpdateMsgHelper {
             System.out.println("WE BOUGHT AN ANCTION CARD YEEI");
             ReturnMsg.setBoughtCard(gameHandler.buyCard(msg.getActionTypeClicked()));
             testSomething();
-            return ReturnMsg;
         } else if (msg.getEstateTypeClicked() != null) {
             gameHandler.buyCard(msg.getEstateTypeClicked());
         }
