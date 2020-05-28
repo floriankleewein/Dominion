@@ -7,10 +7,13 @@ import com.floriankleewein.commonclasses.Network.GameUpdateMsg;
 public class GameUpdateMsgHelper {
 
 
+
+    GameUpdateMsg ReturnMsg;
     GameHandler gameHandler;
 
 
-    public void handleGameUpdateMsg(GameUpdateMsg msg) {
+    public GameUpdateMsg handleGameUpdateMsg(GameUpdateMsg msg) {
+       ReturnMsg = new GameUpdateMsg();
         if (msg.getBoughtCard() != null) {
             gameHandler.buyCard(msg.getBoughtCard());
         } else if (msg.getPlayedCard() != null) {
@@ -19,10 +22,13 @@ public class GameUpdateMsgHelper {
             gameHandler.buyCard(msg.getMoneyTypeClicked());
         } else if (msg.getActionTypeClicked() != null) {
             System.out.println("WE BOUGHT AN ANCTION CARD YEEI");
-            gameHandler.buyCard(msg.getActionTypeClicked());
+            ReturnMsg.setBoughtCard(gameHandler.buyCard(msg.getActionTypeClicked()));
+            testSomething();
+            return ReturnMsg;
         } else if (msg.getEstateTypeClicked() != null) {
             gameHandler.buyCard(msg.getEstateTypeClicked());
         }
+        return null;
     }
 
     public GameHandler getGameHandler() {
@@ -33,5 +39,20 @@ public class GameUpdateMsgHelper {
         this.gameHandler = gameHandler;
     }
 
+    public GameUpdateMsg getReturnMsg() {
+        return ReturnMsg;
+    }
+
+    public void setReturnMsg(GameUpdateMsg returnMsg) {
+        ReturnMsg = returnMsg;
+    }
+
+
+    public void testSomething () {
+        for (int i = 0; i < gameHandler.getActiveUser().getUserCards().getDeck().size() ; i++) {
+           System.out.println(gameHandler.getActiveUser().getUserCards().getDeck().get(i).getId());
+        }
+
+    }
 
 }

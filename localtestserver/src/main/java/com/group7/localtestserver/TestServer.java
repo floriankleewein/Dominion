@@ -337,9 +337,8 @@ public class TestServer {
                         helper.setGameHandler(gamehandler);
                         helper.handleGameUpdateMsg(gameUpdateMsg);
                         gamehandler = helper.getGameHandler();
-                        //updateAll(gameUpdateMsg);
-                        gameUpdateMsg.setGameHandler(gamehandler); // TODO take care on GameupdateMessage
-                        server.sendToAllTCP(gameUpdateMsg);
+                        // TODO take care on GameupdateMessage
+                        server.sendToAllTCP(helper.ReturnMsg);
                     }
                 } else if (object instanceof CheckButtonsMsg) {
                     CheckButtonsMsg msg = (CheckButtonsMsg) object;
