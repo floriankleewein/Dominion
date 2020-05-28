@@ -13,12 +13,13 @@ import com.floriankleewein.commonclasses.Network.AddPlayerNameErrorMsg;
 import com.floriankleewein.commonclasses.Network.AddPlayerSizeErrorMsg;
 import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
 import com.floriankleewein.commonclasses.Network.CheckButtonsMsg;
-import com.floriankleewein.commonclasses.Network.CreateGameMsg;
 import com.floriankleewein.commonclasses.Network.ClientConnector;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button btnCreate, btnJoin, btnReset;
+    Button btnCreate;
+    Button btnJoin;
+    Button btnReset;
     ClientConnector client;
     SharedPreferences sharedPreferences;
 
@@ -56,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
                 public void run() {
                     btnCreate.setEnabled(temp.getCreateValue());
                     btnJoin.setEnabled(temp.getJoinValue());
-                    //btnCreate.setVisibility(1);
                 }
             });
         }));
@@ -84,20 +84,6 @@ public class MainActivity extends AppCompatActivity {
                 public void run() {
                     TextView textView = findViewById(R.id.nameCheckFeedback);
                     textView.setText("Spieler erfolgreich hinzugefügt!");
-
-                    /*Thread thread = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                wait(3);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-
-                    thread.start();*/
-
                     startActivity(new Intent(MainActivity.this, StartGameActivity.class));
                 }
             });
