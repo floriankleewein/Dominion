@@ -142,6 +142,70 @@ public class CardLogicTest {
         Assert.assertEquals(3, gh.getActiveUser().getGamePoints().getPlaysAmount());
     }
 
+    @Test
+    public void checkVariablesWoodcutter() {
+        Card card = new ActionCard(3, ActionType.HOLZFAELLER);
+        m_cut.setVariables(card);
+        Assert.assertEquals(1, m_cut.getAddBuyPts());
+        Assert.assertEquals(2, m_cut.getMoneyValue());
+    }
+
+    @Test
+    public void checkEffectsWoodcutter() {
+        Card card = new ActionCard(3, ActionType.HOLZFAELLER);
+        addCardtoHand(card);
+        Assert.assertEquals(1, gh.getActiveUser().getGamePoints().getBuyAmounts());
+        m_cut.doCardLogic(card);
+        Assert.assertEquals(5, gh.getActiveUser().getUserCards().getHandCards().size());
+        Assert.assertEquals(2, gh.getActiveUser().getGamePoints().getCoins());
+        Assert.assertEquals(2, gh.getActiveUser().getGamePoints().getBuyAmounts());
+    }
+
+    @Test
+    public void checkVariablesWorkshop() {
+        Card card = new ActionCard(3, ActionType.WERKSTATT);
+        m_cut.setVariables(card);
+        Assert.assertEquals(4, m_cut.getMoneyValue());
+    }
+
+    @Test
+    public void checkEffectsWorkshop() {
+        Card card = new ActionCard(3, ActionType.WERKSTATT);
+        addCardtoHand(card);
+        Assert.assertEquals(0, gh.getActiveUser().getGamePoints().getCoins());
+        m_cut.doCardLogic(card);
+        Assert.assertEquals(4, gh.getActiveUser().getGamePoints().getCoins());
+        Assert.assertEquals(5, gh.getActiveUser().getUserCards().getHandCards().size());
+    }
+
+
+    @Test
+    public void checkVariablesMarket() {
+        Card card = new ActionCard(5, ActionType.MARKT);
+        m_cut.setVariables(card);
+        Assert.assertEquals(1, m_cut.getMoneyValue());
+        Assert.assertEquals(1, m_cut.getAddBuyPts());
+        Assert.assertEquals(1, m_cut.getAddActionPts());
+        Assert.assertEquals(1, m_cut.getDrawableCards());
+    }
+
+    @Test
+    public void checkEffectsMarket() {
+        Card card = new ActionCard(5, ActionType.MARKT);
+        addCardtoHand(card);
+        Assert.assertEquals(0, gh.getActiveUser().getGamePoints().getCoins());
+        Assert.assertEquals(6, gh.getActiveUser().getUserCards().getHandCards().size());
+        Assert.assertEquals(1, gh.getActiveUser().getGamePoints().getBuyAmounts());
+        Assert.assertEquals(1, gh.getActiveUser().getGamePoints().getPlaysAmount());
+
+        m_cut.doCardLogic(card);
+
+        Assert.assertEquals(1, gh.getActiveUser().getGamePoints().getCoins());
+        Assert.assertEquals(6, gh.getActiveUser().getUserCards().getHandCards().size());
+        Assert.assertEquals(2, gh.getActiveUser().getGamePoints().getBuyAmounts());
+        Assert.assertEquals(2, gh.getActiveUser().getGamePoints().getPlaysAmount());
+    }
+
     private void init() {
         gh = new GameHandler(Game.getGame());
         Game.getGame().addPlayer(new User("Flo"));
