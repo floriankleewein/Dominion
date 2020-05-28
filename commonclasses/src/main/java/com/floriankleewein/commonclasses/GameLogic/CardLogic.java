@@ -5,7 +5,11 @@ import com.floriankleewein.commonclasses.Cards.ActionCard;
 import com.floriankleewein.commonclasses.Cards.Card;
 import com.floriankleewein.commonclasses.Cards.EstateType;
 import com.floriankleewein.commonclasses.Cards.MoneyCard;
+import com.floriankleewein.commonclasses.Cards.MoneyType;
 import com.floriankleewein.commonclasses.User.User;
+
+import java.util.Collections;
+import java.util.LinkedList;
 
 public class CardLogic {
     private GameHandler gameHandler;
@@ -14,13 +18,40 @@ public class CardLogic {
     private int addActionPts;
     private int curseCount;
     private int moneyValue;
+    private int winningPts;
+    boolean discardCardsOfOtherPlayers;
+    boolean replaceMoneyCard;
 
     public CardLogic() {
 
     }
 
-    public GameHandler getGameHandler() {
-        return gameHandler;
+    public CardLogic(GameHandler gameHandler) {
+        setGameHandler(gameHandler);
+    }
+
+    public boolean isDiscardCardsOfOtherPlayers() {
+        return discardCardsOfOtherPlayers;
+    }
+
+    public void setDiscardCardsOfOtherPlayers(boolean discardCardsOfOtherPlayers) {
+        this.discardCardsOfOtherPlayers = discardCardsOfOtherPlayers;
+    }
+
+    public int getWinningPts() {
+        return winningPts;
+    }
+
+    public void setWinningPts(int winningPts) {
+        this.winningPts = winningPts;
+    }
+
+    public int getMoneyValue() {
+        return moneyValue;
+    }
+
+    public void setMoneyValue(int moneyValue) {
+        this.moneyValue = moneyValue;
     }
 
     public void setGameHandler(GameHandler gameHandler) {
@@ -59,16 +90,27 @@ public class CardLogic {
         this.curseCount = curseCount;
     }
 
+    public boolean isReplaceMoneyCard() {
+        return replaceMoneyCard;
+    }
+
+    public void setReplaceMoneyCard(boolean replaceMoneyCard) {
+        this.replaceMoneyCard = replaceMoneyCard;
+    }
+
     private void setVariables(ActionCard card) {
         Action action = card.getAction();
         setDrawableCards(action.getCardCount());
         setAddBuyPts(action.getBuyCount());
         setAddActionPts(action.getActionCount());
         setCurseCount(action.getCurseCount());
+        setMoneyValue(action.getMoneyValue());
+        setDiscardCardsOfOtherPlayers(action.isThrowEveryUserCardsUntilThreeLeft());
+        setReplaceMoneyCard(action.isTakeMoneyCardThatCostThreeMoreThanOld());
     }
 
     public void setVariables(MoneyCard card) {
-
+        setMoneyValue(card.getWorth());
     }
 
     /**
@@ -89,8 +131,58 @@ public class CardLogic {
         if (addBuyPts > 0) {
             modifyBuyPts();
         }
-        if (getCurseCount() > 0) {
+        if (curseCount > 0) {
             cursePlayers();
+        }
+
+        if (moneyValue > 0) {
+            modifyMoneyAmount();
+        }
+
+        if (isDiscardCardsOfOtherPlayers()) {
+            makePlayersDropCards();
+        }
+
+        if (isReplaceMoneyCard()) {
+            replaceOldMoneyCard();
+        }
+    }
+
+
+    private void replaceOldMoneyCard() {
+        LinkedList<Card> hand = gameHandler.getActiveUser().getUserCards().getHandCards();
+        int indexOfCard = -1;
+        boolean hasCopperMoney = hand.stream().filter(card -> card instanceof MoneyCard).anyMatch(card -> card.getId() == 13); //Kuper = 13, Silber = 14 etc.
+        boolean hasSilverMoney = hand.stream().filter(card -> card instanceof MoneyCard).anyMatch(card -> card.getId() == 14);
+        if (hasSilverMoney) {
+            for (Card card : hand) {
+                if (card instanceof MoneyCard) {
+                    MoneyCard mnyCard = (MoneyCard) card;
+                    if (mnyCard.getMoneyType().equals(MoneyType.SILBER)) {
+                        indexOfCard = hand.indexOf(card);
+                    }
+                }
+            }
+        } else if (hasCopperMoney) {
+            for (Card card : hand) {
+                if (card instanceof MoneyCard) {
+                    MoneyCard mnyCard = (MoneyCard) card;
+                    if (mnyCard.getMoneyType().equals(MoneyType.KUPFER)) {
+                        indexOfCard = hand.indexOf(card);
+                    }
+                }
+            }
+        } else {
+            return;
+        }
+        if (indexOfCard >= 0) {
+            hand.remove(indexOfCard);
+            if (hasSilverMoney) {
+                hand.add(gameHandler.getBoard().getBuyField().pickCard(MoneyType.GOLD));
+            } else {
+                hand.add(gameHandler.getBoard().getBuyField().pickCard(MoneyType.SILBER));
+            }
+            gameHandler.getActiveUser().getUserCards().setHandCards(hand);
         }
     }
 
@@ -106,10 +198,21 @@ public class CardLogic {
         gameHandler.getActiveUser().getUserCards().addDeckCardtoHandCard(drawableCards); // draw cards if possible
     }
 
+    private void makePlayersDropCards() {
+        for (User u : gameHandler.getGame().getPlayerList()) {
+            if (!u.equals(gameHandler.getActiveUser()) && !u.getUserCards().hasMoat() && u.getUserCards().getHandCards().size() > 3) {
+                for (int i = 0; i < 3; i++) {
+                    Collections.shuffle(u.getUserCards().getHandCards());
+                    u.getUserCards().playCard(u.getUserCards().getHandCards().getLast());
+                }
+            }
+        }
+    }
+
     private void cursePlayers() {
         for (User u : gameHandler.getGame().getPlayerList()) {
-            if (!u.getUserCards().hasMoat() && !u.equals(getGameHandler().getActiveUser())) {
-                u.getUserCards().addCardtoDeck(getGameHandler().getBoard().getBuyField().pickCard(EstateType.FLUCH));
+            if (!u.getUserCards().hasMoat() && !u.equals(gameHandler.getActiveUser())) {
+                u.getUserCards().addCardtoDeck(gameHandler.getBoard().getBuyField().pickCard(EstateType.FLUCH));
                 u.getGamePoints().modifyWinningPoints(-1);
             }
         }
@@ -117,5 +220,10 @@ public class CardLogic {
 
     public void doCardLogic(MoneyCard card) {
         setVariables(card);
+        modifyMoneyAmount();
+    }
+
+    private void modifyMoneyAmount() {
+        gameHandler.getActiveUser().getGamePoints().modifyCoins(moneyValue);
     }
 }

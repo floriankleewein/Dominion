@@ -34,6 +34,7 @@ public class GameHandler {
     private Card playedCard;
     private Card buyCard;
     private PlayStatus turnState;
+    private CardLogic cardLogic;
 
     /**
      * Logic for the Game, uses the singleton game to handle game logic. Creates Board, Cards for Players
@@ -43,12 +44,16 @@ public class GameHandler {
      */
     public GameHandler(Game game) {
         this.game = game;
+        cardLogic = new CardLogic(this);
     }
 
     public GameHandler() {
     }
 
     public void prepareGame() {
+        if(cardLogic == null) {
+            cardLogic = new CardLogic(this);
+        }
         List<User> playerList = game.getPlayerList();
         if (playerList.size() >= 1) {
             for (User user : playerList) {
@@ -256,15 +261,20 @@ public class GameHandler {
 
     public void playCard(ActionCard card) {
         if(!isActionPhase()) return;
+        cardLogic.doCardLogic(card);
     }
 
     public void playCard(MoneyCard card) {
         if(isNoPlayPhase()) return;
         else {
             setTurnState(PlayStatus.BUY_PHASE);
+            cardLogic.doCardLogic(card);
         }
     }
 
+    /**
+     * obsolete - use cardLogic playCard()
+     */
     public void playCard() {
         if (playedCard instanceof ActionCard) {
             if (!canPlayActionCard()) {
