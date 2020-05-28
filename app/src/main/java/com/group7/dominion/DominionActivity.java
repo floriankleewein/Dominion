@@ -175,7 +175,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
                 @Override
                 public void run() {
                     user = ((GetGameMsg) msg).getGm().getGame().getActivePlayer();
-                    System.out.println( "*******"+user.getPlayStatus()+ "******");
+                    System.out.println("*******" + user.getPlayStatus() + "******");
                     if (user.getUserName().equals(getUsername())) {
                         cardsHandler.initCards(user);
                         if (user.getPlayStatus() == PlayStatus.ACTION_PHASE) {
@@ -203,11 +203,11 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        /*
+                        cardsHandler.setImageButtonsNull();
                         GameUpdateMsg msg = new GameUpdateMsg();
-                        msg.getActiveUser().setPlayStatus(PlayStatus.BUY_PHASE);
+                        msg.setNewHandCards(true);
                         ClientConnector.getClientConnector().sendUpdate(msg);
-                         */
+
                     }
                 });
             }
@@ -220,14 +220,25 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
                 public void run() {
                     GameUpdateMsg gameUpdateMsg1 = (GameUpdateMsg) msg;
                     Card card = gameUpdateMsg1.getBoughtCard();
-                    if(card == null) {
+                    if (card == null && !gameUpdateMsg1.isNewHandCards()) {
                         ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
                         errorDialogHandler.show(fragmentManager, "errorDialog");
+                    } else if (gameUpdateMsg1.isNewHandCards()) {
+                        System.out.println("The HandCards are here");
+                        user = gameUpdateMsg1.getGameHandler().getActiveUser();
+                        if (user.getUserName().equals(getUsername())) {
+                            cardsHandler.initCards(user);
+                            if (user.getPlayStatus() == PlayStatus.ACTION_PHASE) {
+                                cardsHandler.onClickListenerActionPhase();
+                            } else if (user.getPlayStatus() == PlayStatus.PLAY_COINS) {
+                                cardsHandler.onClickListenerBuyPhase();
+                            }
+                        }
                     } else {
                         ActionCard actionCard = (ActionCard) card;
                         switch (actionCard.getActionType()) {
                             case HEXE:
-                                Log.i("Action","ActionType: " + actionCard.getActionType() +
+                                Log.i("Action", "ActionType: " + actionCard.getActionType() +
                                         ", Card Count: " + actionCard.getAction().getCardCount() +
                                         ", Curse Count: " + actionCard.getAction().getCurseCount());
                                 break;

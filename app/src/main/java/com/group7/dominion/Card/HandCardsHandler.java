@@ -179,7 +179,7 @@ public class HandCardsHandler {
             ImageButtons.get(i).setOnClickListener(v -> {
                 if ((cardList.get(finalI).getId() <= 10)) {
                     System.out.println("Card with the ID is played: " + cardList.get(finalI).getId());
-                    ImageButtons.get(finalI).setVisibility(View.INVISIBLE);
+                    linearLayout.removeView(ImageButtons.get(finalI));
                     Thread thread = new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -194,14 +194,14 @@ public class HandCardsHandler {
         }
     }
 
-    public void onClickListenerBuyPhase () {
+    public void onClickListenerBuyPhase() {
         for (int i = 0; i < ImageButtons.size(); i++) {
             int finalI = i;
 
             ImageButtons.get(i).setOnClickListener(v -> {
                 if ((cardList.get(finalI).getId() >= 14)) {
                     System.out.println("Card with the ID is played: " + cardList.get(finalI).getId());
-                    ImageButtons.get(finalI).setVisibility(View.INVISIBLE);
+                    linearLayout.removeView(ImageButtons.get(finalI));
                     Thread thread = new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -228,8 +228,11 @@ public class HandCardsHandler {
         img_id++;
     }
 
-    private void setImageButtonsNull() {
+        public void setImageButtonsNull() {
+        linearLayout.removeAllViews();
         ImageButtons.clear();
+        cardList.clear();
+        canGetCards = true;
     }
 
 

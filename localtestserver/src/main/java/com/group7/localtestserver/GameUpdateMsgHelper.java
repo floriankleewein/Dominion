@@ -27,6 +27,12 @@ public class GameUpdateMsgHelper {
         } else if (msg.getEstateTypeClicked() != null) {
             gameHandler.buyCard(msg.getEstateTypeClicked());
         }
+        else if (msg.isNewHandCards()) {
+            System.out.println("WE WANT NEW HAND CARDS");
+            gameHandler.newTurn();
+            ReturnMsg.setGameHandler(gameHandler);
+            ReturnMsg.setNewHandCards(true);
+        }
         return null;
     }
 

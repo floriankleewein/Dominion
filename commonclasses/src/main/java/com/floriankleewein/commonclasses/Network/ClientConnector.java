@@ -165,7 +165,7 @@ public class ClientConnector {
 
         });
 
-        client.addListener(new Listener(){
+        client.addListener(new Listener() {
             @Override
             public void received(Connection connection, Object object) {
                 if (object instanceof AllPlayersInDominionActivityMsg) {
@@ -250,7 +250,15 @@ public class ClientConnector {
      * @param msg
      */
     public void sendUpdate(GameUpdateMsg msg) {
-        client.sendTCP(msg);
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                client.sendTCP(msg);
+            }
+        });
+
+        thread.start();
+
 
         client.addListener(new Listener() {
             public void received(Connection con, Object object) {
@@ -351,12 +359,12 @@ public class ClientConnector {
     }
 
     //FKDoc: this is the message which is broadcasted when startbutton is clicked. everyone lands in the dominion activity then.
-    public void allPlayersInDominionActivity(){
+    public void allPlayersInDominionActivity() {
         AllPlayersInDominionActivityMsg msg = new AllPlayersInDominionActivityMsg();
         client.sendTCP(msg);
     }
 
-    public void registerClasses(){
+    public void registerClasses() {
         registerClass(BaseMessage.class);
         registerClass(MessageClass.class);
         registerClass(GameUpdateMsg.class);

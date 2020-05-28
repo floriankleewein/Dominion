@@ -180,6 +180,7 @@ public class GameHandler {
         updateVictoryPts(msg);
     }
 
+
     public void buyCard(Card card) {
         Card boughtCard;
         //if(!getTurnState().equals(PlayStatus.BUY_PHASE)) return; // TODO throw error message to client here NotEnoughRessourcesMsg
@@ -351,7 +352,6 @@ public class GameHandler {
             MoneyCard card = (MoneyCard) playedCard;
             getActiveUser().getGamePoints().modifyCoins(card.getWorth());
             getActiveUser().getUserCards().playCard(card);
-
         }
     }
 
