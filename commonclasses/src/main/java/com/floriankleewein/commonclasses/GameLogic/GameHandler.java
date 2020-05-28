@@ -51,7 +51,7 @@ public class GameHandler {
     }
 
     public void prepareGame() {
-        if(cardLogic == null) {
+        if (cardLogic == null) {
             cardLogic = new CardLogic(this);
         }
         List<User> playerList = game.getPlayerList();
@@ -181,6 +181,39 @@ public class GameHandler {
         updateVictoryPts(msg);
     }
 
+    public void buyCard(ActionCard card) {
+        canBuyCard(card);
+        Card boughtCard;
+        boughtCard = getBoard().getActionField().pickCard(card.getActionType());
+        getActiveUser().getUserCards().addCardtoDeck(boughtCard);
+        int oldCoins = getActiveUser().getGamePoints().getCoins();
+        getActiveUser().getGamePoints().modifyCoins(oldCoins - boughtCard.getPrice());
+    }
+
+    public void buyCard(EstateCard card) {
+        canBuyCard(card);
+        Card boughtCard;
+        boughtCard = getBoard().getBuyField().pickCard(card.getEstateType());
+        getActiveUser().getUserCards().addCardtoDeck(boughtCard);
+        getActiveUser().getGamePoints().modifyWinningPoints(((EstateCard) boughtCard).getEstateValue());
+        int oldCoins = getActiveUser().getGamePoints().getCoins();
+        getActiveUser().getGamePoints().modifyCoins(oldCoins - boughtCard.getPrice());
+    }
+
+    public void buyCard(MoneyCard card) {
+        canBuyCard(card);
+        Card boughtCard;
+        boughtCard = getBoard().getBuyField().pickCard(card.getMoneyType());
+        getActiveUser().getUserCards().addCardtoDeck(boughtCard);
+        int oldCoins = getActiveUser().getGamePoints().getCoins();
+        getActiveUser().getGamePoints().modifyCoins(oldCoins - boughtCard.getPrice());
+    }
+
+    /**
+     * obsolete - replaced with overloaded methods to remove cyclic complexity and unreadable gibberish
+     *
+     * @param card
+     */
     public void buyCard(Card card) {
         //if(!canBuyCard(card)) return; // check if card can be bought
         Card boughtCard;
@@ -260,12 +293,12 @@ public class GameHandler {
     }
 
     public void playCard(ActionCard card) {
-        if(!isActionPhase()) return;
+        if (!isActionPhase()) return;
         cardLogic.doCardLogic(card);
     }
 
     public void playCard(MoneyCard card) {
-        if(isNoPlayPhase()) return;
+        if (isNoPlayPhase()) return;
         else {
             setTurnState(PlayStatus.BUY_PHASE);
             cardLogic.doCardLogic(card);
@@ -365,9 +398,9 @@ public class GameHandler {
                     break;
             }
             getActiveUser().getUserCards().playCard(card);
-        } else if (playedCard instanceof MoneyCard){
-            if(isNoPlayPhase()) return;
-            if(isActionPhase())  {
+        } else if (playedCard instanceof MoneyCard) {
+            if (isNoPlayPhase()) return;
+            if (isActionPhase()) {
                 setTurnState(PlayStatus.BUY_PHASE);
             }
             MoneyCard card = (MoneyCard) playedCard;
@@ -377,17 +410,17 @@ public class GameHandler {
     }
 
     private boolean isActionPhase() {
-        if(turnState.equals(PlayStatus.ACTION_PHASE)) return true;
+        if (turnState.equals(PlayStatus.ACTION_PHASE)) return true;
         return false;
     }
 
     private boolean isBuyPhase() {
-        if(turnState.equals(PlayStatus.BUY_PHASE)) return true;
+        if (turnState.equals(PlayStatus.BUY_PHASE)) return true;
         return false;
     }
 
     private boolean isNoPlayPhase() {
-        if(turnState.equals(PlayStatus.NO_PLAY_PHASE)) return true;
+        if (turnState.equals(PlayStatus.NO_PLAY_PHASE)) return true;
         return false;
     }
 
