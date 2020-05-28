@@ -83,10 +83,4 @@ public class ActionField {
             return card;
         }
     }
-
-    /* Falls benötigt => Diese Logik muss beim User passieren
-    public void setCards(List<Card> cards) {
-        this.cardsToBuy.addAll(cards);
-    }
-    */
 }

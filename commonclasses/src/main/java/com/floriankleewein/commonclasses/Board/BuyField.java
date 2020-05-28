@@ -139,10 +139,4 @@ public class BuyField {
             return null;
         }
     }
-
-    /* Falls benötigt => Diese Logik muss beim User passieren
-    public void setCards(List<Card> cards) {
-        this.cardsToBuy.addAll(cards);
-    }
-    */
 }
