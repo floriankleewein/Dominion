@@ -1,6 +1,5 @@
 package com.floriankleewein.commonclasses.Network;
 
-import com.esotericsoftware.kryonet.Client;
 import com.floriankleewein.commonclasses.User.User;
 
 public class AddPlayerSuccessMsg extends BaseMessage{
