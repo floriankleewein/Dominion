@@ -98,7 +98,12 @@ public class CardLogic {
         this.replaceMoneyCard = replaceMoneyCard;
     }
 
-    private void setVariables(ActionCard card) {
+    public void setVariables(Card card) {
+        if (card instanceof MoneyCard) setVariables((MoneyCard) card);
+        else if (card instanceof ActionCard) setVariables((ActionCard) card);
+    }
+
+    public void setVariables(ActionCard card) {
         Action action = card.getAction();
         setDrawableCards(action.getCardCount());
         setAddBuyPts(action.getBuyCount());
@@ -112,6 +117,12 @@ public class CardLogic {
     public void setVariables(MoneyCard card) {
         setMoneyValue(card.getWorth());
     }
+
+    public void doCardLogic(Card card) {
+        if (card instanceof ActionCard) doCardLogic((ActionCard) card);
+        else if (card instanceof MoneyCard) doCardLogic((MoneyCard) card);
+    }
+
 
     /**
      * Method that handles a card irregardless of type.

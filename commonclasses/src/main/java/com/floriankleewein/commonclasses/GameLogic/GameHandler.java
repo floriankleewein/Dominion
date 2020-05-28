@@ -11,6 +11,7 @@ import com.floriankleewein.commonclasses.Cards.MoneyCard;
 import com.floriankleewein.commonclasses.Cards.MoneyType;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.Network.GameUpdateMsg;
+import com.floriankleewein.commonclasses.User.GamePoints;
 import com.floriankleewein.commonclasses.User.User;
 import com.floriankleewein.commonclasses.User.UserCards;
 
@@ -57,6 +58,9 @@ public class GameHandler {
         List<User> playerList = game.getPlayerList();
         if (playerList.size() >= 1) {
             for (User user : playerList) {
+                GamePoints gp = new GamePoints();
+                gp.setWinningPoints(3);
+                user.setGamePoints(gp);
                 LinkedList<Card> generatedCards = new LinkedList<>();
                 UserCards ucards = new UserCards();
                 for (int i = 0; i < MONEY_CARDS; i++) {
@@ -135,7 +139,7 @@ public class GameHandler {
     }
 
     /**
-     * Checks if the required card can be played, and will execute it if possible.
+     * Obsolete - created new overloaded methods for playing cards.
      *
      * @param card
      */
@@ -143,6 +147,20 @@ public class GameHandler {
         setPlayedCard(card);
         playCard();
     }
+
+    public void playCard(ActionCard card) {
+        if (!isActionPhase()) return;
+        cardLogic.doCardLogic(card);
+    }
+
+    public void playCard(MoneyCard card) {
+        if (isNoPlayPhase()) return;
+        else {
+            setTurnState(PlayStatus.BUY_PHASE);
+            cardLogic.doCardLogic(card);
+        }
+    }
+
 
     private boolean canPlayActionCard() {
         if (getActiveUser().getGamePoints().getPlaysAmount() > 0 && turnState.equals(PlayStatus.ACTION_PHASE)) {
@@ -292,18 +310,6 @@ public class GameHandler {
         }
     }
 
-    public void playCard(ActionCard card) {
-        if (!isActionPhase()) return;
-        cardLogic.doCardLogic(card);
-    }
-
-    public void playCard(MoneyCard card) {
-        if (isNoPlayPhase()) return;
-        else {
-            setTurnState(PlayStatus.BUY_PHASE);
-            cardLogic.doCardLogic(card);
-        }
-    }
 
     /**
      * obsolete - use cardLogic playCard()
