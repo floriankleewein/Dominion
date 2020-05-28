@@ -8,7 +8,6 @@ import com.floriankleewein.commonclasses.Board.BuyField;
 import com.floriankleewein.commonclasses.Cards.Action;
 import com.floriankleewein.commonclasses.Cards.ActionCard;
 import com.floriankleewein.commonclasses.Cards.ActionType;
-import com.floriankleewein.commonclasses.Cards.CalculationHelper;
 import com.floriankleewein.commonclasses.Cards.Card;
 import com.floriankleewein.commonclasses.Cards.EstateCard;
 import com.floriankleewein.commonclasses.Cards.EstateType;
@@ -46,7 +45,7 @@ public class ClassRegistration {
             CreateGameMsg.class, AddPlayerSuccessMsg.class, ArrayList.class, User.class, ResetMsg.class, StartGameMsg.class, ChatMessage.class,
             HasCheatedMessage.class, ActivePlayerMessage.class, UpdatePlayerNamesMsg.class, SuspectMessage.class, CheckButtonsMsg.class,
             GetGameMsg.class, UserCards.class, GamePoints.class, LinkedList.class, Card.class, MoneyCard.class, ActionCard.class,
-            GameHandler.class, PlayerTurn.class, Action.class, Board.class, BuyField.class, ActionType.class, CalculationHelper.class,
+            GameHandler.class, PlayerTurn.class, Action.class, Board.class, BuyField.class, ActionType.class,
             EstateType.class, MoneyType.class, CheatService.class, EstateCard.class, ActionField.class, AllPlayersInDominionActivityMsg.class,
             HashMap.class
     };
