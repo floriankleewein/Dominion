@@ -254,6 +254,17 @@ public class GameHandler {
         }
     }
 
+    public void playCard(ActionCard card) {
+        if(!isActionPhase()) return;
+    }
+
+    public void playCard(MoneyCard card) {
+        if(isNoPlayPhase()) return;
+        else {
+            setTurnState(PlayStatus.BUY_PHASE);
+        }
+    }
+
     public void playCard() {
         if (playedCard instanceof ActionCard) {
             if (!canPlayActionCard()) {

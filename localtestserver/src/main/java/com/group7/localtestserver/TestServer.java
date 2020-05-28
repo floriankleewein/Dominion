@@ -209,6 +209,7 @@ public class TestServer {
         registerClass(AllPlayersInDominionActivityMsg.class);
         registerClass(HashMap.class);
         registerClass(NotEnoughRessourcesMsg.class);
+        registerClass(NewTurnMessage.class);
     }
 
     public void addListeners(){
