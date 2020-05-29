@@ -15,6 +15,7 @@ import com.floriankleewein.commonclasses.Cards.MoneyCard;
 import com.floriankleewein.commonclasses.Cards.MoneyType;
 import com.floriankleewein.commonclasses.Chat.ChatMessage;
 import com.floriankleewein.commonclasses.CheatFunction.CheatService;
+import com.floriankleewein.commonclasses.GameLogic.CardLogic;
 import com.floriankleewein.commonclasses.GameLogic.GameHandler;
 import com.floriankleewein.commonclasses.GameLogic.PlayerTurn;
 import com.floriankleewein.commonclasses.Network.ActivePlayerMessage;
@@ -26,6 +27,8 @@ import com.floriankleewein.commonclasses.Network.CreateGameMsg;
 import com.floriankleewein.commonclasses.Network.GameUpdateMsg;
 import com.floriankleewein.commonclasses.Network.GetGameMsg;
 import com.floriankleewein.commonclasses.Network.HasCheatedMessage;
+import com.floriankleewein.commonclasses.Network.Messages.NewTurnMessage;
+import com.floriankleewein.commonclasses.Network.Messages.NotEnoughRessourcesMsg;
 import com.floriankleewein.commonclasses.Network.NetworkInformationMsg;
 import com.floriankleewein.commonclasses.Network.ResetMsg;
 import com.floriankleewein.commonclasses.Network.StartGameMsg;
@@ -47,7 +50,7 @@ public class ClassRegistration {
             GetGameMsg.class, UserCards.class, GamePoints.class, LinkedList.class, Card.class, MoneyCard.class, ActionCard.class,
             GameHandler.class, PlayerTurn.class, Action.class, Board.class, BuyField.class, ActionType.class,
             EstateType.class, MoneyType.class, CheatService.class, EstateCard.class, ActionField.class, AllPlayersInDominionActivityMsg.class,
-            HashMap.class
+            HashMap.class, NewTurnMessage.class, NotEnoughRessourcesMsg.class, CardLogic.class
     };
 
     public void registerAllClassesForServer(Server server){
