@@ -1,53 +1,34 @@
 package com.group7.localtestserver;
 
 
-import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
-import com.esotericsoftware.minlog.Log;
-import com.floriankleewein.commonclasses.Board.ActionField;
 import com.floriankleewein.commonclasses.Board.Board;
-import com.floriankleewein.commonclasses.Board.BuyField;
-import com.floriankleewein.commonclasses.Cards.Action;
-import com.floriankleewein.commonclasses.Cards.ActionCard;
-import com.floriankleewein.commonclasses.Cards.ActionType;
-import com.floriankleewein.commonclasses.Cards.CalculationHelper;
-import com.floriankleewein.commonclasses.Cards.Card;
-import com.floriankleewein.commonclasses.Cards.EstateCard;
-import com.floriankleewein.commonclasses.Cards.EstateType;
-import com.floriankleewein.commonclasses.Cards.MoneyCard;
-import com.floriankleewein.commonclasses.Cards.MoneyType;
 import com.floriankleewein.commonclasses.Chat.ChatMessage;
-import com.floriankleewein.commonclasses.CheatFunction.CheatService;
+import com.floriankleewein.commonclasses.ClassRegistration;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.GameLogic.GameHandler;
-import com.floriankleewein.commonclasses.GameLogic.PlayerTurn;
 import com.floriankleewein.commonclasses.Network.ActivePlayerMessage;
 import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
 import com.floriankleewein.commonclasses.Network.AllPlayersInDominionActivityMsg;
-import com.floriankleewein.commonclasses.Network.BaseMessage;
 import com.floriankleewein.commonclasses.Network.CheckButtonsMsg;
 import com.floriankleewein.commonclasses.Network.CreateGameMsg;
 import com.floriankleewein.commonclasses.Network.GameUpdateMsg;
 import com.floriankleewein.commonclasses.Network.GetGameMsg;
 import com.floriankleewein.commonclasses.Network.GetPlayerMsg;
 import com.floriankleewein.commonclasses.Network.HasCheatedMessage;
-import com.floriankleewein.commonclasses.Network.NetworkInformationMsg;
+import com.floriankleewein.commonclasses.Network.Messages.NewTurnMessage;
+import com.floriankleewein.commonclasses.Network.Messages.NotEnoughRessourcesMsg;
 import com.floriankleewein.commonclasses.Network.ResetMsg;
 import com.floriankleewein.commonclasses.Network.ReturnPlayersMsg;
 import com.floriankleewein.commonclasses.Network.StartGameMsg;
 import com.floriankleewein.commonclasses.Network.SuspectMessage;
 import com.floriankleewein.commonclasses.Network.UpdatePlayerNamesMsg;
-import com.floriankleewein.commonclasses.User.GamePoints;
 import com.floriankleewein.commonclasses.User.User;
-import com.floriankleewein.commonclasses.User.UserCards;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.LinkedList;
 import java.util.Map;
 
 public class TestServer {
@@ -59,7 +40,7 @@ public class TestServer {
     private boolean gamehandlerCalled = false;
     private final String Tag = "TEST-SERVER"; // debugging only
     private GameHandler gamehandler;
-    private Map<User, Connection> userClientConnectorMap = new HashMap<>();
+    private Map<User, Connection> userClientConnectorMap = new HashMap<>(); // TODO fix bad variable name
 
 
     public TestServer() {
@@ -68,10 +49,10 @@ public class TestServer {
 
     public void startServer() {
         System.out.println(Tag + ", Running Server!");
-        //Register classes
+        //FKDoc: Register classes
         registerClasses();
 
-        //Start Server
+        //FKDoc: Start Server
         server.start();
 
         try {
@@ -80,7 +61,7 @@ public class TestServer {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //adds all listeners. cyclic problem still here.
+        //FKDoc: adds all listeners. cyclic problem still here.
         addListeners();
     }
 
@@ -90,21 +71,10 @@ public class TestServer {
         gamehandler.updateGameHandler(msg);
     }
 
-    public void registerClass(Class regClass) {
-        server.getKryo().register(regClass);
-    }
-
     public void createGame() {
         game = Game.getGame();
         hasGame = true;
         System.out.println("GAME, game instanced - started");
-    }
-
-
-    public void reset() {
-        game.getPlayerList().clear();
-        userClientConnectorMap.clear();
-        System.out.println("Playerlist cleared!");
     }
 
     public void sendCheatInformation(String CheaterName) {
@@ -124,9 +94,86 @@ public class TestServer {
         }
     }
 
+    /**
+     * Can be used to send ErrorMessages to the active User in the game.
+     *
+     * @param errorNumber
+     */
+    public void sendErrorMessage(int errorNumber) {
+        NotEnoughRessourcesMsg msg = new NotEnoughRessourcesMsg(errorNumber); // 1 = notenoughAp, 2 = notEnough BP, 3 = not Enough Money, else just failure
+        Connection con = userClientConnectorMap.get(gamehandler.getActiveUser());
+        con.sendTCP(msg);
+    }
+
 
     public boolean hasGame() {
         return hasGame;
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public void registerClasses() {
+
+        ClassRegistration reg = new ClassRegistration();
+        reg.registerAllClassesForServer(server);
+    }
+
+    public void addListeners() {
+        server.addListener(new Listener() {
+            public void received(Connection con, Object object) {
+                if (object instanceof CreateGameMsg) {
+                    createGameMsgFunctionality(object, con);
+
+                } else if (object instanceof AddPlayerSuccessMsg) {
+                    addPlayerSuccessMsgFunctionality(object, con);
+
+                } else if (object instanceof ResetMsg) {
+                    resetMsgFunctionality();
+
+                } else if (object instanceof StartGameMsg) {
+                    startGameMsgFunctionality(con);
+
+                } else if (object instanceof GetPlayerMsg) {
+                    getPlayerMsgFunctionality(con);
+
+                } else if (object instanceof ChatMessage) {
+                    chatMessageFunctionality(object, con);
+
+                } else if (object instanceof HasCheatedMessage) {
+                    hasCheatedMessageFunctionality(object);
+
+                } else if (object instanceof UpdatePlayerNamesMsg) {
+                    updatePlayerNamesMsgFunctionality();
+
+                } else if (object instanceof SuspectMessage) {
+                    suspectMessageFunctionality(object);
+
+                } else if (object instanceof GameUpdateMsg) {
+                    gameUpdateMsgFunctionality(object);
+
+                } else if (object instanceof CheckButtonsMsg) {
+                    checkButtonsMsgFunctionality(object, con);
+
+                } else if (object instanceof AllPlayersInDominionActivityMsg) {
+                    allPlayersInDominionActivityMsgFunctionality(object);
+
+                } else if (object instanceof GetGameMsg) {
+                    getGameMsgFunctionality();
+                } else if (object instanceof NewTurnMessage) {
+                    newTurnMsgFunctionality();
+                }
+            }
+        });
     }
 
     /**
@@ -148,203 +195,154 @@ public class TestServer {
         }
     }
 
-    public Board getBoard() {
-        return board;
+    public void createGameMsgFunctionality(Object object, Connection con) {
+        createGame();
+        CreateGameMsg startGameMsg = (CreateGameMsg) object;
+        startGameMsg.setGame(getGame());
+        startGameMsg.setHasGame(hasGame());
+        con.sendTCP(startGameMsg);
     }
 
-    public void setBoard(Board board) {
-        this.board = board;
-    }
+    public void addPlayerSuccessMsgFunctionality(Object object, Connection con) {
+        AddPlayerSuccessMsg addPlayerMsg = (AddPlayerSuccessMsg) object;
+        String name = addPlayerMsg.getPlayerName();
+        User player = new User(name);
 
-    public Game getGame() {
-        return game;
-    }
+        if (game.checkSize()) {
+            if (game.checkName(name)) {
 
-    public void registerClasses(){
-        registerClass(BaseMessage.class);
-        registerClass(MessageClass.class);
-        registerClass(GameUpdateMsg.class);
-        registerClass(NetworkInformationMsg.class);
-        registerClass(Game.class);
-        registerClass(CreateGameMsg.class);
-        registerClass(AddPlayerSuccessMsg.class);
-        registerClass(ArrayList.class);
-        registerClass(User.class);
-        registerClass(ResetMsg.class);
-        registerClass(StartGameMsg.class);
-        registerClass(ChatMessage.class);
-        registerClass(HasCheatedMessage.class);
-        registerClass(ActivePlayerMessage.class);
-        registerClass(UpdatePlayerNamesMsg.class);
-        registerClass(SuspectMessage.class);
-        registerClass(CheckButtonsMsg.class);
-        registerClass(GetGameMsg.class);
-        registerClass(UserCards.class);
-        registerClass(GamePoints.class);
-        registerClass(LinkedList.class);
-        registerClass(Card.class);
-        registerClass(MoneyCard.class);
-        registerClass(ActionCard.class);
-        registerClass(GameHandler.class);
-        registerClass(PlayerTurn.class);
-        registerClass(Action.class);
-        registerClass(Board.class);
-        registerClass(BuyField.class);
-        registerClass(ActionType.class);
-        registerClass(CalculationHelper.class);
-        registerClass(EstateType.class);
-        registerClass(MoneyType.class);
-        registerClass(CheatService.class);
-        registerClass(EstateCard.class);
-        registerClass(ActionField.class);
-        registerClass(AllPlayersInDominionActivityMsg.class);
-        registerClass(HashMap.class);
-    }
+                userClientConnectorMap.put(player, con);
 
-    public void addListeners(){
-        server.addListener(new Listener() {
-            public void received(Connection con, Object object) {
-                if (object instanceof MessageClass) {
-                    MessageClass recMessage = (MessageClass) object;
-                    System.out.println(Tag + ", Received Message " + recMessage.getMessage());
-
-                    MessageClass sendMessage = new MessageClass();
-                    sendMessage.setMessage("Hello Client! " + " from: " + con.getRemoteAddressTCP().getHostString());
-
-                    con.sendTCP(sendMessage);
-                } else if (object instanceof CreateGameMsg) {
-                    createGame();
-                    CreateGameMsg startGameMsg = (CreateGameMsg) object;
-                    startGameMsg.setGame(getGame());
-                    startGameMsg.setHasGame(hasGame());
-                    con.sendTCP(startGameMsg);
-                } else if (object instanceof AddPlayerSuccessMsg) {
-                    AddPlayerSuccessMsg addPlayerMsg = (AddPlayerSuccessMsg) object;
-                    String name = addPlayerMsg.getPlayerName();
-                    User player = new User(name);
-                    /*if(game.addPlayer(player)) {
-                        addPlayerMsg.setUser(player);
-                        addPlayerMsg.setPlayerAdded(true);
-                    }*/
-                    if (game.checkSize()) {
-                        if (game.checkName(name)) {
-
-                            userClientConnectorMap.put(player, con);
-
-                            game.addPlayer(player);
-                            addPlayerMsg.setFeedbackUI(0);
-                            addPlayerMsg.setPlayerAdded(true);
-                            System.out.println("Player added: " + player.getUserName());
+                game.addPlayer(player);
+                addPlayerMsg.setFeedbackUI(0);
+                addPlayerMsg.setPlayerAdded(true);
+                System.out.println("Player added: " + player.getUserName());
 
 
-                        } else {
-                            addPlayerMsg.setFeedbackUI(1);
-                        }
-                    } else {
-                        addPlayerMsg.setFeedbackUI(2);
-                    }
-                    con.sendTCP(addPlayerMsg);
-                } else if (object instanceof ResetMsg) {
-                    System.out.println("Received Reset Message.");
-                    reset();
-                    //ResetMsg msg = (ResetMsg) object;
-
-                } else if (object instanceof StartGameMsg) {
-                    StartGameMsg msg = new StartGameMsg();
-                    //Check if game started successfully, and notify client
-                    System.out.println("Got the StartGameMsg on Server");
-                    if (setupGame()) {
-                        msg.setFeedbackUI(0);
-                        msg.setGame(getGame());
-                        msg.setGameHandler(gamehandler);
-                        // Send message to all clients, TODO they need to be in lobby
-                        server.sendToAllTCP(msg);
-                        ActivePlayerMessage activePlayerMsg = new ActivePlayerMessage();
-                        activePlayerMsg.setGame(getGame());
-                        Connection activePlayerCon = userClientConnectorMap.get(game.getActivePlayer());
-                        activePlayerCon.sendTCP(activePlayerMsg);
-                    } else { // fehlerfall
-                        msg.setFeedbackUI(1);
-                        con.sendTCP(msg);
-                    }
-                    con.sendTCP(msg);
-
-                } else if (object instanceof GetPlayerMsg) {
-                    System.out.println("Got the GetPlayerMsg");
-                    ReturnPlayersMsg msg = new ReturnPlayersMsg();
-                    con.sendTCP(msg);
-
-
-                } else if (object instanceof ChatMessage) {
-                    ChatMessage msg = (ChatMessage) object;
-
-                    String message = msg.getMessage();
-
-                    System.out.println("Receive msg from client:" + message);
-
-                    ChatMessage responseMsg = new ChatMessage();
-                    responseMsg.setMessage(msg.getMessage());
-                    responseMsg.setSentByMe(false);
-
-
-                    for (Connection c : server.getConnections()) {
-                        if (c != con) {
-                            server.sendToTCP(c.getID(), responseMsg);
-                        }
-                    }
-
-                } else if (object instanceof HasCheatedMessage) {
-                    HasCheatedMessage CheatMsg = (HasCheatedMessage) object;
-                    /*game.getCheatService().addCardtoUser(CheatMsg.getName());
-                    Not working now because the User has now DeckCards --> Null Pointer
-                     */
-                    sendCheatInformation(CheatMsg.getName());
-
-
-                } else if (object instanceof UpdatePlayerNamesMsg) {
-                    UpdatePlayerNamesMsg msg = new UpdatePlayerNamesMsg();
-                    for (User x : game.getPlayerList()) {
-                        msg.getNameList().add(x.getUserName());
-                    }
-                    server.sendToAllTCP(msg);
-
-                } else if (object instanceof SuspectMessage) {
-                    SuspectMessage msg = (SuspectMessage) object;
-                    System.out.println("GOT SUSPECT MESSAGE FROM" + msg.getUserName());
-                    //game.getCheatService().suspectUser(msg.getSuspectedUserName(),msg.getUserName());
-
-                    sendSuspectInformation(msg.getSuspectedUserName(), msg.getUserName());
-                } else if (object instanceof GameUpdateMsg) {
-                    GameUpdateMsg gameUpdateMsg = (GameUpdateMsg) object;
-                    if (gameUpdateMsg.getGameHandler() != null) {
-                        updateAll(gameUpdateMsg);
-                        gameUpdateMsg.setGameHandler(gamehandler); // TODO take care on GameupdateMessage
-                        server.sendToAllTCP(gameUpdateMsg);
-                    }
-                } else if (object instanceof CheckButtonsMsg) {
-                    CheckButtonsMsg msg = (CheckButtonsMsg) object;
-                    if (hasGame == false) {
-                        msg.setCreateValue(true);
-                        msg.setJoinValue(false);
-                    } else if (hasGame == true) {
-                        msg.setCreateValue(false);
-                        msg.setJoinValue(true);
-                    }
-                    con.sendTCP(msg);
-                } else if (object instanceof AllPlayersInDominionActivityMsg) {
-                    AllPlayersInDominionActivityMsg msg = (AllPlayersInDominionActivityMsg) object;
-                    server.sendToAllTCP(msg);
-                } else if (object instanceof GetGameMsg) {
-                    GetGameMsg msg = new GetGameMsg();
-                    System.out.println("Got Get GameMsg on Server");
-                    msg.setGm(gamehandler);
-                    server.sendToAllTCP(msg);
-                }
+            } else {
+                addPlayerMsg.setFeedbackUI(1);
             }
-        });
+        } else {
+            addPlayerMsg.setFeedbackUI(2);
+        }
+        con.sendTCP(addPlayerMsg);
+    }
+
+    public void resetMsgFunctionality() {
+        game.getPlayerList().clear();
+        userClientConnectorMap.clear();
+        System.out.println("Playerlist cleared!");
+    }
+
+    public void startGameMsgFunctionality(Connection con) {
+        StartGameMsg msg = new StartGameMsg();
+        //Check if game started successfully, and notify client
+        System.out.println("Got the StartGameMsg on Server");
+        if (setupGame()) {
+            msg.setFeedbackUI(0);
+            msg.setGame(getGame());
+            msg.setGameHandler(gamehandler);
+            // Send message to all clients, TODO they need to be in lobby
+            server.sendToAllTCP(msg);
+            ActivePlayerMessage activePlayerMsg = new ActivePlayerMessage();
+            activePlayerMsg.setGame(getGame());
+            Connection activePlayerCon = userClientConnectorMap.get(game.getActivePlayer());
+            activePlayerCon.sendTCP(activePlayerMsg);
+        } else { // fehlerfall
+            msg.setFeedbackUI(1);
+            con.sendTCP(msg);
+        }
+        con.sendTCP(msg);
+
+    }
+
+    public void getPlayerMsgFunctionality(Connection con) {
+        System.out.println("Got the GetPlayerMsg");
+        ReturnPlayersMsg msg = new ReturnPlayersMsg();
+        con.sendTCP(msg);
+    }
+
+    public void chatMessageFunctionality(Object object, Connection con) {
+        ChatMessage msg = (ChatMessage) object;
+
+
+        String message = msg.getMessage();
+
+        System.out.println("Receive msg from client:" + message);
+
+        ChatMessage responseMsg = new ChatMessage();
+        responseMsg.setMessage(msg.getMessage());
+        responseMsg.setSentByMe(false);
+
+
+        for (Connection c : server.getConnections()) {
+            if (c != con) {
+                server.sendToTCP(c.getID(), responseMsg);
+            }
+        }
+    }
+
+    public void hasCheatedMessageFunctionality(Object object) {
+        HasCheatedMessage CheatMsg = (HasCheatedMessage) object;
+        //game.getCheatService().addCardtoUser(CheatMsg.getName());
+        // Not working now because the User has now DeckCards --> Null Pointer
+
+        sendCheatInformation(CheatMsg.getName());
+    }
+
+    public void updatePlayerNamesMsgFunctionality() {
+        UpdatePlayerNamesMsg msg = new UpdatePlayerNamesMsg();
+        for (User x : game.getPlayerList()) {
+            msg.getNameList().add(x.getUserName());
+        }
+        server.sendToAllTCP(msg);
+    }
+
+    public void suspectMessageFunctionality(Object object) {
+        SuspectMessage msg = (SuspectMessage) object;
+        System.out.println("GOT SUSPECT MESSAGE FROM" + msg.getUserName());
+        //game.getCheatService().suspectUser(msg.getSuspectedUserName(),msg.getUserName());
+
+        sendSuspectInformation(msg.getSuspectedUserName(), msg.getUserName());
+    }
+
+    public void gameUpdateMsgFunctionality(Object object) {
+        GameUpdateMsg gameUpdateMsg = (GameUpdateMsg) object;
+        if (gameUpdateMsg.getGameHandler() != null) {
+            updateAll(gameUpdateMsg);
+            gameUpdateMsg.setGameHandler(gamehandler); // TODO take care on GameupdateMessage
+            server.sendToAllTCP(gameUpdateMsg);
+        }
+    }
+
+    public void checkButtonsMsgFunctionality(Object object, Connection con) {
+        CheckButtonsMsg msg = (CheckButtonsMsg) object;
+        if (hasGame == false) {
+            msg.setCreateValue(true);
+            msg.setJoinValue(false);
+        } else if (hasGame) {
+            msg.setCreateValue(false);
+            msg.setJoinValue(true);
+        }
+        con.sendTCP(msg);
+    }
+
+    public void allPlayersInDominionActivityMsgFunctionality(Object object) {
+        AllPlayersInDominionActivityMsg msg = (AllPlayersInDominionActivityMsg) object;
+        server.sendToAllTCP(msg);
+    }
+
+    public void getGameMsgFunctionality() {
+        GetGameMsg msg = new GetGameMsg();
+        System.out.println("Got Get GameMsg on Server");
+        msg.setGm(gamehandler);
+        server.sendToAllTCP(msg);
+    }
+
+    public void newTurnMsgFunctionality() {
+        gamehandler.newTurn();
+        ActivePlayerMessage msg = new ActivePlayerMessage();
+        msg.setGame(gamehandler.getGame());
+        server.sendToAllTCP(msg);
     }
 }
-/*
-se2-demo.aau.at
-53200
- */

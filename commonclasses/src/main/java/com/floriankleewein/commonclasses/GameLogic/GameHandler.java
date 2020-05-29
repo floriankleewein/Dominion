@@ -1,7 +1,6 @@
 package com.floriankleewein.commonclasses.GameLogic;
 
 import com.floriankleewein.commonclasses.Board.Board;
-import com.floriankleewein.commonclasses.Cards.Action;
 import com.floriankleewein.commonclasses.Cards.ActionCard;
 import com.floriankleewein.commonclasses.Cards.ActionType;
 import com.floriankleewein.commonclasses.Cards.Card;
@@ -11,6 +10,7 @@ import com.floriankleewein.commonclasses.Cards.MoneyCard;
 import com.floriankleewein.commonclasses.Cards.MoneyType;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.Network.GameUpdateMsg;
+import com.floriankleewein.commonclasses.User.GamePoints;
 import com.floriankleewein.commonclasses.User.User;
 import com.floriankleewein.commonclasses.User.UserCards;
 
@@ -33,6 +33,8 @@ public class GameHandler {
     private Board board;
     private Card playedCard;
     private Card buyCard;
+    private PlayStatus turnState;
+    private CardLogic cardLogic;
 
     /**
      * Logic for the Game, uses the singleton game to handle game logic. Creates Board, Cards for Players
@@ -44,12 +46,21 @@ public class GameHandler {
         this.game = game;
     }
 
-    public GameHandler () {}
+    public GameHandler() {
+    }
 
+    /**
+     * Must be called first before any other methods can be used. Initialises starter cards for players
+     * and Gamepoints as well as starting cardlogic.
+     */
     public void prepareGame() {
+        cardLogic = new CardLogic(this);
         List<User> playerList = game.getPlayerList();
         if (playerList.size() >= 1) {
             for (User user : playerList) {
+                GamePoints gp = new GamePoints();
+                gp.setWinningPoints(3);
+                user.setGamePoints(gp);
                 LinkedList<Card> generatedCards = new LinkedList<>();
                 UserCards ucards = new UserCards();
                 for (int i = 0; i < MONEY_CARDS; i++) {
@@ -66,6 +77,7 @@ public class GameHandler {
             setBoard(new Board());
             game.setPlayerList(playerList);
             setNewActivePlayer();
+            setTurnState(PlayStatus.ACTION_PHASE);
         }
     }
 
@@ -77,6 +89,7 @@ public class GameHandler {
             int active = game.getPlayerList().indexOf(getActiveUser());
             game.setActivePlayer(game.getPlayerList().get((active + 1) % players));
         }
+        setTurnState(PlayStatus.ACTION_PHASE);
     }
 
     /**
@@ -92,22 +105,87 @@ public class GameHandler {
     }
 
     /**
-     * Checks if the required card can be played, and will execute it if possible.
+     * Change Turn Phase, if end of turn setPlay Status to noPlayPhase
+     * Can be checked everytime since only if turn phase status is set will it change to the next phase.
      *
-     * @param card
+     * @return
      */
-    public void playCard(Card card) {
-        setPlayedCard(card);
-        playCard();
+    public PlayStatus changeTurnStatus() {
+        if (getTurnState() == null) {
+            return null;
+        }
+        else if (getTurnState().equals(PlayStatus.ACTION_PHASE)) {
+            setTurnState(PlayStatus.BUY_PHASE);
+            return PlayStatus.BUY_PHASE;
+        }
+        else if (getTurnState().equals(PlayStatus.BUY_PHASE)) {
+            setTurnState(PlayStatus.NO_PLAY_PHASE);
+            return PlayStatus.NO_PLAY_PHASE;
+        }
+        else {
+            setTurnState(PlayStatus.NO_PLAY_PHASE);
+            return PlayStatus.NO_PLAY_PHASE;
+        }
     }
 
+    /**
+     * In case enums are not working over KryoNet
+     *
+     * @param i
+     */
+    public void setTurnState(int i) {
+        switch (i) {
+            case 1:
+                setTurnState(PlayStatus.ACTION_PHASE);
+                break;
+            case 2:
+                setTurnState(PlayStatus.BUY_PHASE);
+                break;
+            case 3:
+                setTurnState(PlayStatus.NO_PLAY_PHASE);
+                break;
+            default:
+                break;
+        }
+    }
+
+
+    public void playCard(Card card) {
+        setPlayedCard(card);
+        if (card instanceof ActionCard) playCard((ActionCard) card);
+        else if (card instanceof MoneyCard) playCard((MoneyCard) card);
+    }
+
+    public void playCard(ActionCard card) {
+        setPlayedCard(card);
+        if (canPlayActionCard()) {
+            cardLogic.doCardLogic(card);
+            getActiveUser().getGamePoints().modifyPlayAmounts(-1);
+        }
+    }
+
+    public void playCard(MoneyCard card) {
+        setPlayedCard(card);
+        if (isNoPlayPhase()) return;
+        else {
+            setTurnState(PlayStatus.BUY_PHASE);
+            cardLogic.doCardLogic(card);
+            getActiveUser().getGamePoints().modifyPlayAmounts(-1);
+        }
+    }
+
+
     private boolean canPlayActionCard() {
-        if (getActiveUser().getGamePoints().getPlaysAmount() > 0) {
+        if (getActiveUser().getGamePoints().getPlaysAmount() > 0 && turnState.equals(PlayStatus.ACTION_PHASE)) {
             return true;
         }
         return false;
     }
 
+    /**
+     * TODO Obsolete - delete after merge
+     * @param msg
+     */
     private void updateVictoryPts(GameUpdateMsg msg) {
         int pts = 0;
         for (User u : game.getPlayerList()) {
@@ -126,6 +204,7 @@ public class GameHandler {
         this.buyCard = buyCard;
     }
 
+
     public void updateGameHandler(GameUpdateMsg msg) {
         setBoard(msg.getBoard());
         setPlayedCard(msg.getPlayedCard());
@@ -138,21 +217,45 @@ public class GameHandler {
         updateVictoryPts(msg);
     }
 
-    private void buyCard(Card card) {
+    public void buyCard(ActionCard card) {
+        canBuyCard(card);
         Card boughtCard;
-        if (card instanceof ActionCard) {
-            boughtCard = getBoard().getActionField().pickCard(((ActionCard) card).getActionType());
-            getActiveUser().getUserCards().addCardtoDeck(boughtCard);
-        } else if (card instanceof EstateCard) {
-            boughtCard = getBoard().getBuyField().pickCard(((EstateCard) card).getEstateType());
-            getActiveUser().getUserCards().addCardtoDeck(boughtCard);
-            getActiveUser().getGamePoints().modifyWinningPoints(((EstateCard) boughtCard).getEstateValue());
-        } else {
-            boughtCard = getBoard().getBuyField().pickCard(((MoneyCard) card).getMoneyType());
-            getActiveUser().getUserCards().addCardtoDeck(boughtCard);
-        }
+        boughtCard = getBoard().getActionField().pickCard(card.getActionType());
+        getActiveUser().getUserCards().addCardtoDeck(boughtCard);
         int oldCoins = getActiveUser().getGamePoints().getCoins();
-        getActiveUser().getGamePoints().modifyCoins(oldCoins - boughtCard.getPrice());
+        getActiveUser().getGamePoints().setCoins(oldCoins - boughtCard.getPrice());
+        getActiveUser().getGamePoints().modifyBuyAmounts(-1);
+    }
+
+    public void buyCard(EstateCard card) {
+        canBuyCard(card);
+        Card boughtCard;
+        boughtCard = getBoard().getBuyField().pickCard(card.getEstateType());
+        getActiveUser().getUserCards().addCardtoDeck(boughtCard);
+        getActiveUser().getGamePoints().modifyWinningPoints(((EstateCard) boughtCard).getEstateValue());
+        int oldCoins = getActiveUser().getGamePoints().getCoins();
+        getActiveUser().getGamePoints().setCoins(oldCoins - boughtCard.getPrice());
+        getActiveUser().getGamePoints().modifyBuyAmounts(-1);
+    }
+
+    public void buyCard(MoneyCard card) {
+        canBuyCard(card);
+        Card boughtCard;
+        boughtCard = getBoard().getBuyField().pickCard(card.getMoneyType());
+        getActiveUser().getUserCards().addCardtoDeck(boughtCard);
+        int oldCoins = getActiveUser().getGamePoints().getCoins();
+        getActiveUser().getGamePoints().setCoins(oldCoins - boughtCard.getPrice());
+        getActiveUser().getGamePoints().modifyBuyAmounts(-1);
+    }
+
+    public void buyCard(Card card) {
+        if (card instanceof MoneyCard) {
+            buyCard((MoneyCard) card);
+        } else if (card instanceof ActionCard) {
+            buyCard((ActionCard) card);
+        } else {
+            buyCard((EstateCard) card);
+        }
     }
 
     public GameUpdateMsg updateGameHandlerTwo(GameUpdateMsg msg) {
@@ -172,14 +275,14 @@ public class GameHandler {
     }
 
     //LKDoc: new buy methods cause I can't cast on Cards - ActionType has only ActionCard and not Card
-    public Card buyActionCard(ActionType actionType) {
+    public Card buyCard(ActionType actionType) {
         Card boughtCard = getBoard().getActionField().pickCard(actionType);
         getActiveUser().getUserCards().addCardtoDeck(boughtCard);
         calculateCoinsOnActiveUser(boughtCard);
         return boughtCard;
     }
 
-    public Card buyEstateCard(EstateType estateType) {
+    public Card buyCard(EstateType estateType) {
         Card boughtCard = getBoard().getBuyField().pickCard(estateType);
         getActiveUser().getUserCards().addCardtoDeck(boughtCard);
         getActiveUser().getGamePoints().modifyWinningPoints(((EstateCard) boughtCard).getEstateValue());
@@ -187,7 +290,7 @@ public class GameHandler {
         return boughtCard;
     }
 
-    public Card buyMoneyCard(MoneyType moneyType) {
+    public Card buyCard(MoneyType moneyType) {
         Card boughtCard = getBoard().getBuyField().pickCard(moneyType);
         getActiveUser().getUserCards().addCardtoDeck(boughtCard);
         calculateCoinsOnActiveUser(boughtCard);
@@ -196,127 +299,48 @@ public class GameHandler {
 
     private void calculateCoinsOnActiveUser(Card boughtCard) {
         int oldCoins = getActiveUser().getGamePoints().getCoins();
-        getActiveUser().getGamePoints().modifyCoins(oldCoins - boughtCard.getPrice());
+        getActiveUser().getGamePoints().setCoins(oldCoins - boughtCard.getPrice());
+        getActiveUser().getGamePoints().modifyBuyAmounts(-1);
     }
 
     public Card buyCardTwo(GameUpdateMsg gameUpdateMsg) {
-        if(gameUpdateMsg.getActionTypeClicked() != null) {
+        if (gameUpdateMsg.getActionTypeClicked() != null) {
             System.out.println("Bought card Type: " + gameUpdateMsg.getActionTypeClicked());
-            return buyActionCard(gameUpdateMsg.getActionTypeClicked());
+            return buyCard(gameUpdateMsg.getActionTypeClicked());
         } else if (gameUpdateMsg.getEstateTypeClicked() != null) {
             System.out.println("Bought card Type: " + gameUpdateMsg.getEstateTypeClicked());
-            return buyEstateCard(gameUpdateMsg.getEstateTypeClicked());
+            return buyCard(gameUpdateMsg.getEstateTypeClicked());
         } else if (gameUpdateMsg.getMoneyTypeClicked() != null) {
             System.out.println("Bought card Type: " + gameUpdateMsg.getMoneyTypeClicked());
-            return buyMoneyCard(gameUpdateMsg.getMoneyTypeClicked());
+            return buyCard(gameUpdateMsg.getMoneyTypeClicked());
         } else {
             return null;
         }
     }
 
-    public void playCard() {
-        // TODO logic for card played
-        if (playedCard instanceof ActionCard) {
-            if (!canPlayActionCard()) {
-                return;
-            }
-            ActionCard card = (ActionCard) playedCard;
-            Action action = card.getAction();
-            switch (card.getActionType()) {
-                case BURGGRABEN:
-                    getActiveUser().getUserCards().addDeckCardtoHandCard(action.getCardCount());
-                    break;
-                case DORF:
-                    getActiveUser().getGamePoints().modifyPlayAmounts(action.getActionCount());
-                    getActiveUser().getUserCards().addDeckCardtoHandCard(action.getCardCount());
-                    break;
-                case HEXE:
-                    getActiveUser().getUserCards().addDeckCardtoHandCard(action.getCardCount());
-                    for (User user : game.getPlayerList()) {
-                        if (!user.getUserName().equals(getActiveUser().getUserName())) {
-                            user.getUserCards().addCardtoDeck(getBoard().getBuyField().pickCard(EstateType.FLUCH));
-                            user.getGamePoints().modifyWinningPoints(-1);
-                        }
-                    }
-                    break;
-                case HOLZFAELLER:
-                    getActiveUser().getGamePoints().modifyBuyAmounts(action.getBuyCount());
-                    getActiveUser().getGamePoints().modifyCoins(action.getMoneyValue());
-                    break;
-                case KELLER:
-                    //TODO discard/draw card other time
-                    getActiveUser().getGamePoints().modifyPlayAmounts(action.getActionCount());
-                    break;
-                case MARKT:
-                    getActiveUser().getUserCards().addDeckCardtoHandCard(1);
-                    getActiveUser().getGamePoints().modifyBuyAmounts(action.getBuyCount());
-                    getActiveUser().getGamePoints().modifyPlayAmounts(action.getActionCount());
-                    getActiveUser().getGamePoints().modifyCoins(action.getMoneyValue());
-                    break;
-                case MILIZ:
-                    getActiveUser().getGamePoints().modifyCoins(action.getMoneyValue());
 
-                    for (User user : game.getPlayerList()) {
-                        if (!user.getUserName().equals(getActiveUser().getUserName()) && user.getUserCards().getHandCards().size() >= 3) {
-                            LinkedList<Card> handCards = user.getUserCards().getHandCards();
-                            for (Card userCard : handCards) {
-                                if (userCard instanceof ActionCard) {
-                                    if (((ActionCard) userCard).getActionType().equals(ActionType.BURGGRABEN)) { // Beim Burggraben ist man geschützt vor miliz
-                                        continue;
-                                    }
-                                }
-                            }
-                            for (int i = 0; i < 3; i++) {
-                                user.getUserCards().playCard(handCards.getLast());
-                            }
-                        }
-                    }
-                    break;
-                case MINE:
-                    LinkedList<Card> userCards = getActiveUser().getUserCards().getHandCards();
-                    boolean hasSilver = false;
-                    int index = -1;
-                    for (Card usercard : userCards) {
-                        if (usercard instanceof MoneyCard) {
-                            if (((MoneyCard) usercard).getMoneyType().equals(MoneyType.SILBER)) {
-                                hasSilver = true;
-                                index = userCards.indexOf(usercard);
-                            } else if (hasSilver == false && usercard instanceof MoneyCard && ((MoneyCard) usercard).getMoneyType().equals(MoneyType.KUPFER)) {
-                                index = userCards.indexOf(usercard);
-                            }
-                        }
-                    }
-                    if (index >= 0) {
-                        userCards.remove(index);
-                        if (hasSilver) {
-                            userCards.add(getBoard().getBuyField().pickCard(MoneyType.GOLD));
-                        } else {
-                            userCards.add(getBoard().getBuyField().pickCard(MoneyType.SILBER));
-                        }
-                        getActiveUser().getUserCards().setHandCards(userCards);
-                    }
-                    break;
-                case SCHMIEDE:
-                    getActiveUser().getUserCards().addDeckCardtoHandCard(action.getCardCount());
-                    break;
-                case WERKSTATT:
-                    getActiveUser().getGamePoints().modifyBuyAmounts(action.getBuyCount());
-                    getActiveUser().getGamePoints().modifyCoins(action.getMoneyValue());
-                    break;
-            }
-            getActiveUser().getUserCards().playCard(card);
-        } else {
-            MoneyCard card = (MoneyCard) playedCard;
-            getActiveUser().getGamePoints().modifyCoins(card.getWorth());
-            getActiveUser().getUserCards().playCard(card);
-        }
+    private boolean isActionPhase() {
+        if (turnState.equals(PlayStatus.ACTION_PHASE)) return true;
+        return false;
     }
+
+    private boolean isBuyPhase() {
+        if (turnState.equals(PlayStatus.BUY_PHASE)) return true;
+        return false;
+    }
+
+    private boolean isNoPlayPhase() {
+        if (turnState.equals(PlayStatus.NO_PLAY_PHASE)) return true;
+        return false;
+    }
+
 
     private boolean canBuyCard(Card card) {
         if (card == null) {
             return false;
         }
-        if (getActiveUser().getGamePoints().getCoins() >= card.getPrice() && getActiveUser().getGamePoints().getBuyAmounts() > 0) {
+        if (getActiveUser().getGamePoints().getCoins() >= card.getPrice() && getActiveUser().getGamePoints().getBuyAmounts() > 0 && !getTurnState().equals(PlayStatus.NO_PLAY_PHASE)) {
+            setTurnState(PlayStatus.BUY_PHASE);
             return true;
         }
         return false;
@@ -324,7 +348,7 @@ public class GameHandler {
 
     private boolean canBuyCardTwo(GameUpdateMsg gameUpdateMsg) {
         boolean noCard = false;
-        if(gameUpdateMsg.getActionTypeClicked() != null) {
+        if (gameUpdateMsg.getActionTypeClicked() != null) {
             noCard = true;
         } else if (gameUpdateMsg.getEstateTypeClicked() != null) {
             noCard = true;
@@ -334,7 +358,7 @@ public class GameHandler {
             return noCard;
         }
 
-        if(noCard) {
+        if (noCard) {
             /*
             if (getActiveUser().getGamePoints().getCoins() >= card.getPrice()) {
                 return true;
@@ -345,11 +369,23 @@ public class GameHandler {
         return false;
     }
 
+    public PlayStatus getTurnState() {
+        return turnState;
+    }
+
+    public void setTurnState(PlayStatus turnState) {
+        this.turnState = turnState;
+    }
 
     public User getActiveUser() {
         return game.getActivePlayer();
     }
 
+    /**
+     * TODO obsolete - delete after merge
+     * @param user
+     * @param points
+     */
     private void changeVictoryPoints(User user, int points) {
         List<User> users = game.getPlayerList();
         for (User u : users) {

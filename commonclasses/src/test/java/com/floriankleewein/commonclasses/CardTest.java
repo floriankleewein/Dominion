@@ -7,8 +7,6 @@ import com.floriankleewein.commonclasses.Cards.EstateCard;
 import com.floriankleewein.commonclasses.Cards.EstateType;
 import com.floriankleewein.commonclasses.Cards.MoneyCard;
 import com.floriankleewein.commonclasses.Cards.MoneyType;
-import com.floriankleewein.commonclasses.Network.HasCheatedMessage;
-import com.floriankleewein.commonclasses.Network.SuspectMessage;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -57,7 +55,7 @@ public class CardTest {
         assertActionBooleans(actionCard, false, false, true, false);
 
         actionCard = new ActionCard(1, ActionType.WERKSTATT);
-        assertActionIntegers(actionCard, 1, 0, 1, 0,0,4);
+        assertActionIntegers(actionCard, 0, 0, 1, 0,0,4);
         assertActionBooleans(actionCard, false, false, false, false);
 
         actionCard = new ActionCard(1, ActionType.SCHMIEDE);
