@@ -45,16 +45,17 @@ public class GameHandler {
      */
     public GameHandler(Game game) {
         this.game = game;
-        cardLogic = new CardLogic(this);
     }
 
     public GameHandler() {
     }
 
+    /**
+     * Must be called first before any other methods can be used. Initialises starter cards for players
+     * and Gamepoints as well as starting cardlogic.
+     */
     public void prepareGame() {
-        if (cardLogic == null) {
-            cardLogic = new CardLogic(this);
-        }
+        cardLogic = new CardLogic(this);
         List<User> playerList = game.getPlayerList();
         if (playerList.size() >= 1) {
             for (User user : playerList) {
@@ -182,6 +183,10 @@ public class GameHandler {
         return false;
     }
 
+    /**
+     * TODO Obsolete - delete after merge
+     * @param msg
+     */
     private void updateVictoryPts(GameUpdateMsg msg) {
         int pts = 0;
         for (User u : game.getPlayerList()) {
@@ -199,6 +204,7 @@ public class GameHandler {
     public void setBuyCard(Card buyCard) {
         this.buyCard = buyCard;
     }
+
 
     public void updateGameHandler(GameUpdateMsg msg) {
         setBoard(msg.getBoard());
@@ -294,7 +300,8 @@ public class GameHandler {
 
     private void calculateCoinsOnActiveUser(Card boughtCard) {
         int oldCoins = getActiveUser().getGamePoints().getCoins();
-        getActiveUser().getGamePoints().modifyCoins(oldCoins - boughtCard.getPrice());
+        getActiveUser().getGamePoints().setCoins(oldCoins - boughtCard.getPrice());
+        getActiveUser().getGamePoints().modifyBuyAmounts(-1);
     }
 
     public Card buyCardTwo(GameUpdateMsg gameUpdateMsg) {
@@ -375,6 +382,11 @@ public class GameHandler {
         return game.getActivePlayer();
     }
 
+    /**
+     * TODO obsolete - delete after merge
+     * @param user
+     * @param points
+     */
     private void changeVictoryPoints(User user, int points) {
         List<User> users = game.getPlayerList();
         for (User u : users) {
