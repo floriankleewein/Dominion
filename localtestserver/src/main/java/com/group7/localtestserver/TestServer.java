@@ -1,7 +1,6 @@
 package com.group7.localtestserver;
 
 
-import com.floriankleewein.commonclasses.Board.ActionField;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
@@ -21,7 +20,6 @@ import com.floriankleewein.commonclasses.Network.GetPlayerMsg;
 import com.floriankleewein.commonclasses.Network.HasCheatedMessage;
 import com.floriankleewein.commonclasses.Network.Messages.NewTurnMessage;
 import com.floriankleewein.commonclasses.Network.Messages.NotEnoughRessourcesMsg;
-import com.floriankleewein.commonclasses.Network.NetworkInformationMsg;
 import com.floriankleewein.commonclasses.Network.ResetMsg;
 import com.floriankleewein.commonclasses.Network.ReturnPlayersMsg;
 import com.floriankleewein.commonclasses.Network.StartGameMsg;
@@ -30,7 +28,6 @@ import com.floriankleewein.commonclasses.Network.UpdatePlayerNamesMsg;
 import com.floriankleewein.commonclasses.User.User;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 public class TestServer {
@@ -42,7 +39,7 @@ public class TestServer {
     private boolean gamehandlerCalled = false;
     private final String Tag = "TEST-SERVER"; // debugging only
     private GameHandler gamehandler;
-    private Map<User, Connection> userConnections = new HashMap<>();
+    private Map<User, Connection> userClientConnectorMap = new HashMap<>(); // TODO fix bad variable name
 
 
     public TestServer() {
@@ -102,7 +99,7 @@ public class TestServer {
      */
     public void sendErrorMessage(int errorNumber) {
         NotEnoughRessourcesMsg msg = new NotEnoughRessourcesMsg(errorNumber); // 1 = notenoughAp, 2 = notEnough BP, 3 = not Enough Money, else just failure
-        Connection con = userConnections.get(gamehandler.getActiveUser());
+        Connection con = userClientConnectorMap.get(gamehandler.getActiveUser());
         con.sendTCP(msg);
     }
 
