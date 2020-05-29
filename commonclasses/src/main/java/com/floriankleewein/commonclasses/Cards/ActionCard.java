@@ -68,8 +68,8 @@ public class ActionCard extends Card {
             case WERKSTATT: //
                 setId(4);
                 action = new Action();
-                action.setCardCount(1);
-                action.setBuyCount(1);
+//                action.setCardCount(1);
+//                action.setBuyCount(1);
                 action.setMoneyValue(4);
                 // +4 geld
                 break;

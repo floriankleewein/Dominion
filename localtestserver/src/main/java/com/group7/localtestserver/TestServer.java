@@ -1,5 +1,7 @@
 package com.group7.localtestserver;
 
+
+import com.floriankleewein.commonclasses.Board.ActionField;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
@@ -17,6 +19,9 @@ import com.floriankleewein.commonclasses.Network.GameUpdateMsg;
 import com.floriankleewein.commonclasses.Network.GetGameMsg;
 import com.floriankleewein.commonclasses.Network.GetPlayerMsg;
 import com.floriankleewein.commonclasses.Network.HasCheatedMessage;
+import com.floriankleewein.commonclasses.Network.Messages.NewTurnMessage;
+import com.floriankleewein.commonclasses.Network.Messages.NotEnoughRessourcesMsg;
+import com.floriankleewein.commonclasses.Network.NetworkInformationMsg;
 import com.floriankleewein.commonclasses.Network.ResetMsg;
 import com.floriankleewein.commonclasses.Network.ReturnPlayersMsg;
 import com.floriankleewein.commonclasses.Network.StartGameMsg;
@@ -25,6 +30,7 @@ import com.floriankleewein.commonclasses.Network.UpdatePlayerNamesMsg;
 import com.floriankleewein.commonclasses.User.User;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 public class TestServer {
@@ -36,7 +42,7 @@ public class TestServer {
     private boolean gamehandlerCalled = false;
     private final String Tag = "TEST-SERVER"; // debugging only
     private GameHandler gamehandler;
-    private Map<User, Connection> userClientConnectorMap = new HashMap<>();
+    private Map<User, Connection> userConnections = new HashMap<>();
 
 
     public TestServer() {
@@ -88,6 +94,16 @@ public class TestServer {
         for (Connection con : server.getConnections()) {
             con.sendTCP(msg);
         }
+    }
+
+    /**
+     * Can be used to send ErrorMessages to the active User in the game.
+     * @param errorNumber
+     */
+    public void sendErrorMessage(int errorNumber) {
+        NotEnoughRessourcesMsg msg = new NotEnoughRessourcesMsg(errorNumber); // 1 = notenoughAp, 2 = notEnough BP, 3 = not Enough Money, else just failure
+        Connection con = userConnections.get(gamehandler.getActiveUser());
+        con.sendTCP(msg);
     }
 
 
@@ -154,6 +170,14 @@ public class TestServer {
 
                 } else if (object instanceof GetGameMsg) {
                     getGameMsgFunctionality();
+                } else if (object instanceof NewTurnMessage) {
+                    gamehandler.newTurn();
+                    ActivePlayerMessage msg = new ActivePlayerMessage();
+                    msg.setGame(gamehandler.getGame());
+                    server.sendToAllTCP(msg); // Todo check if sending to new active player is enough
+                    // OR
+//                    Connection activeCon = userConnections.get(game.getActivePlayer());
+//                    activeCon.sendTCP(msg);
                 }
             }
         });
@@ -248,6 +272,7 @@ public class TestServer {
     public void chatMessageFunctionality(Object object, Connection con){
         ChatMessage msg = (ChatMessage) object;
 
+
         String message = msg.getMessage();
 
         System.out.println("Receive msg from client:" + message);
@@ -319,9 +344,6 @@ public class TestServer {
         System.out.println("Got Get GameMsg on Server");
         msg.setGm(gamehandler);
         server.sendToAllTCP(msg);
+
     }
 }
-/*
-se2-demo.aau.at
-53200
- */
