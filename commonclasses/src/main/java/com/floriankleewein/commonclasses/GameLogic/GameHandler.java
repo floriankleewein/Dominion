@@ -1,7 +1,6 @@
 package com.floriankleewein.commonclasses.GameLogic;
 
 import com.floriankleewein.commonclasses.Board.Board;
-import com.floriankleewein.commonclasses.Cards.Action;
 import com.floriankleewein.commonclasses.Cards.ActionCard;
 import com.floriankleewein.commonclasses.Cards.ActionType;
 import com.floriankleewein.commonclasses.Cards.Card;
@@ -146,7 +145,7 @@ public class GameHandler {
                 setTurnState(PlayStatus.NO_PLAY_PHASE);
                 break;
             default:
-                return;
+                break;
         }
     }
 

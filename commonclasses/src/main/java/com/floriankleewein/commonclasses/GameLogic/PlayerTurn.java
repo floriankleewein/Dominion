@@ -5,6 +5,9 @@ import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.User.User;
 import com.floriankleewein.commonclasses.User.UserCards;
 
+/**
+ * TODO obselete - delete in master merge
+ */
 public class PlayerTurn {
     Game game;
     User user;
