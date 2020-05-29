@@ -16,6 +16,7 @@ import org.junit.Test;
 
 import java.util.LinkedList;
 
+
 public class CardLogicTest {
 
     private CardLogic m_cut;
@@ -35,11 +36,55 @@ public class CardLogicTest {
     }
 
     @Test
-    public void checkEffectsMine() { // TODO get privateTest for fixed hand to test logic
-        Card card = new ActionCard(5, ActionType.MINE);
-        addCardtoHand(card);
-        m_cut.setVariables(card);
-        Assert.assertEquals(true, m_cut.isReplaceMoneyCard());
+    public void checkEffectsMineNoMoney() {
+        Card card1 = new ActionCard(5, ActionType.MINE);
+        Card card2 = new ActionCard(5, ActionType.MINE);
+        Card card3 = new ActionCard(5, ActionType.MINE);
+        initCardsForMine(); // No cards in hand
+        addCardtoHand(card1);
+        addCardtoHand(card2);
+        addCardtoHand(card3);
+        m_cut.doCardLogic(card1);
+        Assert.assertEquals(2, gh.getActiveUser().getUserCards().getHandCards().size());
+    }
+
+    @Test
+    public void checkEffectsMineWithCopper() {
+        Card card1 = new ActionCard(5, ActionType.MINE);
+        Card card2 = new ActionCard(5, ActionType.MINE);
+        Card card3 = new MoneyCard(0, 1, MoneyType.KUPFER);
+        initCardsForMine(); // No cards in hand
+        addCardtoHand(card1);
+        addCardtoHand(card2);
+        addCardtoHand(card3);
+        m_cut.doCardLogic(card1);
+        Assert.assertEquals(1, gh.getActiveUser().getUserCards().getHandCards().stream().filter(card -> card.getId() == 15).count());
+    }
+
+    @Test
+    public void checkEffectsMineWithSilver() {
+        Card card1 = new ActionCard(5, ActionType.MINE);
+        Card card2 = new ActionCard(5, ActionType.MINE);
+        Card card3 = new MoneyCard(3, 2, MoneyType.SILBER);
+        initCardsForMine(); // No cards in hand
+        addCardtoHand(card1);
+        addCardtoHand(card2);
+        addCardtoHand(card3);
+        m_cut.doCardLogic(card1);
+        Assert.assertEquals(1, gh.getActiveUser().getUserCards().getHandCards().stream().filter(card -> card.getId() == 16).count());
+    }
+
+    @Test
+    public void checkEffectsMineWithGold() {
+        Card card1 = new ActionCard(5, ActionType.MINE);
+        Card card2 = new ActionCard(5, ActionType.MINE);
+        Card card3 = new MoneyCard(6, 3, MoneyType.GOLD);
+        initCardsForMine(); // No cards in hand
+        addCardtoHand(card1);
+        addCardtoHand(card2);
+        addCardtoHand(card3);
+        m_cut.doCardLogic(card1);
+        Assert.assertEquals(1, gh.getActiveUser().getUserCards().getHandCards().stream().filter(card -> card.getId() == 16).count());
     }
 
     @Test
@@ -287,5 +332,10 @@ public class CardLogicTest {
     private void addCardtoHand(Card card) {
         LinkedList<Card> newHand = gh.getActiveUser().getUserCards().getHandCards();
         newHand.add(card);
+    }
+
+    private void initCardsForMine() {
+        LinkedList<Card> newHand = new LinkedList<>();
+        gh.getActiveUser().getUserCards().setHandCards(newHand);
     }
 }

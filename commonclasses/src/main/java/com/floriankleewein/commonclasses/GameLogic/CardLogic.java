@@ -170,8 +170,8 @@ public class CardLogic {
     private void replaceOldMoneyCard() {
         LinkedList<Card> hand = gameHandler.getActiveUser().getUserCards().getHandCards();
         int indexOfCard = -1;
-        boolean hasCopperMoney = hand.stream().filter(card -> card instanceof MoneyCard).anyMatch(card -> card.getId() == 13); //Kuper = 13, Silber = 14 etc.
-        boolean hasSilverMoney = hand.stream().filter(card -> card instanceof MoneyCard).anyMatch(card -> card.getId() == 14);
+        boolean hasCopperMoney = hand.stream().filter(card -> card instanceof MoneyCard).anyMatch(card -> card.getId() == 14); //Kuper = 13, Silber = 14 etc.
+        boolean hasSilverMoney = hand.stream().filter(card -> card instanceof MoneyCard).anyMatch(card -> card.getId() == 15);
         if (hasSilverMoney) {
             for (Card card : hand) {
                 if (card instanceof MoneyCard) {
