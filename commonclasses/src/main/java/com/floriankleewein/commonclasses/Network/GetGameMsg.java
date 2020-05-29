@@ -1,18 +1,28 @@
 package com.floriankleewein.commonclasses.Network;
 
+import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.GameLogic.GameHandler;
+import com.floriankleewein.commonclasses.GameLogic.PlayStatus;
 
 public class GetGameMsg extends BaseMessage {
-    private GameHandler gm;
 
 
-    public GameHandler getGm() {
-        return gm;
+    private Game game;
+    private PlayStatus playStatus;
+
+    public Game getGame() {
+        return game;
     }
 
-    public void setGm(GameHandler gm) {
-        this.gm = gm;
+    public void setGame(Game game) {
+        this.game = game;
     }
 
+    public void setPlayStatus(PlayStatus playStatus) {
+        this.playStatus = playStatus;
+    }
 
+    public PlayStatus getPlayStatus() {
+        return playStatus;
+    }
 }

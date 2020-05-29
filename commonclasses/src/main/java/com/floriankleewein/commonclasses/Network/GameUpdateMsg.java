@@ -29,12 +29,16 @@ public class GameUpdateMsg extends BaseMessage {
     private ActionType actionTypeClicked;
     private EstateType estateTypeClicked;
 
+
+    private boolean newHandCards;
+
     public GameUpdateMsg() {
         /*
         for (User u : game.getPlayerList()) {
             victoryPointsChange.put(u, 0);
         }
         */
+        newHandCards = false;
     }
 
     public PlayStatus getTurnStatus() {
@@ -138,4 +142,14 @@ public class GameUpdateMsg extends BaseMessage {
     public void setBoughtCard(Card boughtCard) {
         this.boughtCard = boughtCard;
     }
+
+    public boolean isNewHandCards() {
+        return newHandCards;
+    }
+
+    public void setNewHandCards(boolean newHandCards) {
+        this.newHandCards = newHandCards;
+    }
+
 }
+

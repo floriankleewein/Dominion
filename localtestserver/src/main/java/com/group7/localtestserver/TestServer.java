@@ -18,6 +18,8 @@ import com.floriankleewein.commonclasses.Network.GameUpdateMsg;
 import com.floriankleewein.commonclasses.Network.GetGameMsg;
 import com.floriankleewein.commonclasses.Network.GetPlayerMsg;
 import com.floriankleewein.commonclasses.Network.HasCheatedMessage;
+import com.floriankleewein.commonclasses.Network.Messages.GameLogicMsg.BuyCardMsg;
+import com.floriankleewein.commonclasses.Network.Messages.GameLogicMsg.PlayCardMsg;
 import com.floriankleewein.commonclasses.Network.Messages.NewTurnMessage;
 import com.floriankleewein.commonclasses.Network.Messages.NotEnoughRessourcesMsg;
 import com.floriankleewein.commonclasses.Network.ResetMsg;
@@ -171,10 +173,15 @@ public class TestServer {
                     getGameMsgFunctionality();
                 } else if (object instanceof NewTurnMessage) {
                     newTurnMsgFunctionality();
+                } else if (object instanceof PlayCardMsg) {
+                    playCardmsgFunctionality(object);
+                } else if (object instanceof BuyCardMsg) {
+                    buyCardmsgFunctionality(object);
                 }
             }
         });
     }
+
 
     /**
      * Creates Starter Deck for all players and returns true if game was created successfully.
@@ -238,16 +245,17 @@ public class TestServer {
         StartGameMsg msg = new StartGameMsg();
         //Check if game started successfully, and notify client
         System.out.println("Got the StartGameMsg on Server");
+
         if (setupGame()) {
             msg.setFeedbackUI(0);
-            msg.setGame(getGame());
-            msg.setGameHandler(gamehandler);
+            msg.setGame(gamehandler.getGame());
             // Send message to all clients, TODO they need to be in lobby
             server.sendToAllTCP(msg);
             ActivePlayerMessage activePlayerMsg = new ActivePlayerMessage();
             activePlayerMsg.setGame(getGame());
             Connection activePlayerCon = userClientConnectorMap.get(game.getActivePlayer());
             activePlayerCon.sendTCP(activePlayerMsg);
+
         } else { // fehlerfall
             msg.setFeedbackUI(1);
             con.sendTCP(msg);
@@ -335,7 +343,8 @@ public class TestServer {
     public void getGameMsgFunctionality() {
         GetGameMsg msg = new GetGameMsg();
         System.out.println("Got Get GameMsg on Server");
-        msg.setGm(gamehandler);
+        msg.setGame(gamehandler.getGame());
+        msg.setPlayStatus(gamehandler.getTurnState());
         server.sendToAllTCP(msg);
     }
 
@@ -344,5 +353,27 @@ public class TestServer {
         ActivePlayerMessage msg = new ActivePlayerMessage();
         msg.setGame(gamehandler.getGame());
         server.sendToAllTCP(msg);
+    }
+
+    private void buyCardmsgFunctionality(Object object) {
+        BuyCardMsg msg = (BuyCardMsg) object;
+        BuyCardMsg returnmsg = new BuyCardMsg();
+        if (msg.getActionTypeClicked() != null) {
+            returnmsg.setBoughtCard(gamehandler.buyCard(msg.getActionTypeClicked()));
+        } else if (msg.getEstateTypeClicked() != null) {
+            returnmsg.setBoughtCard(gamehandler.buyCard(msg.getEstateTypeClicked()));
+        } else if (msg.getMoneyTypeClicked() != null) {
+            returnmsg.setBoughtCard(gamehandler.buyCard(msg.getMoneyTypeClicked()));
+        }
+    }
+
+    private void playCardmsgFunctionality(Object object) {
+        PlayCardMsg msg = (PlayCardMsg) object;
+        System.out.println(msg.getPlayedCard().getId() + "is played");
+        gamehandler.playCard(msg.getPlayedCard());
+        PlayCardMsg returnmsg = new PlayCardMsg();
+        returnmsg.setGame(gamehandler.getGame());
+        returnmsg.setPlayedCard(msg.getPlayedCard());
+        returnmsg.setPlayStatus(gamehandler.getTurnState());
     }
 }

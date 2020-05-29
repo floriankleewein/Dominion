@@ -58,26 +58,22 @@ public class GameHandler {
         List<User> playerList = game.getPlayerList();
         if (playerList.size() >= 1) {
             for (User user : playerList) {
-                GamePoints gp = new GamePoints();
-                gp.setWinningPoints(3);
-                user.setGamePoints(gp);
+                user.setUpforGame();
                 LinkedList<Card> generatedCards = new LinkedList<>();
                 UserCards ucards = new UserCards();
                 for (int i = 0; i < MONEY_CARDS; i++) {
-                    Card copper = new MoneyCard(0, 0, MoneyType.KUPFER);
+                    Card copper = new MoneyCard(0, 1, MoneyType.KUPFER);
                     generatedCards.add(copper);
                 }
                 for (int i = 0; i < ANWESEN_CARDS; i++) {
                     Card anwesen = new EstateCard(2, 1, EstateType.ANWESEN);
                     generatedCards.add(anwesen);
                 }
-                ucards.getFirstCards(generatedCards);
-                user.setUserCards(ucards);
+                user.getUserCards().getFirstCards(generatedCards);
             }
             setBoard(new Board());
             game.setPlayerList(playerList);
             setNewActivePlayer();
-            setTurnState(PlayStatus.ACTION_PHASE);
         }
     }
 
@@ -89,7 +85,11 @@ public class GameHandler {
             int active = game.getPlayerList().indexOf(getActiveUser());
             game.setActivePlayer(game.getPlayerList().get((active + 1) % players));
         }
-        setTurnState(PlayStatus.ACTION_PHASE);
+        if (checkHandCards()) {
+            turnState = PlayStatus.ACTION_PHASE;
+        } else {
+            turnState = PlayStatus.PLAY_COINS;
+        }
     }
 
     /**
@@ -168,9 +168,9 @@ public class GameHandler {
         setPlayedCard(card);
         if (isNoPlayPhase()) return;
         else {
-            setTurnState(PlayStatus.BUY_PHASE);
+            //setTurnState(PlayStatus.BUY_PHASE);
             cardLogic.doCardLogic(card);
-            getActiveUser().getGamePoints().modifyPlayAmounts(-1);
+            //getActiveUser().getGamePoints().modifyPlayAmounts(-1);
         }
     }
 
@@ -394,6 +394,14 @@ public class GameHandler {
             }
         }
         game.setPlayerList(users);
+    }
+    public boolean checkHandCards() {
+        for (int i = 0; i < getActiveUser().getUserCards().getHandCards().size(); i++) {
+            if (getActiveUser().getUserCards().getHandCards().get(i) instanceof ActionCard) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void setGame() {

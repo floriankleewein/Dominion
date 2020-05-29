@@ -17,7 +17,8 @@ public class UserCards {
     private LinkedList<Card> HandCards;
     private LinkedList<Card> DiscardCards;
 
-    public UserCards() {}
+    public UserCards() {
+    }
 
     public void getFirstCards(LinkedList<Card> GivenCards) {
         this.Deck = new LinkedList<Card>();
@@ -59,7 +60,12 @@ public class UserCards {
     }
 
     public void playCard(Card PlayedCard) {
-        this.HandCards.remove(PlayedCard);
+        for (int i = 0; i < getHandCards().size(); i++) {
+            if (PlayedCard.getId() == getHandCards().get(i).getId()) {
+                getHandCards().remove(i);
+                break;
+            }
+        }
         this.DiscardCards.add(PlayedCard);
     }
 
@@ -86,7 +92,7 @@ public class UserCards {
     }
 
     public boolean hasMoat() {
-        if(getHandCards().stream().anyMatch(card -> "0".matches(String.valueOf(card.getId())))){
+        if (getHandCards().stream().anyMatch(card -> "0".matches(String.valueOf(card.getId())))) {
             return true;
         }
         return false;
