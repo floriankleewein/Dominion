@@ -85,6 +85,13 @@ public class UserCards {
         }
     }
 
+    public boolean hasMoat() {
+        if(getHandCards().stream().anyMatch(card -> "0".matches(String.valueOf(card.getId())))){
+            return true;
+        }
+        return false;
+    }
+
 
     public LinkedList<Card> getDeck() {
         return Deck;

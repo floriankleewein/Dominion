@@ -39,11 +39,11 @@ public class ActionDialogHandler extends AppCompatDialogFragment {
     private ImageButton buttonSchmiede;
     private ImageButton buttonWerkstatt;
 
-    private static String ACTION = "Action";
-    private static String ACTION_TYPE = "ActionType: ";
-    private static String CARD_COUNT = ", Card Count: ";
-    private static String MONEY_VALUE = ", Money Value: " ;
-    private static String ACTION_COUNT = ", Action Count: ";
+    private final String action = "Action";
+    private final String actiontype = "ActionType: ";
+    private final String cardcount = ", Card Count: ";
+    private final String moneyvalue = ", Money Value: " ;
+    private final String actioncount = ", Action Count: ";
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -70,55 +70,55 @@ public class ActionDialogHandler extends AppCompatDialogFragment {
                                     ActionCard actionCard = (ActionCard) card;
                                     switch (actionCard.getActionType()) {
                                         case HEXE:
-                                            Log.i(ACTION,ACTION_TYPE + actionCard.getActionType() +
-                                                    CARD_COUNT + actionCard.getAction().getCardCount() +
+                                            Log.i(action, actiontype + actionCard.getActionType() +
+                                                    cardcount + actionCard.getAction().getCardCount() +
                                                     ", Curse Count: " + actionCard.getAction().getCurseCount());
                                             break;
                                         case WERKSTATT:
-                                            Log.i(ACTION, ACTION_TYPE + actionCard.getActionType() +
-                                                    CARD_COUNT + actionCard.getAction().getCardCount() +
+                                            Log.i(action, actiontype + actionCard.getActionType() +
+                                                    cardcount + actionCard.getAction().getCardCount() +
                                                     ", Max Money Value: " + actionCard.getAction().getMaxMoneyValue());
                                             break;
                                         case SCHMIEDE:
-                                            Log.i(ACTION, ACTION_TYPE + actionCard.getActionType() +
-                                                    CARD_COUNT + actionCard.getAction().getCardCount());
+                                            Log.i(action, actiontype + actionCard.getActionType() +
+                                                    cardcount + actionCard.getAction().getCardCount());
                                             break;
                                         case MINE:
-                                            Log.i(ACTION, ACTION_TYPE + actionCard.getActionType() +
-                                                    CARD_COUNT + actionCard.getAction().getCardCount() +
+                                            Log.i(action, actiontype + actionCard.getActionType() +
+                                                    cardcount + actionCard.getAction().getCardCount() +
                                                     ", Take MoneyCard That Cost Three More Than Old: " + actionCard.getAction().isTakeMoneyCardThatCostThreeMoreThanOld() +
                                                     ", Take Card On Hand: " + actionCard.getAction().isTakeCardOnHand());
                                             break;
                                         case MILIZ:
-                                            Log.i(ACTION, ACTION_TYPE + actionCard.getActionType() +
-                                                    MONEY_VALUE + actionCard.getAction().getMoneyValue() +
+                                            Log.i(action, actiontype + actionCard.getActionType() +
+                                                    moneyvalue + actionCard.getAction().getMoneyValue() +
                                                     ", Throw Every UserCards Until Three Left: " + actionCard.getAction().isThrowEveryUserCardsUntilThreeLeft());
                                             break;
                                         case MARKT:
-                                            Log.i(ACTION, ACTION_TYPE + actionCard.getActionType() +
-                                                    CARD_COUNT + actionCard.getAction().getCardCount() +
-                                                    ACTION_COUNT + actionCard.getAction().getActionCount() +
-                                                    MONEY_VALUE + actionCard.getAction().getMoneyValue() +
+                                            Log.i(action, actiontype + actionCard.getActionType() +
+                                                    cardcount + actionCard.getAction().getCardCount() +
+                                                    actioncount + actionCard.getAction().getActionCount() +
+                                                    moneyvalue + actionCard.getAction().getMoneyValue() +
                                                     ", Buy Count: " + actionCard.getAction().getBuyCount());
                                             break;
                                         case KELLER:
-                                            Log.i(ACTION, ACTION_TYPE + actionCard.getActionType() +
-                                                    ACTION_COUNT + actionCard.getAction().getActionCount() +
+                                            Log.i(action, actiontype + actionCard.getActionType() +
+                                                    actioncount + actionCard.getAction().getActionCount() +
                                                     ", Throw Any Amount Cards: " + actionCard.getAction().isThrowAnyAmountCards());
                                             break;
                                         case HOLZFAELLER:
-                                            Log.i(ACTION, ACTION_TYPE + actionCard.getActionType() +
+                                            Log.i(action, actiontype + actionCard.getActionType() +
                                                     ", Buy Count: " + actionCard.getAction().getBuyCount() +
-                                                    MONEY_VALUE + actionCard.getAction().getMoneyValue());
+                                                    moneyvalue + actionCard.getAction().getMoneyValue());
                                             break;
                                         case DORF:
-                                            Log.i(ACTION, ACTION_TYPE + actionCard.getActionType() +
-                                                    CARD_COUNT + actionCard.getAction().getCardCount() +
-                                                    ACTION_COUNT + actionCard.getAction().getActionCount());
+                                            Log.i(action, actiontype + actionCard.getActionType() +
+                                                    cardcount + actionCard.getAction().getCardCount() +
+                                                    actioncount + actionCard.getAction().getActionCount());
                                             break;
                                         case BURGGRABEN:
-                                            Log.i(ACTION, ACTION_TYPE + actionCard.getActionType() +
-                                                    CARD_COUNT + actionCard.getAction().getCardCount() +
+                                            Log.i(action, actiontype + actionCard.getActionType() +
+                                                    cardcount + actionCard.getAction().getCardCount() +
                                                     ", Throw Every UserCards Until Three Left: " + actionCard.getAction().isThrowEveryUserCardsUntilThreeLeft());
                                             break;
                                     }
