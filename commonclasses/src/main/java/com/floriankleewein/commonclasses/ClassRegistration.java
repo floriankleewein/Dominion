@@ -17,7 +17,6 @@ import com.floriankleewein.commonclasses.Chat.ChatMessage;
 import com.floriankleewein.commonclasses.CheatFunction.CheatService;
 import com.floriankleewein.commonclasses.GameLogic.CardLogic;
 import com.floriankleewein.commonclasses.GameLogic.GameHandler;
-import com.floriankleewein.commonclasses.GameLogic.PlayerTurn;
 import com.floriankleewein.commonclasses.Network.ActivePlayerMessage;
 import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
 import com.floriankleewein.commonclasses.Network.AllPlayersInDominionActivityMsg;
@@ -48,7 +47,7 @@ public class ClassRegistration {
             CreateGameMsg.class, AddPlayerSuccessMsg.class, ArrayList.class, User.class, ResetMsg.class, StartGameMsg.class, ChatMessage.class,
             HasCheatedMessage.class, ActivePlayerMessage.class, UpdatePlayerNamesMsg.class, SuspectMessage.class, CheckButtonsMsg.class,
             GetGameMsg.class, UserCards.class, GamePoints.class, LinkedList.class, Card.class, MoneyCard.class, ActionCard.class,
-            GameHandler.class, PlayerTurn.class, Action.class, Board.class, BuyField.class, ActionType.class,
+            GameHandler.class, Action.class, Board.class, BuyField.class, ActionType.class,
             EstateType.class, MoneyType.class, CheatService.class, EstateCard.class, ActionField.class, AllPlayersInDominionActivityMsg.class,
             HashMap.class, NewTurnMessage.class, NotEnoughRessourcesMsg.class, CardLogic.class
     };

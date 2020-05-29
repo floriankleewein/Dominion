@@ -17,6 +17,7 @@ import org.junit.Test;
 import java.util.LinkedList;
 
 
+
 public class CardLogicTest {
 
     private CardLogic m_cut;
@@ -222,6 +223,7 @@ public class CardLogicTest {
         Card card = new ActionCard(3, ActionType.WERKSTATT);
         m_cut.setVariables(card);
         Assert.assertEquals(4, m_cut.getMoneyValue());
+        Assert.assertEquals(1, m_cut.getAddBuyPts());
     }
 
     @Test
@@ -229,8 +231,10 @@ public class CardLogicTest {
         Card card = new ActionCard(3, ActionType.WERKSTATT);
         addCardtoHand(card);
         Assert.assertEquals(0, gh.getActiveUser().getGamePoints().getCoins());
+        Assert.assertEquals(1, gh.getGame().getActivePlayer().getGamePoints().getBuyAmounts());
         m_cut.doCardLogic(card);
         Assert.assertEquals(4, gh.getActiveUser().getGamePoints().getCoins());
+        Assert.assertEquals(2, gh.getGame().getActivePlayer().getGamePoints().getBuyAmounts());
         Assert.assertEquals(5, gh.getActiveUser().getUserCards().getHandCards().size());
     }
 
