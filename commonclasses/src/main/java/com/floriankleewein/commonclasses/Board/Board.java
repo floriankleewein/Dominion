@@ -7,7 +7,6 @@ public class Board {
     private static Board board;
 
     public Board() {
-        // TODO: Vielleicht füge Maximale Kartenanzahl hinzu
         this.actionField = new ActionField();
         this.buyField = new BuyField();
     }
