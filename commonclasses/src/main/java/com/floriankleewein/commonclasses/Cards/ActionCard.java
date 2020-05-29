@@ -70,6 +70,7 @@ public class ActionCard extends Card {
                 action = new Action();
 //                action.setCardCount(1);
 //                action.setBuyCount(1);
+                action.setBuyCount(1);
                 action.setMoneyValue(4);
                 // +4 geld
                 break;
