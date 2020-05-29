@@ -26,6 +26,7 @@ import com.floriankleewein.commonclasses.Network.StartGameMsg;
 import com.floriankleewein.commonclasses.Network.SuspectMessage;
 import com.floriankleewein.commonclasses.Network.UpdatePlayerNamesMsg;
 import com.floriankleewein.commonclasses.User.User;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -95,6 +96,7 @@ public class TestServer {
 
     /**
      * Can be used to send ErrorMessages to the active User in the game.
+     *
      * @param errorNumber
      */
     public void sendErrorMessage(int errorNumber) {
@@ -120,23 +122,23 @@ public class TestServer {
         return game;
     }
 
-    public void registerClasses(){
+    public void registerClasses() {
 
         ClassRegistration reg = new ClassRegistration();
         reg.registerAllClassesForServer(server);
     }
 
-    public void addListeners(){
+    public void addListeners() {
         server.addListener(new Listener() {
             public void received(Connection con, Object object) {
-               if (object instanceof CreateGameMsg) {
+                if (object instanceof CreateGameMsg) {
                     createGameMsgFunctionality(object, con);
 
                 } else if (object instanceof AddPlayerSuccessMsg) {
                     addPlayerSuccessMsgFunctionality(object, con);
 
                 } else if (object instanceof ResetMsg) {
-                   resetMsgFunctionality();
+                    resetMsgFunctionality();
 
                 } else if (object instanceof StartGameMsg) {
                     startGameMsgFunctionality(con);
@@ -157,7 +159,7 @@ public class TestServer {
                     suspectMessageFunctionality(object);
 
                 } else if (object instanceof GameUpdateMsg) {
-                   gameUpdateMsgFunctionality(object);
+                    gameUpdateMsgFunctionality(object);
 
                 } else if (object instanceof CheckButtonsMsg) {
                     checkButtonsMsgFunctionality(object, con);
@@ -168,13 +170,7 @@ public class TestServer {
                 } else if (object instanceof GetGameMsg) {
                     getGameMsgFunctionality();
                 } else if (object instanceof NewTurnMessage) {
-                    gamehandler.newTurn();
-                    ActivePlayerMessage msg = new ActivePlayerMessage();
-                    msg.setGame(gamehandler.getGame());
-                    server.sendToAllTCP(msg); // Todo check if sending to new active player is enough
-                    // OR
-//                    Connection activeCon = userConnections.get(game.getActivePlayer());
-//                    activeCon.sendTCP(msg);
+                    newTurnMsgFunctionality();
                 }
             }
         });
@@ -199,7 +195,7 @@ public class TestServer {
         }
     }
 
-    public void createGameMsgFunctionality(Object object, Connection con){
+    public void createGameMsgFunctionality(Object object, Connection con) {
         createGame();
         CreateGameMsg startGameMsg = (CreateGameMsg) object;
         startGameMsg.setGame(getGame());
@@ -207,7 +203,7 @@ public class TestServer {
         con.sendTCP(startGameMsg);
     }
 
-    public void addPlayerSuccessMsgFunctionality(Object object, Connection con){
+    public void addPlayerSuccessMsgFunctionality(Object object, Connection con) {
         AddPlayerSuccessMsg addPlayerMsg = (AddPlayerSuccessMsg) object;
         String name = addPlayerMsg.getPlayerName();
         User player = new User(name);
@@ -238,7 +234,7 @@ public class TestServer {
         System.out.println("Playerlist cleared!");
     }
 
-    public void startGameMsgFunctionality(Connection con){
+    public void startGameMsgFunctionality(Connection con) {
         StartGameMsg msg = new StartGameMsg();
         //Check if game started successfully, and notify client
         System.out.println("Got the StartGameMsg on Server");
@@ -260,13 +256,13 @@ public class TestServer {
 
     }
 
-    public void getPlayerMsgFunctionality(Connection con){
+    public void getPlayerMsgFunctionality(Connection con) {
         System.out.println("Got the GetPlayerMsg");
         ReturnPlayersMsg msg = new ReturnPlayersMsg();
         con.sendTCP(msg);
     }
 
-    public void chatMessageFunctionality(Object object, Connection con){
+    public void chatMessageFunctionality(Object object, Connection con) {
         ChatMessage msg = (ChatMessage) object;
 
 
@@ -286,7 +282,7 @@ public class TestServer {
         }
     }
 
-    public void hasCheatedMessageFunctionality(Object object){
+    public void hasCheatedMessageFunctionality(Object object) {
         HasCheatedMessage CheatMsg = (HasCheatedMessage) object;
         //game.getCheatService().addCardtoUser(CheatMsg.getName());
         // Not working now because the User has now DeckCards --> Null Pointer
@@ -294,7 +290,7 @@ public class TestServer {
         sendCheatInformation(CheatMsg.getName());
     }
 
-    public void updatePlayerNamesMsgFunctionality(){
+    public void updatePlayerNamesMsgFunctionality() {
         UpdatePlayerNamesMsg msg = new UpdatePlayerNamesMsg();
         for (User x : game.getPlayerList()) {
             msg.getNameList().add(x.getUserName());
@@ -302,7 +298,7 @@ public class TestServer {
         server.sendToAllTCP(msg);
     }
 
-    public void suspectMessageFunctionality(Object object){
+    public void suspectMessageFunctionality(Object object) {
         SuspectMessage msg = (SuspectMessage) object;
         System.out.println("GOT SUSPECT MESSAGE FROM" + msg.getUserName());
         //game.getCheatService().suspectUser(msg.getSuspectedUserName(),msg.getUserName());
@@ -310,7 +306,7 @@ public class TestServer {
         sendSuspectInformation(msg.getSuspectedUserName(), msg.getUserName());
     }
 
-    public void gameUpdateMsgFunctionality(Object object){
+    public void gameUpdateMsgFunctionality(Object object) {
         GameUpdateMsg gameUpdateMsg = (GameUpdateMsg) object;
         if (gameUpdateMsg.getGameHandler() != null) {
             updateAll(gameUpdateMsg);
@@ -319,7 +315,7 @@ public class TestServer {
         }
     }
 
-    public void checkButtonsMsgFunctionality(Object object, Connection con){
+    public void checkButtonsMsgFunctionality(Object object, Connection con) {
         CheckButtonsMsg msg = (CheckButtonsMsg) object;
         if (hasGame == false) {
             msg.setCreateValue(true);
@@ -331,16 +327,22 @@ public class TestServer {
         con.sendTCP(msg);
     }
 
-    public void allPlayersInDominionActivityMsgFunctionality(Object object){
+    public void allPlayersInDominionActivityMsgFunctionality(Object object) {
         AllPlayersInDominionActivityMsg msg = (AllPlayersInDominionActivityMsg) object;
         server.sendToAllTCP(msg);
     }
 
-    public void getGameMsgFunctionality(){
+    public void getGameMsgFunctionality() {
         GetGameMsg msg = new GetGameMsg();
         System.out.println("Got Get GameMsg on Server");
         msg.setGm(gamehandler);
         server.sendToAllTCP(msg);
+    }
 
+    public void newTurnMsgFunctionality() {
+        gamehandler.newTurn();
+        ActivePlayerMessage msg = new ActivePlayerMessage();
+        msg.setGame(gamehandler.getGame());
+        server.sendToAllTCP(msg);
     }
 }
