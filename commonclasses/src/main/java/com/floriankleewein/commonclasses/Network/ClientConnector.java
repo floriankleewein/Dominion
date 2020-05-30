@@ -251,7 +251,22 @@ public class ClientConnector {
     }
 
     public void sendbuyCard(BuyCardMsg msg) {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                client.sendTCP(msg);
+            }
+        });
+        thread.start();
 
+        client.addListener(new Listener() {
+            public void received(Connection con, Object object) {
+                if (object instanceof BuyCardMsg) {
+                    BuyCardMsg msg1 = (BuyCardMsg) object;
+                    callbackMap.get(BuyCardMsg.class).callback(msg1);
+                }
+            }
+        });
     }
 
     public GameHandler getGameHandler() {

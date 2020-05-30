@@ -359,12 +359,16 @@ public class TestServer {
         BuyCardMsg msg = (BuyCardMsg) object;
         BuyCardMsg returnmsg = new BuyCardMsg();
         if (msg.getActionTypeClicked() != null) {
+            System.out.println(msg.getActionTypeClicked() + " buyed");
             returnmsg.setBoughtCard(gamehandler.buyCard(msg.getActionTypeClicked()));
         } else if (msg.getEstateTypeClicked() != null) {
+            System.out.println(msg.getEstateTypeClicked() + " buyed");
             returnmsg.setBoughtCard(gamehandler.buyCard(msg.getEstateTypeClicked()));
         } else if (msg.getMoneyTypeClicked() != null) {
+            System.out.println(msg.getMoneyTypeClicked() + " buyed");
             returnmsg.setBoughtCard(gamehandler.buyCard(msg.getMoneyTypeClicked()));
         }
+        server.sendToAllTCP(returnmsg);
     }
 
     private void playCardmsgFunctionality(Object object) {
@@ -375,5 +379,6 @@ public class TestServer {
         returnmsg.setGame(gamehandler.getGame());
         returnmsg.setPlayedCard(msg.getPlayedCard());
         returnmsg.setPlayStatus(gamehandler.getTurnState());
+        server.sendToAllTCP(returnmsg);
     }
 }
