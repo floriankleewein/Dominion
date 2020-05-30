@@ -69,6 +69,7 @@ public class ActionDialogHandler extends AppCompatDialogFragment {
                                 } else {
                                     ActionCard actionCard = (ActionCard) card;
                                     switch (actionCard.getActionType()) {
+
                                         case HEXE:
                                             Log.i(actionConst, actiontypeConst + actionCard.getActionType() +
                                                     cardcountConst + actionCard.getAction().getCardCount() +
@@ -121,6 +122,8 @@ public class ActionDialogHandler extends AppCompatDialogFragment {
                                                     cardcountConst + actionCard.getAction().getCardCount() +
                                                     ", Throw Every UserCards Until Three Left: " + actionCard.getAction().isThrowEveryUserCardsUntilThreeLeft());
                                             break;
+                                        default:
+                                            Log.e("ERROR", "critical error @ actionDialogHandler. I am the default case!");
                                     }
                                 }
                             }
