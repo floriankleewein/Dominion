@@ -59,6 +59,10 @@ public class UserCards {
         }
     }
 
+    public void addCardToDiscardPile(Card card) {
+        this.DiscardCards.add(card);
+    }
+
     public void playCard(Card PlayedCard) {
         for (int i = 0; i < getHandCards().size(); i++) {
             if (PlayedCard.getId() == getHandCards().get(i).getId()) {
