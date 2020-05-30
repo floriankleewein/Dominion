@@ -276,25 +276,37 @@ public class GameHandler {
 
     //LKDoc: new buy methods cause I can't cast on Cards - ActionType has only ActionCard and not Card
     public Card buyCard(ActionType actionType) {
-        Card boughtCard = getBoard().getActionField().pickCard(actionType);
-        getActiveUser().getUserCards().addCardToDiscardPile(boughtCard);
-        calculateCoinsOnActiveUser(boughtCard);
-        return boughtCard;
+        Card checkCard = getBoard().getActionField().getActionCard(actionType);
+        if (canBuyCard(checkCard)) {
+            Card boughtCard = getBoard().getActionField().pickCard(actionType);
+            getActiveUser().getUserCards().addCardToDiscardPile(boughtCard);
+            calculateCoinsOnActiveUser(boughtCard);
+            return boughtCard;
+        }
+        return null;
     }
 
     public Card buyCard(EstateType estateType) {
-        Card boughtCard = getBoard().getBuyField().pickCard(estateType);
-        getActiveUser().getUserCards().addCardToDiscardPile(boughtCard);
-        getActiveUser().getGamePoints().modifyWinningPoints(((EstateCard) boughtCard).getEstateValue());
-        calculateCoinsOnActiveUser(boughtCard);
-        return boughtCard;
+        Card checkCard = getBoard().getBuyField().getEstateCard(estateType);
+        if (canBuyCard(checkCard)) {
+            Card boughtCard = getBoard().getBuyField().pickCard(estateType);
+            getActiveUser().getUserCards().addCardToDiscardPile(boughtCard);
+            getActiveUser().getGamePoints().modifyWinningPoints(((EstateCard) boughtCard).getEstateValue());
+            calculateCoinsOnActiveUser(boughtCard);
+            return boughtCard;
+        }
+        return null;
     }
 
     public Card buyCard(MoneyType moneyType) {
-        Card boughtCard = getBoard().getBuyField().pickCard(moneyType);
-        getActiveUser().getUserCards().addCardToDiscardPile(boughtCard);
-        calculateCoinsOnActiveUser(boughtCard);
-        return boughtCard;
+        Card checkCard = getBoard().getBuyField().getMoneyCard(moneyType);
+        if (canBuyCard(checkCard)) {
+            Card boughtCard = getBoard().getBuyField().pickCard(moneyType);
+            getActiveUser().getUserCards().addCardToDiscardPile(boughtCard);
+            calculateCoinsOnActiveUser(boughtCard);
+            return boughtCard;
+        }
+        return null;
     }
 
     private void calculateCoinsOnActiveUser(Card boughtCard) {
