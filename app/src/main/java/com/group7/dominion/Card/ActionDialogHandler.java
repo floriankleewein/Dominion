@@ -21,7 +21,7 @@ import androidx.fragment.app.FragmentManager;
 
 
 public class ActionDialogHandler extends AppCompatDialogFragment {
-    //private Board board;
+
     private int drawableDialog;
     private ActionType actionType;
     private FragmentManager fragmentManager;
@@ -307,16 +307,6 @@ public class ActionDialogHandler extends AppCompatDialogFragment {
         });
         th.start();
     }
-
-    /*
-    public Board getBoard() {
-        return board;
-    }
-
-    public void setBoard(Board board) {
-        this.board = board;
-    }
-    */
 
     public ClientConnector getClientConnector() {
         return clientConnector;
