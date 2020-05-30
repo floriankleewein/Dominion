@@ -40,10 +40,6 @@ public class ClientConnector {
         return ClientConnector.clientConnector;
     }
 
-    public void registerClass(Class regClass) {
-        client.getKryo().register(regClass);
-    }
-
     public Game getGame() {
         return game;
     }
@@ -216,9 +212,7 @@ public class ClientConnector {
             public void received(Connection con, Object object) {
                 if (object instanceof GameUpdateMsg) {
                     GameUpdateMsg gameUpdateMsg = (GameUpdateMsg) object;
-                    //gameHandler.updateGameHandler(gameUpdateMsg);/
                     setGameHandler(msg.getGameHandler());
-                    //GameUpdateMsg gameUpdateMsg1 = gameHandler.updateGameHandlerTwo(gameUpdateMsg);
                     callbackMap.get(GameUpdateMsg.class).callback(gameUpdateMsg);
                 }
             }
