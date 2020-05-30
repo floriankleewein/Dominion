@@ -75,6 +75,15 @@ public class GameHandlerTest {
         Assert.assertEquals(activeUsers.get(1).getUserName(), m_cut.getActiveUser().getUserName());
     }
 
+    @Test
+    public void checkMoneyCardPlay() {
+        Card card = new MoneyCard(0, 1, MoneyType.KUPFER);
+        addCardtoHand(card);
+        Assert.assertEquals(1, m_cut.getGame().getActivePlayer().getGamePoints().getPlaysAmount());
+        m_cut.playCard(card);
+        Assert.assertEquals(1, m_cut.getGame().getActivePlayer().getGamePoints().getPlaysAmount());
+    }
+
     @After
     public void teardown() {
         Game.setGame(null);
@@ -133,6 +142,7 @@ public class GameHandlerTest {
         m_cut.playCard(card);
         Assert.assertEquals(1, m_cut.getActiveUser().getGamePoints().getPlaysAmount());
     }
+
     @Test
     public void checkPlayCardActionWhenNotInCorrectPhase2() {
         Card card = new ActionCard(5, ActionType.HEXE);
@@ -161,7 +171,7 @@ public class GameHandlerTest {
 
     @Test
     public void checkBuyMoneyCardWithType() {
-        Card card = new MoneyCard(6,3,MoneyType.GOLD);
+        Card card = new MoneyCard(6, 3, MoneyType.GOLD);
         m_cut.getActiveUser().getGamePoints().modifyCoins(6);
         Assert.assertEquals(6, m_cut.getActiveUser().getGamePoints().getCoins());
         Assert.assertEquals(card.getId(), m_cut.buyCard(MoneyType.GOLD).getId());

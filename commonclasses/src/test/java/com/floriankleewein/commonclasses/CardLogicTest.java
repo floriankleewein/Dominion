@@ -17,7 +17,6 @@ import org.junit.Test;
 import java.util.LinkedList;
 
 
-
 public class CardLogicTest {
 
     private CardLogic m_cut;
@@ -106,7 +105,7 @@ public class CardLogicTest {
 
         for (User u : gh.getGame().getPlayerList()) {
             if (u.equals(gh.getActiveUser())) continue;
-           // Assert.assertEquals(2, u.getGamePoints().getWinningPoints());
+            // Assert.assertEquals(2, u.getGamePoints().getWinningPoints());
         }
     }
 
