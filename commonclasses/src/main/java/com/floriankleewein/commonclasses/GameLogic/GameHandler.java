@@ -28,8 +28,8 @@ public class GameHandler {
     }
 
     private Game game;
-    private final int MONEY_CARDS = 7;
-    private final int ANWESEN_CARDS = 3;
+    private final static int conMoneyCards = 7;
+    private final static int conAnwesenCards = 3;
     private Board board;
     private Card playedCard;
     private Card buyCard;
@@ -63,11 +63,11 @@ public class GameHandler {
                 user.setGamePoints(gp);
                 LinkedList<Card> generatedCards = new LinkedList<>();
                 UserCards ucards = new UserCards();
-                for (int i = 0; i < MONEY_CARDS; i++) {
+                for (int i = 0; i < conMoneyCards; i++) {
                     Card copper = new MoneyCard(0, 0, MoneyType.KUPFER);
                     generatedCards.add(copper);
                 }
-                for (int i = 0; i < ANWESEN_CARDS; i++) {
+                for (int i = 0; i < conAnwesenCards; i++) {
                     Card anwesen = new EstateCard(2, 1, EstateType.ANWESEN);
                     generatedCards.add(anwesen);
                 }
