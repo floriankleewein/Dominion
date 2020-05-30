@@ -94,7 +94,6 @@ public class GameHandler {
 
     /**
      * Discards Hand of activeUser, draws new Cards and sets new Active User.
-     * TODO Check if players draw new cards if < 5.
      */
     public void newTurn() {
         getActiveUser().getUserCards().drawNewCards();
@@ -113,18 +112,15 @@ public class GameHandler {
     public PlayStatus changeTurnStatus() {
         if (getTurnState() == null) {
             return null;
-        }
-        else if (getTurnState().equals(PlayStatus.ACTION_PHASE)) {
+        } else if (getTurnState().equals(PlayStatus.ACTION_PHASE)) {
             setTurnState(PlayStatus.BUY_PHASE);
             return PlayStatus.BUY_PHASE;
-        }
-        else if (getTurnState().equals(PlayStatus.BUY_PHASE)) {
+        } else if (getTurnState().equals(PlayStatus.BUY_PHASE)) {
             setTurnState(PlayStatus.NO_PLAY_PHASE);
             return PlayStatus.NO_PLAY_PHASE;
-        }
-        else {
-            setTurnState(PlayStatus.NO_PLAY_PHASE);
-            return PlayStatus.NO_PLAY_PHASE;
+        } else {
+            setTurnState(PlayStatus.ACTION_PHASE);
+            return PlayStatus.ACTION_PHASE;
         }
     }
 
@@ -166,8 +162,7 @@ public class GameHandler {
 
     public void playCard(MoneyCard card) {
         setPlayedCard(card);
-        if (isNoPlayPhase()) return;
-        else {
+        if (!isNoPlayPhase()) {
             setTurnState(PlayStatus.BUY_PHASE);
             cardLogic.doCardLogic(card);
             getActiveUser().getGamePoints().modifyPlayAmounts(-1);
@@ -176,7 +171,7 @@ public class GameHandler {
 
 
     private boolean canPlayActionCard() {
-        if (getActiveUser().getGamePoints().getPlaysAmount() > 0 && turnState.equals(PlayStatus.ACTION_PHASE)) {
+        if (getActiveUser().getGamePoints().getPlaysAmount() > 0 && isActionPhase()) {
             return true;
         }
         return false;
@@ -184,6 +179,7 @@ public class GameHandler {
 
     /**
      * TODO Obsolete - delete after merge
+     *
      * @param msg
      */
     private void updateVictoryPts(GameUpdateMsg msg) {
@@ -305,7 +301,7 @@ public class GameHandler {
 
     public Card buyCardTwo(GameUpdateMsg gameUpdateMsg) {
         if (gameUpdateMsg.getActionTypeClicked() != null) {
-            System.out.println("Bought card Type: " + gameUpdateMsg.getActionTypeClicked());
+            System.out.println("Bought card Type: " + gameUpdateMsg.getActionTypeClicked()); // TODO Remove sout statements after merge to master
             return buyCard(gameUpdateMsg.getActionTypeClicked());
         } else if (gameUpdateMsg.getEstateTypeClicked() != null) {
             System.out.println("Bought card Type: " + gameUpdateMsg.getEstateTypeClicked());
@@ -320,18 +316,15 @@ public class GameHandler {
 
 
     private boolean isActionPhase() {
-        if (turnState.equals(PlayStatus.ACTION_PHASE)) return true;
-        return false;
+        return turnState.equals(PlayStatus.ACTION_PHASE);
     }
 
     private boolean isBuyPhase() {
-        if (turnState.equals(PlayStatus.BUY_PHASE)) return true;
-        return false;
+        return turnState.equals(PlayStatus.BUY_PHASE);
     }
 
     private boolean isNoPlayPhase() {
-        if (turnState.equals(PlayStatus.NO_PLAY_PHASE)) return true;
-        return false;
+        return turnState.equals(PlayStatus.NO_PLAY_PHASE);
     }
 
 
@@ -339,7 +332,7 @@ public class GameHandler {
         if (card == null) {
             return false;
         }
-        if (getActiveUser().getGamePoints().getCoins() >= card.getPrice() && getActiveUser().getGamePoints().getBuyAmounts() > 0 && !getTurnState().equals(PlayStatus.NO_PLAY_PHASE)) {
+        if (getActiveUser().getGamePoints().getCoins() >= card.getPrice() && getActiveUser().getGamePoints().getBuyAmounts() > 0 && isBuyPhase()) {
             setTurnState(PlayStatus.BUY_PHASE);
             return true;
         }
@@ -359,11 +352,6 @@ public class GameHandler {
         }
 
         if (noCard) {
-            /*
-            if (getActiveUser().getGamePoints().getCoins() >= card.getPrice()) {
-                return true;
-            }
-            */
             return true;
         }
         return false;
@@ -383,6 +371,7 @@ public class GameHandler {
 
     /**
      * TODO obsolete - delete after merge
+     *
      * @param user
      * @param points
      */
