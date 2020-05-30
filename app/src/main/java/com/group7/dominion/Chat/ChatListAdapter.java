@@ -15,13 +15,12 @@ class ChatListAdapter extends ArrayAdapter<ChatMessage> {
     // context in dem sich die Chatliste befindet
     private Context context;
     private int layoutResourceId;
-    private ClientConnector client;
+
 
     ChatListAdapter(Context context, int layoutResourceId) {
         super(context, layoutResourceId);
         this.context = context;
         this.layoutResourceId = layoutResourceId;
-        this.client = ClientConnector.getClientConnector();
     }
 
     @Override

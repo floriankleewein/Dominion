@@ -2,7 +2,7 @@ package com.group7.dominion.Chat;
 
 public interface UserInputHandler {
 
-    String getMessagetoBeSent();
+    String getMessageToBeSent();
     // hiermit wird die Message, die an die anderen Spieler gesendet werden soll gefiltert
 
     void clearInput();

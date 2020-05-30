@@ -1,9 +1,8 @@
 package com.floriankleewein.commonclasses.Chat;
 
-// realisiert die Message, die zwischen den einzelnen Spielern ausgetauscht wird
-
 import com.floriankleewein.commonclasses.Network.BaseMessage;
 
+//realisiert die Message, die zwischen den einzelnen Spielern ausgetauscht wird
 public class ChatMessage extends BaseMessage{
 
     //Nachricht die versendet wird

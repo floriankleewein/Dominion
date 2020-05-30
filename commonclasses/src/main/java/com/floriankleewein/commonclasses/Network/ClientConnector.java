@@ -6,12 +6,14 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.floriankleewein.commonclasses.Chat.ChatMessage;
+import com.floriankleewein.commonclasses.Chat.GetChatMessages;
 import com.floriankleewein.commonclasses.ClassRegistration;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.GameLogic.GameHandler;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ClientConnector {
@@ -20,7 +22,7 @@ public class ClientConnector {
     private static final int SERVER_PORT = 53217;
     private static Client client;
     private GameHandler gameHandler;
-
+    private List<ChatMessage> msgList;
 
     private Game game; //TODO das sollte man evtl nicht mehr hier im Client haben... Einfach Game.getGame verwenden
     Map<Class, Callback<BaseMessage>> callbackMap = new HashMap<>();
@@ -258,6 +260,11 @@ public class ClientConnector {
             }
         });
 
+    }
+
+    public void getChatMessages() {
+        GetChatMessages getChatListMsg = new GetChatMessages();
+        client.sendTCP(getChatListMsg);
     }
 
     public void sendSuspectUser(String SuspectUsername, String Username) {

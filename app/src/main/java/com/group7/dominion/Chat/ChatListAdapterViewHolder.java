@@ -11,13 +11,13 @@ import butterknife.ButterKnife;
 
 public class ChatListAdapterViewHolder {
 
+    // mit Hilfe von ButterKnife werden hier die benötigten Elemente der UI in die View gebunden
     @BindView(R.id.message_received_layout) RelativeLayout messageReceivedLayout;
     @BindView(R.id.message_received_text_view) TextView messageReceivedTextView;
     @BindView(R.id.message_sent_layout) RelativeLayout messageSentLayout;
     @BindView(R.id.message_sent_text_view) TextView messageSentTextView;
     @BindView(R.id.rec_msg_player_name) TextView recMsgFromPlayer;
 
-    // mit Hilfe von ButterKnife werden hier die benötigten Elemente der UI in die View gebunden
 
     public ChatListAdapterViewHolder(View view) { ButterKnife.bind(this,view);
     }
