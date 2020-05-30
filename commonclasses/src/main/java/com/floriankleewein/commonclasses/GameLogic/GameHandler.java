@@ -56,7 +56,7 @@ public class GameHandler {
     public void prepareGame() {
         cardLogic = new CardLogic(this);
         List<User> playerList = game.getPlayerList();
-        if (playerList.size() >= 1) {
+        if (!playerList.isEmpty()) {
             for (User user : playerList) {
                 GamePoints gp = new GamePoints();
                 gp.setWinningPoints(3);
@@ -171,10 +171,7 @@ public class GameHandler {
 
 
     private boolean canPlayActionCard() {
-        if (getActiveUser().getGamePoints().getPlaysAmount() > 0 && isActionPhase()) {
-            return true;
-        }
-        return false;
+        return (getActiveUser().getGamePoints().getPlaysAmount() > 0 && isActionPhase());
     }
 
     /**
@@ -350,7 +347,6 @@ public class GameHandler {
         } else {
             return noCard;
         }
-
         if (noCard) {
             return true;
         }
