@@ -177,7 +177,7 @@ public class GameHandlerTest {
         Assert.assertEquals(card.getId(), m_cut.buyCard(MoneyType.GOLD).getId());
         Assert.assertEquals(0, m_cut.getActiveUser().getGamePoints().getCoins());
         Assert.assertEquals(0, m_cut.getActiveUser().getGamePoints().getBuyAmounts());
-        Assert.assertEquals(1, m_cut.getActiveUser().getUserCards().getDeck().stream().filter(card1 -> card1.getId() == 16).count());
+        Assert.assertEquals(1, m_cut.getActiveUser().getUserCards().getDiscardCards().stream().filter(card1 -> card1.getId() == 16).count());
     }
 
     @Test
