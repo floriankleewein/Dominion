@@ -119,19 +119,8 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         super.onStart();
 
 
-        // Handle communication with Server, only send updated to server whenever card is played etc.
-        ClientConnector clientConnector = ClientConnector.getClientConnector();
-        Game clientGame = clientConnector.getGame();
-        //clientConnector.startGame(); // Send Server Message to start game logic
-        // TODO display playerlist -> Check features
-        // TODO create board and display cards
 
-        // Take from GameHandler getBoard here instead of this
-        //board = clientConnector.getGameHandler().getBoard();
-        // Currently
-        // board = new Board();
-        //actionDialogHandler.setBoard(board);
-        //imageButtonHandler.setBoard(board);
+        ClientConnector clientConnector = ClientConnector.getClientConnector();
 
         actionDialogHandler.setClientConnector(clientConnector);
         imageButtonHandler.setClientConnector(clientConnector);
