@@ -4,14 +4,11 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
 
-import com.floriankleewein.commonclasses.Cards.ActionCard;
 import com.floriankleewein.commonclasses.Cards.ActionType;
-import com.floriankleewein.commonclasses.Cards.Card;
 import com.floriankleewein.commonclasses.Network.ClientConnector;
 import com.floriankleewein.commonclasses.Network.GameUpdateMsg;
 import com.group7.dominion.R;
@@ -39,12 +36,6 @@ public class ActionDialogHandler extends AppCompatDialogFragment {
     private ImageButton buttonSchmiede;
     private ImageButton buttonWerkstatt;
 
-    private final static String actionConst = "Action";
-    private final static String actiontypeConst = "ActionType: ";
-    private final static String cardcountConst = ", Card Count: ";
-    private final static String moneyvalueConst = ", Money Value: " ;
-    private final static String actioncountConst = ", Action Count: ";
-
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
@@ -57,77 +48,10 @@ public class ActionDialogHandler extends AppCompatDialogFragment {
                     gameUpdateMsg.setActionTypeClicked(actionType);
                     sendUpdate(gameUpdateMsg);
 
-                    clientConnector.registerCallback(GameUpdateMsg.class, (msg -> {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                GameUpdateMsg gameUpdateMsg1 = (GameUpdateMsg) msg;
-                                Card card = gameUpdateMsg1.getBoughtCard();
-                                if(card == null) {
-                                    ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
-                                    errorDialogHandler.show(fragmentManager, "errorDialog");
-                                } else {
-                                    ActionCard actionCard = (ActionCard) card;
-                                    switch (actionCard.getActionType()) {
+                    ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
 
-                                        case HEXE:
-                                            Log.i(actionConst, actiontypeConst + actionCard.getActionType() +
-                                                    cardcountConst + actionCard.getAction().getCardCount() +
-                                                    ", Curse Count: " + actionCard.getAction().getCurseCount());
-                                            break;
-                                        case WERKSTATT:
-                                            Log.i(actionConst, actiontypeConst + actionCard.getActionType() +
-                                                    cardcountConst + actionCard.getAction().getCardCount() +
-                                                    ", Max Money Value: " + actionCard.getAction().getMaxMoneyValue());
-                                            break;
-                                        case SCHMIEDE:
-                                            Log.i(actionConst, actiontypeConst + actionCard.getActionType() +
-                                                    cardcountConst + actionCard.getAction().getCardCount());
-                                            break;
-                                        case MINE:
-                                            Log.i(actionConst, actiontypeConst + actionCard.getActionType() +
-                                                    cardcountConst + actionCard.getAction().getCardCount() +
-                                                    ", Take MoneyCard That Cost Three More Than Old: " + actionCard.getAction().isTakeMoneyCardThatCostThreeMoreThanOld() +
-                                                    ", Take Card On Hand: " + actionCard.getAction().isTakeCardOnHand());
-                                            break;
-                                        case MILIZ:
-                                            Log.i(actionConst, actiontypeConst + actionCard.getActionType() +
-                                                    moneyvalueConst + actionCard.getAction().getMoneyValue() +
-                                                    ", Throw Every UserCards Until Three Left: " + actionCard.getAction().isThrowEveryUserCardsUntilThreeLeft());
-                                            break;
-                                        case MARKT:
-                                            Log.i(actionConst, actiontypeConst + actionCard.getActionType() +
-                                                    cardcountConst + actionCard.getAction().getCardCount() +
-                                                    actioncountConst + actionCard.getAction().getActionCount() +
-                                                    moneyvalueConst + actionCard.getAction().getMoneyValue() +
-                                                    ", Buy Count: " + actionCard.getAction().getBuyCount());
-                                            break;
-                                        case KELLER:
-                                            Log.i(actionConst, actiontypeConst + actionCard.getActionType() +
-                                                    actioncountConst + actionCard.getAction().getActionCount() +
-                                                    ", Throw Any Amount Cards: " + actionCard.getAction().isThrowAnyAmountCards());
-                                            break;
-                                        case HOLZFAELLER:
-                                            Log.i(actionConst, actiontypeConst + actionCard.getActionType() +
-                                                    ", Buy Count: " + actionCard.getAction().getBuyCount() +
-                                                    moneyvalueConst + actionCard.getAction().getMoneyValue());
-                                            break;
-                                        case DORF:
-                                            Log.i(actionConst, actiontypeConst + actionCard.getActionType() +
-                                                    cardcountConst + actionCard.getAction().getCardCount() +
-                                                    actioncountConst + actionCard.getAction().getActionCount());
-                                            break;
-                                        case BURGGRABEN:
-                                            Log.i(actionConst, actiontypeConst + actionCard.getActionType() +
-                                                    cardcountConst + actionCard.getAction().getCardCount() +
-                                                    ", Throw Every UserCards Until Three Left: " + actionCard.getAction().isThrowEveryUserCardsUntilThreeLeft());
-                                            break;
-                                        default:
-                                            Log.e("ERROR", "critical error @ actionDialogHandler. I am the default case!");
-                                    }
-                                }
-                            }
-                        });
+                    clientConnector.registerCallback(GameUpdateMsg.class, (msg -> {
+                        ActionUITask uiTask = new ActionUITask(errorDialogHandler, fragmentManager, (GameUpdateMsg) msg);
                     }));
                 })
                 .setNegativeButton("Close", (dialog, which) -> {
