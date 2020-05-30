@@ -1,9 +1,9 @@
 package com.group7.localtestserver;
 
-
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
+import com.esotericsoftware.minlog.Log;
 import com.floriankleewein.commonclasses.Board.Board;
 import com.floriankleewein.commonclasses.Chat.ChatMessage;
 import com.floriankleewein.commonclasses.ClassRegistration;
@@ -59,7 +59,7 @@ public class TestServer {
             //server.bind(8080);
             server.bind(53217);
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.error("ERROR: ", "bind to port failed!");
         }
         //FKDoc: adds all listeners. cyclic problem still here.
         addListeners();
@@ -231,7 +231,6 @@ public class TestServer {
     public void resetMsgFunctionality() {
         game.getPlayerList().clear();
         userClientConnectorMap.clear();
-        System.out.println("Playerlist cleared!");
     }
 
     public void startGameMsgFunctionality(Connection con) {
@@ -284,8 +283,6 @@ public class TestServer {
 
     public void hasCheatedMessageFunctionality(Object object) {
         HasCheatedMessage CheatMsg = (HasCheatedMessage) object;
-        //game.getCheatService().addCardtoUser(CheatMsg.getName());
-        // Not working now because the User has now DeckCards --> Null Pointer
 
         sendCheatInformation(CheatMsg.getName());
     }
@@ -317,12 +314,12 @@ public class TestServer {
 
     public void checkButtonsMsgFunctionality(Object object, Connection con) {
         CheckButtonsMsg msg = (CheckButtonsMsg) object;
-        if (hasGame == false) {
-            msg.setCreateValue(true);
-            msg.setJoinValue(false);
-        } else if (hasGame) {
+        if (hasGame) {
             msg.setCreateValue(false);
             msg.setJoinValue(true);
+        } else {
+            msg.setCreateValue(true);
+            msg.setJoinValue(false);
         }
         con.sendTCP(msg);
     }
