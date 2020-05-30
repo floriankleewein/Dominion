@@ -19,17 +19,12 @@ public class ClientConnector {
     private static final String SERVER_IP = "143.205.174.196";
     private static final int SERVER_PORT = 53217;
     private static Client client;
-    //private boolean hasGame = false;
     private GameHandler gameHandler;
 
 
     private Game game; //TODO das sollte man evtl nicht mehr hier im Client haben... Einfach Game.getGame verwenden
-    private Callback<CreateGameMsg> callback;
     Map<Class, Callback<BaseMessage>> callbackMap = new HashMap<>();
 
-    /*public ClientConnector() {
-        this.client = new Client();
-    }*/
 
     private static ClientConnector clientConnector;
 
@@ -43,10 +38,6 @@ public class ClientConnector {
             ClientConnector.clientConnector = new ClientConnector();
         }
         return ClientConnector.clientConnector;
-    }
-
-    public void registerClass(Class regClass) {
-        client.getKryo().register(regClass);
     }
 
     public Game getGame() {
@@ -64,9 +55,9 @@ public class ClientConnector {
         try {
             client.connect(5000, SERVER_IP, SERVER_PORT);   // Uni server
         } catch (IOException e) {
-            e.printStackTrace();
+           Log.error("Connection to server failed!");
         }
-        System.out.println("Connection-Status: " + client.isConnected());
+        Log.info("Connection-Status: " + client.isConnected());
     }
 
     public void recreateStartGameActivity() {
@@ -75,7 +66,7 @@ public class ClientConnector {
     }
 
     public void createGame() {
-        System.out.println("Connection-Status: " + client.isConnected());
+        Log.info("Connection-Status: " + client.isConnected());
         final CreateGameMsg startMsg = new CreateGameMsg();
         client.sendTCP(startMsg);
         client.addListener(new Listener() {
@@ -197,7 +188,7 @@ public class ClientConnector {
                 if (object instanceof StartGameMsg) {
                     StartGameMsg msg = (StartGameMsg) object;
                     if (msg.getFeedbackUI() == 0) {
-                        System.out.println("Got Game Message in ClientConnector");
+                        Log.info("Got Game Message in ClientConnector");
                         callbackMap.get(StartGameMsg.class).callback(msg);
                         Game.setGame(msg.getGame());
                         gameHandler = msg.getGameHandler();
@@ -221,9 +212,7 @@ public class ClientConnector {
             public void received(Connection con, Object object) {
                 if (object instanceof GameUpdateMsg) {
                     GameUpdateMsg gameUpdateMsg = (GameUpdateMsg) object;
-                    //gameHandler.updateGameHandler(gameUpdateMsg);/
                     setGameHandler(msg.getGameHandler());
-                    //GameUpdateMsg gameUpdateMsg1 = gameHandler.updateGameHandlerTwo(gameUpdateMsg);
                     callbackMap.get(GameUpdateMsg.class).callback(gameUpdateMsg);
                 }
             }
