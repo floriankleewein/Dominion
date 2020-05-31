@@ -161,6 +161,8 @@ public class GameHandler {
 
     public void playCard(MoneyCard card) {
         setPlayedCard(card);
+        setTurnState(PlayStatus.BUY_PHASE);
+        cardLogic.doCardLogic(card);
 
         if (!isNoPlayPhase()) {
             setTurnState(PlayStatus.BUY_PHASE);
