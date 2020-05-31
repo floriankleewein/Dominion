@@ -282,12 +282,6 @@ public class TestServer {
 
         messageList.add(chatPair);
 
-        //testen, ob Nachrichten der anderen gespeichert werden und wiederhergestellt werden
-        Pair c = new Pair();
-        c.setChatMessage(msg);
-        c.setPlayerId(con.getID() + 1);
-        messageList.add(c);
-
         //sende die Nachrihct an die anderen Spieler
         server.sendToAllTCP(msg);
     }
