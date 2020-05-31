@@ -160,12 +160,8 @@ public class GameHandler {
     }
 
     public void playCard(MoneyCard card) {
-        setPlayedCard(card);
-        setTurnState(PlayStatus.BUY_PHASE);
-        cardLogic.doCardLogic(card);
-
         if (!isNoPlayPhase()) {
-            setTurnState(PlayStatus.BUY_PHASE);
+            // setTurnState(PlayStatus.BUY_PHASE);
             cardLogic.doCardLogic(card);
             //getActiveUser().getGamePoints().modifyPlayAmounts(-1);
         }
@@ -220,6 +216,9 @@ public class GameHandler {
             int oldCoins = getActiveUser().getGamePoints().getCoins();
             getActiveUser().getGamePoints().setCoins(oldCoins - boughtCard.getPrice());
             getActiveUser().getGamePoints().modifyBuyAmounts(-1);
+        }
+        if (getActiveUser().getGamePoints().getBuyAmounts() == 0) {
+            setNewActivePlayer();
         }
     }
 

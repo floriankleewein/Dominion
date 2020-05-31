@@ -20,12 +20,14 @@ import com.floriankleewein.commonclasses.Cards.ActionCard;
 import com.floriankleewein.commonclasses.Cards.Card;
 import com.floriankleewein.commonclasses.Chat.ChatMessage;
 import com.floriankleewein.commonclasses.GameLogic.PlayStatus;
+import com.floriankleewein.commonclasses.Network.BaseMessage;
 import com.floriankleewein.commonclasses.Network.ClientConnector;
 import com.floriankleewein.commonclasses.Network.GameUpdateMsg;
 import com.floriankleewein.commonclasses.Network.GetGameMsg;
 import com.floriankleewein.commonclasses.Network.HasCheatedMessage;
 import com.floriankleewein.commonclasses.Network.Messages.GameLogicMsg.BuyCardMsg;
 import com.floriankleewein.commonclasses.Network.Messages.GameLogicMsg.PlayCardMsg;
+import com.floriankleewein.commonclasses.Network.Messages.NewTurnMessage;
 import com.floriankleewein.commonclasses.Network.SuspectMessage;
 import com.floriankleewein.commonclasses.Network.UpdatePlayerNamesMsg;
 import com.floriankleewein.commonclasses.User.User;
@@ -49,6 +51,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
     private SensorManager sm;
     private ShakeListener shakeListener;
     private TextView playerScores;
+    private int CallbackCounter;
 
 
     private FragmentManager fragmentManager;
@@ -156,8 +159,6 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
                 public void run() {
                     User user = ((GetGameMsg) msg).getGame().findUser(getUsername());
                     cardsHandler.initCards(user);
-
-                    System.out.println("*******" + ((GetGameMsg) msg).getPlayStatus() + "******");
                     if (user.getUserName().equals(((GetGameMsg) msg).getGame().getActivePlayer().getUserName())) {
                         if (((GetGameMsg) msg).getPlayStatus() == PlayStatus.ACTION_PHASE) {
                             cardsHandler.onClickListenerActionPhase();
@@ -173,35 +174,21 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    //cardsHandler.setImageButtonsNull();
-                    User user = ((PlayCardMsg) msg).getGame().getActivePlayer();
-                    System.out.println("*******" + ((PlayCardMsg) msg).getPlayStatus() + " Size of HandCards " + user.getUserCards().getHandCards().size() + "*******");
-                    if (user.getUserName().equals(getUsername())) {
-                        cardsHandler.initCards(user);
-                        if (((PlayCardMsg) msg).getPlayStatus() == PlayStatus.ACTION_PHASE) {
-                            cardsHandler.onClickListenerActionPhase();
-                        } else if (((PlayCardMsg) msg).getPlayStatus() == PlayStatus.PLAY_COINS) {
-                            cardsHandler.onClickListenerBuyPhase();
-                        }
-                    }
-                    String text = "";
-                    for (User u : ((PlayCardMsg) msg).getGame().getPlayerList()) {
-                        text += u.getUserName() + ": " + u.getGamePoints().getWinningPoints() + "\n";
-                    }
-                    playerScores.setText(text);
+                    handleMessage(msg);
                 }
             });
         });
 
-        ClientConnector.getClientConnector().registerCallback(GameUpdateMsg.class, msg -> {
+        ClientConnector.getClientConnector().registerCallback(NewTurnMessage.class, msg -> {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    user = ((GameUpdateMsg) msg).getGame().getActivePlayer();
-                    cardsHandler.onClickListener();
+                    handleMessage(msg);
                 }
             });
         });
+
+
         cardsHandler.sendMessage();
 
         clientConnector.registerCallback(BuyCardMsg.class, (msg -> {
@@ -278,6 +265,24 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
                 }
             });
         }));
+    }
+
+    private void handleMessage(BaseMessage msg) {
+        User user = ((PlayCardMsg) msg).getGame().findUser(getUsername());
+        if (user.getUserName().equals(((PlayCardMsg) msg).getGame().getActivePlayer().getUserName())) {
+            cardsHandler.setImageButtonsNull();
+            cardsHandler.initCards(user);
+            if (((PlayCardMsg) msg).getPlayStatus() == PlayStatus.ACTION_PHASE) {
+                cardsHandler.onClickListenerActionPhase();
+            } else if (((PlayCardMsg) msg).getPlayStatus() == PlayStatus.PLAY_COINS) {
+                cardsHandler.onClickListenerBuyPhase();
+            }
+        }
+        String text = "";
+        for (User u : ((PlayCardMsg) msg).getGame().getPlayerList()) {
+            text += u.getUserName() + ": " + u.getGamePoints().getWinningPoints() + "\n";
+        }
+        playerScores.setText(text);
     }
 
     public void sendUpdateMessage() {

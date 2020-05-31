@@ -64,12 +64,14 @@ public class UserCards {
     }
 
     public void playCard(Card PlayedCard) {
+
         for (int i = 0; i < getHandCards().size(); i++) {
             if (PlayedCard.getId() == getHandCards().get(i).getId()) {
                 getHandCards().remove(i);
                 break;
             }
         }
+
         this.DiscardCards.add(PlayedCard);
     }
 

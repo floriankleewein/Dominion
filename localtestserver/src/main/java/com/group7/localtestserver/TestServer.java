@@ -291,7 +291,7 @@ public class TestServer {
 
     public void hasCheatedMessageFunctionality(Object object) {
         HasCheatedMessage CheatMsg = (HasCheatedMessage) object;
-
+        gamehandler.getGame().findUser(CheatMsg.getName()).getUserCards().addDeckCardtoHandCard(1);
         sendCheatInformation(CheatMsg.getName());
     }
 
@@ -306,8 +306,7 @@ public class TestServer {
     public void suspectMessageFunctionality(Object object) {
         SuspectMessage msg = (SuspectMessage) object;
         System.out.println("GOT SUSPECT MESSAGE FROM" + msg.getUserName());
-        //game.getCheatService().suspectUser(msg.getSuspectedUserName(),msg.getUserName());
-
+        gamehandler.getGame().getCheatService().suspectUser(msg.getSuspectedUserName(), msg.getUserName());
         sendSuspectInformation(msg.getSuspectedUserName(), msg.getUserName());
     }
 

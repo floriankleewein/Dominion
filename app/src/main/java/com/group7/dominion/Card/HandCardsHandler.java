@@ -32,7 +32,7 @@ import java.util.List;
 import static com.floriankleewein.commonclasses.Cards.ActionType.HEXE;
 
 
-public class HandCardsHandler  {
+public class HandCardsHandler {
     PlayStatus playStatus;
     LinearLayout linearLayout;
     LinearLayout.LayoutParams lparams;
@@ -56,7 +56,10 @@ public class HandCardsHandler  {
     public void initCards(User user) {
         if (canGetCards) {
             canGetCards = false;
+            System.out.println(user.getUserCards().getHandCards().size() + "in initcards");
             cardList = user.getUserCards().getHandCards();
+            System.out.println(cardList.size());
+            Log.i("intit", "INIT CARDS");
             try {
                 for (int i = 0; i < cardList.size(); i++) {
                     addCard(cardList.get(i));
@@ -201,9 +204,10 @@ public class HandCardsHandler  {
     }
 
     public void setImageButtonsNull() {
+        Log.i("SEt", "SET IMAGE BUTTON NULL IS CALLED ");
         linearLayout.removeAllViewsInLayout();
         ImageButtons.clear();
-        cardList.clear();
+        //cardList.clear();
         canGetCards = true;
     }
 
