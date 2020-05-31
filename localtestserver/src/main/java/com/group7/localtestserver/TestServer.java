@@ -237,16 +237,17 @@ public class TestServer {
         StartGameMsg msg = new StartGameMsg();
         //Check if game started successfully, and notify client
         System.out.println("Got the StartGameMsg on Server");
+
         if (setupGame()) {
             msg.setFeedbackUI(0);
-            msg.setGame(getGame());
-            msg.setGameHandler(gamehandler);
+            msg.setGame(gamehandler.getGame());
             // Send message to all clients, TODO they need to be in lobby
             server.sendToAllTCP(msg);
             ActivePlayerMessage activePlayerMsg = new ActivePlayerMessage();
             activePlayerMsg.setGame(getGame());
             Connection activePlayerCon = userClientConnectorMap.get(game.getActivePlayer());
             activePlayerCon.sendTCP(activePlayerMsg);
+
         } else { // fehlerfall
             msg.setFeedbackUI(1);
             con.sendTCP(msg);
