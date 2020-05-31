@@ -163,7 +163,6 @@ public class GameHandler {
         setPlayedCard(card);
         setTurnState(PlayStatus.BUY_PHASE);
         cardLogic.doCardLogic(card);
-
     }
 
 
