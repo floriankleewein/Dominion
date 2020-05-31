@@ -64,6 +64,7 @@ public class GameHandler {
                 }
                 for (int i = 0; i < conAnwesenCards; i++) {
                     Card anwesen = new EstateCard(2, 1, EstateType.ANWESEN);
+                    user.getGamePoints().modifyWinningPoints(1);
                     generatedCards.add(anwesen);
                 }
                 user.getUserCards().getFirstCards(generatedCards);
