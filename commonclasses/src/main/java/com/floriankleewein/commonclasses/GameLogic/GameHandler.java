@@ -33,6 +33,7 @@ public class GameHandler {
     private Card buyCard;
     private PlayStatus turnState;
     private CardLogic cardLogic;
+    private int playToken;
 
 
     private boolean newTurn;
@@ -75,18 +76,22 @@ public class GameHandler {
             setBoard(new Board());
             game.setPlayerList(playerList);
             setNewActivePlayer();
+            playToken = 0;
         }
     }
 
     private void setNewActivePlayer() {
         if (getActiveUser() == null) {
-            game.setActivePlayer(game.getPlayerList().get(0));
+            game.setActivePlayer(game.getPlayerList().get(playToken));
+            playToken = 1;
         } else {
             int players = game.getPlayerList().size();
             int active = game.getPlayerList().indexOf(getActiveUser());
-
-            game.setActivePlayer(game.getPlayerList().get((active + 1) % players));
-            System.out.println(getActiveUser().getUserName() + "this is the active User");
+            game.setActivePlayer(game.getPlayerList().get(playToken));
+            playToken++;
+            if (playToken == 1) {
+                playToken = 0;
+            }
         }
         if (checkHandCards()) {
             turnState = PlayStatus.ACTION_PHASE;
@@ -164,10 +169,11 @@ public class GameHandler {
         if (canPlayActionCard()) {
             cardLogic.doCardLogic(card);
             getActiveUser().getGamePoints().modifyPlayAmounts(-1);
+            if (getActiveUser().getGamePoints().getPlaysAmount() == 0) {
+                turnState = PlayStatus.PLAY_COINS;
+            }
         }
-        if (getActiveUser().getGamePoints().getPlaysAmount() == 0){
-            turnState = PlayStatus.PLAY_COINS;
-        }
+
     }
 
     public void playCard(MoneyCard card) {
