@@ -365,6 +365,7 @@ public class TestServer {
             System.out.println(msg.getMoneyTypeClicked() + " buyed");
             returnmsg.setBoughtCard(gamehandler.buyCard(msg.getMoneyTypeClicked()));
         }
+        returnmsg.setGame(Game.getGame());
         server.sendToAllTCP(returnmsg);
     }
 

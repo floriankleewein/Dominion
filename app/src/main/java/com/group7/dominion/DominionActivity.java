@@ -16,23 +16,16 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.floriankleewein.commonclasses.Board.Board;
-
-import com.floriankleewein.commonclasses.Cards.ActionType;
-import com.floriankleewein.commonclasses.Cards.MoneyCard;
-import com.floriankleewein.commonclasses.Cards.MoneyType;
-import com.floriankleewein.commonclasses.GameLogic.PlayStatus;
-import com.floriankleewein.commonclasses.Network.GameUpdateMsg;
-import com.floriankleewein.commonclasses.Network.Messages.GameLogicMsg.BuyCardMsg;
-import com.floriankleewein.commonclasses.Network.Messages.GameLogicMsg.PlayCardMsg;
-import com.group7.dominion.Card.ActionDialogHandler;
-import com.group7.dominion.Card.ErrorDialogHandler;
-import com.group7.dominion.Card.ImageButtonHandler;
 import com.floriankleewein.commonclasses.Cards.ActionCard;
 import com.floriankleewein.commonclasses.Cards.Card;
 import com.floriankleewein.commonclasses.Chat.ChatMessage;
+import com.floriankleewein.commonclasses.GameLogic.PlayStatus;
 import com.floriankleewein.commonclasses.Network.ClientConnector;
+import com.floriankleewein.commonclasses.Network.GameUpdateMsg;
 import com.floriankleewein.commonclasses.Network.GetGameMsg;
 import com.floriankleewein.commonclasses.Network.HasCheatedMessage;
+import com.floriankleewein.commonclasses.Network.Messages.GameLogicMsg.BuyCardMsg;
+import com.floriankleewein.commonclasses.Network.Messages.GameLogicMsg.PlayCardMsg;
 import com.floriankleewein.commonclasses.Network.SuspectMessage;
 import com.floriankleewein.commonclasses.Network.UpdatePlayerNamesMsg;
 import com.floriankleewein.commonclasses.User.User;
@@ -191,6 +184,11 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
                             cardsHandler.onClickListenerBuyPhase();
                         }
                     }
+                    String text = "";
+                    for (User u : ((PlayCardMsg) msg).getGame().getPlayerList()) {
+                        text += u.getUserName() + ": " + u.getGamePoints().getWinningPoints() + "\n";
+                    }
+                    playerScores.setText(text);
                 }
             });
         });
@@ -200,14 +198,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
                 @Override
                 public void run() {
                     user = ((GameUpdateMsg) msg).getGame().getActivePlayer();
-
                     cardsHandler.onClickListener();
-                    String text = "";
-                    for (User u : ((GetGameMsg) msg).getGame().getPlayerList()) {
-                        text += u.getUserName() + ": " + u.getGamePoints().getWinningPoints() + "\n";
-                    }
-                    playerScores.setText(text);
-
                 }
             });
         });
@@ -279,6 +270,11 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
                                         ", Throw Every UserCards Until Three Left: " + actionCard.getAction().isThrowEveryUserCardsUntilThreeLeft());
                                 break;
                         }
+                        String text = "";
+                        for (User u : gameUpdateMsg1.getGame().getPlayerList()) {
+                            text += u.getUserName() + ": " + u.getGamePoints().getWinningPoints() + "\n";
+                        }
+                        playerScores.setText(text);
                     }
                 }
             });

@@ -58,8 +58,6 @@ public class GameHandler {
             for (User user : playerList) {
                 user.setUpforGame();
                 LinkedList<Card> generatedCards = new LinkedList<>();
-
-               // UserCards ucards = new UserCards();
                 for (int i = 0; i < conMoneyCards; i++) {
                     Card copper = new MoneyCard(0, 0, MoneyType.KUPFER);
                     generatedCards.add(copper);

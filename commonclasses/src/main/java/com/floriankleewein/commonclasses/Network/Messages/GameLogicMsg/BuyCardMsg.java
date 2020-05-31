@@ -4,6 +4,7 @@ import com.floriankleewein.commonclasses.Cards.ActionType;
 import com.floriankleewein.commonclasses.Cards.Card;
 import com.floriankleewein.commonclasses.Cards.EstateType;
 import com.floriankleewein.commonclasses.Cards.MoneyType;
+import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.Network.BaseMessage;
 
 public class BuyCardMsg extends BaseMessage {
@@ -12,7 +13,15 @@ public class BuyCardMsg extends BaseMessage {
     private ActionType actionTypeClicked;
     private EstateType estateTypeClicked;
     private boolean cantBuyCard;
+    private Game game;
 
+    public Game getGame() {
+        return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
 
     public MoneyType getMoneyTypeClicked() {
         return moneyTypeClicked;
