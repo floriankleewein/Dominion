@@ -11,7 +11,6 @@ import com.floriankleewein.commonclasses.Cards.MoneyType;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.Network.GameUpdateMsg;
 import com.floriankleewein.commonclasses.User.User;
-import com.floriankleewein.commonclasses.User.UserCards;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -55,11 +54,10 @@ public class GameHandler {
     public void prepareGame() {
         cardLogic = new CardLogic(this);
         List<User> playerList = game.getPlayerList();
-        if (playerList.size() >= 1) {
+        if (!playerList.isEmpty()) {
             for (User user : playerList) {
                 user.setUpforGame();
                 LinkedList<Card> generatedCards = new LinkedList<>();
-                UserCards ucards = new UserCards();
                 for (int i = 0; i < MONEY_CARDS; i++) {
                     Card copper = new MoneyCard(0, 1, MoneyType.KUPFER);
                     generatedCards.add(copper);
