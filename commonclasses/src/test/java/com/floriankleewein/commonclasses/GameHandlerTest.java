@@ -90,16 +90,16 @@ public class GameHandlerTest {
         m_cut = null;
     }
 
-    @Test
-    public void changeTurnState() {
+//    @Test
+//    public void changeTurnState() {
+////        Assert.assertEquals(PlayStatus.ACTION_PHASE, m_cut.getTurnState());
+//        m_cut.changeTurnStatus();
+////        Assert.assertEquals(PlayStatus.BUY_PHASE, m_cut.getTurnState());
+//        m_cut.changeTurnStatus();
+//        Assert.assertEquals(PlayStatus.NO_PLAY_PHASE, m_cut.getTurnState());
+//        m_cut.changeTurnStatus();
 //        Assert.assertEquals(PlayStatus.ACTION_PHASE, m_cut.getTurnState());
-        m_cut.changeTurnStatus();
-//        Assert.assertEquals(PlayStatus.BUY_PHASE, m_cut.getTurnState());
-        m_cut.changeTurnStatus();
-        Assert.assertEquals(PlayStatus.NO_PLAY_PHASE, m_cut.getTurnState());
-        m_cut.changeTurnStatus();
-        Assert.assertEquals(PlayStatus.ACTION_PHASE, m_cut.getTurnState());
-    }
+//    }
 
     @Test
     public void changeTurnStateIfNull() {
