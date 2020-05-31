@@ -7,6 +7,13 @@
     tools:context=".DominionActivity">
 
     <androidx.gridlayout.widget.GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+    </androidx.gridlayout.widget.GridLayout>
+
+    <androidx.gridlayout.widget.GridLayout
         android:id="@+id/GridCards"
         android:layout_width="441dp"
         android:layout_height="105dp"
@@ -20,8 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            tools:visibility="visible">
-        </LinearLayout>
+            tools:visibility="visible"></LinearLayout>
     </androidx.gridlayout.widget.GridLayout>
 
     <androidx.gridlayout.widget.GridLayout
@@ -409,12 +415,10 @@
     </androidx.gridlayout.widget.GridLayout>
 
 
-
-
     <androidx.gridlayout.widget.GridLayout
         android:id="@+id/gridLayout4"
-        android:layout_width="121dp"
-        android:layout_height="95dp"
+        android:layout_width="135dp"
+        android:layout_height="99dp"
         android:layout_marginStart="12dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="20dp"
@@ -444,6 +448,7 @@
             android:paddingBottom="0dp"
             android:scaleType="centerInside"
             android:src="@drawable/backofcard" />
+
     </androidx.gridlayout.widget.GridLayout>
 
     <TextView
@@ -509,7 +514,7 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">

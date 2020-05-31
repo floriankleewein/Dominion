@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -198,11 +199,11 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    user = ((GameUpdateMsg) msg).getGameHandler().getGame().getActivePlayer();
+                    user = ((GameUpdateMsg) msg).getGame().getActivePlayer();
 
                     cardsHandler.onClickListener();
                     String text = "";
-                    for (User u : ((GetGameMsg) msg).getGm().getGame().getPlayerList()) {
+                    for (User u : ((GetGameMsg) msg).getGame().getPlayerList()) {
                         text += u.getUserName() + ": " + u.getGamePoints().getWinningPoints() + "\n";
                     }
                     playerScores.setText(text);
