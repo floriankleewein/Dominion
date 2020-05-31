@@ -206,7 +206,6 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
 
         clientConnector.registerCallback(BuyCardMsg.class, (msg -> {
             runOnUiThread(new Runnable() {
-
                 @Override
                 public void run() {
                     System.out.println("BuyCardMsg is in Dominion Activity");

@@ -59,7 +59,7 @@ public class GameHandler {
                 user.setUpforGame();
                 LinkedList<Card> generatedCards = new LinkedList<>();
                 for (int i = 0; i < conMoneyCards; i++) {
-                    Card copper = new MoneyCard(0, 0, MoneyType.KUPFER);
+                    Card copper = new MoneyCard(0, 1, MoneyType.KUPFER);
                     generatedCards.add(copper);
                 }
                 for (int i = 0; i < conAnwesenCards; i++) {
@@ -164,7 +164,7 @@ public class GameHandler {
 
         if (!isNoPlayPhase()) {
             setTurnState(PlayStatus.BUY_PHASE);
-         cardLogic.doCardLogic(card);
+            cardLogic.doCardLogic(card);
             //getActiveUser().getGamePoints().modifyPlayAmounts(-1);
         }
     }
@@ -342,8 +342,11 @@ public class GameHandler {
 
     private boolean canBuyCard(Card card) {
         if (card == null) {
+            System.out.println("CARD IS NULL");
             return false;
         }
+        System.out.println(getActiveUser().getGamePoints().getCoins() + "Coins");
+        System.out.println(getActiveUser().getGamePoints().getBuyAmounts() + " Buy Amounts");
         if (getActiveUser().getGamePoints().getCoins() >= card.getPrice() && getActiveUser().getGamePoints().getBuyAmounts() > 0) {
             setTurnState(PlayStatus.BUY_PHASE);
             return true;
