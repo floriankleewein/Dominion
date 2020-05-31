@@ -1,47 +1,31 @@
 package com.group7.dominion;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.floriankleewein.commonclasses.Board.Board;
-import com.floriankleewein.commonclasses.Cards.ActionType;
-import com.floriankleewein.commonclasses.Cards.MoneyCard;
-import com.floriankleewein.commonclasses.Cards.MoneyType;
-import com.floriankleewein.commonclasses.Network.GameUpdateMsg;
-import com.group7.dominion.Card.ActionDialogHandler;
-import com.group7.dominion.Card.ErrorDialogHandler;
-import com.group7.dominion.Card.ImageButtonHandler;
-import com.floriankleewein.commonclasses.Cards.ActionCard;
-import com.floriankleewein.commonclasses.Cards.Card;
 import com.floriankleewein.commonclasses.Chat.ChatMessage;
 import com.floriankleewein.commonclasses.Network.ClientConnector;
 import com.floriankleewein.commonclasses.Network.GetGameMsg;
-import com.floriankleewein.commonclasses.Network.StartGameMsg;
-import com.floriankleewein.commonclasses.User.User;
-import com.group7.dominion.Card.HandCardsHandler;
-import com.group7.dominion.Chat.ChatFragment;
-
-import android.widget.Toast;
-
-import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.Network.HasCheatedMessage;
 import com.floriankleewein.commonclasses.Network.SuspectMessage;
 import com.floriankleewein.commonclasses.Network.UpdatePlayerNamesMsg;
+import com.floriankleewein.commonclasses.User.User;
+import com.group7.dominion.Card.ActionDialogHandler;
+import com.group7.dominion.Card.HandCardsHandler;
+import com.group7.dominion.Card.ImageButtonHandler;
+import com.group7.dominion.Chat.ChatFragment;
 import com.group7.dominion.CheatFunction.ShakeListener;
 
 import java.util.ArrayList;
@@ -57,6 +41,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
     private User user;
     private SensorManager sm;
     private ShakeListener shakeListener;
+    private TextView playerScores;
 
     private FragmentManager fragmentManager;
 
@@ -78,6 +63,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
 
 
         chatButton = findViewById(R.id.chat_Button);
+
         fragmentContainer = findViewById(R.id.chatFragmentContainer);
 
         this.clientConnector = ClientConnector.getClientConnector();
@@ -117,8 +103,8 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
     @Override
     protected void onStart() {
         super.onStart();
-
-
+        playerScores = findViewById(R.id.txtVPlayerScore);
+        playerScores.setText("Scores of Players.");
 
         ClientConnector clientConnector = ClientConnector.getClientConnector();
 
@@ -163,6 +149,11 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
                     user = ((GetGameMsg) msg).getGm().getGame().findUser(getUsername());
                     cardsHandler.initCards(user);
                     cardsHandler.onClickListener();
+                    String text = "";
+                    for (User u : ((GetGameMsg) msg).getGm().getGame().getPlayerList()) {
+                        text += u.getUserName() + ": " + u.getGamePoints().getWinningPoints() + "\n";
+                    }
+                    playerScores.setText(text);
                 }
             });
         });
