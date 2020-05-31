@@ -346,8 +346,9 @@ public class TestServer {
 
     public void newTurnMsgFunctionality() {
         gamehandler.newTurn();
-        ActivePlayerMessage msg = new ActivePlayerMessage();
+        NewTurnMessage msg = new NewTurnMessage();
         msg.setGame(gamehandler.getGame());
+        msg.setPlayStatus(gamehandler.getTurnState());
         server.sendToAllTCP(msg);
     }
 
@@ -363,6 +364,12 @@ public class TestServer {
         } else if (msg.getMoneyTypeClicked() != null) {
             System.out.println(msg.getMoneyTypeClicked() + " buyed");
             returnmsg.setBoughtCard(gamehandler.buyCard(msg.getMoneyTypeClicked()));
+        }
+        if (gamehandler.isNewTurn()) {
+            System.out.println("WE HAVE A NEW PLAYER");
+            newTurnMsgFunctionality();
+            gamehandler.setNewTurn(false);
+            return;
         }
         returnmsg.setGame(Game.getGame());
         server.sendToAllTCP(returnmsg);

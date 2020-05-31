@@ -58,7 +58,7 @@ public class ClientConnector {
         try {
             client.connect(5000, SERVER_IP, SERVER_PORT);   // Uni server
         } catch (IOException e) {
-           Log.error("Connection to server failed!");
+            Log.error("Connection to server failed!");
         }
         Log.info("Connection-Status: " + client.isConnected());
     }
@@ -203,6 +203,16 @@ public class ClientConnector {
                     } else {
                         //TODO display error in starting game
                     }
+                }
+            }
+        });
+
+        client.addListener(new Listener() {
+            public void received(Connection con, Object object) {
+                if (object instanceof NewTurnMessage) {
+                    NewTurnMessage msg = (NewTurnMessage) object;
+                    Log.info("Got New Turn Message in ClientConnector");
+                    callbackMap.get(NewTurnMessage.class).callback(msg);
                 }
             }
         });

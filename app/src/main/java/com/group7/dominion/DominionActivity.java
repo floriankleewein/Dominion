@@ -174,7 +174,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    handleMessage(msg);
+                    handlePlayCardMsg((PlayCardMsg) msg);
                 }
             });
         });
@@ -183,7 +183,8 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    handleMessage(msg);
+                    Log.i("Turn", "NEW TURN IN GAME");
+                    handNewTurnMsg((NewTurnMessage) msg);
                 }
             });
         });
@@ -267,19 +268,39 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         }));
     }
 
-    private void handleMessage(BaseMessage msg) {
-        User user = ((PlayCardMsg) msg).getGame().findUser(getUsername());
-        if (user.getUserName().equals(((PlayCardMsg) msg).getGame().getActivePlayer().getUserName())) {
+    private void handlePlayCardMsg(PlayCardMsg msg) {
+        User user;
+        user = msg.getGame().findUser(getUsername());
+        if (user.getUserName().equals(msg.getGame().getActivePlayer().getUserName())) {
             cardsHandler.setImageButtonsNull();
             cardsHandler.initCards(user);
-            if (((PlayCardMsg) msg).getPlayStatus() == PlayStatus.ACTION_PHASE) {
+            if (msg.getPlayStatus() == PlayStatus.ACTION_PHASE) {
                 cardsHandler.onClickListenerActionPhase();
-            } else if (((PlayCardMsg) msg).getPlayStatus() == PlayStatus.PLAY_COINS) {
+            } else if (msg.getPlayStatus() == PlayStatus.PLAY_COINS) {
                 cardsHandler.onClickListenerBuyPhase();
             }
         }
         String text = "";
-        for (User u : ((PlayCardMsg) msg).getGame().getPlayerList()) {
+        for (User u : msg.getGame().getPlayerList()) {
+            text += u.getUserName() + ": " + u.getGamePoints().getWinningPoints() + "\n";
+        }
+        playerScores.setText(text);
+    }
+
+    public void handNewTurnMsg(NewTurnMessage msg) {
+        Log.i("Callback", "Callback for new Cards is triggerd");
+        cardsHandler.setImageButtonsNull();
+        User user = msg.getGame().findUser(getUsername());
+        cardsHandler.initCards(user);
+        if (user.getUserName().equals(msg.getGame().getActivePlayer().getUserName())) {
+            if (msg.getPlayStatus() == PlayStatus.ACTION_PHASE) {
+                cardsHandler.onClickListenerActionPhase();
+            } else if (msg.getPlayStatus() == PlayStatus.PLAY_COINS) {
+                cardsHandler.onClickListenerBuyPhase();
+            }
+        }
+        String text = "";
+        for (User u : msg.getGame().getPlayerList()) {
             text += u.getUserName() + ": " + u.getGamePoints().getWinningPoints() + "\n";
         }
         playerScores.setText(text);

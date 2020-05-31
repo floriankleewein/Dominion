@@ -34,6 +34,9 @@ public class GameHandler {
     private PlayStatus turnState;
     private CardLogic cardLogic;
 
+
+    private boolean newTurn;
+
     /**
      * Logic for the Game, uses the singleton game to handle game logic. Creates Board, Cards for Players
      * and handles played and bought cards.
@@ -82,6 +85,7 @@ public class GameHandler {
             int players = game.getPlayerList().size();
             int active = game.getPlayerList().indexOf(getActiveUser());
             game.setActivePlayer(game.getPlayerList().get((active + 1) % players));
+
         }
         if (checkHandCards()) {
             turnState = PlayStatus.ACTION_PHASE;
@@ -94,7 +98,9 @@ public class GameHandler {
      * Discards Hand of activeUser, draws new Cards and sets new Active User.
      */
     public void newTurn() {
+        newTurn = true;
         getActiveUser().getUserCards().drawNewCards();
+        System.out.println(getActiveUser().getUserName() + " " + getActiveUser().getUserCards().getHandCards().size());
         setNewActivePlayer();
         for (User user : game.getPlayerList()) {
             user.getGamePoints().setPointsDefault();
@@ -217,9 +223,7 @@ public class GameHandler {
             getActiveUser().getGamePoints().setCoins(oldCoins - boughtCard.getPrice());
             getActiveUser().getGamePoints().modifyBuyAmounts(-1);
         }
-        if (getActiveUser().getGamePoints().getBuyAmounts() == 0) {
-            setNewActivePlayer();
-        }
+
     }
 
     public void buyCard(EstateCard card) {
@@ -280,6 +284,11 @@ public class GameHandler {
             calculateCoinsOnActiveUser(boughtCard);
             return boughtCard;
         }
+        if (getActiveUser().getGamePoints().getBuyAmounts() <= 1) {
+            System.out.println("HIER SOLLTE WAS STEHEN");
+            newTurn();
+        }
+
         return null;
     }
 
@@ -292,6 +301,12 @@ public class GameHandler {
             calculateCoinsOnActiveUser(boughtCard);
             return boughtCard;
         }
+
+        if (getActiveUser().getGamePoints().getBuyAmounts() <= 1) {
+            System.out.println("HIER SOLLTE WAS STEHEN");
+            newTurn();
+        }
+
         return null;
     }
 
@@ -303,6 +318,11 @@ public class GameHandler {
             calculateCoinsOnActiveUser(boughtCard);
             return boughtCard;
         }
+        if (getActiveUser().getGamePoints().getBuyAmounts() <= 1) {
+            System.out.println("HIER SOLLTE WAS STEHEN");
+            newTurn();
+        }
+
         return null;
     }
 
@@ -428,4 +448,13 @@ public class GameHandler {
     public void setBoard(Board board) {
         this.board = board;
     }
+
+    public boolean isNewTurn() {
+        return newTurn;
+    }
+
+    public void setNewTurn(boolean newTurn) {
+        this.newTurn = newTurn;
+    }
+
 }
