@@ -98,7 +98,7 @@ public class GameHandlerTest {
         m_cut.changeTurnStatus();
         Assert.assertEquals(PlayStatus.NO_PLAY_PHASE, m_cut.getTurnState());
         m_cut.changeTurnStatus();
-        Assert.assertEquals(PlayStatus.NO_PLAY_PHASE, m_cut.getTurnState());
+        Assert.assertEquals(PlayStatus.ACTION_PHASE, m_cut.getTurnState());
     }
 
     @Test

@@ -108,18 +108,8 @@ public class StartGameActivity extends AppCompatActivity {
                     @Override
                     public void run() {
 
-                        //client.startGame();
                         clientConnector.allPlayersInDominionActivity();
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                //client.allPlayersInDominionActivity();
-                                //Intent intent = new Intent(StartGameActivity.this, DominionActivity.class);
-                                //startActivity(intent);
 
-
-                            }
-                        });
                     }
                 });
 

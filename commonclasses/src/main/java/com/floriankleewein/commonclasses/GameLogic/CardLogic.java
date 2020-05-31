@@ -169,25 +169,25 @@ public class CardLogic {
 
     private void replaceOldMoneyCard() {
         LinkedList<Card> hand = gameHandler.getActiveUser().getUserCards().getHandCards();
+        LinkedList<MoneyCard> moneyCardsinHand = new LinkedList<>();
         int indexOfCard = -1;
         boolean hasCopperMoney = hand.stream().filter(card -> card instanceof MoneyCard).anyMatch(card -> card.getId() == 14); //Kuper = 13, Silber = 14 etc.
         boolean hasSilverMoney = hand.stream().filter(card -> card instanceof MoneyCard).anyMatch(card -> card.getId() == 15);
+        for (Card card : hand) {
+            if (card instanceof MoneyCard) {
+                moneyCardsinHand.add((MoneyCard) card);
+            }
+        }
         if (hasSilverMoney) {
-            for (Card card : hand) {
-                if (card instanceof MoneyCard) {
-                    MoneyCard mnyCard = (MoneyCard) card;
-                    if (mnyCard.getMoneyType().equals(MoneyType.SILBER)) {
-                        indexOfCard = hand.indexOf(card);
-                    }
+            for (MoneyCard card : moneyCardsinHand) {
+                if (card.getMoneyType().equals(MoneyType.SILBER)) {
+                    indexOfCard = hand.indexOf(card);
                 }
             }
         } else if (hasCopperMoney) {
-            for (Card card : hand) {
-                if (card instanceof MoneyCard) {
-                    MoneyCard mnyCard = (MoneyCard) card;
-                    if (mnyCard.getMoneyType().equals(MoneyType.KUPFER)) {
-                        indexOfCard = hand.indexOf(card);
-                    }
+            for (MoneyCard card : moneyCardsinHand) {
+                if (card.getMoneyType().equals(MoneyType.KUPFER)) {
+                    indexOfCard = hand.indexOf(card);
                 }
             }
         } else {
