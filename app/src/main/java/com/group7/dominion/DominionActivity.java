@@ -291,8 +291,8 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         Log.i("Callback", "Callback for new Cards is triggerd");
         cardsHandler.setImageButtonsNull();
         User user = msg.getGame().findUser(getUsername());
-        cardsHandler.initCards(user);
         if (user.getUserName().equals(msg.getGame().getActivePlayer().getUserName())) {
+            cardsHandler.initCards(user);
             if (msg.getPlayStatus() == PlayStatus.ACTION_PHASE) {
                 cardsHandler.onClickListenerActionPhase();
             } else if (msg.getPlayStatus() == PlayStatus.PLAY_COINS) {

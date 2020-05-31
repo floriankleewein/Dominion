@@ -85,7 +85,6 @@ public class GameHandler {
             int players = game.getPlayerList().size();
             int active = game.getPlayerList().indexOf(getActiveUser());
             game.setActivePlayer(game.getPlayerList().get((active + 1) % players));
-
         }
         if (checkHandCards()) {
             turnState = PlayStatus.ACTION_PHASE;
@@ -102,6 +101,7 @@ public class GameHandler {
         getActiveUser().getUserCards().drawNewCards();
         System.out.println(getActiveUser().getUserName() + " " + getActiveUser().getUserCards().getHandCards().size());
         setNewActivePlayer();
+        System.out.println("ACTIVE PLAYER" + getActiveUser().getUserName());
         for (User user : game.getPlayerList()) {
             user.getGamePoints().setPointsDefault();
         }
