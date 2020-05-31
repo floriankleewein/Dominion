@@ -11,6 +11,7 @@ import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.GameLogic.GameHandler;
 import com.floriankleewein.commonclasses.Network.Messages.GameLogicMsg.BuyCardMsg;
 import com.floriankleewein.commonclasses.Network.Messages.GameLogicMsg.PlayCardMsg;
+import com.floriankleewein.commonclasses.Network.Messages.NewTurnMessage;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -163,6 +164,11 @@ public class ClientConnector {
             }
 
         });
+    }
+
+    public void endTurn() {
+        NewTurnMessage msg = new NewTurnMessage();
+        client.sendTCP(msg);
     }
 
     public void updatePlayerNames() {
