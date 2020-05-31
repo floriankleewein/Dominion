@@ -20,6 +20,7 @@ import com.floriankleewein.commonclasses.Chat.RecChatListMsg;
 import com.floriankleewein.commonclasses.CheatFunction.CheatService;
 import com.floriankleewein.commonclasses.GameLogic.CardLogic;
 import com.floriankleewein.commonclasses.GameLogic.GameHandler;
+import com.floriankleewein.commonclasses.GameLogic.PlayStatus;
 import com.floriankleewein.commonclasses.Network.ActivePlayerMessage;
 import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
 import com.floriankleewein.commonclasses.Network.AllPlayersInDominionActivityMsg;
@@ -29,12 +30,13 @@ import com.floriankleewein.commonclasses.Network.CreateGameMsg;
 import com.floriankleewein.commonclasses.Network.GameUpdateMsg;
 import com.floriankleewein.commonclasses.Network.GetGameMsg;
 import com.floriankleewein.commonclasses.Network.HasCheatedMessage;
+import com.floriankleewein.commonclasses.Network.Messages.GameLogicMsg.BuyCardMsg;
+import com.floriankleewein.commonclasses.Network.Messages.GameLogicMsg.PlayCardMsg;
 import com.floriankleewein.commonclasses.Network.Messages.NewTurnMessage;
 import com.floriankleewein.commonclasses.Network.Messages.NotEnoughRessourcesMsg;
 import com.floriankleewein.commonclasses.Network.NetworkInformationMsg;
 import com.floriankleewein.commonclasses.Network.ResetMsg;
 import com.floriankleewein.commonclasses.Network.StartGameMsg;
-import com.floriankleewein.commonclasses.Network.ReturnPlayersMsg;
 import com.floriankleewein.commonclasses.Network.SuspectMessage;
 import com.floriankleewein.commonclasses.Network.UpdatePlayerNamesMsg;
 import com.floriankleewein.commonclasses.User.GamePoints;
@@ -53,8 +55,8 @@ public class ClassRegistration {
             GetGameMsg.class, UserCards.class, GamePoints.class, LinkedList.class, Card.class, MoneyCard.class, ActionCard.class,
             GameHandler.class, Action.class, Board.class, BuyField.class, ActionType.class,
             EstateType.class, MoneyType.class, CheatService.class, EstateCard.class, ActionField.class, AllPlayersInDominionActivityMsg.class,
-            HashMap.class, NewTurnMessage.class, NotEnoughRessourcesMsg.class, CardLogic.class, GetChatMessages.class,
-            RecChatListMsg.class, Pair.class, ReturnPlayersMsg.class
+            HashMap.class, NewTurnMessage.class, NotEnoughRessourcesMsg.class, CardLogic.class, BuyCardMsg.class, PlayCardMsg.class, PlayStatus.class,
+            CardLogic.class,RecChatListMsg.class, Pair.class,GetChatMessages.class
     };
 
     public void registerAllClassesForServer(Server server){

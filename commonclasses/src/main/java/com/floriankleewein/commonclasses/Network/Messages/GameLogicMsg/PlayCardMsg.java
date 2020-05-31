@@ -1,10 +1,24 @@
-package com.floriankleewein.commonclasses.Network.Messages;
+package com.floriankleewein.commonclasses.Network.Messages.GameLogicMsg;
 
+import com.floriankleewein.commonclasses.Cards.Card;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.GameLogic.PlayStatus;
 import com.floriankleewein.commonclasses.Network.BaseMessage;
 
-public class NewTurnMessage extends BaseMessage {
+public class PlayCardMsg extends BaseMessage {
+
+    Card playedCard;
+    Game game;
+    PlayStatus playStatus;
+
+    public Card getPlayedCard() {
+        return playedCard;
+    }
+
+    public void setPlayedCard(Card playedCard) {
+        this.playedCard = playedCard;
+    }
+
     public Game getGame() {
         return game;
     }
@@ -20,7 +34,4 @@ public class NewTurnMessage extends BaseMessage {
     public void setPlayStatus(PlayStatus playStatus) {
         this.playStatus = playStatus;
     }
-
-    PlayStatus playStatus;
-    Game game;
 }

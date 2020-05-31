@@ -10,6 +10,9 @@ import com.floriankleewein.commonclasses.Chat.GetChatMessages;
 import com.floriankleewein.commonclasses.ClassRegistration;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.GameLogic.GameHandler;
+import com.floriankleewein.commonclasses.Network.Messages.GameLogicMsg.BuyCardMsg;
+import com.floriankleewein.commonclasses.Network.Messages.GameLogicMsg.PlayCardMsg;
+import com.floriankleewein.commonclasses.Network.Messages.NewTurnMessage;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -57,7 +60,7 @@ public class ClientConnector {
         try {
             client.connect(5000, SERVER_IP, SERVER_PORT);   // Uni server
         } catch (IOException e) {
-           Log.error("Connection to server failed!");
+            Log.error("Connection to server failed!");
         }
         Log.info("Connection-Status: " + client.isConnected());
     }
@@ -123,7 +126,7 @@ public class ClientConnector {
 
         });
 
-        client.addListener(new Listener(){
+        client.addListener(new Listener() {
             @Override
             public void received(Connection connection, Object object) {
                 if (object instanceof AllPlayersInDominionActivityMsg) {
@@ -143,7 +146,7 @@ public class ClientConnector {
                 if (object instanceof GetGameMsg) {
                     Log.info("Got Message");
                     GetGameMsg msg = (GetGameMsg) object;
-                    game = msg.getGm().getGame();
+                    game = msg.getGame();
                     callbackMap.get(GetGameMsg.class).callback(msg);
                 }
             }
@@ -163,6 +166,11 @@ public class ClientConnector {
             }
 
         });
+    }
+
+    public void endTurn() {
+        NewTurnMessage msg = new NewTurnMessage();
+        client.sendTCP(msg);
     }
 
     public void updatePlayerNames() {
@@ -200,6 +208,16 @@ public class ClientConnector {
                 }
             }
         });
+
+        client.addListener(new Listener() {
+            public void received(Connection con, Object object) {
+                if (object instanceof NewTurnMessage) {
+                    NewTurnMessage msg = (NewTurnMessage) object;
+                    Log.info("Got New Turn Message in ClientConnector");
+                    callbackMap.get(NewTurnMessage.class).callback(msg);
+                }
+            }
+        });
     }
 
     /**
@@ -216,6 +234,43 @@ public class ClientConnector {
                     GameUpdateMsg gameUpdateMsg = (GameUpdateMsg) object;
                     setGameHandler(msg.getGameHandler());
                     callbackMap.get(GameUpdateMsg.class).callback(gameUpdateMsg);
+                }
+            }
+        });
+    }
+
+    public void sendPlayCard(PlayCardMsg msg) {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                client.sendTCP(msg);
+            }
+        });
+        thread.start();
+        client.addListener(new Listener() {
+            public void received(Connection con, Object object) {
+                if (object instanceof PlayCardMsg) {
+                    PlayCardMsg msg1 = (PlayCardMsg) object;
+                    callbackMap.get(PlayCardMsg.class).callback(msg1);
+                }
+            }
+        });
+    }
+
+    public void sendbuyCard(BuyCardMsg msg) {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                client.sendTCP(msg);
+            }
+        });
+        thread.start();
+
+        client.addListener(new Listener() {
+            public void received(Connection con, Object object) {
+                if (object instanceof BuyCardMsg) {
+                    BuyCardMsg msg1 = (BuyCardMsg) object;
+                    callbackMap.get(BuyCardMsg.class).callback(msg1);
                 }
             }
         });
@@ -304,12 +359,12 @@ public class ClientConnector {
     }
 
     //FKDoc: this is the message which is broadcasted when startbutton is clicked. everyone lands in the dominion activity then.
-    public void allPlayersInDominionActivity(){
+    public void allPlayersInDominionActivity() {
         AllPlayersInDominionActivityMsg msg = new AllPlayersInDominionActivityMsg();
         client.sendTCP(msg);
     }
 
-    public void registerClasses(){
+    public void registerClasses() {
         ClassRegistration reg = new ClassRegistration();
         reg.registerAllClassesForClient(client);
     }

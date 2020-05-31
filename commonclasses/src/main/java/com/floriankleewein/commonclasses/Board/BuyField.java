@@ -104,7 +104,7 @@ public class BuyField {
 
             return card;
         } else {
-            // TODO: Gebe hier auch eine Log Message oder User Message aus, dass dieser Typ von Karten nicht mehr im Stapel existiert
+            //falls benötigt
             return null;
         }
     }
@@ -135,14 +135,58 @@ public class BuyField {
 
             return card;
         } else {
-            // TODO: Gebe hier auch eine Log Message oder User Message aus, dass dieser Typ von Karten nicht mehr im Stapel existiert
+            //falls benötigt
             return null;
         }
     }
 
-    /* Falls benötigt => Diese Logik muss beim User passieren
-    public void setCards(List<Card> cards) {
-        this.cardsToBuy.addAll(cards);
+    public Card getMoneyCard(MoneyType moneyType) {
+        Card card = null;
+        boolean cardFound = false;
+        int cardIndex = 0;
+
+        // Überprüfe ob der ActionType überhaupt noch im Stapel existiert
+        if(isTypeExistsInField(moneyType)){
+            for(int i = 0; i < this.cardsToBuy.size(); i++) {
+                if(this.cardsToBuy.get(i) instanceof MoneyCard) {
+                    MoneyCard moneyCard = (MoneyCard) this.cardsToBuy.get(i);
+                    // Wenn der Kartentyp gefunden wird dann merke Index
+                    if(moneyCard.getMoneyType() == moneyType) {
+                        card = moneyCard;
+                        cardIndex = i;
+                        cardFound = true;
+                    }
+                }
+            }
+            return card;
+        } else {
+            //falls benötigt
+            return null;
+        }
     }
-    */
+
+    public Card getEstateCard(EstateType estateType) {
+        Card card = null;
+        boolean cardFound = false;
+        int cardIndex = 0;
+
+        // Überprüfe ob der ActionType überhaupt noch im Stapel existiert
+        if(isTypeExistsInField(estateType)){
+            for(int i = 0; i < this.cardsToBuy.size(); i++) {
+                if(this.cardsToBuy.get(i) instanceof EstateCard) {
+                    EstateCard estateCard = (EstateCard) this.cardsToBuy.get(i);
+                    // Wenn der Kartentyp gefunden wird dann merke Index
+                    if(estateCard.getEstateType() == estateType) {
+                        card = estateCard;
+                        cardIndex = i;
+                        cardFound = true;
+                    }
+                }
+            }
+            return card;
+        } else {
+            //falls benötigt
+            return null;
+        }
+    }
 }

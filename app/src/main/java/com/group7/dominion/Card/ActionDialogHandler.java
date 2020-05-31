@@ -13,7 +13,7 @@ import com.floriankleewein.commonclasses.Cards.ActionCard;
 import com.floriankleewein.commonclasses.Cards.ActionType;
 import com.floriankleewein.commonclasses.Cards.Card;
 import com.floriankleewein.commonclasses.Network.ClientConnector;
-import com.floriankleewein.commonclasses.Network.GameUpdateMsg;
+import com.floriankleewein.commonclasses.Network.Messages.GameLogicMsg.BuyCardMsg;
 import com.group7.dominion.R;
 
 import androidx.appcompat.app.AppCompatDialogFragment;
@@ -53,16 +53,16 @@ public class ActionDialogHandler extends AppCompatDialogFragment {
                 .setPositiveButton("Buy", (dialog, which) -> {
                     // Buy the Card
                     //Card card = this.board.getActionField().pickCard(actionType);
-                    GameUpdateMsg gameUpdateMsg = new GameUpdateMsg();
-                    gameUpdateMsg.setActionTypeClicked(actionType);
-                    sendUpdate(gameUpdateMsg);
-
-                    clientConnector.registerCallback(GameUpdateMsg.class, (msg -> {
+                    BuyCardMsg buyCardMsg =new BuyCardMsg();
+                    buyCardMsg.setActionTypeClicked(actionType);
+                    sendUpdate(buyCardMsg);
+/*
+                    clientConnector.registerCallback(BuyCardMsg.class, (msg -> {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                GameUpdateMsg gameUpdateMsg1 = (GameUpdateMsg) msg;
-                                Card card = gameUpdateMsg1.getBoughtCard();
+                                BuyCardMsg buyCardMsg1= (BuyCardMsg) msg;
+                                Card card = buyCardMsg1.getBoughtCard();
                                 if(card == null) {
                                     ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
                                     errorDialogHandler.show(fragmentManager, "errorDialog");
@@ -128,7 +128,7 @@ public class ActionDialogHandler extends AppCompatDialogFragment {
                                 }
                             }
                         });
-                    }));
+                    })); */
                 })
                 .setNegativeButton("Close", (dialog, which) -> {
                     dialog.cancel();
@@ -298,11 +298,11 @@ public class ActionDialogHandler extends AppCompatDialogFragment {
         this.show(fragmentManager, "werkstattDialog");
     }
 
-    private void sendUpdate(GameUpdateMsg gameUpdateMsg) {
+    private void sendUpdate(BuyCardMsg buyCardMsg){
         Thread th = new Thread(new Runnable() {
             @Override
             public void run() {
-                clientConnector.sendUpdate(gameUpdateMsg);
+                clientConnector.sendbuyCard(buyCardMsg);
             }
         });
         th.start();
