@@ -181,7 +181,7 @@
 
         <TextView
             android:id="@+id/txtVPlayerScore"
-            android:layout_width="49dp"
+            android:layout_width="90dp"
             android:layout_height="83dp"
             app:layout_column="2"
             app:layout_row="0" />
