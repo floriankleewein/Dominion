@@ -1,6 +1,8 @@
 package com.floriankleewein.commonclasses.User;
 
 
+import com.floriankleewein.commonclasses.GameLogic.PlayStatus;
+
 public class User {
     private static long ID;
     private long UserID;
@@ -11,6 +13,7 @@ public class User {
     private GamePoints gamePoints;
     private boolean gameCreator = false;
     private boolean isCheater;
+    private PlayStatus playStatus;
 
 
     public User() {
@@ -20,6 +23,7 @@ public class User {
     public User(String userName) {
         this.UserName = userName;
         isCheater = false;
+        setUpforGame();
     }
 
     public void setUpforGame() {
@@ -91,6 +95,14 @@ public class User {
         isCheater = cheater;
     }
 
-}
+    public PlayStatus getPlayStatus() {
+        return playStatus;
+    }
 
+    public void setPlayStatus(PlayStatus playStatus) {
+        this.playStatus = playStatus;
+    }
+
+
+}
 

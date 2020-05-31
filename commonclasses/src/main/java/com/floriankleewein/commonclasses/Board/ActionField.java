@@ -53,6 +53,7 @@ public class ActionField {
         return typeFound;
     }
 
+    //LKDoc: pickCard Method to buy a card
     public Card pickCard(ActionType actionType) {
         Card card = null;
         boolean cardFound = false;
@@ -79,14 +80,35 @@ public class ActionField {
 
             return card;
         } else {
-            // TODO: Gebe hier auch eine Log Message oder User Message aus, dass dieser Typ von Karten nicht mehr im Stapel existiert
+            //falls benötigt
             return card;
         }
     }
 
-    /* Falls benötigt => Diese Logik muss beim User passieren
-    public void setCards(List<Card> cards) {
-        this.cardsToBuy.addAll(cards);
+    //LKDoc - just returns the card (needed for the logic of Emanuel)
+    public Card getActionCard(ActionType actionType) {
+        Card card = null;
+        boolean cardFound = false;
+        int cardIndex = 0;
+
+        // Überprüfe ob der ActionType überhaupt noch im Stapel existiert
+        if(isTypeExistsInField(actionType)){
+            for(int i = 0; i < this.actionCardsToBuy.size(); i++) {
+                if (this.actionCardsToBuy.get(i) instanceof ActionCard) {
+                    ActionCard actionCard = (ActionCard) this.actionCardsToBuy.get(i);
+                    // Wenn der Kartentyp gefunden wird dann merke Index
+                    if (actionCard.getActionType() == actionType) {
+                        card = actionCard;
+                        cardIndex = i;
+                        cardFound = true;
+                    }
+                }
+            }
+            return card;
+        } else {
+            //falls benötigt
+            return card;
+        }
     }
-    */
+
 }

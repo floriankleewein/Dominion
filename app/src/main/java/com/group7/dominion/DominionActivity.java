@@ -15,6 +15,19 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.floriankleewein.commonclasses.Board.Board;
+
+import com.floriankleewein.commonclasses.Cards.ActionType;
+import com.floriankleewein.commonclasses.Cards.MoneyCard;
+import com.floriankleewein.commonclasses.Cards.MoneyType;
+import com.floriankleewein.commonclasses.GameLogic.PlayStatus;
+import com.floriankleewein.commonclasses.Network.GameUpdateMsg;
+import com.floriankleewein.commonclasses.Network.Messages.GameLogicMsg.BuyCardMsg;
+import com.floriankleewein.commonclasses.Network.Messages.GameLogicMsg.PlayCardMsg;
+import com.group7.dominion.Card.ActionDialogHandler;
+import com.group7.dominion.Card.ErrorDialogHandler;
+import com.group7.dominion.Card.ImageButtonHandler;
+import com.floriankleewein.commonclasses.Cards.ActionCard;
+import com.floriankleewein.commonclasses.Cards.Card;
 import com.floriankleewein.commonclasses.Chat.ChatMessage;
 import com.floriankleewein.commonclasses.Network.ClientConnector;
 import com.floriankleewein.commonclasses.Network.GetGameMsg;
@@ -42,6 +55,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
     private SensorManager sm;
     private ShakeListener shakeListener;
     private TextView playerScores;
+
 
     private FragmentManager fragmentManager;
 
@@ -146,20 +160,129 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    user = ((GetGameMsg) msg).getGm().getGame().findUser(getUsername());
+                    User user = ((GetGameMsg) msg).getGame().findUser(getUsername());
                     cardsHandler.initCards(user);
+
+                    System.out.println("*******" + ((GetGameMsg) msg).getPlayStatus() + "******");
+                    if (user.getUserName().equals(((GetGameMsg) msg).getGame().getActivePlayer().getUserName())) {
+                        if (((GetGameMsg) msg).getPlayStatus() == PlayStatus.ACTION_PHASE) {
+                            cardsHandler.onClickListenerActionPhase();
+                        } else if (((GetGameMsg) msg).getPlayStatus() == PlayStatus.PLAY_COINS) {
+                            cardsHandler.onClickListenerBuyPhase();
+                        }
+                    }
+                }
+            });
+        });
+
+        ClientConnector.getClientConnector().registerCallback(PlayCardMsg.class, msg -> {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    //cardsHandler.setImageButtonsNull();
+                    User user = ((PlayCardMsg) msg).getGame().getActivePlayer();
+                    System.out.println("*******" + ((PlayCardMsg) msg).getPlayStatus() + " Size of HandCards " + user.getUserCards().getHandCards().size() + "*******");
+                    if (user.getUserName().equals(getUsername())) {
+                        cardsHandler.initCards(user);
+                        if (((PlayCardMsg) msg).getPlayStatus() == PlayStatus.ACTION_PHASE) {
+                            cardsHandler.onClickListenerActionPhase();
+                        } else if (((PlayCardMsg) msg).getPlayStatus() == PlayStatus.PLAY_COINS) {
+                            cardsHandler.onClickListenerBuyPhase();
+                        }
+                    }
+                }
+            });
+        });
+
+        ClientConnector.getClientConnector().registerCallback(GameUpdateMsg.class, msg -> {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    user = ((GameUpdateMsg) msg).getGameHandler().getGame().getActivePlayer();
+
                     cardsHandler.onClickListener();
                     String text = "";
                     for (User u : ((GetGameMsg) msg).getGm().getGame().getPlayerList()) {
                         text += u.getUserName() + ": " + u.getGamePoints().getWinningPoints() + "\n";
                     }
                     playerScores.setText(text);
+
                 }
             });
         });
         cardsHandler.sendMessage();
-    }
 
+        clientConnector.registerCallback(BuyCardMsg.class, (msg -> {
+            runOnUiThread(new Runnable() {
+
+                @Override
+                public void run() {
+                    System.out.println("BuyCardMsg is in Dominion Activity");
+                    BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
+                    Card card = gameUpdateMsg1.getBoughtCard();
+                    if (card == null) {
+                        Toast.makeText(getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
+                    } else {
+                        ActionCard actionCard = (ActionCard) card;
+                        switch (actionCard.getActionType()) {
+                            case HEXE:
+                                Log.i("Action", "ActionType: " + actionCard.getActionType() +
+                                        ", Card Count: " + actionCard.getAction().getCardCount() +
+                                        ", Curse Count: " + actionCard.getAction().getCurseCount());
+                                break;
+                            case WERKSTATT:
+                                Log.i("Action", "ActionType: " + actionCard.getActionType() +
+                                        ", Card Count: " + actionCard.getAction().getCardCount() +
+                                        ", Max Money Value: " + actionCard.getAction().getMaxMoneyValue());
+                                break;
+                            case SCHMIEDE:
+                                Log.i("Action", "ActionType: " + actionCard.getActionType() +
+                                        ", Card Count: " + actionCard.getAction().getCardCount());
+                                break;
+                            case MINE:
+                                Log.i("Action", "ActionType: " + actionCard.getActionType() +
+                                        ", Card Count: " + actionCard.getAction().getCardCount() +
+                                        ", Take MoneyCard That Cost Three More Than Old: " + actionCard.getAction().isTakeMoneyCardThatCostThreeMoreThanOld() +
+                                        ", Take Card On Hand: " + actionCard.getAction().isTakeCardOnHand());
+                                break;
+                            case MILIZ:
+                                Log.i("Action", "ActionType: " + actionCard.getActionType() +
+                                        ", Money Value: " + actionCard.getAction().getMoneyValue() +
+                                        ", Throw Every UserCards Until Three Left: " + actionCard.getAction().isThrowEveryUserCardsUntilThreeLeft());
+                                break;
+                            case MARKT:
+                                Log.i("Action", "ActionType: " + actionCard.getActionType() +
+                                        ", Card Count: " + actionCard.getAction().getCardCount() +
+                                        ", Action Count: " + actionCard.getAction().getActionCount() +
+                                        ", Money Value: " + actionCard.getAction().getMoneyValue() +
+                                        ", Buy Count: " + actionCard.getAction().getBuyCount());
+                                break;
+                            case KELLER:
+                                Log.i("Action", "ActionType: " + actionCard.getActionType() +
+                                        ", Action Count: " + actionCard.getAction().getActionCount() +
+                                        ", Throw Any Amount Cards: " + actionCard.getAction().isThrowAnyAmountCards());
+                                break;
+                            case HOLZFAELLER:
+                                Log.i("Action", "ActionType: " + actionCard.getActionType() +
+                                        ", Buy Count: " + actionCard.getAction().getBuyCount() +
+                                        ", Money Value: " + actionCard.getAction().getMoneyValue());
+                                break;
+                            case DORF:
+                                Log.i("Action", "ActionType: " + actionCard.getActionType() +
+                                        ", Card Count: " + actionCard.getAction().getCardCount() +
+                                        ", Action Count: " + actionCard.getAction().getActionCount());
+                                break;
+                            case BURGGRABEN:
+                                Log.i("Action", "ActionType: " + actionCard.getActionType() +
+                                        ", Card Count: " + actionCard.getAction().getCardCount() +
+                                        ", Throw Every UserCards Until Three Left: " + actionCard.getAction().isThrowEveryUserCardsUntilThreeLeft());
+                                break;
+                        }
+                    }
+                }
+            });
+        }));
+    }
 
     public void sendUpdateMessage() {
         Thread th = new Thread(new Runnable() {
