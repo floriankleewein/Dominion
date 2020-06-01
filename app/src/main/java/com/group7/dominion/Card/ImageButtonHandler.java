@@ -29,11 +29,11 @@ public class ImageButtonHandler {
     private ImageButton buttonHerzogturm;
     private ImageButton buttonFluch;
 
-    private final static String errorDialogConst = "errorDialog";
-    private final static String moneyCardConst = "MoneyCard";
-    private final static String moneyTypeConst = "MoneyType: ";
-    private final static String estateCardConst = "EstateCard";
-    private final static String estateTypeConst = "EstateType: ";
+    private static final String errorDialogConst = "errorDialog";
+    private static final String moneyCardConst = "MoneyCard";
+    private static final String moneyTypeConst = "MoneyType: ";
+    private static final String estateCardConst = "EstateCard";
+    private static final String estateTypeConst = "EstateType: ";
 
     public void init(Activity activity, FragmentManager fragmentManager) {
         //Gold
