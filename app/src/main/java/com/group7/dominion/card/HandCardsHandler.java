@@ -56,20 +56,13 @@ public class HandCardsHandler {
     }
 
     public void sendMessage() {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                ClientConnector.getClientConnector().sendGameUpdate();
-            }
-        });
+        Thread thread = new Thread(() -> ClientConnector.getClientConnector().sendGameUpdate());
         thread.start();
 
     }
 
     private int setRessource(Card card) {
         switch (card.getId()) {
-            default:
-                return R.drawable.backofcard;
             case 0:
                 return R.drawable.burggraben_info;
             case 1:
@@ -104,6 +97,8 @@ public class HandCardsHandler {
                 return R.drawable.silber;
             case 16:
                 return R.drawable.gold;
+            default:
+                return R.drawable.backofcard;
         }
     }
 
