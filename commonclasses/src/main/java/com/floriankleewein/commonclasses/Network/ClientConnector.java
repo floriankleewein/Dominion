@@ -18,7 +18,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ClientConnector {
-    private final String Tag = "CLIENT-CONNECTOR"; // Debugging only
     private static final String SERVER_IP = "143.205.174.196";
     private static final int SERVER_PORT = 53217;
     private static Client client;
