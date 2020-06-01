@@ -40,9 +40,10 @@ public class TestServer {
     private Board board;
     private boolean hasGame = false;
     private boolean gamehandlerCalled = false;
-    private final String Tag = "TEST-SERVER"; // debugging only
     private GameHandler gamehandler;
     private Map<User, Connection> userClientConnectorMap = new HashMap<>(); // TODO fix bad variable name
+
+    private static final String BOUGHT = " bought";
 
 
     public TestServer() {
@@ -50,7 +51,7 @@ public class TestServer {
     }
 
     public void startServer() {
-        System.out.println(Tag + ", Running Server!");
+        Log.info("Running Server!");
         //FKDoc: Register classes
         registerClasses();
 
@@ -76,7 +77,7 @@ public class TestServer {
     public void createGame() {
         game = Game.getGame();
         hasGame = true;
-        System.out.println("GAME, game instanced - started");
+        Log.info("GAME, game instanced - started");
     }
 
     public void sendCheatInformation(String CheaterName) {
@@ -223,7 +224,7 @@ public class TestServer {
                 game.addPlayer(player);
                 addPlayerMsg.setFeedbackUI(0);
                 addPlayerMsg.setPlayerAdded(true);
-                System.out.println("Player added: " + player.getUserName());
+                Log.info("Player added: " + player.getUserName());
 
 
             } else {
@@ -243,7 +244,7 @@ public class TestServer {
     public void startGameMsgFunctionality(Connection con) {
         StartGameMsg msg = new StartGameMsg();
         //Check if game started successfully, and notify client
-        System.out.println("Got the StartGameMsg on Server");
+        Log.info("Got the StartGameMsg on Server");
 
         if (setupGame()) {
             msg.setFeedbackUI(0);
@@ -264,7 +265,7 @@ public class TestServer {
     }
 
     public void getPlayerMsgFunctionality(Connection con) {
-        System.out.println("Got the GetPlayerMsg");
+        Log.info("Got the GetPlayerMsg");
         ReturnPlayersMsg msg = new ReturnPlayersMsg();
         con.sendTCP(msg);
     }
@@ -275,7 +276,7 @@ public class TestServer {
 
         String message = msg.getMessage();
 
-        System.out.println("Receive msg from client:" + message);
+        Log.info("Receive msg from client:" + message);
 
         ChatMessage responseMsg = new ChatMessage();
         responseMsg.setMessage(msg.getMessage());
@@ -305,7 +306,7 @@ public class TestServer {
 
     public void suspectMessageFunctionality(Object object) {
         SuspectMessage msg = (SuspectMessage) object;
-        System.out.println("GOT SUSPECT MESSAGE FROM" + msg.getUserName());
+        Log.info("GOT SUSPECT MESSAGE FROM" + msg.getUserName());
         gamehandler.getGame().getCheatService().suspectUser(msg.getSuspectedUserName(), msg.getUserName());
         sendSuspectInformation(msg.getSuspectedUserName(), msg.getUserName());
     }
@@ -338,7 +339,7 @@ public class TestServer {
 
     public void getGameMsgFunctionality() {
         GetGameMsg msg = new GetGameMsg();
-        System.out.println("Got Get GameMsg on Server");
+        Log.info("Got Get GameMsg on Server");
         msg.setGame(gamehandler.getGame());
         msg.setPlayStatus(gamehandler.getTurnState());
         server.sendToAllTCP(msg);
@@ -355,17 +356,17 @@ public class TestServer {
         BuyCardMsg msg = (BuyCardMsg) object;
         BuyCardMsg returnmsg = new BuyCardMsg();
         if (msg.getActionTypeClicked() != null) {
-            System.out.println(msg.getActionTypeClicked() + " buyed");
+            Log.info(msg.getActionTypeClicked() + BOUGHT);
             returnmsg.setBoughtCard(gamehandler.buyCard(msg.getActionTypeClicked()));
         } else if (msg.getEstateTypeClicked() != null) {
-            System.out.println(msg.getEstateTypeClicked() + " buyed");
+            Log.info(msg.getEstateTypeClicked() + BOUGHT);
             returnmsg.setBoughtCard(gamehandler.buyCard(msg.getEstateTypeClicked()));
         } else if (msg.getMoneyTypeClicked() != null) {
-            System.out.println(msg.getMoneyTypeClicked() + " buyed");
+            Log.info(msg.getMoneyTypeClicked() + BOUGHT);
             returnmsg.setBoughtCard(gamehandler.buyCard(msg.getMoneyTypeClicked()));
         }
         if (gamehandler.isNewTurn()) {
-            System.out.println("WE HAVE A NEW PLAYER");
+            Log.info("WE HAVE A NEW PLAYER");
             newTurnMsgFunctionality();
             gamehandler.setNewTurn(false);
         }
@@ -375,7 +376,7 @@ public class TestServer {
 
     private void playCardmsgFunctionality(Object object) {
         PlayCardMsg msg = (PlayCardMsg) object;
-        System.out.println(msg.getPlayedCard().getId() + "is played");
+        Log.info(msg.getPlayedCard().getId() + "is played");
         gamehandler.playCard(msg.getPlayedCard());
         PlayCardMsg returnmsg = new PlayCardMsg();
         returnmsg.setGame(gamehandler.getGame());

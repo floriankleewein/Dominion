@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.Toast;
-
 import com.floriankleewein.commonclasses.Cards.Card;
 import com.floriankleewein.commonclasses.Cards.EstateCard;
 import com.floriankleewein.commonclasses.Cards.EstateType;
@@ -29,11 +27,11 @@ public class ImageButtonHandler {
     private ImageButton buttonHerzogturm;
     private ImageButton buttonFluch;
 
-    private final static String errorDialogConst = "errorDialog";
-    private final static String moneyCardConst = "MoneyCard";
-    private final static String moneyTypeConst = "MoneyType: ";
-    private final static String estateCardConst = "EstateCard";
-    private final static String estateTypeConst = "EstateType: ";
+    private static final String ERRORDIALOG_CONST = "errorDialog";
+    private static final String MONEYCARD_CONST = "MoneyCard";
+    private static final String MONEYTYPE_CONST = "MoneyType: ";
+    private static final String ESTATECARD_CONST = "EstateCard";
+    private static final String ESTATETYPE_CONST = "EstateType: ";
 
     public void init(Activity activity, FragmentManager fragmentManager) {
         //Gold
@@ -113,10 +111,10 @@ public class ImageButtonHandler {
                     Card card = gameUpdateMsg1.getBoughtCard();
                     if (card == null) {
                         ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
-                        errorDialogHandler.show(fragmentManager, errorDialogConst);
+                        errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
                     } else {
                         MoneyCard moneyCard = (MoneyCard) card;
-                        Log.i(moneyCardConst, moneyTypeConst + moneyCard.getMoneyType());
+                        Log.i(MONEYCARD_CONST, MONEYTYPE_CONST + moneyCard.getMoneyType());
                     }
                 }
             });
@@ -137,10 +135,10 @@ public class ImageButtonHandler {
                     Card card = gameUpdateMsg1.getBoughtCard();
                     if (card == null) {
                         ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
-                        errorDialogHandler.show(fragmentManager, errorDialogConst);
+                        errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
                     } else {
                         MoneyCard moneyCard = (MoneyCard) card;
-                        Log.i(moneyCardConst, moneyTypeConst + moneyCard.getMoneyType());
+                        Log.i(MONEYCARD_CONST, MONEYTYPE_CONST + moneyCard.getMoneyType());
                     }
                 }
             });
@@ -162,10 +160,10 @@ public class ImageButtonHandler {
                     Card card = gameUpdateMsg1.getBoughtCard();
                     if (card == null) {
                         ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
-                        errorDialogHandler.show(fragmentManager, errorDialogConst);
+                        errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
                     } else {
                         MoneyCard moneyCard = (MoneyCard) card;
-                        Log.i(moneyCardConst, moneyTypeConst + moneyCard.getMoneyType());
+                        Log.i(MONEYCARD_CONST, MONEYTYPE_CONST + moneyCard.getMoneyType());
                     }
                 }
             });
@@ -186,10 +184,10 @@ public class ImageButtonHandler {
                     Card card = gameUpdateMsg1.getBoughtCard();
                     if (card == null) {
                         ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
-                        errorDialogHandler.show(fragmentManager, errorDialogConst);
+                        errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
                     } else {
                         EstateCard estateCard = (EstateCard) card;
-                        Log.i(estateCardConst, estateTypeConst + estateCard.getEstateType());
+                        Log.i(ESTATECARD_CONST, ESTATETYPE_CONST + estateCard.getEstateType());
                     }
                 }
             });
@@ -210,10 +208,10 @@ public class ImageButtonHandler {
                     Card card = gameUpdateMsg1.getBoughtCard();
                     if (card == null) {
                         ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
-                        errorDialogHandler.show(fragmentManager, errorDialogConst);
+                        errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
                     } else {
                         EstateCard estateCard = (EstateCard) card;
-                        Log.i(estateCardConst, estateTypeConst + estateCard.getEstateType());
+                        Log.i(ESTATECARD_CONST, ESTATETYPE_CONST + estateCard.getEstateType());
                     }
                 }
             });
@@ -234,10 +232,10 @@ public class ImageButtonHandler {
                     Card card = gameUpdateMsg1.getBoughtCard();
                     if (card == null) {
                         ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
-                        errorDialogHandler.show(fragmentManager, errorDialogConst);
+                        errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
                     } else {
                         EstateCard estateCard = (EstateCard) card;
-                        Log.i(estateCardConst, estateTypeConst + estateCard.getEstateType());
+                        Log.i(ESTATECARD_CONST, ESTATETYPE_CONST + estateCard.getEstateType());
                     }
                 }
             });
@@ -258,10 +256,10 @@ public class ImageButtonHandler {
                     Card card = gameUpdateMsg1.getBoughtCard();
                     if (card == null) {
                         ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
-                        errorDialogHandler.show(fragmentManager, errorDialogConst);
+                        errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
                     } else {
                         EstateCard estateCard = (EstateCard) card;
-                        Log.i(estateCardConst, estateTypeConst + estateCard.getEstateType());
+                        Log.i(ESTATECARD_CONST, ESTATETYPE_CONST + estateCard.getEstateType());
                     }
                 }
             });

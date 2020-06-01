@@ -23,6 +23,10 @@ public class MainActivity extends AppCompatActivity {
     ClientConnector client;
     SharedPreferences sharedPreferences;
 
+    private static final String playerAddedSuccessfully = "Spieler wurde erfolgreich hinzugefügt!";
+    private static final String nameAlreadyInUse = "Name wird bereits verwendet. Bitte wähle einen anderen!";
+    private static final String playerMaxReached = "Maximale Spielerzahl bereits erreicht. Du kannst nicht beitreten!";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     TextView textView = findViewById(R.id.nameCheckFeedback);
-                    textView.setText("Spieler erfolgreich hinzugefügt!");
+                    textView.setText(playerAddedSuccessfully);
                     startActivity(new Intent(MainActivity.this, StartGameActivity.class));
                 }
             });
@@ -94,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     TextView textView = findViewById(R.id.nameCheckFeedback);
-                    textView.setText("Name wird bereits verwendet. Bitte wähle einen anderen.");
+                    textView.setText(nameAlreadyInUse);
                 }
             });
         }));
@@ -104,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     TextView textView = findViewById(R.id.nameCheckFeedback);
-                    textView.setText("Maximale Spielerzahl bereits erreicht. Du kannst nicht beitreten.");
+                    textView.setText(playerMaxReached);
                 }
             });
         }));

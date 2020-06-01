@@ -18,14 +18,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ClientConnector {
-    private final String Tag = "CLIENT-CONNECTOR"; // Debugging only
     private static final String SERVER_IP = "143.205.174.196";
     private static final int SERVER_PORT = 53217;
     private static Client client;
     private GameHandler gameHandler;
 
 
-    private Game game; //TODO das sollte man evtl nicht mehr hier im Client haben... Einfach Game.getGame verwenden
+    private Game game;
     Map<Class, Callback<BaseMessage>> callbackMap = new HashMap<>();
 
 
@@ -281,10 +280,6 @@ public class ClientConnector {
     public void setGameHandler(GameHandler gameHandler) {
         this.gameHandler = gameHandler;
     }
-
-    //public boolean hasGame() {return hasGame;}
-
-    //public void setHasGame(Boolean bool) {this.hasGame = bool;}
 
     public Client getClient() {
         return client;

@@ -1,5 +1,6 @@
 package com.floriankleewein.commonclasses.GameLogic;
 
+import com.esotericsoftware.minlog.Log;
 import com.floriankleewein.commonclasses.Board.Board;
 import com.floriankleewein.commonclasses.Cards.ActionCard;
 import com.floriankleewein.commonclasses.Cards.ActionType;
@@ -26,8 +27,9 @@ public class GameHandler {
     }
 
     private Game game;
-    private final static int conMoneyCards = 7;
-    private final static int conAnwesenCards = 3;
+    private final static int CON_MONEY_CARDS = 7;
+    private final static int CON_ANWESEN_CARDS = 3;
+    private final static String BOUGHT_CARD_TYPE = "Bought card type: ";
     private Board board;
     private Card playedCard;
     private Card buyCard;
@@ -62,11 +64,11 @@ public class GameHandler {
             for (User user : playerList) {
                 user.setUpforGame();
                 LinkedList<Card> generatedCards = new LinkedList<>();
-                for (int i = 0; i < conMoneyCards; i++) {
+                for (int i = 0; i < CON_MONEY_CARDS; i++) {
                     Card copper = new MoneyCard(0, 1, MoneyType.KUPFER);
                     generatedCards.add(copper);
                 }
-                for (int i = 0; i < conAnwesenCards; i++) {
+                for (int i = 0; i < CON_ANWESEN_CARDS; i++) {
                     Card anwesen = new EstateCard(2, 1, EstateType.ANWESEN);
                     user.getGamePoints().modifyWinningPoints(1);
                     generatedCards.add(anwesen);
@@ -347,13 +349,13 @@ public class GameHandler {
 
     public Card buyCardTwo(GameUpdateMsg gameUpdateMsg) {
         if (gameUpdateMsg.getActionTypeClicked() != null) {
-            System.out.println("Bought card Type: " + gameUpdateMsg.getActionTypeClicked()); // TODO Remove sout statements after merge to master
+            Log.info(BOUGHT_CARD_TYPE + gameUpdateMsg.getActionTypeClicked());
             return buyCard(gameUpdateMsg.getActionTypeClicked());
         } else if (gameUpdateMsg.getEstateTypeClicked() != null) {
-            System.out.println("Bought card Type: " + gameUpdateMsg.getEstateTypeClicked());
+            Log.info(BOUGHT_CARD_TYPE + gameUpdateMsg.getEstateTypeClicked());
             return buyCard(gameUpdateMsg.getEstateTypeClicked());
         } else if (gameUpdateMsg.getMoneyTypeClicked() != null) {
-            System.out.println("Bought card Type: " + gameUpdateMsg.getMoneyTypeClicked());
+            Log.info(BOUGHT_CARD_TYPE + gameUpdateMsg.getMoneyTypeClicked());
             return buyCard(gameUpdateMsg.getMoneyTypeClicked());
         } else {
             return null;
