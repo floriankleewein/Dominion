@@ -1,13 +1,13 @@
 package com.floriankleewein.commonclasses;
 
-import com.floriankleewein.commonclasses.Board.Board;
-import com.floriankleewein.commonclasses.Cards.ActionCard;
-import com.floriankleewein.commonclasses.Cards.ActionType;
-import com.floriankleewein.commonclasses.Cards.Card;
-import com.floriankleewein.commonclasses.Cards.EstateCard;
-import com.floriankleewein.commonclasses.Cards.EstateType;
-import com.floriankleewein.commonclasses.Cards.MoneyCard;
-import com.floriankleewein.commonclasses.Cards.MoneyType;
+import com.floriankleewein.commonclasses.board.Board;
+import com.floriankleewein.commonclasses.cards.ActionCard;
+import com.floriankleewein.commonclasses.cards.ActionType;
+import com.floriankleewein.commonclasses.cards.Card;
+import com.floriankleewein.commonclasses.cards.EstateCard;
+import com.floriankleewein.commonclasses.cards.EstateType;
+import com.floriankleewein.commonclasses.cards.MoneyCard;
+import com.floriankleewein.commonclasses.cards.MoneyType;
 
 import org.junit.After;
 import org.junit.AfterClass;

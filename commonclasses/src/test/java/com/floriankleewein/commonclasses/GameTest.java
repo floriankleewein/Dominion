@@ -1,8 +1,6 @@
 package com.floriankleewein.commonclasses;
 
-import com.floriankleewein.commonclasses.CheatFunction.CheatService;
-import com.floriankleewein.commonclasses.Network.ClientConnector;
-import com.floriankleewein.commonclasses.User.User;
+import com.floriankleewein.commonclasses.user.User;
 
 import org.junit.After;
 import org.junit.Assert;
