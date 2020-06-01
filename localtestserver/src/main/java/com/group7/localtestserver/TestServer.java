@@ -291,7 +291,8 @@ public class TestServer {
         messageList.add(chatPair);
 
         //sende die Nachrihct an die anderen Spieler
-        server.sendToAllTCP(msg);
+        //server.sendToAllTCP(msg);
+        server.sendToAllExceptTCP(con.getID(), msg);
     }
 
     public void hasCheatedMessageFunctionality(Object object) {
