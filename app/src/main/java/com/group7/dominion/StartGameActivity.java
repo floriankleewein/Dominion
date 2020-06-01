@@ -11,15 +11,8 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.floriankleewein.commonclasses.Network.AllPlayersInDominionActivityMsg;
-import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.Network.ClientConnector;
-
-import com.floriankleewein.commonclasses.Network.ClientConnector;
-
 import com.floriankleewein.commonclasses.Network.StartGameMsg;
 import com.floriankleewein.commonclasses.Network.UpdatePlayerNamesMsg;
 
