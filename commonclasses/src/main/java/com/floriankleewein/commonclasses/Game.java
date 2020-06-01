@@ -53,11 +53,9 @@ public class Game {
     }
 
     public boolean addPlayer(User user) {
-        if (checkName(user.getUserName())) {
-            if (checkSize()) {
-                playerList.add(user);
-                return true;
-            }
+        if (checkName(user.getUserName()) && checkSize()) {
+            playerList.add(user);
+            return true;
         }
         return false;
     }
