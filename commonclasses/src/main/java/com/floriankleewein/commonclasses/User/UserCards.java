@@ -98,10 +98,11 @@ public class UserCards {
     }
 
     public boolean hasMoat() {
+        boolean ret = false;
         if (getHandCards().stream().anyMatch(card -> "0".matches(String.valueOf(card.getId())))) {
-            return true;
+            ret = true;
         }
-        return false;
+        return ret;
     }
 
 
