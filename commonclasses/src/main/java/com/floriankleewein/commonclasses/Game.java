@@ -65,10 +65,11 @@ public class Game {
     }
 
     public boolean checkSize() {
+        boolean ret = false;
         if (getPlayerNumber() < 4) {
-            return true;
+            ret = true;
         }
-        return false;
+        return ret;
     }
 
 
