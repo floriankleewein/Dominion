@@ -43,6 +43,8 @@ public class TestServer {
     private GameHandler gamehandler;
     private Map<User, Connection> userClientConnectorMap = new HashMap<>(); // TODO fix bad variable name
 
+    private static final String BOUGHT = " bought";
+
 
     public TestServer() {
         server = new Server(65536, 65536);
@@ -355,13 +357,13 @@ public class TestServer {
         BuyCardMsg msg = (BuyCardMsg) object;
         BuyCardMsg returnmsg = new BuyCardMsg();
         if (msg.getActionTypeClicked() != null) {
-            Log.info(msg.getActionTypeClicked() + " bought");
+            Log.info(msg.getActionTypeClicked() + BOUGHT);
             returnmsg.setBoughtCard(gamehandler.buyCard(msg.getActionTypeClicked()));
         } else if (msg.getEstateTypeClicked() != null) {
-            Log.info(msg.getEstateTypeClicked() + " bought");
+            Log.info(msg.getEstateTypeClicked() + BOUGHT);
             returnmsg.setBoughtCard(gamehandler.buyCard(msg.getEstateTypeClicked()));
         } else if (msg.getMoneyTypeClicked() != null) {
-            Log.info(msg.getMoneyTypeClicked() + " bought");
+            Log.info(msg.getMoneyTypeClicked() + BOUGHT);
             returnmsg.setBoughtCard(gamehandler.buyCard(msg.getMoneyTypeClicked()));
         }
         if (gamehandler.isNewTurn()) {
