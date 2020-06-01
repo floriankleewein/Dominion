@@ -7,70 +7,70 @@ package com.floriankleewein.commonclasses.user;
 public class GamePoints {
 
 
-    private int Coins;
-    private int WinningPoints;
-    private int PlaysAmount;
-    private int BuyAmounts;
+    private int coins;
+    private int winningPoints;
+    private int playsAmount;
+    private int buyAmounts;
 
     public GamePoints() {
-        Coins = 0;
-        WinningPoints = 0;
-        PlaysAmount = 1;
-        BuyAmounts = 1;
+        coins = 0;
+        winningPoints = 0;
+        playsAmount = 1;
+        buyAmounts = 1;
     }
 
     public void modifyCoins(int amountCoins) {
-        this.Coins += amountCoins;
+        this.coins += amountCoins;
     }
 
     public void modifyWinningPoints(int wp) {
-        this.WinningPoints += wp;
+        this.winningPoints += wp;
     }
 
     public void modifyPlayAmounts(int playsAmount) {
-        this.PlaysAmount += playsAmount;
+        this.playsAmount += playsAmount;
     }
 
     public void modifyBuyAmounts(int buyAmounts) {
-        this.BuyAmounts += buyAmounts;
+        this.buyAmounts += buyAmounts;
     }
 
     public void setPointsDefault() {
-        Coins = 0;
-        PlaysAmount = 1;
-        BuyAmounts = 1;
+        coins = 0;
+        playsAmount = 1;
+        buyAmounts = 1;
     }
 
     public int getCoins() {
-        return Coins;
+        return coins;
     }
 
     public void setCoins(int coins) {
-        Coins = coins;
+        this.coins = coins;
     }
 
     public int getWinningPoints() {
-        return WinningPoints;
+        return winningPoints;
     }
 
     public void setWinningPoints(int winningPoints) {
-        WinningPoints = winningPoints;
+        this.winningPoints = winningPoints;
     }
 
     public int getPlaysAmount() {
-        return PlaysAmount;
+        return playsAmount;
     }
 
     public void setPlaysAmount(int playsAmount) {
-        PlaysAmount = playsAmount;
+        this.playsAmount = playsAmount;
     }
 
     public int getBuyAmounts() {
-        return BuyAmounts;
+        return buyAmounts;
     }
 
     public void setBuyAmounts(int buyAmounts) {
-        BuyAmounts = buyAmounts;
+        this.buyAmounts = buyAmounts;
     }
 
 }

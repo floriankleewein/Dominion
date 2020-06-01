@@ -22,7 +22,8 @@ import java.util.ArrayList;
 
 public class StartGameActivity extends AppCompatActivity {
 
-    Button btnStart, btnshowPlayers;
+    Button btnStart;
+    Button  btnshowPlayers;
     ClientConnector client;
 
 
