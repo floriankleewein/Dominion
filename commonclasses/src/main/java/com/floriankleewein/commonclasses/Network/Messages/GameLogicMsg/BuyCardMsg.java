@@ -15,6 +15,7 @@ public class BuyCardMsg extends BaseMessage {
     private boolean cantBuyCard;
     private Game game;
 
+
     public Game getGame() {
         return game;
     }

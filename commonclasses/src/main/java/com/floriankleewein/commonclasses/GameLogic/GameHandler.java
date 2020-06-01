@@ -1,5 +1,6 @@
 package com.floriankleewein.commonclasses.GameLogic;
 
+import com.esotericsoftware.minlog.Log;
 import com.floriankleewein.commonclasses.Board.Board;
 import com.floriankleewein.commonclasses.Cards.ActionCard;
 import com.floriankleewein.commonclasses.Cards.ActionType;
@@ -26,13 +27,15 @@ public class GameHandler {
     }
 
     private Game game;
-    private final static int conMoneyCards = 7;
-    private final static int conAnwesenCards = 3;
+    private final static int CON_MONEY_CARDS = 7;
+    private final static int CON_ANWESEN_CARDS = 3;
+    private final static String BOUGHT_CARD_TYPE = "Bought card type: ";
     private Board board;
     private Card playedCard;
     private Card buyCard;
     private PlayStatus turnState;
     private CardLogic cardLogic;
+
 
 
     private boolean newTurn;
@@ -61,11 +64,11 @@ public class GameHandler {
             for (User user : playerList) {
                 user.setUpforGame();
                 LinkedList<Card> generatedCards = new LinkedList<>();
-                for (int i = 0; i < conMoneyCards; i++) {
+                for (int i = 0; i < CON_MONEY_CARDS; i++) {
                     Card copper = new MoneyCard(0, 1, MoneyType.KUPFER);
                     generatedCards.add(copper);
                 }
-                for (int i = 0; i < conAnwesenCards; i++) {
+                for (int i = 0; i < CON_ANWESEN_CARDS; i++) {
                     Card anwesen = new EstateCard(2, 1, EstateType.ANWESEN);
                     user.getGamePoints().modifyWinningPoints(1);
                     generatedCards.add(anwesen);
@@ -85,7 +88,6 @@ public class GameHandler {
             int players = game.getPlayerList().size();
             int active = game.getPlayerList().indexOf(getActiveUser());
             game.setActivePlayer(game.getPlayerList().get((active + 1) % players));
-
         }
         if (checkHandCards()) {
             turnState = PlayStatus.ACTION_PHASE;
@@ -100,7 +102,6 @@ public class GameHandler {
     public void newTurn() {
         newTurn = true;
         getActiveUser().getUserCards().drawNewCards();
-        System.out.println(getActiveUser().getUserName() + " " + getActiveUser().getUserCards().getHandCards().size());
         setNewActivePlayer();
         for (User user : game.getPlayerList()) {
             user.getGamePoints().setPointsDefault();
@@ -159,9 +160,15 @@ public class GameHandler {
 
     public void playCard(ActionCard card) {
         setPlayedCard(card);
+        System.out.println(getActiveUser().getGamePoints().getBuyAmounts() + " thats the BuyAmount");
         if (canPlayActionCard()) {
             cardLogic.doCardLogic(card);
             getActiveUser().getGamePoints().modifyPlayAmounts(-1);
+            System.out.println(getActiveUser().getGamePoints().getBuyAmounts() + " thats the BuyAmount");
+            if ((getActiveUser().getGamePoints().getPlaysAmount() <= 1) || (!checkHandCards())) {
+                System.out.println(getActiveUser().getGamePoints().getBuyAmounts() + " thats the BuyAmount");
+                turnState = PlayStatus.PLAY_COINS;
+            }
         }
     }
 
@@ -282,12 +289,13 @@ public class GameHandler {
             Card boughtCard = getBoard().getActionField().pickCard(actionType);
             getActiveUser().getUserCards().addCardToDiscardPile(boughtCard);
             calculateCoinsOnActiveUser(boughtCard);
+            if (getActiveUser().getGamePoints().getBuyAmounts() <= 0) {
+                System.out.println("HIER SOLLTE WAS STEHEN");
+                newTurn();
+            }
             return boughtCard;
         }
-        if (getActiveUser().getGamePoints().getBuyAmounts() <= 1) {
-            System.out.println("HIER SOLLTE WAS STEHEN");
-            newTurn();
-        }
+
 
         return null;
     }
@@ -299,14 +307,12 @@ public class GameHandler {
             getActiveUser().getUserCards().addCardToDiscardPile(boughtCard);
             getActiveUser().getGamePoints().modifyWinningPoints(((EstateCard) boughtCard).getEstateValue());
             calculateCoinsOnActiveUser(boughtCard);
+            if (getActiveUser().getGamePoints().getBuyAmounts() <= 0) {
+                System.out.println("HIER SOLLTE WAS STEHEN");
+                newTurn();
+            }
             return boughtCard;
         }
-
-        if (getActiveUser().getGamePoints().getBuyAmounts() <= 1) {
-            System.out.println("HIER SOLLTE WAS STEHEN");
-            newTurn();
-        }
-
         return null;
     }
 
@@ -316,13 +322,11 @@ public class GameHandler {
             Card boughtCard = getBoard().getBuyField().pickCard(moneyType);
             getActiveUser().getUserCards().addCardToDiscardPile(boughtCard);
             calculateCoinsOnActiveUser(boughtCard);
+            if (getActiveUser().getGamePoints().getBuyAmounts() <= 0) {
+                newTurn();
+            }
             return boughtCard;
         }
-        if (getActiveUser().getGamePoints().getBuyAmounts() <= 1) {
-            System.out.println("HIER SOLLTE WAS STEHEN");
-            newTurn();
-        }
-
         return null;
     }
 
@@ -334,13 +338,13 @@ public class GameHandler {
 
     public Card buyCardTwo(GameUpdateMsg gameUpdateMsg) {
         if (gameUpdateMsg.getActionTypeClicked() != null) {
-            System.out.println("Bought card Type: " + gameUpdateMsg.getActionTypeClicked()); // TODO Remove sout statements after merge to master
+            Log.info(BOUGHT_CARD_TYPE + gameUpdateMsg.getActionTypeClicked());
             return buyCard(gameUpdateMsg.getActionTypeClicked());
         } else if (gameUpdateMsg.getEstateTypeClicked() != null) {
-            System.out.println("Bought card Type: " + gameUpdateMsg.getEstateTypeClicked());
+            Log.info(BOUGHT_CARD_TYPE + gameUpdateMsg.getEstateTypeClicked());
             return buyCard(gameUpdateMsg.getEstateTypeClicked());
         } else if (gameUpdateMsg.getMoneyTypeClicked() != null) {
-            System.out.println("Bought card Type: " + gameUpdateMsg.getMoneyTypeClicked());
+            Log.info(BOUGHT_CARD_TYPE + gameUpdateMsg.getMoneyTypeClicked());
             return buyCard(gameUpdateMsg.getMoneyTypeClicked());
         } else {
             return null;
@@ -366,8 +370,6 @@ public class GameHandler {
             System.out.println("CARD IS NULL");
             return false;
         }
-        System.out.println(getActiveUser().getGamePoints().getCoins() + "Coins");
-        System.out.println(getActiveUser().getGamePoints().getBuyAmounts() + " Buy Amounts");
         if (getActiveUser().getGamePoints().getCoins() >= card.getPrice() && getActiveUser().getGamePoints().getBuyAmounts() > 0) {
             setTurnState(PlayStatus.BUY_PHASE);
             return true;

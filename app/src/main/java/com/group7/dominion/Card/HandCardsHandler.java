@@ -60,12 +60,8 @@ public class HandCardsHandler {
             cardList = user.getUserCards().getHandCards();
             System.out.println(cardList.size());
             Log.i("intit", "INIT CARDS");
-            try {
-                for (int i = 0; i < cardList.size(); i++) {
-                    addCard(cardList.get(i));
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+            for (int i = 0; i < cardList.size(); i++) {
+                addCard(cardList.get(i));
             }
         }
     }
@@ -82,8 +78,9 @@ public class HandCardsHandler {
     }
 
     private int setRessource(Card card) {
-
         switch (card.getId()) {
+            default:
+                return R.drawable.backofcard;
             case 0:
                 return R.drawable.burggraben_info;
             case 1:
@@ -102,6 +99,8 @@ public class HandCardsHandler {
                 return R.drawable.hexe_info;
             case 8:
                 return R.drawable.mine_info;
+            case 9:
+                return R.drawable.miliz_info;
             case 10:
                 return R.drawable.provinz;
             case 11:
@@ -116,36 +115,9 @@ public class HandCardsHandler {
                 return R.drawable.silber;
             case 16:
                 return R.drawable.gold;
-
         }
-        return R.drawable.backofcard;
     }
 
-
-    public void onClickListener() {
-        for (int i = 0; i < ImageButtons.size(); i++) {
-            int finalI = i;
-
-            ImageButtons.get(i).setOnClickListener(v -> {
-                if ((cardList.get(finalI).getId() >= 13) || (cardList.get(finalI).getId() <= 10)) {
-                    System.out.println("Card with the ID is played: " + cardList.get(finalI).getId());
-                    ImageButtons.get(finalI).setVisibility(View.INVISIBLE);
-                    Thread thread = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            GameUpdateMsg msg = new GameUpdateMsg();
-                            msg.setPlayedCard(cardList.get(finalI));
-                            ClientConnector.getClientConnector().sendUpdate(msg);
-                        }
-                    });
-                    thread.start();
-                }
-            });
-
-        }
-
-
-    }
 
     public void onClickListenerActionPhase() {
         for (int i = 0; i < ImageButtons.size(); i++) {
@@ -158,9 +130,9 @@ public class HandCardsHandler {
                     Thread thread = new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            GameUpdateMsg msg = new GameUpdateMsg();
+                            PlayCardMsg msg = new PlayCardMsg();
                             msg.setPlayedCard(cardList.get(finalI));
-                            ClientConnector.getClientConnector().sendUpdate(msg);
+                            ClientConnector.getClientConnector().sendPlayCard(msg);
                         }
                     });
                     thread.start();
@@ -207,7 +179,6 @@ public class HandCardsHandler {
         Log.i("SEt", "SET IMAGE BUTTON NULL IS CALLED ");
         linearLayout.removeAllViewsInLayout();
         ImageButtons.clear();
-        //cardList.clear();
         canGetCards = true;
     }
 

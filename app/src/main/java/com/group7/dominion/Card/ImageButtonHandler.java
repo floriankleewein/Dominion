@@ -29,11 +29,11 @@ public class ImageButtonHandler {
     private ImageButton buttonHerzogturm;
     private ImageButton buttonFluch;
 
-    private final static String errorDialogConst = "errorDialog";
-    private final static String moneyCardConst = "MoneyCard";
-    private final static String moneyTypeConst = "MoneyType: ";
-    private final static String estateCardConst = "EstateCard";
-    private final static String estateTypeConst = "EstateType: ";
+    private static final String ERRORDIALOG_CONST = "errorDialog";
+    private static final String MONEYCARD_CONST = "MoneyCard";
+    private static final String MONEYTYPE_CONST = "MoneyType: ";
+    private static final String ESTATECARD_CONST = "EstateCard";
+    private static final String ESTATETYPE_CONST = "EstateType: ";
 
     public void init(Activity activity, FragmentManager fragmentManager) {
         //Gold
@@ -112,11 +112,15 @@ public class ImageButtonHandler {
                     BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
                     Card card = gameUpdateMsg1.getBoughtCard();
                     if (card == null) {
+                        /*
                         ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
-                        errorDialogHandler.show(fragmentManager, errorDialogConst);
-                    } else {
+                        errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
+
+                         */
+                        Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
+                    } else if (card instanceof MoneyCard) {
                         MoneyCard moneyCard = (MoneyCard) card;
-                        Log.i(moneyCardConst, moneyTypeConst + moneyCard.getMoneyType());
+                        Log.i(MONEYCARD_CONST, MONEYTYPE_CONST + moneyCard.getMoneyType());
                     }
                 }
             });
@@ -136,11 +140,15 @@ public class ImageButtonHandler {
                     BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
                     Card card = gameUpdateMsg1.getBoughtCard();
                     if (card == null) {
+                        /*
                         ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
-                        errorDialogHandler.show(fragmentManager, errorDialogConst);
-                    } else {
+                        errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
+
+                         */
+                        Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
+                    } else if (card instanceof MoneyCard) {
                         MoneyCard moneyCard = (MoneyCard) card;
-                        Log.i(moneyCardConst, moneyTypeConst + moneyCard.getMoneyType());
+                        Log.i(MONEYCARD_CONST, MONEYTYPE_CONST + moneyCard.getMoneyType());
                     }
                 }
             });
@@ -161,11 +169,15 @@ public class ImageButtonHandler {
                     BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
                     Card card = gameUpdateMsg1.getBoughtCard();
                     if (card == null) {
+                        /*
                         ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
-                        errorDialogHandler.show(fragmentManager, errorDialogConst);
-                    } else {
+                        errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
+
+                         */
+                        Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
+                    } else if (card instanceof MoneyCard) {
                         MoneyCard moneyCard = (MoneyCard) card;
-                        Log.i(moneyCardConst, moneyTypeConst + moneyCard.getMoneyType());
+                        Log.i(MONEYCARD_CONST, MONEYTYPE_CONST + moneyCard.getMoneyType());
                     }
                 }
             });
@@ -185,11 +197,15 @@ public class ImageButtonHandler {
                     BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
                     Card card = gameUpdateMsg1.getBoughtCard();
                     if (card == null) {
+                        /*
                         ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
-                        errorDialogHandler.show(fragmentManager, errorDialogConst);
-                    } else {
+                        errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
+
+                         */
+                        Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
+                    } else if (card instanceof EstateCard) {
                         EstateCard estateCard = (EstateCard) card;
-                        Log.i(estateCardConst, estateTypeConst + estateCard.getEstateType());
+                        Log.i(ESTATECARD_CONST, ESTATETYPE_CONST + estateCard.getEstateType());
                     }
                 }
             });
@@ -209,11 +225,15 @@ public class ImageButtonHandler {
                     BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
                     Card card = gameUpdateMsg1.getBoughtCard();
                     if (card == null) {
+                        /*
                         ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
-                        errorDialogHandler.show(fragmentManager, errorDialogConst);
-                    } else {
+                        errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
+
+                         */
+                        Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
+                    } else if (card instanceof EstateCard) {
                         EstateCard estateCard = (EstateCard) card;
-                        Log.i(estateCardConst, estateTypeConst + estateCard.getEstateType());
+                        Log.i(ESTATECARD_CONST, ESTATETYPE_CONST + estateCard.getEstateType());
                     }
                 }
             });
@@ -233,11 +253,16 @@ public class ImageButtonHandler {
                     BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
                     Card card = gameUpdateMsg1.getBoughtCard();
                     if (card == null) {
+                        /*
                         ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
-                        errorDialogHandler.show(fragmentManager, errorDialogConst);
-                    } else {
+                        errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
+
+                         */
+                        Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
+                    } else if (card instanceof EstateCard) {
                         EstateCard estateCard = (EstateCard) card;
-                        Log.i(estateCardConst, estateTypeConst + estateCard.getEstateType());
+                        Log.i(ESTATECARD_CONST, ESTATETYPE_CONST + estateCard.getEstateType());
+
                     }
                 }
             });
@@ -257,11 +282,15 @@ public class ImageButtonHandler {
                     BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
                     Card card = gameUpdateMsg1.getBoughtCard();
                     if (card == null) {
+                        /*
                         ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
-                        errorDialogHandler.show(fragmentManager, errorDialogConst);
-                    } else {
+                        errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
+
+                         */
+                        Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
+                    } else if (card instanceof EstateCard) {
                         EstateCard estateCard = (EstateCard) card;
-                        Log.i(estateCardConst, estateTypeConst + estateCard.getEstateType());
+                        Log.i(ESTATECARD_CONST, ESTATETYPE_CONST + estateCard.getEstateType());
                     }
                 }
             });
