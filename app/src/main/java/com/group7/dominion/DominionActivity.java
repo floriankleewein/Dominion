@@ -104,9 +104,16 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         imageButtonHandler.init(this, fragmentManager);
 
 
-        if (this.chatFragment == null) {
-            this.chatFragment = ChatFragment.newInstance();
-        }
+        //erstelle ein Bundle mit dem der Spielername an das ChatFragment weitergegeben wird
+        Bundle bundle = new Bundle();
+        bundle.putString("playerName", getUsername());
+
+        this.chatFragment = new ChatFragment();
+        //hinzufügen des Spielernamens als Argument an den Chat
+        chatFragment.setArguments(bundle);
+
+        //hiermit wird die transition von game zum chat durchgeführt
+        chatButton.setOnClickListener(view -> openFragment());
     }
 
     @Override
@@ -322,13 +329,15 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         return str;
     }
 
+    //führt den Wechsel von Spiel zu Chat durch
     public void openFragment() {
-
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction trans = fragmentManager.beginTransaction();
         trans.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right,
                 R.anim.enter_from_right, R.anim.exit_to_right);
 
+        //Hiermit wird gewährleistet, dass man mit dem BackButton auch wirklich zur Activity zurückkehren kann.
+        //Mittels addToBackStack wird jedes neu hinzugefügte Fragment auf einem Stack zwischengespeichert
         trans.addToBackStack(null);
 
         trans.add(R.id.chatFragmentContainer, chatFragment, "CHAT_FRAGMENT").commit();
@@ -337,8 +346,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
 
     @Override
     public void onChatMessageArrived(String msg) {
-        //Toast.makeText(getApplicationContext(), "Nachricht: " + msg, Toast.LENGTH_SHORT).show();
-        //this.trans.hide(chatFragment);
+        Toast.makeText(getApplicationContext(), "Nachricht: " + msg, Toast.LENGTH_SHORT).show();
         onBackPressed();
     }
 

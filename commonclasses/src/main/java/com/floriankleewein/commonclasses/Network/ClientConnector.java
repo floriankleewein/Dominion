@@ -6,6 +6,7 @@ import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.floriankleewein.commonclasses.Chat.ChatMessage;
+import com.floriankleewein.commonclasses.Chat.GetChatMessages;
 import com.floriankleewein.commonclasses.ClassRegistration;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.GameLogic.GameHandler;
@@ -15,6 +16,7 @@ import com.floriankleewein.commonclasses.Network.Messages.NewTurnMessage;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ClientConnector {
@@ -22,7 +24,7 @@ public class ClientConnector {
     private static final int SERVER_PORT = 53217;
     private static Client client;
     private GameHandler gameHandler;
-
+    private List<ChatMessage> msgList;
 
     private Game game;
     Map<Class, Callback<BaseMessage>> callbackMap = new HashMap<>();
@@ -310,6 +312,11 @@ public class ClientConnector {
 
     }
 
+    public void getChatMessages() {
+        GetChatMessages getChatListMsg = new GetChatMessages();
+        client.sendTCP(getChatListMsg);
+    }
+
     public void sendSuspectUser(String SuspectUsername, String Username) {
         SuspectMessage msg = new SuspectMessage();
         msg.setSuspectedUserName(SuspectUsername);
@@ -340,18 +347,10 @@ public class ClientConnector {
         });
     }
 
+    // hiermit wird eine ChatMessage über TCP an die anderen Spieler versendet
+    // @param msgToOthers -> message die versendet wird
     public void sendChatMessage(ChatMessage msgToOthers) {
         client.sendTCP(msgToOthers);
-
-        client.addListener(new Listener() {
-            @Override
-            public void received(Connection connection, Object object) {
-                if (object instanceof ChatMessage) {
-                    ChatMessage msg = (ChatMessage) object;
-                    callbackMap.get(ChatMessage.class).callback(msg);
-                }
-            }
-        });
     }
 
     //FKDoc: this is the message which is broadcasted when startbutton is clicked. everyone lands in the dominion activity then.

@@ -6,6 +6,9 @@ import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 import com.floriankleewein.commonclasses.Board.Board;
 import com.floriankleewein.commonclasses.Chat.ChatMessage;
+import com.floriankleewein.commonclasses.Chat.GetChatMessages;
+import com.floriankleewein.commonclasses.Chat.Pair;
+import com.floriankleewein.commonclasses.Chat.RecChatListMsg;
 import com.floriankleewein.commonclasses.ClassRegistration;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.GameLogic.GameHandler;
@@ -30,7 +33,9 @@ import com.floriankleewein.commonclasses.Network.UpdatePlayerNamesMsg;
 import com.floriankleewein.commonclasses.User.User;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class TestServer {
@@ -43,7 +48,11 @@ public class TestServer {
     private GameHandler gamehandler;
     private Map<User, Connection> userClientConnectorMap = new HashMap<>(); // TODO fix bad variable name
 
+    private List<Pair> messageList = new ArrayList<>();
+
+
     private static final String BOUGHT = " bought";
+
 
 
     public TestServer() {
@@ -178,6 +187,8 @@ public class TestServer {
                     playCardmsgFunctionality(object);
                 } else if (object instanceof BuyCardMsg) {
                     buyCardmsgFunctionality(object);
+                }else if (object instanceof GetChatMessages) {
+                    getChatMessagesFunctionality(con);
                 }
             }
         });
@@ -273,21 +284,26 @@ public class TestServer {
     public void chatMessageFunctionality(Object object, Connection con) {
         ChatMessage msg = (ChatMessage) object;
 
+        System.out.println("Receive msg from client:" + msg.getPlayerName());
+
+
+        msg.setSentByMe(false);
 
         String message = msg.getMessage();
 
         Log.info("Receive msg from client:" + message);
 
-        ChatMessage responseMsg = new ChatMessage();
-        responseMsg.setMessage(msg.getMessage());
-        responseMsg.setSentByMe(false);
 
+        //speichert die ID des Clients, der die Nachricht sendet und die Nachricht selbst
+        Pair chatPair = new Pair();
+        chatPair.setChatMessage(msg);
+        chatPair.setPlayerId(con.getID());
 
-        for (Connection c : server.getConnections()) {
-            if (c != con) {
-                server.sendToTCP(c.getID(), responseMsg);
-            }
-        }
+        messageList.add(chatPair);
+
+        //sende die Nachrihct an die anderen Spieler
+        //server.sendToAllTCP(msg);
+        server.sendToAllExceptTCP(con.getID(), msg);
     }
 
     public void hasCheatedMessageFunctionality(Object object) {
@@ -383,5 +399,14 @@ public class TestServer {
         returnmsg.setPlayedCard(msg.getPlayedCard());
         returnmsg.setPlayStatus(gamehandler.getTurnState());
         server.sendToAllTCP(returnmsg);
+    }
+
+
+    public void getChatMessagesFunctionality(Connection con) {
+        System.out.println("SEND CHAT MESSAGES TO CLIENT");
+        System.out.println("SERVER MESSAGE LIST SIZE: " + messageList.size());
+        RecChatListMsg msg = new RecChatListMsg();
+        msg.setMessages(messageList);
+        server.sendToTCP(con.getID(), msg);
     }
 }
