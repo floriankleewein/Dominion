@@ -7,7 +7,6 @@ import android.content.Context;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -49,12 +48,7 @@ public class StartGameActivity extends AppCompatActivity {
 
         //FKDoc: this is the listView where the playerNames should be viewed.
         ListView playerNamesListView = findViewById(R.id.playerNamesListView);
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                clientConnector.updatePlayerNames();
-            }
-        });
+        Thread thread = new Thread(() -> clientConnector.updatePlayerNames());
 
         thread.start();
 
@@ -65,59 +59,27 @@ public class StartGameActivity extends AppCompatActivity {
         playerNamesListView.setAdapter(listViewAdapter);
 
         //FKDoc: thats the servercallback which is triggered after the clientConnector.getGame() call.
-        clientConnector.registerCallback(UpdatePlayerNamesMsg.class, (msg -> {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    names.clear();
-                    names.addAll(((UpdatePlayerNamesMsg) msg).getNameList());
-                    listViewAdapter.notifyDataSetChanged();
-                    if (names.size() == 2) {
-                        Thread thread1 = new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                clientConnector.startGame();
-                            }
-                        });
-                        thread1.start();
-                    }
-                }
-            });
-        }));
-
-        clientConnector.registerCallback(AllPlayersInDominionActivityMsg.class, (msg -> {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Intent intent = new Intent(StartGameActivity.this, DominionActivity.class);
-                    startActivity(intent);
-                }
-            });
-        }));
-
-        btnStart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        clientConnector.allPlayersInDominionActivity();
-
-                    }
-                });
-
-                thread.start();
+        clientConnector.registerCallback(UpdatePlayerNamesMsg.class, (msg -> runOnUiThread(() -> {
+            names.clear();
+            names.addAll(((UpdatePlayerNamesMsg) msg).getNameList());
+            listViewAdapter.notifyDataSetChanged();
+            if (names.size() == 2) {
+                Thread thread1 = new Thread(() -> clientConnector.startGame());
+                thread1.start();
             }
+        })));
+
+        clientConnector.registerCallback(AllPlayersInDominionActivityMsg.class, (msg -> runOnUiThread(() -> {
+            Intent intent = new Intent(StartGameActivity.this, DominionActivity.class);
+            startActivity(intent);
+        })));
+
+        btnStart.setOnClickListener(v -> {
+            Thread thread12 = new Thread(() -> clientConnector.allPlayersInDominionActivity());
+
+            thread12.start();
         });
-        ClientConnector.getClientConnector().registerCallback(StartGameMsg.class, msg -> {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    System.out.println("Got the Callback for StartGameMsg in StartGameAcitivity");
-                }
-            });
-        });
+        ClientConnector.getClientConnector().registerCallback(StartGameMsg.class, msg -> runOnUiThread(() -> System.out.println("Got the Callback for StartGameMsg in StartGameAcitivity")));
     }
 
 

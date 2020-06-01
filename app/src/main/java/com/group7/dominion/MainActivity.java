@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -44,103 +43,59 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 
         client = ClientConnector.getClientConnector();
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                client.connect();
-                client.checkButtons();
-            }
+        Thread thread = new Thread(() -> {
+            client.connect();
+            client.checkButtons();
         });
         thread.start();
 
         client.registerCallback(CheckButtonsMsg.class,(msg->{
             CheckButtonsMsg temp = (CheckButtonsMsg)msg;
 
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    btnCreate.setEnabled(temp.getCreateValue());
-                    btnJoin.setEnabled(temp.getJoinValue());
-                }
+            runOnUiThread(() -> {
+                btnCreate.setEnabled(temp.getCreateValue());
+                btnJoin.setEnabled(temp.getJoinValue());
             });
         }));
 
-        btnCreate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        btnCreate.setOnClickListener(v -> {
 
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
+            Thread thread1 = new Thread(() -> client.createGame());
 
-                        client.createGame();
-                    }
-                });
-
-                thread.start();
-            }
+            thread1.start();
         });
 
 
-        client.registerCallback(AddPlayerSuccessMsg.class, (msg -> {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    TextView textView = findViewById(R.id.nameCheckFeedback);
-                    textView.setText(PLAYER_ADDED_SUCCESSFULLY);
-                    startActivity(new Intent(MainActivity.this, StartGameActivity.class));
-                }
+        client.registerCallback(AddPlayerSuccessMsg.class, (msg -> runOnUiThread(() -> {
+            TextView textView = findViewById(R.id.nameCheckFeedback);
+            textView.setText(PLAYER_ADDED_SUCCESSFULLY);
+            startActivity(new Intent(MainActivity.this, StartGameActivity.class));
+        })));
+
+        client.registerCallback(AddPlayerNameErrorMsg.class, (msg -> runOnUiThread(() -> {
+            TextView textView = findViewById(R.id.nameCheckFeedback);
+            textView.setText(NAME_ALREADY_IN_USE);
+        })));
+
+        client.registerCallback(AddPlayerSizeErrorMsg.class, (msg -> runOnUiThread(() -> {
+            TextView textView = findViewById(R.id.nameCheckFeedback);
+            textView.setText(PLAYER_MAX_REACHED);
+        })));
+
+
+        btnJoin.setOnClickListener(v -> {
+            addUsernametoPreferences();
+            Thread thread12 = new Thread(() -> {
+                EditText editText = findViewById(R.id.inputName);
+                String userName = editText.getText().toString();
+                client.addUser(userName);
             });
-        }));
-
-        client.registerCallback(AddPlayerNameErrorMsg.class, (msg -> {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    TextView textView = findViewById(R.id.nameCheckFeedback);
-                    textView.setText(NAME_ALREADY_IN_USE);
-                }
-            });
-        }));
-
-        client.registerCallback(AddPlayerSizeErrorMsg.class, (msg -> {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    TextView textView = findViewById(R.id.nameCheckFeedback);
-                    textView.setText(PLAYER_MAX_REACHED);
-                }
-            });
-        }));
-
-
-        btnJoin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addUsernametoPreferences();
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        EditText editText = findViewById(R.id.inputName);
-                        String userName = editText.getText().toString();
-                        client.addUser(userName);
-                    }
-                });
-                thread.start();
-            }
+            thread12.start();
         });
 
-        btnReset.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        client.resetGame();
-                    }
-                });
-                thread.start();
-            }
+        btnReset.setOnClickListener(v -> {
+            Thread thread13 = new Thread(() -> client.resetGame());
+            thread13.start();
         });
     }
 
