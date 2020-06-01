@@ -10,9 +10,11 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
 import com.floriankleewein.commonclasses.Board.Board;
 import com.floriankleewein.commonclasses.Cards.ActionCard;
 import com.floriankleewein.commonclasses.Cards.Card;
@@ -198,67 +200,70 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
                     if (card == null) {
                         Toast.makeText(getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
                     } else {
-                        ActionCard actionCard = (ActionCard) card;
-                        switch (actionCard.getActionType()) {
-                            case HEXE:
-                                Log.i("Action", "ActionType: " + actionCard.getActionType() +
-                                        ", Card Count: " + actionCard.getAction().getCardCount() +
-                                        ", Curse Count: " + actionCard.getAction().getCurseCount());
-                                break;
-                            case WERKSTATT:
-                                Log.i("Action", "ActionType: " + actionCard.getActionType() +
-                                        ", Card Count: " + actionCard.getAction().getCardCount() +
-                                        ", Max Money Value: " + actionCard.getAction().getMaxMoneyValue());
-                                break;
-                            case SCHMIEDE:
-                                Log.i("Action", "ActionType: " + actionCard.getActionType() +
-                                        ", Card Count: " + actionCard.getAction().getCardCount());
-                                break;
-                            case MINE:
-                                Log.i("Action", "ActionType: " + actionCard.getActionType() +
-                                        ", Card Count: " + actionCard.getAction().getCardCount() +
-                                        ", Take MoneyCard That Cost Three More Than Old: " + actionCard.getAction().isTakeMoneyCardThatCostThreeMoreThanOld() +
-                                        ", Take Card On Hand: " + actionCard.getAction().isTakeCardOnHand());
-                                break;
-                            case MILIZ:
-                                Log.i("Action", "ActionType: " + actionCard.getActionType() +
-                                        ", Money Value: " + actionCard.getAction().getMoneyValue() +
-                                        ", Throw Every UserCards Until Three Left: " + actionCard.getAction().isThrowEveryUserCardsUntilThreeLeft());
-                                break;
-                            case MARKT:
-                                Log.i("Action", "ActionType: " + actionCard.getActionType() +
-                                        ", Card Count: " + actionCard.getAction().getCardCount() +
-                                        ", Action Count: " + actionCard.getAction().getActionCount() +
-                                        ", Money Value: " + actionCard.getAction().getMoneyValue() +
-                                        ", Buy Count: " + actionCard.getAction().getBuyCount());
-                                break;
-                            case KELLER:
-                                Log.i("Action", "ActionType: " + actionCard.getActionType() +
-                                        ", Action Count: " + actionCard.getAction().getActionCount() +
-                                        ", Throw Any Amount Cards: " + actionCard.getAction().isThrowAnyAmountCards());
-                                break;
-                            case HOLZFAELLER:
-                                Log.i("Action", "ActionType: " + actionCard.getActionType() +
-                                        ", Buy Count: " + actionCard.getAction().getBuyCount() +
-                                        ", Money Value: " + actionCard.getAction().getMoneyValue());
-                                break;
-                            case DORF:
-                                Log.i("Action", "ActionType: " + actionCard.getActionType() +
-                                        ", Card Count: " + actionCard.getAction().getCardCount() +
-                                        ", Action Count: " + actionCard.getAction().getActionCount());
-                                break;
-                            case BURGGRABEN:
-                                Log.i("Action", "ActionType: " + actionCard.getActionType() +
-                                        ", Card Count: " + actionCard.getAction().getCardCount() +
-                                        ", Throw Every UserCards Until Three Left: " + actionCard.getAction().isThrowEveryUserCardsUntilThreeLeft());
-                                break;
+                        if (card instanceof ActionCard) {
+                            ActionCard actionCard = (ActionCard) card;
+                            switch (actionCard.getActionType()) {
+                                case HEXE:
+                                    Log.i("Action", "ActionType: " + actionCard.getActionType() +
+                                            ", Card Count: " + actionCard.getAction().getCardCount() +
+                                            ", Curse Count: " + actionCard.getAction().getCurseCount());
+                                    break;
+                                case WERKSTATT:
+                                    Log.i("Action", "ActionType: " + actionCard.getActionType() +
+                                            ", Card Count: " + actionCard.getAction().getCardCount() +
+                                            ", Max Money Value: " + actionCard.getAction().getMaxMoneyValue());
+                                    break;
+                                case SCHMIEDE:
+                                    Log.i("Action", "ActionType: " + actionCard.getActionType() +
+                                            ", Card Count: " + actionCard.getAction().getCardCount());
+                                    break;
+                                case MINE:
+                                    Log.i("Action", "ActionType: " + actionCard.getActionType() +
+                                            ", Card Count: " + actionCard.getAction().getCardCount() +
+                                            ", Take MoneyCard That Cost Three More Than Old: " + actionCard.getAction().isTakeMoneyCardThatCostThreeMoreThanOld() +
+                                            ", Take Card On Hand: " + actionCard.getAction().isTakeCardOnHand());
+                                    break;
+                                case MILIZ:
+                                    Log.i("Action", "ActionType: " + actionCard.getActionType() +
+                                            ", Money Value: " + actionCard.getAction().getMoneyValue() +
+                                            ", Throw Every UserCards Until Three Left: " + actionCard.getAction().isThrowEveryUserCardsUntilThreeLeft());
+                                    break;
+                                case MARKT:
+                                    Log.i("Action", "ActionType: " + actionCard.getActionType() +
+                                            ", Card Count: " + actionCard.getAction().getCardCount() +
+                                            ", Action Count: " + actionCard.getAction().getActionCount() +
+                                            ", Money Value: " + actionCard.getAction().getMoneyValue() +
+                                            ", Buy Count: " + actionCard.getAction().getBuyCount());
+                                    break;
+                                case KELLER:
+                                    Log.i("Action", "ActionType: " + actionCard.getActionType() +
+                                            ", Action Count: " + actionCard.getAction().getActionCount() +
+                                            ", Throw Any Amount Cards: " + actionCard.getAction().isThrowAnyAmountCards());
+                                    break;
+                                case HOLZFAELLER:
+                                    Log.i("Action", "ActionType: " + actionCard.getActionType() +
+                                            ", Buy Count: " + actionCard.getAction().getBuyCount() +
+                                            ", Money Value: " + actionCard.getAction().getMoneyValue());
+                                    break;
+                                case DORF:
+                                    Log.i("Action", "ActionType: " + actionCard.getActionType() +
+                                            ", Card Count: " + actionCard.getAction().getCardCount() +
+                                            ", Action Count: " + actionCard.getAction().getActionCount());
+                                    break;
+                                case BURGGRABEN:
+                                    Log.i("Action", "ActionType: " + actionCard.getActionType() +
+                                            ", Card Count: " + actionCard.getAction().getCardCount() +
+                                            ", Throw Every UserCards Until Three Left: " + actionCard.getAction().isThrowEveryUserCardsUntilThreeLeft());
+                                    break;
+                            }
+                            String text = "";
+                            for (User u : gameUpdateMsg1.getGame().getPlayerList()) {
+                                text += u.getUserName() + ": " + u.getGamePoints().getWinningPoints() + "\n";
+                            }
+                            playerScores.setText(text);
                         }
-                        String text = "";
-                        for (User u : gameUpdateMsg1.getGame().getPlayerList()) {
-                            text += u.getUserName() + ": " + u.getGamePoints().getWinningPoints() + "\n";
-                        }
-                        playerScores.setText(text);
                     }
+
                 }
             });
         }));
@@ -270,7 +275,6 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         if (user.getUserName().equals(msg.getGame().getActivePlayer().getUserName())) {
             cardsHandler.setImageButtonsNull();
             cardsHandler.initCards(user);
-            System.out.println(user.getUserName() +  " got cards" + "  *****" + msg.getPlayStatus());
             if (msg.getPlayStatus() == PlayStatus.ACTION_PHASE) {
                 cardsHandler.onClickListenerActionPhase();
             } else if (msg.getPlayStatus() == PlayStatus.PLAY_COINS) {
@@ -285,12 +289,10 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
     }
 
     public void handNewTurnMsg(NewTurnMessage msg) {
-        Log.i("Callback", "Callback for new Cards is triggerd");
         cardsHandler.setImageButtonsNull();
         User user = msg.getGame().findUser(getUsername());
         if (user.getUserName().equals(msg.getGame().getActivePlayer().getUserName())) {
             cardsHandler.initCards(user);
-            System.out.println(user.getUserName() +  " got cards" + "  ***** " + msg.getPlayStatus());
             if (msg.getPlayStatus() == PlayStatus.ACTION_PHASE) {
                 cardsHandler.onClickListenerActionPhase();
             } else if (msg.getPlayStatus() == PlayStatus.PLAY_COINS) {
