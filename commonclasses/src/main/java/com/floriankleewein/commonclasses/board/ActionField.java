@@ -24,7 +24,7 @@ public class ActionField {
 
     private void init() {
         this.actionCardsToBuy = new ArrayList<>();
-        // Hier sind alle Action Karten definiert => von jeder Karte gibt es 10
+        //LKDoc: Hier sind alle Action Karten definiert => von jeder Karte gibt es 10
         for(int i = 0; i < 10; i++) {
             this.actionCardsToBuy.add(new ActionCard(2, ActionType.KELLER));
             this.actionCardsToBuy.add(new ActionCard(2, ActionType.BURGGRABEN));
@@ -59,12 +59,12 @@ public class ActionField {
         boolean cardFound = false;
         int cardIndex = 0;
 
-        // Überprüfe ob der ActionType überhaupt noch im Stapel existiert
+        //LKDoc: Überprüfe ob der ActionType überhaupt noch im Stapel existiert
         if(isTypeExistsInField(actionType)){
             for(int i = 0; i < this.actionCardsToBuy.size(); i++) {
                 if(this.actionCardsToBuy.get(i) instanceof ActionCard) {
                     ActionCard actionCard = (ActionCard) this.actionCardsToBuy.get(i);
-                    // Wenn der Kartentyp gefunden wird dann merke Index
+                    //LKDoc: Wenn der Kartentyp gefunden wird dann merke Index
                     if(actionCard.getActionType() == actionType) {
                         card = actionCard;
                         cardIndex = i;
@@ -73,30 +73,30 @@ public class ActionField {
                 }
             }
 
-            // Hier wird dann die Karte gelöscht
+            //LKDoc: Hier wird dann die Karte gelöscht
             if(cardFound) {
                 this.actionCardsToBuy.remove(cardIndex);
             }
 
             return card;
         } else {
-            //falls benötigt
+            //LKDoc:falls benötigt
             return card;
         }
     }
 
-    //LKDoc - just returns the card (needed for the logic of Emanuel)
+    //LKDoc: just returns the card (needed for the logic of Emanuel)
     public Card getActionCard(ActionType actionType) {
         Card card = null;
         boolean cardFound = false;
         int cardIndex = 0;
 
-        // Überprüfe ob der ActionType überhaupt noch im Stapel existiert
+        //LKDoc: Überprüfe ob der ActionType überhaupt noch im Stapel existiert
         if(isTypeExistsInField(actionType)){
             for(int i = 0; i < this.actionCardsToBuy.size(); i++) {
                 if (this.actionCardsToBuy.get(i) instanceof ActionCard) {
                     ActionCard actionCard = (ActionCard) this.actionCardsToBuy.get(i);
-                    // Wenn der Kartentyp gefunden wird dann merke Index
+                    //LKDoc: Wenn der Kartentyp gefunden wird dann merke Index
                     if (actionCard.getActionType() == actionType) {
                         card = actionCard;
                         cardIndex = i;
@@ -106,7 +106,7 @@ public class ActionField {
             }
             return card;
         } else {
-            //falls benötigt
+            //LKDoc: falls benötigt
             return card;
         }
     }
