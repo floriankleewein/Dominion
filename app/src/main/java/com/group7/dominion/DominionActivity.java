@@ -274,6 +274,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         if (user.getUserName().equals(msg.getGame().getActivePlayer().getUserName())) {
             cardsHandler.setImageButtonsNull();
             cardsHandler.initCards(user);
+            System.out.println(user.getUserName() +  " got cards" + "  *****" + msg.getPlayStatus());
             if (msg.getPlayStatus() == PlayStatus.ACTION_PHASE) {
                 cardsHandler.onClickListenerActionPhase();
             } else if (msg.getPlayStatus() == PlayStatus.PLAY_COINS) {
@@ -293,6 +294,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         User user = msg.getGame().findUser(getUsername());
         if (user.getUserName().equals(msg.getGame().getActivePlayer().getUserName())) {
             cardsHandler.initCards(user);
+            System.out.println(user.getUserName() +  " got cards" + "  ***** " + msg.getPlayStatus());
             if (msg.getPlayStatus() == PlayStatus.ACTION_PHASE) {
                 cardsHandler.onClickListenerActionPhase();
             } else if (msg.getPlayStatus() == PlayStatus.PLAY_COINS) {

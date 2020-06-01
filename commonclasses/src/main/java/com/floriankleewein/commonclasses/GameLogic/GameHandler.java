@@ -82,16 +82,18 @@ public class GameHandler {
 
     private void setNewActivePlayer() {
         if (getActiveUser() == null) {
-            game.setActivePlayer(game.getPlayerList().get(playToken));
-            playToken = 1;
+            game.setActivePlayer(game.getPlayerList().get(0));
+            // playToken++;
         } else {
             int players = game.getPlayerList().size();
             int active = game.getPlayerList().indexOf(getActiveUser());
-            game.setActivePlayer(game.getPlayerList().get(playToken));
-            playToken++;
-            if (playToken == 1) {
+            game.setActivePlayer(game.getPlayerList().get((active + 1) % players));
+            // playToken++;
+            /*
+            if (playToken >= 2) {
                 playToken = 0;
             }
+             */
         }
         if (checkHandCards()) {
             turnState = PlayStatus.ACTION_PHASE;
@@ -104,6 +106,7 @@ public class GameHandler {
      * Discards Hand of activeUser, draws new Cards and sets new Active User.
      */
     public void newTurn() {
+        System.out.println("**************NEw Turn is triggerd*****************");
         newTurn = true;
         getActiveUser().getUserCards().drawNewCards();
         System.out.println(getActiveUser().getUserName() + " " + getActiveUser().getUserCards().getHandCards().size());
@@ -166,14 +169,16 @@ public class GameHandler {
 
     public void playCard(ActionCard card) {
         setPlayedCard(card);
+        System.out.println(getActiveUser().getGamePoints().getBuyAmounts() + " thats the BuyAmount");
         if (canPlayActionCard()) {
             cardLogic.doCardLogic(card);
             getActiveUser().getGamePoints().modifyPlayAmounts(-1);
-            if (getActiveUser().getGamePoints().getPlaysAmount() == 0) {
+            System.out.println(getActiveUser().getGamePoints().getBuyAmounts() + " thats the BuyAmount");
+            if ((getActiveUser().getGamePoints().getPlaysAmount() <= 1) || (!checkHandCards())) {
+                System.out.println(getActiveUser().getGamePoints().getBuyAmounts() + " thats the BuyAmount");
                 turnState = PlayStatus.PLAY_COINS;
             }
         }
-
     }
 
     public void playCard(MoneyCard card) {
@@ -293,12 +298,13 @@ public class GameHandler {
             Card boughtCard = getBoard().getActionField().pickCard(actionType);
             getActiveUser().getUserCards().addCardToDiscardPile(boughtCard);
             calculateCoinsOnActiveUser(boughtCard);
+            if (getActiveUser().getGamePoints().getBuyAmounts() <= 1) {
+                System.out.println("HIER SOLLTE WAS STEHEN");
+                newTurn();
+            }
             return boughtCard;
         }
-        if (getActiveUser().getGamePoints().getBuyAmounts() <= 1) {
-            System.out.println("HIER SOLLTE WAS STEHEN");
-            newTurn();
-        }
+
 
         return null;
     }
@@ -310,14 +316,12 @@ public class GameHandler {
             getActiveUser().getUserCards().addCardToDiscardPile(boughtCard);
             getActiveUser().getGamePoints().modifyWinningPoints(((EstateCard) boughtCard).getEstateValue());
             calculateCoinsOnActiveUser(boughtCard);
+            if (getActiveUser().getGamePoints().getBuyAmounts() <= 1) {
+                System.out.println("HIER SOLLTE WAS STEHEN");
+                newTurn();
+            }
             return boughtCard;
         }
-
-        if (getActiveUser().getGamePoints().getBuyAmounts() <= 1) {
-            System.out.println("HIER SOLLTE WAS STEHEN");
-            newTurn();
-        }
-
         return null;
     }
 
@@ -327,13 +331,11 @@ public class GameHandler {
             Card boughtCard = getBoard().getBuyField().pickCard(moneyType);
             getActiveUser().getUserCards().addCardToDiscardPile(boughtCard);
             calculateCoinsOnActiveUser(boughtCard);
+            if (getActiveUser().getGamePoints().getBuyAmounts() <= 1) {
+                newTurn();
+            }
             return boughtCard;
         }
-        if (getActiveUser().getGamePoints().getBuyAmounts() <= 1) {
-            System.out.println("HIER SOLLTE WAS STEHEN");
-            newTurn();
-        }
-
         return null;
     }
 

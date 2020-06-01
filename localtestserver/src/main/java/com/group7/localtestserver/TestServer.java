@@ -345,7 +345,6 @@ public class TestServer {
     }
 
     public void newTurnMsgFunctionality() {
-        gamehandler.newTurn();
         NewTurnMessage msg = new NewTurnMessage();
         msg.setGame(gamehandler.getGame());
         msg.setPlayStatus(gamehandler.getTurnState());
@@ -369,7 +368,6 @@ public class TestServer {
             System.out.println("WE HAVE A NEW PLAYER");
             newTurnMsgFunctionality();
             gamehandler.setNewTurn(false);
-            return;
         }
         returnmsg.setGame(Game.getGame());
         server.sendToAllTCP(returnmsg);

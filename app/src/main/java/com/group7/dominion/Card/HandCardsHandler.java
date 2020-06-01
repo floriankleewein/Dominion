@@ -158,9 +158,9 @@ public class HandCardsHandler {
                     Thread thread = new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            GameUpdateMsg msg = new GameUpdateMsg();
+                            PlayCardMsg msg = new PlayCardMsg();
                             msg.setPlayedCard(cardList.get(finalI));
-                            ClientConnector.getClientConnector().sendUpdate(msg);
+                            ClientConnector.getClientConnector().sendPlayCard(msg);
                         }
                     });
                     thread.start();
