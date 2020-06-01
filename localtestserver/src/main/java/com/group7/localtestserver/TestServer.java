@@ -40,7 +40,6 @@ public class TestServer {
     private Board board;
     private boolean hasGame = false;
     private boolean gamehandlerCalled = false;
-    private final String Tag = "TEST-SERVER"; // debugging only
     private GameHandler gamehandler;
     private Map<User, Connection> userClientConnectorMap = new HashMap<>(); // TODO fix bad variable name
 
@@ -50,7 +49,7 @@ public class TestServer {
     }
 
     public void startServer() {
-        Log.info(Tag + ", Running Server!");
+        Log.info("Running Server!");
         //FKDoc: Register classes
         registerClasses();
 
