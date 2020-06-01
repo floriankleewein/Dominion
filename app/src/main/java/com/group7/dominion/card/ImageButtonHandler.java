@@ -34,6 +34,7 @@ public class ImageButtonHandler {
     private static final String MONEYTYPE_CONST = "MoneyType: ";
     private static final String ESTATECARD_CONST = "EstateCard";
     private static final String ESTATETYPE_CONST = "EstateType: ";
+    private static final String YOU_CANT_BUY_THIS_CARD = "Du kannst diese Karte nicht kaufen";
 
     public void init(Activity activity, FragmentManager fragmentManager) {
         //Gold
@@ -117,7 +118,7 @@ public class ImageButtonHandler {
                         errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
 
                          */
-                        Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity.getApplicationContext(), YOU_CANT_BUY_THIS_CARD, Toast.LENGTH_SHORT).show();
                     } else if (card instanceof MoneyCard) {
                         MoneyCard moneyCard = (MoneyCard) card;
                         Log.i(MONEYCARD_CONST, MONEYTYPE_CONST + moneyCard.getMoneyType());
@@ -145,7 +146,7 @@ public class ImageButtonHandler {
                         errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
 
                          */
-                        Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity.getApplicationContext(), YOU_CANT_BUY_THIS_CARD, Toast.LENGTH_SHORT).show();
                     } else if (card instanceof MoneyCard) {
                         MoneyCard moneyCard = (MoneyCard) card;
                         Log.i(MONEYCARD_CONST, MONEYTYPE_CONST + moneyCard.getMoneyType());
@@ -174,7 +175,7 @@ public class ImageButtonHandler {
                         errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
 
                          */
-                        Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity.getApplicationContext(), YOU_CANT_BUY_THIS_CARD, Toast.LENGTH_SHORT).show();
                     } else if (card instanceof MoneyCard) {
                         MoneyCard moneyCard = (MoneyCard) card;
                         Log.i(MONEYCARD_CONST, MONEYTYPE_CONST + moneyCard.getMoneyType());
@@ -202,7 +203,7 @@ public class ImageButtonHandler {
                         errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
 
                          */
-                        Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity.getApplicationContext(), YOU_CANT_BUY_THIS_CARD, Toast.LENGTH_SHORT).show();
                     } else if (card instanceof EstateCard) {
                         EstateCard estateCard = (EstateCard) card;
                         Log.i(ESTATECARD_CONST, ESTATETYPE_CONST + estateCard.getEstateType());
@@ -230,7 +231,7 @@ public class ImageButtonHandler {
                         errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
 
                          */
-                        Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity.getApplicationContext(), YOU_CANT_BUY_THIS_CARD, Toast.LENGTH_SHORT).show();
                     } else if (card instanceof EstateCard) {
                         EstateCard estateCard = (EstateCard) card;
                         Log.i(ESTATECARD_CONST, ESTATETYPE_CONST + estateCard.getEstateType());
@@ -258,7 +259,7 @@ public class ImageButtonHandler {
                         errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
 
                          */
-                        Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity.getApplicationContext(), YOU_CANT_BUY_THIS_CARD, Toast.LENGTH_SHORT).show();
                     } else if (card instanceof EstateCard) {
                         EstateCard estateCard = (EstateCard) card;
                         Log.i(ESTATECARD_CONST, ESTATETYPE_CONST + estateCard.getEstateType());
@@ -287,7 +288,7 @@ public class ImageButtonHandler {
                         errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
 
                          */
-                        Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity.getApplicationContext(), YOU_CANT_BUY_THIS_CARD, Toast.LENGTH_SHORT).show();
                     } else if (card instanceof EstateCard) {
                         EstateCard estateCard = (EstateCard) card;
                         Log.i(ESTATECARD_CONST, ESTATETYPE_CONST + estateCard.getEstateType());
