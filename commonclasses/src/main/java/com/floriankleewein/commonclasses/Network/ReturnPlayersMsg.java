@@ -4,7 +4,7 @@ import com.floriankleewein.commonclasses.Game;
 
 
 
-public class ReturnPlayersMsg extends BaseMessage {
+public class ReturnPlayersMsg implements BaseMessage{
 
    private Game game;
 

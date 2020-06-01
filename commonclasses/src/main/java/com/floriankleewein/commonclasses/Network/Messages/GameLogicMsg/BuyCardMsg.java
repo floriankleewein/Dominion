@@ -7,7 +7,7 @@ import com.floriankleewein.commonclasses.Cards.MoneyType;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.Network.BaseMessage;
 
-public class BuyCardMsg extends BaseMessage {
+public class BuyCardMsg implements BaseMessage {
     private Card boughtCard;
     private MoneyType moneyTypeClicked;
     private ActionType actionTypeClicked;

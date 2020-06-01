@@ -5,7 +5,7 @@ import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.GameLogic.PlayStatus;
 import com.floriankleewein.commonclasses.Network.BaseMessage;
 
-public class PlayCardMsg extends BaseMessage {
+public class PlayCardMsg implements BaseMessage {
 
     Card playedCard;
     Game game;

@@ -1,4 +1,4 @@
 package com.floriankleewein.commonclasses.Network;
 
-public class RecreateStartActivityMsg extends BaseMessage {
+public class RecreateStartActivityMsg implements BaseMessage{
 }

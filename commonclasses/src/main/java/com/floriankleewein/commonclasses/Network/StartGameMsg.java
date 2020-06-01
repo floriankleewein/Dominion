@@ -3,7 +3,7 @@ package com.floriankleewein.commonclasses.Network;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.GameLogic.GameHandler;
 
-public class StartGameMsg extends BaseMessage {
+public class StartGameMsg implements BaseMessage{
 
     private int feedbackUI;
     private Game game;

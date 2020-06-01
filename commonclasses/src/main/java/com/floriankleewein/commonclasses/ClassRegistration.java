@@ -21,7 +21,6 @@ import com.floriankleewein.commonclasses.GameLogic.PlayStatus;
 import com.floriankleewein.commonclasses.Network.ActivePlayerMessage;
 import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
 import com.floriankleewein.commonclasses.Network.AllPlayersInDominionActivityMsg;
-import com.floriankleewein.commonclasses.Network.BaseMessage;
 import com.floriankleewein.commonclasses.Network.CheckButtonsMsg;
 import com.floriankleewein.commonclasses.Network.CreateGameMsg;
 import com.floriankleewein.commonclasses.Network.GameUpdateMsg;
@@ -46,7 +45,7 @@ import java.util.LinkedList;
 
 public class ClassRegistration {
 
-    private Class[] constants = {BaseMessage.class, GameUpdateMsg.class, NetworkInformationMsg.class, Game.class,
+    private Class[] constants = {GameUpdateMsg.class, NetworkInformationMsg.class, Game.class,
             CreateGameMsg.class, AddPlayerSuccessMsg.class, ArrayList.class, User.class, ResetMsg.class, StartGameMsg.class, ChatMessage.class,
             HasCheatedMessage.class, ActivePlayerMessage.class, UpdatePlayerNamesMsg.class, SuspectMessage.class, CheckButtonsMsg.class,
             GetGameMsg.class, UserCards.class, GamePoints.class, LinkedList.class, Card.class, MoneyCard.class, ActionCard.class,

@@ -1,10 +1,9 @@
 package com.floriankleewein.commonclasses.Network;
 
 import com.floriankleewein.commonclasses.Game;
-import com.floriankleewein.commonclasses.GameLogic.GameHandler;
 import com.floriankleewein.commonclasses.GameLogic.PlayStatus;
 
-public class GetGameMsg extends BaseMessage {
+public class GetGameMsg implements BaseMessage{
 
 
     private Game game;

@@ -1,4 +1,4 @@
 package com.floriankleewein.commonclasses.Network;
 
-public class GetPlayerMsg {
+public class GetPlayerMsg implements BaseMessage{
 }

@@ -1,6 +1,6 @@
 package com.floriankleewein.commonclasses.Network;
 
-public class HasCheatedMessage extends BaseMessage {
+public class HasCheatedMessage implements BaseMessage{
 
     String CheaterName;
 

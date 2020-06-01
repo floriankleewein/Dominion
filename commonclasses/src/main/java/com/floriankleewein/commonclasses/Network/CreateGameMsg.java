@@ -2,7 +2,7 @@ package com.floriankleewein.commonclasses.Network;
 
 import com.floriankleewein.commonclasses.Game;
 
-public class CreateGameMsg extends BaseMessage {
+public class CreateGameMsg implements BaseMessage{
     private boolean hasGame = false;
     private Game game;
 

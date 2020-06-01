@@ -4,7 +4,7 @@ import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.GameLogic.PlayStatus;
 import com.floriankleewein.commonclasses.Network.BaseMessage;
 
-public class NewTurnMessage extends BaseMessage {
+public class NewTurnMessage implements BaseMessage {
     public Game getGame() {
         return game;
     }

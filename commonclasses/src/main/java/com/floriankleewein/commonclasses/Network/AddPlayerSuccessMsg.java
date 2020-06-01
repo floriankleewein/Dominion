@@ -2,7 +2,7 @@ package com.floriankleewein.commonclasses.Network;
 
 import com.floriankleewein.commonclasses.User.User;
 
-public class AddPlayerSuccessMsg extends BaseMessage{
+public class AddPlayerSuccessMsg implements BaseMessage{
 
     private String playerName;
     private User user;

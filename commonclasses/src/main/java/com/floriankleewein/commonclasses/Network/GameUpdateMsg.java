@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class GameUpdateMsg extends BaseMessage {
+public class GameUpdateMsg implements BaseMessage{
     private Game game;
     private Board board;
     private User activeUser;

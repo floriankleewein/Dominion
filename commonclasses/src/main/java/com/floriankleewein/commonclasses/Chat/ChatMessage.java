@@ -4,7 +4,7 @@ package com.floriankleewein.commonclasses.Chat;
 
 import com.floriankleewein.commonclasses.Network.BaseMessage;
 
-public class ChatMessage  extends BaseMessage{
+public class ChatMessage implements BaseMessage {
 
     private String message;
     private boolean sentByMe;

@@ -1,6 +1,6 @@
 package com.floriankleewein.commonclasses.Network;
 
-public class SuspectMessage extends BaseMessage {
+public class SuspectMessage implements BaseMessage{
 
    private String SuspectedUserName;
     private String UserName;

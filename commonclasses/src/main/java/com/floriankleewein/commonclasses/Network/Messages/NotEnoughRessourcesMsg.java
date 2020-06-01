@@ -2,7 +2,7 @@ package com.floriankleewein.commonclasses.Network.Messages;
 
 import com.floriankleewein.commonclasses.Network.BaseMessage;
 
-public class NotEnoughRessourcesMsg extends BaseMessage {
+public class NotEnoughRessourcesMsg implements BaseMessage {
     /**
      * Send back to Client if they do not have enough Action- or Buypoints to play a card
      * or if they don't have enough Money to buy a card.

@@ -1,6 +1,6 @@
 package com.floriankleewein.commonclasses.Network;
 
-public class CheckButtonsMsg extends BaseMessage {
+public class CheckButtonsMsg implements BaseMessage{
     boolean CreateValue;
     boolean JoinValue;
 
