@@ -282,10 +282,6 @@ public class ClientConnector {
         this.gameHandler = gameHandler;
     }
 
-    //public boolean hasGame() {return hasGame;}
-
-    //public void setHasGame(Boolean bool) {this.hasGame = bool;}
-
     public Client getClient() {
         return client;
     }
