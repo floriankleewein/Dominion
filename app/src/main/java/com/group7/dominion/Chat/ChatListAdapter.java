@@ -7,8 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
 
-import com.floriankleewein.commonclasses.Chat.ChatMessage;
-import com.floriankleewein.commonclasses.Network.ClientConnector;
+import com.floriankleewein.commonclasses.chat.ChatMessage;
 
 class ChatListAdapter extends ArrayAdapter<ChatMessage> {
 

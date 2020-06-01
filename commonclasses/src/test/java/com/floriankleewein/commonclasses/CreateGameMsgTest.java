@@ -1,6 +1,6 @@
 package com.floriankleewein.commonclasses;
 
-import com.floriankleewein.commonclasses.Network.CreateGameMsg;
+import com.floriankleewein.commonclasses.network.CreateGameMsg;
 
 import org.junit.After;
 import org.junit.Assert;

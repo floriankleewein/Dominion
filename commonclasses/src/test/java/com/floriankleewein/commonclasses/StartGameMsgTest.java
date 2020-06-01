@@ -1,6 +1,6 @@
 package com.floriankleewein.commonclasses;
 
-import com.floriankleewein.commonclasses.Network.StartGameMsg;
+import com.floriankleewein.commonclasses.network.StartGameMsg;
 
 import org.junit.Assert;
 import org.junit.Before;

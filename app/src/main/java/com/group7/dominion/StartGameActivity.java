@@ -11,18 +11,19 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import com.floriankleewein.commonclasses.Network.AllPlayersInDominionActivityMsg;
-import com.floriankleewein.commonclasses.Network.ClientConnector;
-import com.floriankleewein.commonclasses.Network.StartGameMsg;
-import com.floriankleewein.commonclasses.Network.UpdatePlayerNamesMsg;
+import com.floriankleewein.commonclasses.network.AllPlayersInDominionActivityMsg;
+import com.floriankleewein.commonclasses.network.ClientConnector;
+import com.floriankleewein.commonclasses.network.StartGameMsg;
+import com.floriankleewein.commonclasses.network.UpdatePlayerNamesMsg;
 
-import com.group7.dominion.CheatFunction.ShakeListener;
+import com.group7.dominion.cheatfunction.ShakeListener;
 
 import java.util.ArrayList;
 
 public class StartGameActivity extends AppCompatActivity {
 
-    Button btnStart, btnshowPlayers;
+    Button btnStart;
+    Button  btnshowPlayers;
     ClientConnector client;
 
 
