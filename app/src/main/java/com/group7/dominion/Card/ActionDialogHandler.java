@@ -39,11 +39,11 @@ public class ActionDialogHandler extends AppCompatDialogFragment {
     private ImageButton buttonSchmiede;
     private ImageButton buttonWerkstatt;
 
-    private static final String actionConst = "Action";
-    private static final String actiontypeConst = "ActionType: ";
-    private static final String cardcountConst = ", Card Count: ";
-    private static final String moneyvalueConst = ", Money Value: " ;
-    private static final String actioncountConst = ", Action Count: ";
+    private static final String ACTION_CONST = "Action";
+    private static final String ACTIONTYPE_CONST = "ActionType: ";
+    private static final String CARDCOUNT_CONST = ", Card Count: ";
+    private static final String MONEYVALUE_CONST = ", Money Value: " ;
+    private static final String ACTIONCOUNT_CONST = ", Action Count: ";
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
