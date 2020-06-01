@@ -24,7 +24,7 @@ public class ClientConnector {
     private GameHandler gameHandler;
 
 
-    private Game game; //TODO das sollte man evtl nicht mehr hier im Client haben... Einfach Game.getGame verwenden
+    private Game game;
     Map<Class, Callback<BaseMessage>> callbackMap = new HashMap<>();
 
 

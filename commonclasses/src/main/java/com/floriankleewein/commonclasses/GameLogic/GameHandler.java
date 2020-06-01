@@ -1,5 +1,6 @@
 package com.floriankleewein.commonclasses.GameLogic;
 
+import com.esotericsoftware.minlog.Log;
 import com.floriankleewein.commonclasses.Board.Board;
 import com.floriankleewein.commonclasses.Cards.ActionCard;
 import com.floriankleewein.commonclasses.Cards.ActionType;
@@ -334,13 +335,13 @@ public class GameHandler {
 
     public Card buyCardTwo(GameUpdateMsg gameUpdateMsg) {
         if (gameUpdateMsg.getActionTypeClicked() != null) {
-            System.out.println("Bought card Type: " + gameUpdateMsg.getActionTypeClicked()); // TODO Remove sout statements after merge to master
+            Log.info("Bought card Type: " + gameUpdateMsg.getActionTypeClicked());
             return buyCard(gameUpdateMsg.getActionTypeClicked());
         } else if (gameUpdateMsg.getEstateTypeClicked() != null) {
-            System.out.println("Bought card Type: " + gameUpdateMsg.getEstateTypeClicked());
+            Log.info("Bought card Type: " + gameUpdateMsg.getEstateTypeClicked());
             return buyCard(gameUpdateMsg.getEstateTypeClicked());
         } else if (gameUpdateMsg.getMoneyTypeClicked() != null) {
-            System.out.println("Bought card Type: " + gameUpdateMsg.getMoneyTypeClicked());
+            Log.info("Bought card Type: " + gameUpdateMsg.getMoneyTypeClicked());
             return buyCard(gameUpdateMsg.getMoneyTypeClicked());
         } else {
             return null;
