@@ -1,15 +1,15 @@
 package com.floriankleewein.commonclasses;
 
-import com.floriankleewein.commonclasses.Cards.ActionCard;
-import com.floriankleewein.commonclasses.Cards.ActionType;
-import com.floriankleewein.commonclasses.Cards.Card;
-import com.floriankleewein.commonclasses.Cards.EstateCard;
-import com.floriankleewein.commonclasses.Cards.EstateType;
-import com.floriankleewein.commonclasses.Cards.MoneyCard;
-import com.floriankleewein.commonclasses.Cards.MoneyType;
-import com.floriankleewein.commonclasses.GameLogic.GameHandler;
-import com.floriankleewein.commonclasses.GameLogic.PlayStatus;
-import com.floriankleewein.commonclasses.User.User;
+import com.floriankleewein.commonclasses.cards.ActionCard;
+import com.floriankleewein.commonclasses.cards.ActionType;
+import com.floriankleewein.commonclasses.cards.Card;
+import com.floriankleewein.commonclasses.cards.EstateCard;
+import com.floriankleewein.commonclasses.cards.EstateType;
+import com.floriankleewein.commonclasses.cards.MoneyCard;
+import com.floriankleewein.commonclasses.cards.MoneyType;
+import com.floriankleewein.commonclasses.gamelogic.GameHandler;
+import com.floriankleewein.commonclasses.gamelogic.PlayStatus;
+import com.floriankleewein.commonclasses.user.User;
 
 import org.junit.After;
 import org.junit.Assert;

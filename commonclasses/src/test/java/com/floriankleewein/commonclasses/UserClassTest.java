@@ -1,14 +1,14 @@
 package com.floriankleewein.commonclasses;
 
-import com.floriankleewein.commonclasses.Cards.ActionCard;
-import com.floriankleewein.commonclasses.Cards.Card;
-import com.floriankleewein.commonclasses.Cards.EstateCard;
-import com.floriankleewein.commonclasses.Cards.EstateType;
-import com.floriankleewein.commonclasses.Cards.MoneyCard;
-import com.floriankleewein.commonclasses.Cards.MoneyType;
-import com.floriankleewein.commonclasses.User.GamePoints;
-import com.floriankleewein.commonclasses.User.User;
-import com.floriankleewein.commonclasses.User.UserCards;
+import com.floriankleewein.commonclasses.cards.ActionCard;
+import com.floriankleewein.commonclasses.cards.Card;
+import com.floriankleewein.commonclasses.cards.EstateCard;
+import com.floriankleewein.commonclasses.cards.EstateType;
+import com.floriankleewein.commonclasses.cards.MoneyCard;
+import com.floriankleewein.commonclasses.cards.MoneyType;
+import com.floriankleewein.commonclasses.user.GamePoints;
+import com.floriankleewein.commonclasses.user.User;
+import com.floriankleewein.commonclasses.user.UserCards;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -17,8 +17,8 @@ import org.junit.Test;
 
 import java.util.LinkedList;
 
-import static com.floriankleewein.commonclasses.Cards.ActionType.BURGGRABEN;
-import static com.floriankleewein.commonclasses.Cards.ActionType.HEXE;
+import static com.floriankleewein.commonclasses.cards.ActionType.BURGGRABEN;
+import static com.floriankleewein.commonclasses.cards.ActionType.HEXE;
 
 public class UserClassTest {
     static String UserName = "TestUser";

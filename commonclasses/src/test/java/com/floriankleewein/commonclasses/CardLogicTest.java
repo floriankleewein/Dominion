@@ -1,13 +1,13 @@
 package com.floriankleewein.commonclasses;
 
-import com.floriankleewein.commonclasses.Cards.ActionCard;
-import com.floriankleewein.commonclasses.Cards.ActionType;
-import com.floriankleewein.commonclasses.Cards.Card;
-import com.floriankleewein.commonclasses.Cards.MoneyCard;
-import com.floriankleewein.commonclasses.Cards.MoneyType;
-import com.floriankleewein.commonclasses.GameLogic.CardLogic;
-import com.floriankleewein.commonclasses.GameLogic.GameHandler;
-import com.floriankleewein.commonclasses.User.User;
+import com.floriankleewein.commonclasses.cards.ActionCard;
+import com.floriankleewein.commonclasses.cards.ActionType;
+import com.floriankleewein.commonclasses.cards.Card;
+import com.floriankleewein.commonclasses.cards.MoneyCard;
+import com.floriankleewein.commonclasses.cards.MoneyType;
+import com.floriankleewein.commonclasses.gamelogic.CardLogic;
+import com.floriankleewein.commonclasses.gamelogic.GameHandler;
+import com.floriankleewein.commonclasses.user.User;
 
 import org.junit.After;
 import org.junit.Assert;

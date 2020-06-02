@@ -9,11 +9,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
-import com.floriankleewein.commonclasses.Network.AddPlayerNameErrorMsg;
-import com.floriankleewein.commonclasses.Network.AddPlayerSizeErrorMsg;
-import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
-import com.floriankleewein.commonclasses.Network.CheckButtonsMsg;
-import com.floriankleewein.commonclasses.Network.ClientConnector;
+import com.floriankleewein.commonclasses.network.AddPlayerNameErrorMsg;
+import com.floriankleewein.commonclasses.network.AddPlayerSizeErrorMsg;
+import com.floriankleewein.commonclasses.network.AddPlayerSuccessMsg;
+import com.floriankleewein.commonclasses.network.CheckButtonsMsg;
+import com.floriankleewein.commonclasses.network.ClientConnector;
 
 public class MainActivity extends AppCompatActivity {
 

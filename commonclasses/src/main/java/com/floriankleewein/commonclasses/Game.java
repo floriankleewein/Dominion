@@ -1,7 +1,7 @@
 package com.floriankleewein.commonclasses;
 
-import com.floriankleewein.commonclasses.CheatFunction.CheatService;
-import com.floriankleewein.commonclasses.User.User;
+import com.floriankleewein.commonclasses.cheatfunction.CheatService;
+import com.floriankleewein.commonclasses.user.User;
 import java.util.ArrayList;
 import java.util.List;
 
