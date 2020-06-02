@@ -10,18 +10,17 @@ import android.widget.ArrayAdapter;
 import com.floriankleewein.commonclasses.Chat.ChatMessage;
 import com.floriankleewein.commonclasses.Network.ClientConnector;
 
-public class ChatListAdapter extends ArrayAdapter<ChatMessage> {
+class ChatListAdapter extends ArrayAdapter<ChatMessage> {
 
     // context in dem sich die Chatliste befindet
     private Context context;
     private int layoutResourceId;
-    private ClientConnector client;
 
-    public ChatListAdapter(Context context, int layoutResourceId) {
+
+    ChatListAdapter(Context context, int layoutResourceId) {
         super(context, layoutResourceId);
         this.context = context;
         this.layoutResourceId = layoutResourceId;
-        this.client = ClientConnector.getClientConnector();
     }
 
     @Override
@@ -45,6 +44,7 @@ public class ChatListAdapter extends ArrayAdapter<ChatMessage> {
             chatListAdapterViewHolder.messageReceivedLayout.setVisibility(View.VISIBLE);
             chatListAdapterViewHolder.messageSentLayout.setVisibility(View.GONE);
             chatListAdapterViewHolder.messageReceivedTextView.setText(chatMsg.getMessage());
+            chatListAdapterViewHolder.recMsgFromPlayer.setText(chatMsg.getPlayerName());
         }
         return convertView;
     }

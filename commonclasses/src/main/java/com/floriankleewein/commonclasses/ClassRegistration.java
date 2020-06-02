@@ -14,6 +14,9 @@ import com.floriankleewein.commonclasses.Cards.EstateType;
 import com.floriankleewein.commonclasses.Cards.MoneyCard;
 import com.floriankleewein.commonclasses.Cards.MoneyType;
 import com.floriankleewein.commonclasses.Chat.ChatMessage;
+import com.floriankleewein.commonclasses.Chat.GetChatMessages;
+import com.floriankleewein.commonclasses.Chat.Pair;
+import com.floriankleewein.commonclasses.Chat.RecChatListMsg;
 import com.floriankleewein.commonclasses.CheatFunction.CheatService;
 import com.floriankleewein.commonclasses.GameLogic.CardLogic;
 import com.floriankleewein.commonclasses.GameLogic.GameHandler;
@@ -27,8 +30,8 @@ import com.floriankleewein.commonclasses.Network.CreateGameMsg;
 import com.floriankleewein.commonclasses.Network.GameUpdateMsg;
 import com.floriankleewein.commonclasses.Network.GetGameMsg;
 import com.floriankleewein.commonclasses.Network.HasCheatedMessage;
-import com.floriankleewein.commonclasses.Network.Messages.GameLogicMsg.BuyCardMsg;
-import com.floriankleewein.commonclasses.Network.Messages.GameLogicMsg.PlayCardMsg;
+import com.floriankleewein.commonclasses.Network.BuyCardMsg;
+import com.floriankleewein.commonclasses.Network.PlayCardMsg;
 import com.floriankleewein.commonclasses.Network.Messages.NewTurnMessage;
 import com.floriankleewein.commonclasses.Network.Messages.NotEnoughRessourcesMsg;
 import com.floriankleewein.commonclasses.Network.NetworkInformationMsg;
@@ -53,7 +56,7 @@ public class ClassRegistration {
             GameHandler.class, Action.class, Board.class, BuyField.class, ActionType.class,
             EstateType.class, MoneyType.class, CheatService.class, EstateCard.class, ActionField.class, AllPlayersInDominionActivityMsg.class,
             HashMap.class, NewTurnMessage.class, NotEnoughRessourcesMsg.class, CardLogic.class, BuyCardMsg.class, PlayCardMsg.class, PlayStatus.class,
-            CardLogic.class
+            CardLogic.class,RecChatListMsg.class, Pair.class,GetChatMessages.class
     };
 
     public void registerAllClassesForServer(Server server){
