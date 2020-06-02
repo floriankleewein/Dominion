@@ -30,6 +30,7 @@ public class GameHandler {
     private static final int CON_MONEY_CARDS = 7;
     private static final int CON_ANWESEN_CARDS = 3;
     private static final String BOUGHT_CARD_TYPE = "Bought card type: ";
+    private static final String BUYAMOUNT_CONST = " thats the BuyAmount";
     private Board board;
     private Card playedCard;
     private Card buyCard;
@@ -160,13 +161,13 @@ public class GameHandler {
 
     public void playCard(ActionCard card) {
         setPlayedCard(card);
-        System.out.println(getActiveUser().getGamePoints().getBuyAmounts() + " thats the BuyAmount");
+        Log.info(getActiveUser().getGamePoints().getBuyAmounts() + BUYAMOUNT_CONST);
         if (canPlayActionCard()) {
             cardLogic.doCardLogic(card);
             getActiveUser().getGamePoints().modifyPlayAmounts(-1);
-            System.out.println(getActiveUser().getGamePoints().getBuyAmounts() + " thats the BuyAmount");
+            Log.info(getActiveUser().getGamePoints().getBuyAmounts() + BUYAMOUNT_CONST);
             if ((getActiveUser().getGamePoints().getPlaysAmount() <= 1) || (!checkHandCards())) {
-                System.out.println(getActiveUser().getGamePoints().getBuyAmounts() + " thats the BuyAmount");
+                Log.info(getActiveUser().getGamePoints().getBuyAmounts() + BUYAMOUNT_CONST);
                 turnState = PlayStatus.PLAY_COINS;
             }
         }
@@ -290,7 +291,7 @@ public class GameHandler {
             getActiveUser().getUserCards().addCardToDiscardPile(boughtCard);
             calculateCoinsOnActiveUser(boughtCard);
             if (getActiveUser().getGamePoints().getBuyAmounts() <= 0) {
-                System.out.println("HIER SOLLTE WAS STEHEN");
+                Log.info("HIER SOLLTE WAS STEHEN");
                 newTurn();
             }
             return boughtCard;
@@ -308,7 +309,7 @@ public class GameHandler {
             getActiveUser().getGamePoints().modifyWinningPoints(((EstateCard) boughtCard).getEstateValue());
             calculateCoinsOnActiveUser(boughtCard);
             if (getActiveUser().getGamePoints().getBuyAmounts() <= 0) {
-                System.out.println("HIER SOLLTE WAS STEHEN");
+                Log.info("HIER SOLLTE WAS STEHEN");
                 newTurn();
             }
             return boughtCard;
@@ -367,7 +368,7 @@ public class GameHandler {
 
     private boolean canBuyCard(Card card) {
         if (card == null) {
-            System.out.println("CARD IS NULL");
+            Log.error("CARD IS NULL");
             return false;
         }
         if (getActiveUser().getGamePoints().getCoins() >= card.getPrice() && getActiveUser().getGamePoints().getBuyAmounts() > 0) {

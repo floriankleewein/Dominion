@@ -1,5 +1,6 @@
 package com.floriankleewein.commonclasses.gamelogic;
 
+import com.esotericsoftware.minlog.Log;
 import com.floriankleewein.commonclasses.cards.Action;
 import com.floriankleewein.commonclasses.cards.ActionCard;
 import com.floriankleewein.commonclasses.cards.Card;
@@ -240,6 +241,6 @@ public class CardLogic {
 
     private void modifyMoneyAmount() {
         gameHandler.getActiveUser().getGamePoints().modifyCoins(moneyValue);
-        System.out.println(gameHandler.getActiveUser().getGamePoints().getCoins() + "USERCOINS IN CARD LOGIC");
+        Log.info(gameHandler.getActiveUser().getGamePoints().getCoins() + "USERCOINS IN CARD LOGIC");
     }
 }

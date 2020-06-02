@@ -49,7 +49,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
     private SensorManager sm;
     private ShakeListener shakeListener;
     private TextView playerScores;
-    private int CallbackCounter;
+    private int callbackCounter;
 
 
     private FragmentManager fragmentManager;
@@ -118,20 +118,20 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         playerScores = findViewById(R.id.txtVPlayerScore);
         playerScores.setText("Scores of Players.");
 
-        ClientConnector clientConnector = ClientConnector.getClientConnector();
+        clientConnector = ClientConnector.getClientConnector();
 
         actionDialogHandler.setClientConnector(clientConnector);
         imageButtonHandler.setClientConnector(clientConnector);
 
         clientConnector.registerCallback(HasCheatedMessage.class, (msg -> runOnUiThread(() -> {
-            String CheaterName = ((HasCheatedMessage) msg).getName();
-            Toast.makeText(getApplicationContext(), CheaterName + " hat eine zusätzliche Karte gezogen...", Toast.LENGTH_SHORT).show();
+            String cheaterName = ((HasCheatedMessage) msg).getName();
+            Toast.makeText(getApplicationContext(), cheaterName + " hat eine zusätzliche Karte gezogen...", Toast.LENGTH_SHORT).show();
         })));
 
         clientConnector.registerCallback(SuspectMessage.class, (msg -> runOnUiThread(() -> {
             String SuspectedUser = ((SuspectMessage) msg).getSuspectedUserName();
-            String Username = ((SuspectMessage) msg).getUserName();
-            Toast.makeText(getApplicationContext(), Username + " glaubt, dass " + SuspectedUser + " geschummelt hat", Toast.LENGTH_SHORT).show();
+            String userName = ((SuspectMessage) msg).getUserName();
+            Toast.makeText(getApplicationContext(), userName + " glaubt, dass " + SuspectedUser + " geschummelt hat", Toast.LENGTH_SHORT).show();
         })));
 
         clientConnector.registerCallback(ChatMessage.class, (msg -> runOnUiThread(() -> {
@@ -140,7 +140,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         })));
 
         ClientConnector.getClientConnector().registerCallback(GetGameMsg.class, msg -> runOnUiThread(() -> {
-            User user = ((GetGameMsg) msg).getGame().findUser(getUsername());
+            user = ((GetGameMsg) msg).getGame().findUser(getUsername());
             cardsHandler.initCards(user);
             if (user.getUserName().equals(((GetGameMsg) msg).getGame().getActivePlayer().getUserName())) {
                 if (((GetGameMsg) msg).getPlayStatus() == PlayStatus.ACTION_PHASE) {
@@ -171,6 +171,8 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
                 if (card instanceof ActionCard) {
                     ActionCard actionCard = (ActionCard) card;
                     switch (actionCard.getActionType()) {
+                        default:
+                            break;
                         case HEXE:
                             Log.i("Action", "ActionType: " + actionCard.getActionType() +
                                     ", Card Count: " + actionCard.getAction().getCardCount() +
