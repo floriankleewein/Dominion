@@ -10,8 +10,6 @@ import com.floriankleewein.commonclasses.Chat.GetChatMessages;
 import com.floriankleewein.commonclasses.ClassRegistration;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.GameLogic.GameHandler;
-import com.floriankleewein.commonclasses.Network.Messages.GameLogicMsg.BuyCardMsg;
-import com.floriankleewein.commonclasses.Network.Messages.GameLogicMsg.PlayCardMsg;
 import com.floriankleewein.commonclasses.Network.Messages.NewTurnMessage;
 
 import java.io.IOException;

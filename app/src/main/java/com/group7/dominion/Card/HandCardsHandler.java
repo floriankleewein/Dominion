@@ -2,25 +2,16 @@ package com.group7.dominion.Card;
 
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.util.Log;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.floriankleewein.commonclasses.Cards.ActionCard;
 import com.floriankleewein.commonclasses.Cards.Card;
-import com.floriankleewein.commonclasses.Cards.EstateCard;
-import com.floriankleewein.commonclasses.Cards.EstateType;
-import com.floriankleewein.commonclasses.Cards.MoneyCard;
-import com.floriankleewein.commonclasses.Cards.MoneyType;
 import com.floriankleewein.commonclasses.GameLogic.PlayStatus;
 import com.floriankleewein.commonclasses.Network.ClientConnector;
-import com.floriankleewein.commonclasses.Network.GameUpdateMsg;
-import com.floriankleewein.commonclasses.Network.GetGameMsg;
-import com.floriankleewein.commonclasses.Network.Messages.GameLogicMsg.PlayCardMsg;
+import com.floriankleewein.commonclasses.Network.PlayCardMsg;
 import com.floriankleewein.commonclasses.Network.StartGameMsg;
 import com.floriankleewein.commonclasses.User.User;
 import com.group7.dominion.DominionActivity;
@@ -28,8 +19,6 @@ import com.group7.dominion.R;
 
 import java.util.LinkedList;
 import java.util.List;
-
-import static com.floriankleewein.commonclasses.Cards.ActionType.HEXE;
 
 
 public class HandCardsHandler {
