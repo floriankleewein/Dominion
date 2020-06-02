@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+
+import com.esotericsoftware.minlog.Log;
 import com.floriankleewein.commonclasses.network.AllPlayersInDominionActivityMsg;
 import com.floriankleewein.commonclasses.network.ClientConnector;
 import com.floriankleewein.commonclasses.network.StartGameMsg;
@@ -79,7 +81,7 @@ public class StartGameActivity extends AppCompatActivity {
 
             thread12.start();
         });
-        ClientConnector.getClientConnector().registerCallback(StartGameMsg.class, msg -> runOnUiThread(() -> System.out.println("Got the Callback for StartGameMsg in StartGameAcitivity")));
+        ClientConnector.getClientConnector().registerCallback(StartGameMsg.class, msg -> runOnUiThread(() -> Log.info("Got the Callback for StartGameMsg in StartGameAcitivity")));
     }
 
 

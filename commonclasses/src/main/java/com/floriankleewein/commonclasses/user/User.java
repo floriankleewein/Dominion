@@ -4,11 +4,11 @@ package com.floriankleewein.commonclasses.user;
 import com.floriankleewein.commonclasses.gamelogic.PlayStatus;
 
 public class User {
-    private static long ID;
-    private long UserID;
-    private String UserName;
-    private String UserEmail;
-    private String Password;
+    private static long id;
+    private long userId;
+    private String userName;
+    private String userEmail;
+    private String password;
     private UserCards userCards;
     private GamePoints gamePoints;
     private boolean gameCreator = false;
@@ -21,7 +21,7 @@ public class User {
 
     //constructor needed for user registration
     public User(String userName) {
-        this.UserName = userName;
+        this.userName = userName;
         isCheater = false;
         setUpforGame();
     }
@@ -47,36 +47,36 @@ public class User {
         this.userCards = userCards;
     }
 
-    public long getUserID() {
-        return UserID;
+    public long getUserId() {
+        return userId;
     }
 
-    public void setUserID(long userID) {
-        UserID = userID;
+    public void setUserId(long userId) {
+        this.userId = userId;
     }
 
     public String getUserName() {
-        return UserName;
+        return userName;
     }
 
     public void setUserName(String userName) {
-        UserName = userName;
+        this.userName = userName;
     }
 
     public String getUserEmail() {
-        return UserEmail;
+        return userEmail;
     }
 
     public void setUserEmail(String userEmail) {
-        UserEmail = userEmail;
+        this.userEmail = userEmail;
     }
 
     public String getPassword() {
-        return Password;
+        return password;
     }
 
     public void setPassword(String password) {
-        Password = password;
+        this.password = password;
     }
 
     public boolean isGameCreator() {

@@ -135,7 +135,7 @@ public class UserClassTest {
         User user = new User();
         UserCards TestCards = new UserCards();
         GamePoints TestPoints = new GamePoints();
-        user.setUserID(1);
+        user.setUserId(1);
         user.setUserName("TestUser");
         user.setCheater(true);
         user.setGameCreator(false);
@@ -144,7 +144,7 @@ public class UserClassTest {
         user.setGamePoints(TestPoints);
         user.setUserCards(TestCards);
 
-        Assert.assertEquals(1, user.getUserID());
+        Assert.assertEquals(1, user.getUserId());
         Assert.assertEquals("TestUser", user.getUserName());
         Assert.assertEquals(true, user.isCheater());
         Assert.assertEquals(false, user.isGameCreator());
