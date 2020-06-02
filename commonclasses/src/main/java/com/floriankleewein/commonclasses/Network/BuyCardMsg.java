@@ -1,4 +1,4 @@
-package com.floriankleewein.commonclasses.Network.Messages.GameLogicMsg;
+package com.floriankleewein.commonclasses.Network;
 
 import com.floriankleewein.commonclasses.Cards.ActionType;
 import com.floriankleewein.commonclasses.Cards.Card;
