@@ -89,18 +89,18 @@ public class TestServer {
         Log.info("GAME, game instanced - started");
     }
 
-    public void sendCheatInformation(String CheaterName) {
+    public void sendCheatInformation(String cheaterName) {
         HasCheatedMessage msg = new HasCheatedMessage();
-        msg.setName(CheaterName);
+        msg.setName(cheaterName);
         for (Connection con : server.getConnections()) {
             con.sendTCP(msg);
         }
     }
 
-    public void sendSuspectInformation(String SuspectName, String Username) {
+    public void sendSuspectInformation(String suspectName, String username) {
         SuspectMessage msg = new SuspectMessage();
-        msg.setSuspectedUserName(SuspectName);
-        msg.setUserName(Username);
+        msg.setSuspectedUserName(suspectName);
+        msg.setUserName(username);
         for (Connection con : server.getConnections()) {
             con.sendTCP(msg);
         }
@@ -307,9 +307,9 @@ public class TestServer {
     }
 
     public void hasCheatedMessageFunctionality(Object object) {
-        HasCheatedMessage CheatMsg = (HasCheatedMessage) object;
-        gamehandler.getGame().findUser(CheatMsg.getName()).getUserCards().addDeckCardtoHandCard(1);
-        sendCheatInformation(CheatMsg.getName());
+        HasCheatedMessage cheatMsg = (HasCheatedMessage) object;
+        gamehandler.getGame().findUser(cheatMsg.getName()).getUserCards().addDeckCardtoHandCard(1);
+        sendCheatInformation(cheatMsg.getName());
     }
 
     public void updatePlayerNamesMsgFunctionality() {
