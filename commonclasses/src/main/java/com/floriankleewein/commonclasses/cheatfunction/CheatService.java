@@ -8,36 +8,36 @@ import java.util.List;
 public class CheatService {
 
 
-    private List<User> PlayerList;
+    private List<User> playerList;
 
 
     public CheatService(Game game) {
-        PlayerList = game.getPlayerList();
+        playerList = game.getPlayerList();
     }
 
     public User findUser(String name) {
 
-        for (int i = 0; i < this.PlayerList.size(); i++) {
-            if (PlayerList.get(i).getUserName().equals(name)) {
-                return PlayerList.get(i);
+        for (int i = 0; i < this.playerList.size(); i++) {
+            if (playerList.get(i).getUserName().equals(name)) {
+                return playerList.get(i);
             }
         }
         return null;
     }
 
     public void addCardtoUser(String name) {
-        User CheatUser = findUser(name);
-        if (CheatUser != null && (!CheatUser.isCheater())) {
-            CheatUser.getUserCards().addDeckCardtoHandCard(1);
-            CheatUser.setCheater(true);
+        User cheatUser = findUser(name);
+        if (cheatUser != null && (!cheatUser.isCheater())) {
+            cheatUser.getUserCards().addDeckCardtoHandCard(1);
+            cheatUser.setCheater(true);
         }
     }
 
     public User findCheater(String name) {
-        User CheatUser = findUser(name);
+        User cheatUser = findUser(name);
 
-        if (CheatUser.isCheater()) {
-            return CheatUser;
+        if (cheatUser.isCheater()) {
+            return cheatUser;
         } else {
             return null;
         }

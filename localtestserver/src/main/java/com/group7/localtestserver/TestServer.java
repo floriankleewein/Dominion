@@ -23,8 +23,8 @@ import com.floriankleewein.commonclasses.network.GetPlayerMsg;
 import com.floriankleewein.commonclasses.network.HasCheatedMessage;
 import com.floriankleewein.commonclasses.network.BuyCardMsg;
 import com.floriankleewein.commonclasses.network.PlayCardMsg;
-import com.floriankleewein.commonclasses.network.Messages.NewTurnMessage;
-import com.floriankleewein.commonclasses.network.Messages.NotEnoughRessourcesMsg;
+import com.floriankleewein.commonclasses.network.messages.NewTurnMessage;
+import com.floriankleewein.commonclasses.network.messages.NotEnoughRessourcesMsg;
 import com.floriankleewein.commonclasses.network.ResetMsg;
 import com.floriankleewein.commonclasses.network.ReturnPlayersMsg;
 import com.floriankleewein.commonclasses.network.StartGameMsg;
@@ -44,7 +44,6 @@ public class TestServer {
     private Game game;
     private Board board;
     private boolean hasGame = false;
-    private boolean gamehandlerCalled = false;
     private GameHandler gamehandler;
     private Map<User, Connection> userClientConnectorMap = new HashMap<>(); // TODO fix bad variable name
 
@@ -52,7 +51,6 @@ public class TestServer {
 
 
     private static final String BOUGHT = " bought";
-
 
 
     public TestServer() {
@@ -70,7 +68,6 @@ public class TestServer {
         });
         thread.start();
         thread.join();
-
 
 
         //FKDoc: Start Server
@@ -98,18 +95,18 @@ public class TestServer {
         Log.info("GAME, game instanced - started");
     }
 
-    public void sendCheatInformation(String CheaterName) {
+    public void sendCheatInformation(String cheaterName) {
         HasCheatedMessage msg = new HasCheatedMessage();
-        msg.setName(CheaterName);
+        msg.setName(cheaterName);
         for (Connection con : server.getConnections()) {
             con.sendTCP(msg);
         }
     }
 
-    public void sendSuspectInformation(String SuspectName, String Username) {
+    public void sendSuspectInformation(String suspectName, String username) {
         SuspectMessage msg = new SuspectMessage();
-        msg.setSuspectedUserName(SuspectName);
-        msg.setUserName(Username);
+        msg.setSuspectedUserName(suspectName);
+        msg.setUserName(username);
         for (Connection con : server.getConnections()) {
             con.sendTCP(msg);
         }
@@ -196,7 +193,7 @@ public class TestServer {
                     playCardmsgFunctionality(object);
                 } else if (object instanceof BuyCardMsg) {
                     buyCardmsgFunctionality(object);
-                }else if (object instanceof GetChatMessages) {
+                } else if (object instanceof GetChatMessages) {
                     getChatMessagesFunctionality(con);
                 }
             }
@@ -316,9 +313,9 @@ public class TestServer {
     }
 
     public void hasCheatedMessageFunctionality(Object object) {
-        HasCheatedMessage CheatMsg = (HasCheatedMessage) object;
-        gamehandler.getGame().findUser(CheatMsg.getName()).getUserCards().addDeckCardtoHandCard(1);
-        sendCheatInformation(CheatMsg.getName());
+        HasCheatedMessage cheatMsg = (HasCheatedMessage) object;
+        gamehandler.getGame().findUser(cheatMsg.getName()).getUserCards().addDeckCardtoHandCard(1);
+        sendCheatInformation(cheatMsg.getName());
     }
 
     public void updatePlayerNamesMsgFunctionality() {

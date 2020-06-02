@@ -10,7 +10,7 @@ import com.floriankleewein.commonclasses.chat.GetChatMessages;
 import com.floriankleewein.commonclasses.ClassRegistration;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.gamelogic.GameHandler;
-import com.floriankleewein.commonclasses.network.Messages.NewTurnMessage;
+import com.floriankleewein.commonclasses.network.messages.NewTurnMessage;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -48,12 +48,7 @@ public class ClientConnector {
 
     public void connect() throws InterruptedException {
         // Register classes
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                registerClasses();
-            }
-        });
+        Thread thread = new Thread(() -> registerClasses());
         thread.start();
         thread.join();
 
@@ -245,12 +240,7 @@ public class ClientConnector {
     }
 
     public void sendPlayCard(PlayCardMsg msg) {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                client.sendTCP(msg);
-            }
-        });
+        Thread thread = new Thread(() -> client.sendTCP(msg));
         thread.start();
         client.addListener(new Listener() {
             public void received(Connection con, Object object) {
@@ -263,12 +253,7 @@ public class ClientConnector {
     }
 
     public void sendbuyCard(BuyCardMsg msg) {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                client.sendTCP(msg);
-            }
-        });
+        Thread thread = new Thread(() -> client.sendTCP(msg));
         thread.start();
 
         client.addListener(new Listener() {
@@ -281,9 +266,6 @@ public class ClientConnector {
         });
     }
 
-    public GameHandler getGameHandler() {
-        return gameHandler;
-    }
 
     public void setGameHandler(GameHandler gameHandler) {
         this.gameHandler = gameHandler;
@@ -323,10 +305,10 @@ public class ClientConnector {
         client.sendTCP(getChatListMsg);
     }
 
-    public void sendSuspectUser(String SuspectUsername, String Username) {
+    public void sendSuspectUser(String suspectUsername, String username) {
         SuspectMessage msg = new SuspectMessage();
-        msg.setSuspectedUserName(SuspectUsername);
-        msg.setUserName(Username);
+        msg.setSuspectedUserName(suspectUsername);
+        msg.setUserName(username);
         client.sendTCP(msg);
 
         client.addListener(new Listener() {

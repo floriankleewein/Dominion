@@ -153,6 +153,6 @@ public class MainActivity extends AppCompatActivity {
         String userName = editText.getText().toString();
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("us", userName);
-        editor.commit();
+        editor.apply();
     }
 }

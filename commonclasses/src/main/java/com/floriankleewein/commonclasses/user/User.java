@@ -1,27 +1,22 @@
 package com.floriankleewein.commonclasses.user;
 
 
-import com.floriankleewein.commonclasses.gamelogic.PlayStatus;
+
 
 public class User {
-    private static long ID;
-    private long UserID;
-    private String UserName;
-    private String UserEmail;
-    private String Password;
+
+    private String userName;
     private UserCards userCards;
     private GamePoints gamePoints;
     private boolean gameCreator = false;
     private boolean isCheater;
-    private PlayStatus playStatus;
-
 
     public User() {
     }
 
     //constructor needed for user registration
     public User(String userName) {
-        this.UserName = userName;
+        this.userName = userName;
         isCheater = false;
         setUpforGame();
     }
@@ -29,6 +24,14 @@ public class User {
     public void setUpforGame() {
         this.userCards = new UserCards();
         this.gamePoints = new GamePoints();
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public GamePoints getGamePoints() {
@@ -47,38 +50,6 @@ public class User {
         this.userCards = userCards;
     }
 
-    public long getUserID() {
-        return UserID;
-    }
-
-    public void setUserID(long userID) {
-        UserID = userID;
-    }
-
-    public String getUserName() {
-        return UserName;
-    }
-
-    public void setUserName(String userName) {
-        UserName = userName;
-    }
-
-    public String getUserEmail() {
-        return UserEmail;
-    }
-
-    public void setUserEmail(String userEmail) {
-        UserEmail = userEmail;
-    }
-
-    public String getPassword() {
-        return Password;
-    }
-
-    public void setPassword(String password) {
-        Password = password;
-    }
-
     public boolean isGameCreator() {
         return gameCreator;
     }
@@ -93,14 +64,6 @@ public class User {
 
     public void setCheater(boolean cheater) {
         isCheater = cheater;
-    }
-
-    public PlayStatus getPlayStatus() {
-        return playStatus;
-    }
-
-    public void setPlayStatus(PlayStatus playStatus) {
-        this.playStatus = playStatus;
     }
 
 

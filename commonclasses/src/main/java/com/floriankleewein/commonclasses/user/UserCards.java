@@ -5,6 +5,7 @@ import com.floriankleewein.commonclasses.cards.Card;
 
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Class User
@@ -13,20 +14,20 @@ import java.util.LinkedList;
 
 public class UserCards {
 
-    private LinkedList<Card> Deck;
-    private LinkedList<Card> HandCards;
-    private LinkedList<Card> DiscardCards;
+    private LinkedList<Card> deck;
+    private LinkedList<Card> handCards;
+    private LinkedList<Card> discardCards;
 
     public UserCards() {
     }
 
-    public void getFirstCards(LinkedList<Card> GivenCards) {
-        this.Deck = new LinkedList<Card>();
-        this.HandCards = new LinkedList<Card>();
-        this.DiscardCards = new LinkedList<Card>();
+    public void getFirstCards(LinkedList<Card> givenCards) {
+        this.deck = new LinkedList<>();
+        this.handCards = new LinkedList<>();
+        this.discardCards = new LinkedList<>();
 
 
-        this.Deck = GivenCards;
+        this.deck = givenCards;
         shufflesCards();
         drawNewCards();
     }
@@ -34,66 +35,66 @@ public class UserCards {
 
     public void shufflesCards() {
 
-        Collections.shuffle(this.Deck);
+        Collections.shuffle(this.deck);
     }
 
 
     public void drawNewCards() {
 
-        int decksize = Deck.size();
+        int decksize = deck.size();
 
-        this.DiscardCards.addAll(HandCards);
+        this.discardCards.addAll(handCards);
 
-        this.HandCards.clear();
+        this.handCards.clear();
 
         if (decksize < 5) {
-            this.Deck.addAll(DiscardCards);
+            this.deck.addAll(discardCards);
             shufflesCards();
-            this.DiscardCards.clear();
+            this.discardCards.clear();
         }
         for (int i = 4; i >= 0; i--) {
-            this.HandCards.add(this.Deck.get(i));
+            this.handCards.add(this.deck.get(i));
         }
         for (int i = 4; i >= 0; i--) {
-            this.Deck.remove(i);
+            this.deck.remove(i);
         }
     }
 
     public void addCardToDiscardPile(Card card) {
-        this.DiscardCards.add(card);
+        this.discardCards.add(card);
     }
 
-    public void playCard(Card PlayedCard) {
+    public void playCard(Card playedCard) {
 
         for (int i = 0; i < getHandCards().size(); i++) {
-            if (PlayedCard.getId() == getHandCards().get(i).getId()) {
+            if (playedCard.getId() == getHandCards().get(i).getId()) {
                 getHandCards().remove(i);
                 break;
             }
         }
 
-        this.DiscardCards.add(PlayedCard);
+        this.discardCards.add(playedCard);
     }
 
     public void addCardtoDeck(Card newCard) {
-        this.Deck.add(newCard);
+        this.deck.add(newCard);
     }
 
-    public void putCardsinTheDeck(LinkedList<Card> GivenCards) {
-        this.Deck.addAll(GivenCards);
+    public void putCardsinTheDeck(List<Card> givenCards) {
+        this.deck.addAll(givenCards);
     }
 
 
     public void addDeckCardtoHandCard(int amountCards) {
 
-        if (Deck.size() < 5) {
-            Deck.addAll(DiscardCards);
-            DiscardCards.clear();
-            Collections.shuffle(Deck);
+        if (deck.size() < 5) {
+            deck.addAll(discardCards);
+            discardCards.clear();
+            Collections.shuffle(deck);
         }
         for (int i = 0; i < amountCards; i++) {
-            this.HandCards.add(this.Deck.getLast());
-            this.Deck.removeLast();
+            this.handCards.add(this.deck.getLast());
+            this.deck.removeLast();
         }
     }
 
@@ -107,27 +108,27 @@ public class UserCards {
 
 
     public LinkedList<Card> getDeck() {
-        return Deck;
+        return deck;
     }
 
     public void setDeck(LinkedList<Card> deck) {
-        Deck = deck;
+        this.deck = deck;
     }
 
     public LinkedList<Card> getHandCards() {
-        return HandCards;
+        return handCards;
     }
 
     public void setHandCards(LinkedList<Card> handCards) {
-        HandCards = handCards;
+        this.handCards = handCards;
     }
 
     public LinkedList<Card> getDiscardCards() {
-        return DiscardCards;
+        return discardCards;
     }
 
     public void setDiscardCards(LinkedList<Card> discardCards) {
-        DiscardCards = discardCards;
+        this.discardCards = discardCards;
     }
 
 }

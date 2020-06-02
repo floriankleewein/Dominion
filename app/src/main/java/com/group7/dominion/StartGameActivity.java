@@ -22,7 +22,8 @@ import java.util.ArrayList;
 
 public class StartGameActivity extends AppCompatActivity {
 
-    Button btnStart, btnshowPlayers;
+    Button btnStart;
+    Button btnshowPlayers;
     ClientConnector client;
 
 
@@ -108,14 +109,6 @@ public class StartGameActivity extends AppCompatActivity {
 
                 thread.start();
             }
-        });
-        ClientConnector.getClientConnector().registerCallback(StartGameMsg.class, msg -> {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    System.out.println("Got the Callback for StartGameMsg in StartGameAcitivity");
-                }
-            });
         });
     }
 

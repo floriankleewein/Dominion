@@ -1,4 +1,4 @@
-package com.floriankleewein.commonclasses.network.Messages;
+package com.floriankleewein.commonclasses.network.messages;
 
 import com.floriankleewein.commonclasses.network.BaseMessage;
 

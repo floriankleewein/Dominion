@@ -25,17 +25,17 @@ public class HandCardsHandler {
     PlayStatus playStatus;
     LinearLayout linearLayout;
     LinearLayout.LayoutParams lparams;
-    private List<ImageButton> ImageButtons;
+    private List<ImageButton> imageButtonList;
     private List<Card> cardList;
     Context context;
-    int img_id;
+    int imgId;
     boolean canGetCards;
 
     public HandCardsHandler(Context context) {
         this.context = context;
         linearLayout = ((DominionActivity) context).findViewById(R.id.LinearCards);
         lparams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        ImageButtons = new LinkedList<>();
+        imageButtonList = new LinkedList<>();
         lparams.weight = 1;
         playStatus = PlayStatus.NO_PLAY_PHASE;
         canGetCards = true;
@@ -45,9 +45,7 @@ public class HandCardsHandler {
     public void initCards(User user) {
         if (canGetCards) {
             canGetCards = false;
-            System.out.println(user.getUserCards().getHandCards().size() + "in initcards");
             cardList = user.getUserCards().getHandCards();
-            System.out.println(cardList.size());
             Log.i("intit", "INIT CARDS");
             for (int i = 0; i < cardList.size(); i++) {
                 addCard(cardList.get(i));
@@ -56,20 +54,13 @@ public class HandCardsHandler {
     }
 
     public void sendMessage() {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                ClientConnector.getClientConnector().sendGameUpdate();
-            }
-        });
+        Thread thread = new Thread(() -> ClientConnector.getClientConnector().sendGameUpdate());
         thread.start();
 
     }
 
     private int setRessource(Card card) {
         switch (card.getId()) {
-            default:
-                return R.drawable.backofcard;
             case 0:
                 return R.drawable.burggraben_info;
             case 1:
@@ -104,25 +95,23 @@ public class HandCardsHandler {
                 return R.drawable.silber;
             case 16:
                 return R.drawable.gold;
+            default:
+                return R.drawable.backofcard;
         }
     }
 
 
     public void onClickListenerActionPhase() {
-        for (int i = 0; i < ImageButtons.size(); i++) {
+        for (int i = 0; i < imageButtonList.size(); i++) {
             int finalI = i;
 
-            ImageButtons.get(i).setOnClickListener(v -> {
+            imageButtonList.get(i).setOnClickListener(v -> {
                 if ((cardList.get(finalI).getId() <= 10)) {
-                    System.out.println("Card with the ID is played: " + cardList.get(finalI).getId());
-                    linearLayout.removeView(ImageButtons.get(finalI));
-                    Thread thread = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            PlayCardMsg msg = new PlayCardMsg();
-                            msg.setPlayedCard(cardList.get(finalI));
-                            ClientConnector.getClientConnector().sendPlayCard(msg);
-                        }
+                    linearLayout.removeView(imageButtonList.get(finalI));
+                    Thread thread = new Thread(() -> {
+                        PlayCardMsg msg = new PlayCardMsg();
+                        msg.setPlayedCard(cardList.get(finalI));
+                        ClientConnector.getClientConnector().sendPlayCard(msg);
                     });
                     thread.start();
                 }
@@ -131,13 +120,12 @@ public class HandCardsHandler {
     }
 
     public void onClickListenerBuyPhase() {
-        for (int i = 0; i < ImageButtons.size(); i++) {
+        for (int i = 0; i < imageButtonList.size(); i++) {
             int finalI = i;
 
-            ImageButtons.get(i).setOnClickListener(v -> {
+            imageButtonList.get(i).setOnClickListener(v -> {
                 if ((cardList.get(finalI).getId() >= 14)) {
-                    System.out.println("Card with the ID is played: " + cardList.get(finalI).getId());
-                    linearLayout.removeView(ImageButtons.get(finalI));
+                    linearLayout.removeView(imageButtonList.get(finalI));
                     Thread thread = new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -156,33 +144,21 @@ public class HandCardsHandler {
     private void addCard(Card card) {
         ImageButton umg = new ImageButton(context);
         umg.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-        umg.setId(img_id);
+        umg.setId(imgId);
         umg.setLayoutParams(lparams);
         umg.setImageResource(setRessource(card));
         linearLayout.addView(umg);
-        ImageButtons.add(umg);
-        img_id++;
+        imageButtonList.add(umg);
+        imgId++;
     }
 
     public void setImageButtonsNull() {
         Log.i("SEt", "SET IMAGE BUTTON NULL IS CALLED ");
         linearLayout.removeAllViewsInLayout();
-        ImageButtons.clear();
+        imageButtonList.clear();
         canGetCards = true;
     }
-
-
-    public void registerListener(String Username) {
-        ClientConnector.getClientConnector().registerCallback(StartGameMsg.class, msg -> {
-            ((DominionActivity) context).runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    System.out.println("Got the Callback");
-                }
-            });
-        });
-    }
-
+    
 }
 
 

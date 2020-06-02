@@ -20,7 +20,7 @@ import java.util.List;
 public class CheatAlert extends AppCompatDialogFragment implements AdapterView.OnItemSelectedListener {
 
     private String name;
-    private String SuspectedUser;
+    private String suspectedUser;
     private List<String> namesList;
     private boolean alreadyCheated = false;
 
@@ -32,7 +32,7 @@ public class CheatAlert extends AppCompatDialogFragment implements AdapterView.O
          */
 
         String[] s = parseLisToString();
-        final ArrayAdapter<String> adp = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_dropdown_item, s);
+        final ArrayAdapter<String> adp = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, s);
         final Spinner sp = new Spinner(getContext());
         sp.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         sp.setAdapter(adp);
@@ -51,9 +51,9 @@ public class CheatAlert extends AppCompatDialogFragment implements AdapterView.O
                 .setNegativeButton("Close Cheat Menu", (dialog, which) -> {
                     dialog.cancel();
                 }).setNeutralButton("Suspect Selected User", (dialog, which) -> {
-                    if (!this.SuspectedUser.equals(this.name)) {
-                        deleteSelectedUser(SuspectedUser);
-                        sendSuspectMessage(this.SuspectedUser, name);
+                    if (!this.suspectedUser.equals(this.name)) {
+                        deleteSelectedUser(this.suspectedUser);
+                        sendSuspectMessage();
                         dialog.cancel();
                     }
                 });
@@ -80,12 +80,13 @@ public class CheatAlert extends AppCompatDialogFragment implements AdapterView.O
         for (int i = 0; i < this.namesList.size(); i++) {
             if (this.namesList.get(i).equals(name)) {
                 this.namesList.remove(i);
+                break;
             }
         }
     }
 
-    private void sendSuspectMessage(String SuspectedName, String name) {
-        Thread thread = new Thread(() -> ClientConnector.getClientConnector().sendSuspectUser(SuspectedName, name));
+    private void sendSuspectMessage() {
+        Thread thread = new Thread(() -> ClientConnector.getClientConnector().sendSuspectUser(suspectedUser,name));
         thread.start();
     }
 
@@ -101,7 +102,7 @@ public class CheatAlert extends AppCompatDialogFragment implements AdapterView.O
      */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        this.SuspectedUser = (String) parent.getItemAtPosition(position);
+        this.suspectedUser = (String) parent.getItemAtPosition(position);
     }
 
     @Override
@@ -112,10 +113,7 @@ public class CheatAlert extends AppCompatDialogFragment implements AdapterView.O
     public void setName(String name) {
         this.name = name;
     }
-
-    public List<String> getNamesList() {
-        return namesList;
-    }
+    
 
     public void setNamesList(List<String> namesList) {
         this.namesList = namesList;

@@ -16,25 +16,24 @@ public class ShakeListener {
     private float acelVal;
     private float acelLast;
     private float shake;
-    private CheatAlert cheat_alert;
+    private CheatAlert cheatAlert;
     private FragmentManager fragmentManager;
     private String Username;
     private List<String> names;
 
-    public ShakeListener(FragmentManager fragmentManager, String Username, ArrayList<String> names) {
+    public ShakeListener(FragmentManager fragmentManager, String username, List<String> names) {
         acelVal = SensorManager.GRAVITY_EARTH;
         acelLast = SensorManager.GRAVITY_EARTH;
         shake = 0.00f;
-        cheat_alert = new CheatAlert();
+        cheatAlert = new CheatAlert();
         this.fragmentManager = fragmentManager;
-        this.Username = Username;
+        this.Username = username;
         this.names = names;
     }
 
 
     public SensorEventListener newSensorListener() {
-
-        final SensorEventListener sensorListener = new SensorEventListener() {
+        return new SensorEventListener() {
             @Override
             public void onSensorChanged(SensorEvent event) {
                 float x = event.values[0];
@@ -47,10 +46,10 @@ public class ShakeListener {
                 float delta = acelVal - acelLast;
                 shake = shake * 0.9f + delta;
 
-                if (shake > 4 && !cheat_alert.isAdded()) {
-                    cheat_alert.setName(Username);
-                    cheat_alert.setNamesList(names);
-                    cheat_alert.show(fragmentManager, "cheat");
+                if (shake > 4 && !cheatAlert.isAdded()) {
+                    cheatAlert.setName(Username);
+                    cheatAlert.setNamesList(names);
+                    cheatAlert.show(fragmentManager, "cheat");
                 }
             }
 
@@ -59,6 +58,5 @@ public class ShakeListener {
 
             }
         };
-        return sensorListener;
     }
 }

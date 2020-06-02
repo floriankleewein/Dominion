@@ -240,6 +240,5 @@ public class CardLogic {
 
     private void modifyMoneyAmount() {
         gameHandler.getActiveUser().getGamePoints().modifyCoins(moneyValue);
-        System.out.println(gameHandler.getActiveUser().getGamePoints().getCoins() + "USERCOINS IN CARD LOGIC");
     }
 }

@@ -2,23 +2,23 @@ package com.floriankleewein.commonclasses.network;
 
 public class SuspectMessage extends BaseMessage {
 
-   private String SuspectedUserName;
-    private String UserName;
+   private String suspectedUserName;
+    private String userName;
 
     public String getSuspectedUserName() {
-        return SuspectedUserName;
+        return suspectedUserName;
     }
 
     public void setSuspectedUserName(String suspectedUserName) {
-        SuspectedUserName = suspectedUserName;
+        this.suspectedUserName = suspectedUserName;
     }
 
     public String getUserName() {
-        return UserName;
+        return userName;
     }
 
     public void setUserName(String userName) {
-        UserName = userName;
+        this.userName = userName;
     }
 
 
