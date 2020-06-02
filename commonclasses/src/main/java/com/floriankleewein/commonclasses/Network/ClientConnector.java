@@ -46,9 +46,17 @@ public class ClientConnector {
         return game;
     }
 
-    public void connect() {
+    public void connect() throws InterruptedException {
         // Register classes
-        registerClasses();
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                registerClasses();
+            }
+        });
+        thread.start();
+        thread.join();
+
 
         // start client
         client.start();

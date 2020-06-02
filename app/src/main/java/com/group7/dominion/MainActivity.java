@@ -47,7 +47,11 @@ public class MainActivity extends AppCompatActivity {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                client.connect();
+                try {
+                    client.connect();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 client.checkButtons();
             }
         });
