@@ -25,6 +25,7 @@ import com.floriankleewein.commonclasses.network.GetGameMsg;
 import com.floriankleewein.commonclasses.network.HasCheatedMessage;
 import com.floriankleewein.commonclasses.network.BuyCardMsg;
 import com.floriankleewein.commonclasses.network.PlayCardMsg;
+import com.floriankleewein.commonclasses.network.messages.EndGameMsg;
 import com.floriankleewein.commonclasses.network.messages.NewTurnMessage;
 import com.floriankleewein.commonclasses.network.SuspectMessage;
 import com.floriankleewein.commonclasses.network.UpdatePlayerNamesMsg;
@@ -249,6 +250,15 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
                     }
                 }
 
+            });
+        }));
+
+        clientConnector.registerCallback(EndGameMsg.class, (msg -> {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Log.i("GAME END",((EndGameMsg)msg).getWinningUser().getUserName() + "HAS WON");
+                }
             });
         }));
     }

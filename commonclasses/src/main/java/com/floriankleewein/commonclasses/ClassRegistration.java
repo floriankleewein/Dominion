@@ -32,6 +32,7 @@ import com.floriankleewein.commonclasses.network.GetGameMsg;
 import com.floriankleewein.commonclasses.network.HasCheatedMessage;
 import com.floriankleewein.commonclasses.network.BuyCardMsg;
 import com.floriankleewein.commonclasses.network.PlayCardMsg;
+import com.floriankleewein.commonclasses.network.messages.EndGameMsg;
 import com.floriankleewein.commonclasses.network.messages.NewTurnMessage;
 import com.floriankleewein.commonclasses.network.messages.NotEnoughRessourcesMsg;
 import com.floriankleewein.commonclasses.network.NetworkInformationMsg;
@@ -56,7 +57,7 @@ public class ClassRegistration {
             GameHandler.class, Action.class, Board.class, BuyField.class, ActionType.class,
             EstateType.class, MoneyType.class, CheatService.class, EstateCard.class, ActionField.class, AllPlayersInDominionActivityMsg.class,
             HashMap.class, NewTurnMessage.class, NotEnoughRessourcesMsg.class, CardLogic.class, BuyCardMsg.class, PlayCardMsg.class, PlayStatus.class,
-            CardLogic.class,RecChatListMsg.class, Pair.class,GetChatMessages.class
+            CardLogic.class,RecChatListMsg.class, Pair.class,GetChatMessages.class, EndGameMsg.class
     };
 
     public void registerAllClassesForServer(Server server){

@@ -23,6 +23,7 @@ import com.floriankleewein.commonclasses.network.GetPlayerMsg;
 import com.floriankleewein.commonclasses.network.HasCheatedMessage;
 import com.floriankleewein.commonclasses.network.BuyCardMsg;
 import com.floriankleewein.commonclasses.network.PlayCardMsg;
+import com.floriankleewein.commonclasses.network.messages.EndGameMsg;
 import com.floriankleewein.commonclasses.network.messages.NewTurnMessage;
 import com.floriankleewein.commonclasses.network.messages.NotEnoughRessourcesMsg;
 import com.floriankleewein.commonclasses.network.ResetMsg;
@@ -391,6 +392,12 @@ public class TestServer {
             Log.info("WE HAVE A NEW PLAYER");
             newTurnMsgFunctionality();
             gamehandler.setNewTurn(false);
+        }
+        if ((gamehandler.getBoard().getBuyField().isNoEstateCards()) || (gamehandler.getBoard()
+                .getActionField().getNotAvailableCards().size() >= 3)) {
+            EndGameMsg endGameMsg = new EndGameMsg();
+            endGameMsg.setWinningUser(gamehandler.declareWinner());
+            server.sendToAllTCP(endGameMsg);
         }
         returnmsg.setGame(Game.getGame());
         server.sendToAllTCP(returnmsg);
