@@ -12,7 +12,7 @@ import com.floriankleewein.commonclasses.Cards.EstateType;
 import com.floriankleewein.commonclasses.Cards.MoneyCard;
 import com.floriankleewein.commonclasses.Cards.MoneyType;
 import com.floriankleewein.commonclasses.Network.ClientConnector;
-import com.floriankleewein.commonclasses.Network.GameUpdateMsg;
+import com.floriankleewein.commonclasses.Network.Messages.GameLogicMsg.BuyCardMsg;
 import com.group7.dominion.R;
 
 import androidx.fragment.app.FragmentManager;
@@ -28,6 +28,12 @@ public class ImageButtonHandler {
     private ImageButton buttonAnwesen;
     private ImageButton buttonHerzogturm;
     private ImageButton buttonFluch;
+
+    private static final String ERRORDIALOG_CONST = "errorDialog";
+    private static final String MONEYCARD_CONST = "MoneyCard";
+    private static final String MONEYTYPE_CONST = "MoneyType: ";
+    private static final String ESTATECARD_CONST = "EstateCard";
+    private static final String ESTATETYPE_CONST = "EstateType: ";
 
     public void init(Activity activity, FragmentManager fragmentManager) {
         //Gold
@@ -95,22 +101,26 @@ public class ImageButtonHandler {
 
     private void onClickGold(Activity activity, FragmentManager fragmentManager) {
         //Card card = board.getBuyField().pickCard(MoneyType.GOLD);
-        GameUpdateMsg gameUpdateMsg = new GameUpdateMsg();
+        BuyCardMsg gameUpdateMsg = new BuyCardMsg();
         gameUpdateMsg.setMoneyTypeClicked(MoneyType.GOLD);
         sendUpdate(gameUpdateMsg);
 
-        clientConnector.registerCallback(GameUpdateMsg.class, (msg -> {
+        clientConnector.registerCallback(BuyCardMsg.class, (msg -> {
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    GameUpdateMsg gameUpdateMsg1 = (GameUpdateMsg) msg;
+                    BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
                     Card card = gameUpdateMsg1.getBoughtCard();
-                    if(card == null){
+                    if (card == null) {
+                        /*
                         ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
-                        errorDialogHandler.show(fragmentManager, "errorDialog");
-                    } else {
+                        errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
+
+                         */
+                        Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
+                    } else if (card instanceof MoneyCard) {
                         MoneyCard moneyCard = (MoneyCard) card;
-                        Log.i("MoneyCard", "MoneyType: " + moneyCard.getMoneyType());
+                        Log.i(MONEYCARD_CONST, MONEYTYPE_CONST + moneyCard.getMoneyType());
                     }
                 }
             });
@@ -119,22 +129,26 @@ public class ImageButtonHandler {
 
     private void onClickSilber(Activity activity, FragmentManager fragmentManager) {
         //Card card = board.getBuyField().pickCard(MoneyType.SILBER);
-        GameUpdateMsg gameUpdateMsg = new GameUpdateMsg();
+        BuyCardMsg gameUpdateMsg = new BuyCardMsg();
         gameUpdateMsg.setMoneyTypeClicked(MoneyType.SILBER);
         sendUpdate(gameUpdateMsg);
 
-        clientConnector.registerCallback(GameUpdateMsg.class, (msg -> {
+        clientConnector.registerCallback(BuyCardMsg.class, (msg -> {
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    GameUpdateMsg gameUpdateMsg1 = (GameUpdateMsg) msg;
+                    BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
                     Card card = gameUpdateMsg1.getBoughtCard();
-                    if(card == null){
+                    if (card == null) {
+                        /*
                         ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
-                        errorDialogHandler.show(fragmentManager, "errorDialog");
-                    } else {
+                        errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
+
+                         */
+                        Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
+                    } else if (card instanceof MoneyCard) {
                         MoneyCard moneyCard = (MoneyCard) card;
-                        Log.i("MoneyCard", "MoneyType: " + moneyCard.getMoneyType());
+                        Log.i(MONEYCARD_CONST, MONEYTYPE_CONST + moneyCard.getMoneyType());
                     }
                 }
             });
@@ -144,22 +158,26 @@ public class ImageButtonHandler {
 
     private void onClickKupfer(Activity activity, FragmentManager fragmentManager) {
         //Card card = board.getBuyField().pickCard(MoneyType.KUPFER);
-        GameUpdateMsg gameUpdateMsg = new GameUpdateMsg();
+        BuyCardMsg gameUpdateMsg = new BuyCardMsg();
         gameUpdateMsg.setMoneyTypeClicked(MoneyType.KUPFER);
         sendUpdate(gameUpdateMsg);
 
-        clientConnector.registerCallback(GameUpdateMsg.class, (msg -> {
+        clientConnector.registerCallback(BuyCardMsg.class, (msg -> {
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    GameUpdateMsg gameUpdateMsg1 = (GameUpdateMsg) msg;
+                    BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
                     Card card = gameUpdateMsg1.getBoughtCard();
-                    if(card == null){
+                    if (card == null) {
+                        /*
                         ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
-                        errorDialogHandler.show(fragmentManager, "errorDialog");
-                    } else {
+                        errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
+
+                         */
+                        Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
+                    } else if (card instanceof MoneyCard) {
                         MoneyCard moneyCard = (MoneyCard) card;
-                        Log.i("MoneyCard", "MoneyType: " + moneyCard.getMoneyType());
+                        Log.i(MONEYCARD_CONST, MONEYTYPE_CONST + moneyCard.getMoneyType());
                     }
                 }
             });
@@ -168,22 +186,26 @@ public class ImageButtonHandler {
 
     private void onClickAnwesen(Activity activity, FragmentManager fragmentManager) {
         //Card card = board.getBuyField().pickCard(EstateType.ANWESEN);
-        GameUpdateMsg gameUpdateMsg = new GameUpdateMsg();
+        BuyCardMsg gameUpdateMsg = new BuyCardMsg();
         gameUpdateMsg.setEstateTypeClicked(EstateType.ANWESEN);
         sendUpdate(gameUpdateMsg);
 
-        clientConnector.registerCallback(GameUpdateMsg.class, (msg -> {
+        clientConnector.registerCallback(BuyCardMsg.class, (msg -> {
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    GameUpdateMsg gameUpdateMsg1 = (GameUpdateMsg) msg;
+                    BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
                     Card card = gameUpdateMsg1.getBoughtCard();
-                    if(card == null){
+                    if (card == null) {
+                        /*
                         ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
-                        errorDialogHandler.show(fragmentManager, "errorDialog");
-                    } else {
+                        errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
+
+                         */
+                        Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
+                    } else if (card instanceof EstateCard) {
                         EstateCard estateCard = (EstateCard) card;
-                        Log.i("EstateCard", "EstateType: " + estateCard.getEstateType());
+                        Log.i(ESTATECARD_CONST, ESTATETYPE_CONST + estateCard.getEstateType());
                     }
                 }
             });
@@ -192,22 +214,26 @@ public class ImageButtonHandler {
 
     private void onClickProvinz(Activity activity, FragmentManager fragmentManager) {
         //Card card = board.getBuyField().pickCard(EstateType.PROVINZ);
-        GameUpdateMsg gameUpdateMsg = new GameUpdateMsg();
+        BuyCardMsg gameUpdateMsg = new BuyCardMsg();
         gameUpdateMsg.setEstateTypeClicked(EstateType.PROVINZ);
         sendUpdate(gameUpdateMsg);
 
-        clientConnector.registerCallback(GameUpdateMsg.class, (msg -> {
+        clientConnector.registerCallback(BuyCardMsg.class, (msg -> {
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    GameUpdateMsg gameUpdateMsg1 = (GameUpdateMsg) msg;
+                    BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
                     Card card = gameUpdateMsg1.getBoughtCard();
-                    if(card == null){
+                    if (card == null) {
+                        /*
                         ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
-                        errorDialogHandler.show(fragmentManager, "errorDialog");
-                    } else {
+                        errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
+
+                         */
+                        Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
+                    } else if (card instanceof EstateCard) {
                         EstateCard estateCard = (EstateCard) card;
-                        Log.i("EstateCard", "EstateType: " + estateCard.getEstateType());
+                        Log.i(ESTATECARD_CONST, ESTATETYPE_CONST + estateCard.getEstateType());
                     }
                 }
             });
@@ -216,22 +242,27 @@ public class ImageButtonHandler {
 
     private void onClickHerzogturm(Activity activity, FragmentManager fragmentManager) {
         //Card card = board.getBuyField().pickCard(EstateType.HERZOGTUM);
-        GameUpdateMsg gameUpdateMsg = new GameUpdateMsg();
+        BuyCardMsg gameUpdateMsg = new BuyCardMsg();
         gameUpdateMsg.setEstateTypeClicked(EstateType.HERZOGTUM);
         sendUpdate(gameUpdateMsg);
 
-        clientConnector.registerCallback(GameUpdateMsg.class, (msg -> {
+        clientConnector.registerCallback(BuyCardMsg.class, (msg -> {
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    GameUpdateMsg gameUpdateMsg1 = (GameUpdateMsg) msg;
+                    BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
                     Card card = gameUpdateMsg1.getBoughtCard();
-                    if(card == null){
+                    if (card == null) {
+                        /*
                         ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
-                        errorDialogHandler.show(fragmentManager, "errorDialog");
-                    } else {
+                        errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
+
+                         */
+                        Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
+                    } else if (card instanceof EstateCard) {
                         EstateCard estateCard = (EstateCard) card;
-                        Log.i("EstateCard", "EstateType: " + estateCard.getEstateType());
+                        Log.i(ESTATECARD_CONST, ESTATETYPE_CONST + estateCard.getEstateType());
+
                     }
                 }
             });
@@ -240,33 +271,37 @@ public class ImageButtonHandler {
 
     private void onClickFluch(Activity activity, FragmentManager fragmentManager) {
         //Card card = board.getBuyField().pickCard(EstateType.FLUCH);
-        GameUpdateMsg gameUpdateMsg = new GameUpdateMsg();
+        BuyCardMsg gameUpdateMsg = new BuyCardMsg();
         gameUpdateMsg.setEstateTypeClicked(EstateType.FLUCH);
         sendUpdate(gameUpdateMsg);
 
-        clientConnector.registerCallback(GameUpdateMsg.class, (msg -> {
+        clientConnector.registerCallback(BuyCardMsg.class, (msg -> {
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    GameUpdateMsg gameUpdateMsg1 = (GameUpdateMsg) msg;
+                    BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
                     Card card = gameUpdateMsg1.getBoughtCard();
-                    if(card == null){
+                    if (card == null) {
+                        /*
                         ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
-                        errorDialogHandler.show(fragmentManager, "errorDialog");
-                    } else {
+                        errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
+
+                         */
+                        Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
+                    } else if (card instanceof EstateCard) {
                         EstateCard estateCard = (EstateCard) card;
-                        Log.i("EstateCard", "EstateType: " + estateCard.getEstateType());
+                        Log.i(ESTATECARD_CONST, ESTATETYPE_CONST + estateCard.getEstateType());
                     }
                 }
             });
         }));
     }
 
-    private void sendUpdate(GameUpdateMsg gameUpdateMsg) {
+    private void sendUpdate(BuyCardMsg msg) {
         Thread th = new Thread(new Runnable() {
             @Override
             public void run() {
-                clientConnector.sendUpdate(gameUpdateMsg);
+                clientConnector.sendbuyCard(msg);
             }
         });
         th.start();

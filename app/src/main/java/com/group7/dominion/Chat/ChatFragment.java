@@ -111,8 +111,6 @@ public class ChatFragment extends ListFragment implements UserInputHandler {
         setListAdapter(this.chatListAdapter);
 
         if (this.client.isConnected()) {
-            this.client.registerClass(ChatMessage.class);
-
             Thread clientThread = new Thread(new Runnable() {
                 @Override
                 public void run() {

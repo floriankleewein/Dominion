@@ -1,12 +1,7 @@
 package com.floriankleewein.commonclasses;
 
-
-
-
-import com.floriankleewein.commonclasses.Board.Board;
 import com.floriankleewein.commonclasses.CheatFunction.CheatService;
 import com.floriankleewein.commonclasses.User.User;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,11 +48,9 @@ public class Game {
     }
 
     public boolean addPlayer(User user) {
-        if (checkName(user.getUserName())) {
-            if (checkSize()) {
-                playerList.add(user);
-                return true;
-            }
+        if (checkName(user.getUserName()) && checkSize()) {
+            playerList.add(user);
+            return true;
         }
         return false;
     }
@@ -72,10 +65,11 @@ public class Game {
     }
 
     public boolean checkSize() {
+        boolean ret = false;
         if (getPlayerNumber() < 4) {
-            return true;
+            ret = true;
         }
-        return false;
+        return ret;
     }
 
 

@@ -1,47 +1,38 @@
 package com.group7.dominion;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.floriankleewein.commonclasses.Board.Board;
-import com.floriankleewein.commonclasses.Cards.ActionType;
-import com.floriankleewein.commonclasses.Cards.MoneyCard;
-import com.floriankleewein.commonclasses.Cards.MoneyType;
-import com.floriankleewein.commonclasses.Network.GameUpdateMsg;
-import com.group7.dominion.Card.ActionDialogHandler;
-import com.group7.dominion.Card.ErrorDialogHandler;
-import com.group7.dominion.Card.ImageButtonHandler;
 import com.floriankleewein.commonclasses.Cards.ActionCard;
 import com.floriankleewein.commonclasses.Cards.Card;
 import com.floriankleewein.commonclasses.Chat.ChatMessage;
+import com.floriankleewein.commonclasses.GameLogic.PlayStatus;
 import com.floriankleewein.commonclasses.Network.ClientConnector;
 import com.floriankleewein.commonclasses.Network.GetGameMsg;
-import com.floriankleewein.commonclasses.Network.StartGameMsg;
-import com.floriankleewein.commonclasses.User.User;
-import com.group7.dominion.Card.HandCardsHandler;
-import com.group7.dominion.Chat.ChatFragment;
-
-import android.widget.Toast;
-
-import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.Network.HasCheatedMessage;
+import com.floriankleewein.commonclasses.Network.Messages.GameLogicMsg.BuyCardMsg;
+import com.floriankleewein.commonclasses.Network.Messages.GameLogicMsg.PlayCardMsg;
+import com.floriankleewein.commonclasses.Network.Messages.NewTurnMessage;
 import com.floriankleewein.commonclasses.Network.SuspectMessage;
 import com.floriankleewein.commonclasses.Network.UpdatePlayerNamesMsg;
+import com.floriankleewein.commonclasses.User.User;
+import com.group7.dominion.Card.ActionDialogHandler;
+import com.group7.dominion.Card.HandCardsHandler;
+import com.group7.dominion.Card.ImageButtonHandler;
+import com.group7.dominion.Chat.ChatFragment;
 import com.group7.dominion.CheatFunction.ShakeListener;
 
 import java.util.ArrayList;
@@ -57,6 +48,9 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
     private User user;
     private SensorManager sm;
     private ShakeListener shakeListener;
+    private TextView playerScores;
+    private int CallbackCounter;
+
 
     private FragmentManager fragmentManager;
 
@@ -78,6 +72,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
 
 
         chatButton = findViewById(R.id.chat_Button);
+
         fragmentContainer = findViewById(R.id.chatFragmentContainer);
 
         this.clientConnector = ClientConnector.getClientConnector();
@@ -117,21 +112,10 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
     @Override
     protected void onStart() {
         super.onStart();
+        playerScores = findViewById(R.id.txtVPlayerScore);
+        playerScores.setText("Scores of Players.");
 
-
-        // Handle communication with Server, only send updated to server whenever card is played etc.
         ClientConnector clientConnector = ClientConnector.getClientConnector();
-        Game clientGame = clientConnector.getGame();
-        //clientConnector.startGame(); // Send Server Message to start game logic
-        // TODO display playerlist -> Check features
-        // TODO create board and display cards
-
-        // Take from GameHandler getBoard here instead of this
-        //board = clientConnector.getGameHandler().getBoard();
-        // Currently
-        // board = new Board();
-        //actionDialogHandler.setBoard(board);
-        //imageButtonHandler.setBoard(board);
 
         actionDialogHandler.setClientConnector(clientConnector);
         imageButtonHandler.setClientConnector(clientConnector);
@@ -171,15 +155,156 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    user = ((GetGameMsg) msg).getGm().getGame().findUser(getUsername());
+                    User user = ((GetGameMsg) msg).getGame().findUser(getUsername());
                     cardsHandler.initCards(user);
-                    cardsHandler.onClickListener();
+                    if (user.getUserName().equals(((GetGameMsg) msg).getGame().getActivePlayer().getUserName())) {
+                        if (((GetGameMsg) msg).getPlayStatus() == PlayStatus.ACTION_PHASE) {
+                            cardsHandler.onClickListenerActionPhase();
+                        } else if (((GetGameMsg) msg).getPlayStatus() == PlayStatus.PLAY_COINS) {
+                            cardsHandler.onClickListenerBuyPhase();
+                        }
+                    }
                 }
             });
         });
+
+        ClientConnector.getClientConnector().registerCallback(PlayCardMsg.class, msg -> {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    handlePlayCardMsg((PlayCardMsg) msg);
+                }
+            });
+        });
+
+        ClientConnector.getClientConnector().registerCallback(NewTurnMessage.class, msg -> {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Log.i("Turn", "NEW TURN IN GAME");
+                    handNewTurnMsg((NewTurnMessage) msg);
+                }
+            });
+        });
+
+
         cardsHandler.sendMessage();
+
+        clientConnector.registerCallback(BuyCardMsg.class, (msg -> {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    System.out.println("BuyCardMsg is in Dominion Activity");
+                    BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
+                    Card card = gameUpdateMsg1.getBoughtCard();
+                    if (card == null) {
+                        Toast.makeText(getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
+                    } else {
+                        if (card instanceof ActionCard) {
+                            ActionCard actionCard = (ActionCard) card;
+                            switch (actionCard.getActionType()) {
+                                case HEXE:
+                                    Log.i("Action", "ActionType: " + actionCard.getActionType() +
+                                            ", Card Count: " + actionCard.getAction().getCardCount() +
+                                            ", Curse Count: " + actionCard.getAction().getCurseCount());
+                                    break;
+                                case WERKSTATT:
+                                    Log.i("Action", "ActionType: " + actionCard.getActionType() +
+                                            ", Card Count: " + actionCard.getAction().getCardCount() +
+                                            ", Max Money Value: " + actionCard.getAction().getMaxMoneyValue());
+                                    break;
+                                case SCHMIEDE:
+                                    Log.i("Action", "ActionType: " + actionCard.getActionType() +
+                                            ", Card Count: " + actionCard.getAction().getCardCount());
+                                    break;
+                                case MINE:
+                                    Log.i("Action", "ActionType: " + actionCard.getActionType() +
+                                            ", Card Count: " + actionCard.getAction().getCardCount() +
+                                            ", Take MoneyCard That Cost Three More Than Old: " + actionCard.getAction().isTakeMoneyCardThatCostThreeMoreThanOld() +
+                                            ", Take Card On Hand: " + actionCard.getAction().isTakeCardOnHand());
+                                    break;
+                                case MILIZ:
+                                    Log.i("Action", "ActionType: " + actionCard.getActionType() +
+                                            ", Money Value: " + actionCard.getAction().getMoneyValue() +
+                                            ", Throw Every UserCards Until Three Left: " + actionCard.getAction().isThrowEveryUserCardsUntilThreeLeft());
+                                    break;
+                                case MARKT:
+                                    Log.i("Action", "ActionType: " + actionCard.getActionType() +
+                                            ", Card Count: " + actionCard.getAction().getCardCount() +
+                                            ", Action Count: " + actionCard.getAction().getActionCount() +
+                                            ", Money Value: " + actionCard.getAction().getMoneyValue() +
+                                            ", Buy Count: " + actionCard.getAction().getBuyCount());
+                                    break;
+                                case KELLER:
+                                    Log.i("Action", "ActionType: " + actionCard.getActionType() +
+                                            ", Action Count: " + actionCard.getAction().getActionCount() +
+                                            ", Throw Any Amount Cards: " + actionCard.getAction().isThrowAnyAmountCards());
+                                    break;
+                                case HOLZFAELLER:
+                                    Log.i("Action", "ActionType: " + actionCard.getActionType() +
+                                            ", Buy Count: " + actionCard.getAction().getBuyCount() +
+                                            ", Money Value: " + actionCard.getAction().getMoneyValue());
+                                    break;
+                                case DORF:
+                                    Log.i("Action", "ActionType: " + actionCard.getActionType() +
+                                            ", Card Count: " + actionCard.getAction().getCardCount() +
+                                            ", Action Count: " + actionCard.getAction().getActionCount());
+                                    break;
+                                case BURGGRABEN:
+                                    Log.i("Action", "ActionType: " + actionCard.getActionType() +
+                                            ", Card Count: " + actionCard.getAction().getCardCount() +
+                                            ", Throw Every UserCards Until Three Left: " + actionCard.getAction().isThrowEveryUserCardsUntilThreeLeft());
+                                    break;
+                            }
+                            String text = "";
+                            for (User u : gameUpdateMsg1.getGame().getPlayerList()) {
+                                text += u.getUserName() + ": " + u.getGamePoints().getWinningPoints() + "\n";
+                            }
+                            playerScores.setText(text);
+                        }
+                    }
+
+                }
+            });
+        }));
     }
 
+    private void handlePlayCardMsg(PlayCardMsg msg) {
+        User user;
+        user = msg.getGame().findUser(getUsername());
+        if (user.getUserName().equals(msg.getGame().getActivePlayer().getUserName())) {
+            cardsHandler.setImageButtonsNull();
+            cardsHandler.initCards(user);
+            if (msg.getPlayStatus() == PlayStatus.ACTION_PHASE) {
+                cardsHandler.onClickListenerActionPhase();
+            } else if (msg.getPlayStatus() == PlayStatus.PLAY_COINS) {
+                cardsHandler.onClickListenerBuyPhase();
+            }
+        }
+        String text = "";
+        for (User u : msg.getGame().getPlayerList()) {
+            text += u.getUserName() + ": " + u.getGamePoints().getWinningPoints() + "\n";
+        }
+        playerScores.setText(text);
+    }
+
+    public void handNewTurnMsg(NewTurnMessage msg) {
+        cardsHandler.setImageButtonsNull();
+        User user = msg.getGame().findUser(getUsername());
+        if (user.getUserName().equals(msg.getGame().getActivePlayer().getUserName())) {
+            cardsHandler.initCards(user);
+            if (msg.getPlayStatus() == PlayStatus.ACTION_PHASE) {
+                cardsHandler.onClickListenerActionPhase();
+            } else if (msg.getPlayStatus() == PlayStatus.PLAY_COINS) {
+                cardsHandler.onClickListenerBuyPhase();
+            }
+        }
+        String text = "";
+        for (User u : msg.getGame().getPlayerList()) {
+            text += u.getUserName() + ": " + u.getGamePoints().getWinningPoints() + "\n";
+        }
+        playerScores.setText(text);
+    }
 
     public void sendUpdateMessage() {
         Thread th = new Thread(new Runnable() {

@@ -11,15 +11,8 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.floriankleewein.commonclasses.Network.AllPlayersInDominionActivityMsg;
-import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.Network.ClientConnector;
-
-import com.floriankleewein.commonclasses.Network.ClientConnector;
-
 import com.floriankleewein.commonclasses.Network.StartGameMsg;
 import com.floriankleewein.commonclasses.Network.UpdatePlayerNamesMsg;
 
@@ -78,6 +71,7 @@ public class StartGameActivity extends AppCompatActivity {
                     names.clear();
                     names.addAll(((UpdatePlayerNamesMsg) msg).getNameList());
                     listViewAdapter.notifyDataSetChanged();
+                    if (names.size() == 2) {
                         Thread thread1 = new Thread(new Runnable() {
                             @Override
                             public void run() {
@@ -85,6 +79,7 @@ public class StartGameActivity extends AppCompatActivity {
                             }
                         });
                         thread1.start();
+                    }
                 }
             });
         }));
@@ -106,18 +101,8 @@ public class StartGameActivity extends AppCompatActivity {
                     @Override
                     public void run() {
 
-                        //client.startGame();
                         clientConnector.allPlayersInDominionActivity();
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                //client.allPlayersInDominionActivity();
-                                //Intent intent = new Intent(StartGameActivity.this, DominionActivity.class);
-                                //startActivity(intent);
 
-
-                            }
-                        });
                     }
                 });
 
