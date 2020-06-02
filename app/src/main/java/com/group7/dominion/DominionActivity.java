@@ -285,8 +285,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
 
     public String getUsername() {
         SharedPreferences sharedPreferences = getSharedPreferences("USERNAME", Context.MODE_PRIVATE);
-        String str = sharedPreferences.getString("us", null);
-        return str;
+        return sharedPreferences.getString("us", null);
     }
 
     //führt den Wechsel von Spiel zu Chat durch
