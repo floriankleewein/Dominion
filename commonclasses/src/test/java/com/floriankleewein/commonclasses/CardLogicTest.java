@@ -5,9 +5,9 @@ import com.floriankleewein.commonclasses.cards.ActionType;
 import com.floriankleewein.commonclasses.cards.Card;
 import com.floriankleewein.commonclasses.cards.MoneyCard;
 import com.floriankleewein.commonclasses.cards.MoneyType;
-import com.floriankleewein.commonclasses.gamelogic.CardLogic;
-import com.floriankleewein.commonclasses.gamelogic.GameHandler;
-import com.floriankleewein.commonclasses.user.User;
+import com.floriankleewein.commonclasses.Gamelogic.CardLogic;
+import com.floriankleewein.commonclasses.Gamelogic.GameHandler;
+import com.floriankleewein.commonclasses.User.User;
 
 import org.junit.After;
 import org.junit.Assert;

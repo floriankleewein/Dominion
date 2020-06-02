@@ -1,7 +1,7 @@
 package com.floriankleewein.commonclasses;
 
-import com.floriankleewein.commonclasses.network.HasCheatedMessage;
-import com.floriankleewein.commonclasses.network.SuspectMessage;
+import com.floriankleewein.commonclasses.Network.HasCheatedMessage;
+import com.floriankleewein.commonclasses.Network.SuspectMessage;
 
 import org.junit.Assert;
 import org.junit.Before;

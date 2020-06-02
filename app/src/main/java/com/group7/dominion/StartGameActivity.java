@@ -12,12 +12,12 @@ import android.widget.Button;
 import android.widget.ListView;
 
 import com.esotericsoftware.minlog.Log;
-import com.floriankleewein.commonclasses.network.AllPlayersInDominionActivityMsg;
-import com.floriankleewein.commonclasses.network.ClientConnector;
-import com.floriankleewein.commonclasses.network.StartGameMsg;
-import com.floriankleewein.commonclasses.network.UpdatePlayerNamesMsg;
+import com.floriankleewein.commonclasses.Network.AllPlayersInDominionActivityMsg;
+import com.floriankleewein.commonclasses.Network.ClientConnector;
+import com.floriankleewein.commonclasses.Network.StartGameMsg;
+import com.floriankleewein.commonclasses.Network.UpdatePlayerNamesMsg;
 
-import com.group7.dominion.cheatfunction.ShakeListener;
+import com.group7.dominion.Cheatfunction.ShakeListener;
 
 import java.util.ArrayList;
 

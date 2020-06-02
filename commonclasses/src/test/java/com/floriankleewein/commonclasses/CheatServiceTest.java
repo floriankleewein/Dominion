@@ -6,8 +6,8 @@ import com.floriankleewein.commonclasses.cards.EstateCard;
 import com.floriankleewein.commonclasses.cards.EstateType;
 import com.floriankleewein.commonclasses.cards.MoneyCard;
 import com.floriankleewein.commonclasses.cards.MoneyType;
-import com.floriankleewein.commonclasses.cheatfunction.CheatService;
-import com.floriankleewein.commonclasses.user.User;
+import com.floriankleewein.commonclasses.Cheatfunction.CheatService;
+import com.floriankleewein.commonclasses.User.User;
 
 import org.junit.After;
 import org.junit.Assert;

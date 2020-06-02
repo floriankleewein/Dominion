@@ -7,9 +7,9 @@ import com.floriankleewein.commonclasses.cards.EstateCard;
 import com.floriankleewein.commonclasses.cards.EstateType;
 import com.floriankleewein.commonclasses.cards.MoneyCard;
 import com.floriankleewein.commonclasses.cards.MoneyType;
-import com.floriankleewein.commonclasses.gamelogic.GameHandler;
-import com.floriankleewein.commonclasses.gamelogic.PlayStatus;
-import com.floriankleewein.commonclasses.user.User;
+import com.floriankleewein.commonclasses.Gamelogic.GameHandler;
+import com.floriankleewein.commonclasses.Gamelogic.PlayStatus;
+import com.floriankleewein.commonclasses.User.User;
 
 import org.junit.After;
 import org.junit.Assert;

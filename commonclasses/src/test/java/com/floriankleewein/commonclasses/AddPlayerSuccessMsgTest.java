@@ -1,7 +1,7 @@
 package com.floriankleewein.commonclasses;
 
-import com.floriankleewein.commonclasses.network.AddPlayerSuccessMsg;
-import com.floriankleewein.commonclasses.user.User;
+import com.floriankleewein.commonclasses.Network.AddPlayerSuccessMsg;
+import com.floriankleewein.commonclasses.User.User;
 
 import org.junit.After;
 import org.junit.Assert;

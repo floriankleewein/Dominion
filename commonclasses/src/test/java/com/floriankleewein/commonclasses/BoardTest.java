@@ -1,6 +1,6 @@
 package com.floriankleewein.commonclasses;
 
-import com.floriankleewein.commonclasses.board.Board;
+import com.floriankleewein.commonclasses.Board.Board;
 import com.floriankleewein.commonclasses.cards.ActionCard;
 import com.floriankleewein.commonclasses.cards.ActionType;
 import com.floriankleewein.commonclasses.cards.Card;

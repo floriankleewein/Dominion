@@ -1,6 +1,6 @@
 package com.floriankleewein.commonclasses;
 
-import com.floriankleewein.commonclasses.network.ClientConnector;
+import com.floriankleewein.commonclasses.Network.ClientConnector;
 
 import org.junit.Before;
 import org.junit.Test;

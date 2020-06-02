@@ -21,10 +21,10 @@ import android.widget.Toast;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import com.floriankleewein.commonclasses.chat.ChatMessage;
-import com.floriankleewein.commonclasses.chat.Pair;
-import com.floriankleewein.commonclasses.chat.RecChatListMsg;
-import com.floriankleewein.commonclasses.network.ClientConnector;
+import com.floriankleewein.commonclasses.Chat.ChatMessage;
+import com.floriankleewein.commonclasses.Chat.Pair;
+import com.floriankleewein.commonclasses.Chat.RecChatListMsg;
+import com.floriankleewein.commonclasses.Network.ClientConnector;
 import com.group7.dominion.R;
 
 import java.util.List;
@@ -61,7 +61,7 @@ public class ChatFragment extends ListFragment implements UserInputHandler {
 
     private boolean isRestorable = false;
 
-    private List<com.floriankleewein.commonclasses.chat.Pair> messageList;
+    private List<com.floriankleewein.commonclasses.Chat.Pair> messageList;
 
 
     public ChatFragment() {

@@ -1,6 +1,6 @@
 package com.floriankleewein.commonclasses;
 
-import com.floriankleewein.commonclasses.network.UpdatePlayerNamesMsg;
+import com.floriankleewein.commonclasses.Network.UpdatePlayerNamesMsg;
 
 import org.junit.After;
 import org.junit.Assert;

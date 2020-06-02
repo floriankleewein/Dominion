@@ -1,8 +1,7 @@
 package com.floriankleewein.commonclasses;
 
-import com.floriankleewein.commonclasses.gamelogic.PlayStatus;
-import com.floriankleewein.commonclasses.network.GameUpdateMsg;
-import com.floriankleewein.commonclasses.network.GetGameMsg;
+import com.floriankleewein.commonclasses.Gamelogic.PlayStatus;
+import com.floriankleewein.commonclasses.Network.GetGameMsg;
 
 import org.junit.After;
 import org.junit.Assert;

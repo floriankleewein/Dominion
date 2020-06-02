@@ -1,6 +1,6 @@
 package com.floriankleewein.commonclasses;
 
-import com.floriankleewein.commonclasses.network.GameUpdateMsg;
+import com.floriankleewein.commonclasses.Network.GameUpdateMsg;
 
 import org.junit.After;
 import org.junit.Before;
