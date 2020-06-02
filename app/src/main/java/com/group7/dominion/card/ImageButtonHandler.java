@@ -39,65 +39,30 @@ public class ImageButtonHandler {
     public void init(Activity activity, FragmentManager fragmentManager) {
         //Gold
         buttonGold = activity.findViewById(R.id.btn_gold);
-        buttonGold.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onClickGold(activity, fragmentManager);
-            }
-        });
+        buttonGold.setOnClickListener(view -> onClickGold(activity, fragmentManager));
 
         //Silber
         buttonSilber = activity.findViewById(R.id.btn_silber);
-        buttonSilber.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onClickSilber(activity, fragmentManager);
-            }
-        });
+        buttonSilber.setOnClickListener(view -> onClickSilber(activity, fragmentManager));
         //Kupfer
         buttonKupfer = activity.findViewById(R.id.btn_kupfer);
-        buttonKupfer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onClickKupfer(activity, fragmentManager);
-            }
-        });
+        buttonKupfer.setOnClickListener(view -> onClickKupfer(activity, fragmentManager));
 
         //Provinz
         buttonProvinz = activity.findViewById(R.id.btn_provinz);
-        buttonProvinz.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onClickProvinz(activity, fragmentManager);
-            }
-        });
+        buttonProvinz.setOnClickListener(view -> onClickProvinz(activity, fragmentManager));
 
         //Anwesen
         buttonAnwesen = activity.findViewById(R.id.btn_anwesen);
-        buttonAnwesen.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onClickAnwesen(activity, fragmentManager);
-            }
-        });
+        buttonAnwesen.setOnClickListener(view -> onClickAnwesen(activity, fragmentManager));
 
         //Herzogturm
         buttonHerzogturm = activity.findViewById(R.id.btn_herzogturm);
-        buttonHerzogturm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onClickHerzogturm(activity, fragmentManager);
-            }
-        });
+        buttonHerzogturm.setOnClickListener(view -> onClickHerzogturm(activity, fragmentManager));
 
         //Fluch
         buttonFluch = activity.findViewById(R.id.btn_fluch);
-        buttonFluch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onClickFluch(activity, fragmentManager);
-            }
-        });
+        buttonFluch.setOnClickListener(view -> onClickFluch(activity, fragmentManager));
     }
 
     private void onClickGold(Activity activity, FragmentManager fragmentManager) {
@@ -106,26 +71,21 @@ public class ImageButtonHandler {
         gameUpdateMsg.setMoneyTypeClicked(MoneyType.GOLD);
         sendUpdate(gameUpdateMsg);
 
-        clientConnector.registerCallback(BuyCardMsg.class, (msg -> {
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
-                    Card card = gameUpdateMsg1.getBoughtCard();
-                    if (card == null) {
-                        /*
-                        ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
-                        errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
+        clientConnector.registerCallback(BuyCardMsg.class, (msg -> activity.runOnUiThread(() -> {
+            BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
+            Card card = gameUpdateMsg1.getBoughtCard();
+            if (card == null) {
+                /*
+                ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
+                errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
 
-                         */
-                        Toast.makeText(activity.getApplicationContext(), YOU_CANT_BUY_THIS_CARD, Toast.LENGTH_SHORT).show();
-                    } else if (card instanceof MoneyCard) {
-                        MoneyCard moneyCard = (MoneyCard) card;
-                        Log.i(MONEYCARD_CONST, MONEYTYPE_CONST + moneyCard.getMoneyType());
-                    }
-                }
-            });
-        }));
+                 */
+                Toast.makeText(activity.getApplicationContext(), YOU_CANT_BUY_THIS_CARD, Toast.LENGTH_SHORT).show();
+            } else if (card instanceof MoneyCard) {
+                MoneyCard moneyCard = (MoneyCard) card;
+                Log.i(MONEYCARD_CONST, MONEYTYPE_CONST + moneyCard.getMoneyType());
+            }
+        })));
     }
 
     private void onClickSilber(Activity activity, FragmentManager fragmentManager) {
@@ -134,26 +94,21 @@ public class ImageButtonHandler {
         gameUpdateMsg.setMoneyTypeClicked(MoneyType.SILBER);
         sendUpdate(gameUpdateMsg);
 
-        clientConnector.registerCallback(BuyCardMsg.class, (msg -> {
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
-                    Card card = gameUpdateMsg1.getBoughtCard();
-                    if (card == null) {
-                        /*
-                        ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
-                        errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
+        clientConnector.registerCallback(BuyCardMsg.class, (msg -> activity.runOnUiThread(() -> {
+            BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
+            Card card = gameUpdateMsg1.getBoughtCard();
+            if (card == null) {
+                /*
+                ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
+                errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
 
-                         */
-                        Toast.makeText(activity.getApplicationContext(), YOU_CANT_BUY_THIS_CARD, Toast.LENGTH_SHORT).show();
-                    } else if (card instanceof MoneyCard) {
-                        MoneyCard moneyCard = (MoneyCard) card;
-                        Log.i(MONEYCARD_CONST, MONEYTYPE_CONST + moneyCard.getMoneyType());
-                    }
-                }
-            });
-        }));
+                 */
+                Toast.makeText(activity.getApplicationContext(), YOU_CANT_BUY_THIS_CARD, Toast.LENGTH_SHORT).show();
+            } else if (card instanceof MoneyCard) {
+                MoneyCard moneyCard = (MoneyCard) card;
+                Log.i(MONEYCARD_CONST, MONEYTYPE_CONST + moneyCard.getMoneyType());
+            }
+        })));
 
     }
 
@@ -163,26 +118,21 @@ public class ImageButtonHandler {
         gameUpdateMsg.setMoneyTypeClicked(MoneyType.KUPFER);
         sendUpdate(gameUpdateMsg);
 
-        clientConnector.registerCallback(BuyCardMsg.class, (msg -> {
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
-                    Card card = gameUpdateMsg1.getBoughtCard();
-                    if (card == null) {
-                        /*
-                        ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
-                        errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
+        clientConnector.registerCallback(BuyCardMsg.class, (msg -> activity.runOnUiThread(() -> {
+            BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
+            Card card = gameUpdateMsg1.getBoughtCard();
+            if (card == null) {
+                /*
+                ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
+                errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
 
-                         */
-                        Toast.makeText(activity.getApplicationContext(), YOU_CANT_BUY_THIS_CARD, Toast.LENGTH_SHORT).show();
-                    } else if (card instanceof MoneyCard) {
-                        MoneyCard moneyCard = (MoneyCard) card;
-                        Log.i(MONEYCARD_CONST, MONEYTYPE_CONST + moneyCard.getMoneyType());
-                    }
-                }
-            });
-        }));
+                 */
+                Toast.makeText(activity.getApplicationContext(), YOU_CANT_BUY_THIS_CARD, Toast.LENGTH_SHORT).show();
+            } else if (card instanceof MoneyCard) {
+                MoneyCard moneyCard = (MoneyCard) card;
+                Log.i(MONEYCARD_CONST, MONEYTYPE_CONST + moneyCard.getMoneyType());
+            }
+        })));
     }
 
     private void onClickAnwesen(Activity activity, FragmentManager fragmentManager) {
@@ -191,26 +141,21 @@ public class ImageButtonHandler {
         gameUpdateMsg.setEstateTypeClicked(EstateType.ANWESEN);
         sendUpdate(gameUpdateMsg);
 
-        clientConnector.registerCallback(BuyCardMsg.class, (msg -> {
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
-                    Card card = gameUpdateMsg1.getBoughtCard();
-                    if (card == null) {
-                        /*
-                        ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
-                        errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
+        clientConnector.registerCallback(BuyCardMsg.class, (msg -> activity.runOnUiThread(() -> {
+            BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
+            Card card = gameUpdateMsg1.getBoughtCard();
+            if (card == null) {
+                /*
+                ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
+                errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
 
-                         */
-                        Toast.makeText(activity.getApplicationContext(), YOU_CANT_BUY_THIS_CARD, Toast.LENGTH_SHORT).show();
-                    } else if (card instanceof EstateCard) {
-                        EstateCard estateCard = (EstateCard) card;
-                        Log.i(ESTATECARD_CONST, ESTATETYPE_CONST + estateCard.getEstateType());
-                    }
-                }
-            });
-        }));
+                 */
+                Toast.makeText(activity.getApplicationContext(), YOU_CANT_BUY_THIS_CARD, Toast.LENGTH_SHORT).show();
+            } else if (card instanceof EstateCard) {
+                EstateCard estateCard = (EstateCard) card;
+                Log.i(ESTATECARD_CONST, ESTATETYPE_CONST + estateCard.getEstateType());
+            }
+        })));
     }
 
     private void onClickProvinz(Activity activity, FragmentManager fragmentManager) {
@@ -219,26 +164,21 @@ public class ImageButtonHandler {
         gameUpdateMsg.setEstateTypeClicked(EstateType.PROVINZ);
         sendUpdate(gameUpdateMsg);
 
-        clientConnector.registerCallback(BuyCardMsg.class, (msg -> {
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
-                    Card card = gameUpdateMsg1.getBoughtCard();
-                    if (card == null) {
-                        /*
-                        ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
-                        errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
+        clientConnector.registerCallback(BuyCardMsg.class, (msg -> activity.runOnUiThread(() -> {
+            BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
+            Card card = gameUpdateMsg1.getBoughtCard();
+            if (card == null) {
+                /*
+                ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
+                errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
 
-                         */
-                        Toast.makeText(activity.getApplicationContext(), YOU_CANT_BUY_THIS_CARD, Toast.LENGTH_SHORT).show();
-                    } else if (card instanceof EstateCard) {
-                        EstateCard estateCard = (EstateCard) card;
-                        Log.i(ESTATECARD_CONST, ESTATETYPE_CONST + estateCard.getEstateType());
-                    }
-                }
-            });
-        }));
+                 */
+                Toast.makeText(activity.getApplicationContext(), YOU_CANT_BUY_THIS_CARD, Toast.LENGTH_SHORT).show();
+            } else if (card instanceof EstateCard) {
+                EstateCard estateCard = (EstateCard) card;
+                Log.i(ESTATECARD_CONST, ESTATETYPE_CONST + estateCard.getEstateType());
+            }
+        })));
     }
 
     private void onClickHerzogturm(Activity activity, FragmentManager fragmentManager) {
@@ -247,27 +187,22 @@ public class ImageButtonHandler {
         gameUpdateMsg.setEstateTypeClicked(EstateType.HERZOGTUM);
         sendUpdate(gameUpdateMsg);
 
-        clientConnector.registerCallback(BuyCardMsg.class, (msg -> {
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
-                    Card card = gameUpdateMsg1.getBoughtCard();
-                    if (card == null) {
-                        /*
-                        ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
-                        errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
+        clientConnector.registerCallback(BuyCardMsg.class, (msg -> activity.runOnUiThread(() -> {
+            BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
+            Card card = gameUpdateMsg1.getBoughtCard();
+            if (card == null) {
+                /*
+                ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
+                errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
 
-                         */
-                        Toast.makeText(activity.getApplicationContext(), YOU_CANT_BUY_THIS_CARD, Toast.LENGTH_SHORT).show();
-                    } else if (card instanceof EstateCard) {
-                        EstateCard estateCard = (EstateCard) card;
-                        Log.i(ESTATECARD_CONST, ESTATETYPE_CONST + estateCard.getEstateType());
+                 */
+                Toast.makeText(activity.getApplicationContext(), YOU_CANT_BUY_THIS_CARD, Toast.LENGTH_SHORT).show();
+            } else if (card instanceof EstateCard) {
+                EstateCard estateCard = (EstateCard) card;
+                Log.i(ESTATECARD_CONST, ESTATETYPE_CONST + estateCard.getEstateType());
 
-                    }
-                }
-            });
-        }));
+            }
+        })));
     }
 
     private void onClickFluch(Activity activity, FragmentManager fragmentManager) {
@@ -276,35 +211,25 @@ public class ImageButtonHandler {
         gameUpdateMsg.setEstateTypeClicked(EstateType.FLUCH);
         sendUpdate(gameUpdateMsg);
 
-        clientConnector.registerCallback(BuyCardMsg.class, (msg -> {
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
-                    Card card = gameUpdateMsg1.getBoughtCard();
-                    if (card == null) {
-                        /*
-                        ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
-                        errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
+        clientConnector.registerCallback(BuyCardMsg.class, (msg -> activity.runOnUiThread(() -> {
+            BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
+            Card card = gameUpdateMsg1.getBoughtCard();
+            if (card == null) {
+                /*
+                ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
+                errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
 
-                         */
-                        Toast.makeText(activity.getApplicationContext(), YOU_CANT_BUY_THIS_CARD, Toast.LENGTH_SHORT).show();
-                    } else if (card instanceof EstateCard) {
-                        EstateCard estateCard = (EstateCard) card;
-                        Log.i(ESTATECARD_CONST, ESTATETYPE_CONST + estateCard.getEstateType());
-                    }
-                }
-            });
-        }));
+                 */
+                Toast.makeText(activity.getApplicationContext(), YOU_CANT_BUY_THIS_CARD, Toast.LENGTH_SHORT).show();
+            } else if (card instanceof EstateCard) {
+                EstateCard estateCard = (EstateCard) card;
+                Log.i(ESTATECARD_CONST, ESTATETYPE_CONST + estateCard.getEstateType());
+            }
+        })));
     }
 
     private void sendUpdate(BuyCardMsg msg) {
-        Thread th = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                clientConnector.sendbuyCard(msg);
-            }
-        });
+        Thread th = new Thread(() -> clientConnector.sendbuyCard(msg));
         th.start();
     }
 
