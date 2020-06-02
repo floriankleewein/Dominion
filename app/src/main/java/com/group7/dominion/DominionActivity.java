@@ -1,10 +1,12 @@
 package com.group7.dominion;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -257,7 +259,9 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Log.i("GAME END",((EndGameMsg)msg).getWinningUser().getUserName() + "HAS WON");
+                    Intent i = new Intent(DominionActivity.this, GameEndActivity.class);
+                    User user = ((EndGameMsg) msg).getWinningUser();
+                    i.putExtra("winner", (Parcelable) user);
                 }
             });
         }));
