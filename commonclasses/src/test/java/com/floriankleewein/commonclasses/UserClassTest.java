@@ -135,21 +135,17 @@ public class UserClassTest {
         User user = new User();
         UserCards TestCards = new UserCards();
         GamePoints TestPoints = new GamePoints();
-        user.setUserID(1);
+
         user.setUserName("TestUser");
         user.setCheater(true);
         user.setGameCreator(false);
-        user.setPassword("password");
-        user.setUserEmail("test@email.com");
         user.setGamePoints(TestPoints);
         user.setUserCards(TestCards);
 
-        Assert.assertEquals(1, user.getUserID());
+
         Assert.assertEquals("TestUser", user.getUserName());
         Assert.assertEquals(true, user.isCheater());
         Assert.assertEquals(false, user.isGameCreator());
-        Assert.assertEquals("password", user.getPassword());
-        Assert.assertEquals("test@email.com", user.getUserEmail());
         Assert.assertEquals(TestCards ,user.getUserCards());
         Assert.assertEquals(TestPoints, user.getGamePoints());
     }
