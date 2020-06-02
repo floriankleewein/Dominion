@@ -239,12 +239,7 @@ public class ClientConnector {
     }
 
     public void sendPlayCard(PlayCardMsg msg) {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                client.sendTCP(msg);
-            }
-        });
+        Thread thread = new Thread(() -> client.sendTCP(msg));
         thread.start();
         client.addListener(new Listener() {
             public void received(Connection con, Object object) {
@@ -257,12 +252,7 @@ public class ClientConnector {
     }
 
     public void sendbuyCard(BuyCardMsg msg) {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                client.sendTCP(msg);
-            }
-        });
+        Thread thread = new Thread(() -> client.sendTCP(msg));
         thread.start();
 
         client.addListener(new Listener() {
@@ -317,10 +307,10 @@ public class ClientConnector {
         client.sendTCP(getChatListMsg);
     }
 
-    public void sendSuspectUser(String SuspectUsername, String Username) {
+    public void sendSuspectUser(String suspectUsername, String username) {
         SuspectMessage msg = new SuspectMessage();
-        msg.setSuspectedUserName(SuspectUsername);
-        msg.setUserName(Username);
+        msg.setSuspectedUserName(suspectUsername);
+        msg.setUserName(username);
         client.sendTCP(msg);
 
         client.addListener(new Listener() {
