@@ -43,8 +43,8 @@ public class BuyField {
         }
 
         // je Provinz 12 Karten
-        for (int i = 0; i < 3; i++) {
-            this.cardsToBuy.add(new EstateCard(1, 6, EstateType.PROVINZ));
+        for (int i = 0; i < 12; i++) {
+            this.cardsToBuy.add(new EstateCard(8, 6, EstateType.PROVINZ));
             this.cardsToBuy.add(new EstateCard(5, 3, EstateType.HERZOGTUM));
             this.cardsToBuy.add(new EstateCard(2, 1, EstateType.ANWESEN));
             this.cardsToBuy.add(new EstateCard(0, -1, EstateType.FLUCH));
