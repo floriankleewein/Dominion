@@ -256,13 +256,11 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         }));
 
         clientConnector.registerCallback(EndGameMsg.class, (msg -> {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Intent i = new Intent(DominionActivity.this, GameEndActivity.class);
-                    User user = ((EndGameMsg) msg).getWinningUser();
-                    i.putExtra("winner", (Parcelable) user);
-                }
+            runOnUiThread(() -> {
+                Intent i = new Intent(DominionActivity.this, GameEndActivity.class);
+                User user = ((EndGameMsg) msg).getWinningUser();
+                i.putExtra("winner", (Parcelable) user);
+                startActivity(i);
             });
         }));
     }

@@ -22,6 +22,7 @@ public class ActionField {
     public void setActionCardsToBuy(List<Card> actionCardsToBuy) {
         this.actionCardsToBuy = actionCardsToBuy;
     }
+
     public List<ActionType> getNotAvailableCards() {
         return notAvailableCards;
     }
