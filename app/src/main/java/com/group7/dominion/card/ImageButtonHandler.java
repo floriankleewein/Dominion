@@ -18,16 +18,7 @@ import com.group7.dominion.R;
 import androidx.fragment.app.FragmentManager;
 
 public class ImageButtonHandler {
-    //private Board board;
     private ClientConnector clientConnector;
-
-    private ImageButton buttonGold;
-    private ImageButton buttonSilber;
-    private ImageButton buttonKupfer;
-    private ImageButton buttonProvinz;
-    private ImageButton buttonAnwesen;
-    private ImageButton buttonHerzogturm;
-    private ImageButton buttonFluch;
 
     private static final String ERRORDIALOG_CONST = "errorDialog";
     private static final String MONEYCARD_CONST = "MoneyCard";
@@ -37,6 +28,7 @@ public class ImageButtonHandler {
 
     public void init(Activity activity, FragmentManager fragmentManager) {
         //Gold
+        ImageButton buttonGold;
         buttonGold = activity.findViewById(R.id.btn_gold);
         buttonGold.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,6 +38,7 @@ public class ImageButtonHandler {
         });
 
         //Silber
+        ImageButton buttonSilber;
         buttonSilber = activity.findViewById(R.id.btn_silber);
         buttonSilber.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,7 +46,9 @@ public class ImageButtonHandler {
                 onClickSilber(activity, fragmentManager);
             }
         });
+
         //Kupfer
+        ImageButton buttonKupfer;
         buttonKupfer = activity.findViewById(R.id.btn_kupfer);
         buttonKupfer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,6 +58,7 @@ public class ImageButtonHandler {
         });
 
         //Provinz
+        ImageButton buttonProvinz;
         buttonProvinz = activity.findViewById(R.id.btn_provinz);
         buttonProvinz.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +68,7 @@ public class ImageButtonHandler {
         });
 
         //Anwesen
+        ImageButton buttonAnwesen;
         buttonAnwesen = activity.findViewById(R.id.btn_anwesen);
         buttonAnwesen.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,6 +78,7 @@ public class ImageButtonHandler {
         });
 
         //Herzogturm
+        ImageButton buttonHerzogturm;
         buttonHerzogturm = activity.findViewById(R.id.btn_herzogturm);
         buttonHerzogturm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,6 +88,7 @@ public class ImageButtonHandler {
         });
 
         //Fluch
+        ImageButton buttonFluch;
         buttonFluch = activity.findViewById(R.id.btn_fluch);
         buttonFluch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,7 +99,6 @@ public class ImageButtonHandler {
     }
 
     private void onClickGold(Activity activity, FragmentManager fragmentManager) {
-        //Card card = board.getBuyField().pickCard(MoneyType.GOLD);
         BuyCardMsg gameUpdateMsg = new BuyCardMsg();
         gameUpdateMsg.setMoneyTypeClicked(MoneyType.GOLD);
         sendUpdate(gameUpdateMsg);
@@ -128,7 +126,6 @@ public class ImageButtonHandler {
     }
 
     private void onClickSilber(Activity activity, FragmentManager fragmentManager) {
-        //Card card = board.getBuyField().pickCard(MoneyType.SILBER);
         BuyCardMsg gameUpdateMsg = new BuyCardMsg();
         gameUpdateMsg.setMoneyTypeClicked(MoneyType.SILBER);
         sendUpdate(gameUpdateMsg);
@@ -157,7 +154,6 @@ public class ImageButtonHandler {
     }
 
     private void onClickKupfer(Activity activity, FragmentManager fragmentManager) {
-        //Card card = board.getBuyField().pickCard(MoneyType.KUPFER);
         BuyCardMsg gameUpdateMsg = new BuyCardMsg();
         gameUpdateMsg.setMoneyTypeClicked(MoneyType.KUPFER);
         sendUpdate(gameUpdateMsg);
@@ -185,7 +181,6 @@ public class ImageButtonHandler {
     }
 
     private void onClickAnwesen(Activity activity, FragmentManager fragmentManager) {
-        //Card card = board.getBuyField().pickCard(EstateType.ANWESEN);
         BuyCardMsg gameUpdateMsg = new BuyCardMsg();
         gameUpdateMsg.setEstateTypeClicked(EstateType.ANWESEN);
         sendUpdate(gameUpdateMsg);
@@ -213,7 +208,6 @@ public class ImageButtonHandler {
     }
 
     private void onClickProvinz(Activity activity, FragmentManager fragmentManager) {
-        //Card card = board.getBuyField().pickCard(EstateType.PROVINZ);
         BuyCardMsg gameUpdateMsg = new BuyCardMsg();
         gameUpdateMsg.setEstateTypeClicked(EstateType.PROVINZ);
         sendUpdate(gameUpdateMsg);
@@ -241,7 +235,6 @@ public class ImageButtonHandler {
     }
 
     private void onClickHerzogturm(Activity activity, FragmentManager fragmentManager) {
-        //Card card = board.getBuyField().pickCard(EstateType.HERZOGTUM);
         BuyCardMsg gameUpdateMsg = new BuyCardMsg();
         gameUpdateMsg.setEstateTypeClicked(EstateType.HERZOGTUM);
         sendUpdate(gameUpdateMsg);
@@ -270,7 +263,6 @@ public class ImageButtonHandler {
     }
 
     private void onClickFluch(Activity activity, FragmentManager fragmentManager) {
-        //Card card = board.getBuyField().pickCard(EstateType.FLUCH);
         BuyCardMsg gameUpdateMsg = new BuyCardMsg();
         gameUpdateMsg.setEstateTypeClicked(EstateType.FLUCH);
         sendUpdate(gameUpdateMsg);
@@ -298,24 +290,10 @@ public class ImageButtonHandler {
     }
 
     private void sendUpdate(BuyCardMsg msg) {
-        Thread th = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                clientConnector.sendbuyCard(msg);
-            }
-        });
+        //LKDoc: Sonarcloud wanted a lambda
+        Thread th = new Thread(() -> clientConnector.sendbuyCard(msg));
         th.start();
     }
-
-    /*
-    public Board getBoard() {
-        return board;
-    }
-
-    public void setBoard(Board board) {
-        this.board = board;
-    }
-    */
 
     public ClientConnector getClientConnector() {
         return clientConnector;
