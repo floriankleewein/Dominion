@@ -162,7 +162,6 @@ public class BuyField {
             }
             return card;
         } else {
-            //falls benötigt
             return null;
         }
     }
