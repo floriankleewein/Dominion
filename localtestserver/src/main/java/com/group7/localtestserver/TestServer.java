@@ -396,6 +396,7 @@ public class TestServer {
         if ((gamehandler.getBoard().getBuyField().isNoEstateCards()) || (gamehandler.getBoard()
                 .getActionField().getNotAvailableCards().size() >= 3)) {
             EndGameMsg endGameMsg = new EndGameMsg();
+            endGameMsg.setGame(gamehandler.getGame());
             endGameMsg.setWinningUser(gamehandler.declareWinner());
             server.sendToAllTCP(endGameMsg);
         }

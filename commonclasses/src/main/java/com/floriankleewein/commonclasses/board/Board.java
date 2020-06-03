@@ -4,8 +4,6 @@ public class Board {
     private ActionField actionField;
     private BuyField buyField;
 
-    private static Board board;
-
     public Board() {
         this.actionField = new ActionField();
         this.buyField = new BuyField();

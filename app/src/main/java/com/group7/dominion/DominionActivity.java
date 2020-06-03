@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.board.Board;
 import com.floriankleewein.commonclasses.cards.ActionCard;
 import com.floriankleewein.commonclasses.cards.Card;
@@ -257,9 +258,12 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
 
         clientConnector.registerCallback(EndGameMsg.class, (msg -> {
             runOnUiThread(() -> {
+                Log.i("ENDGAMEMSG" ,"Game Has ended");
                 Intent i = new Intent(DominionActivity.this, GameEndActivity.class);
                 User user = ((EndGameMsg) msg).getWinningUser();
+                Game game = ((EndGameMsg) msg).getGame();
                 i.putExtra("winner", (Parcelable) user);
+                i.putExtra("game", (Parcelable) game);
                 startActivity(i);
             });
         }));
