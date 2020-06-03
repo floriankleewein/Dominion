@@ -43,12 +43,12 @@ public class CheatService {
         }
     }
 
-    public void suspectUser(String SuspectedUserName, String UserName) {
-        User SuspectedUser = findCheater(SuspectedUserName);
-        User user = findUser(UserName);
+    public void suspectUser(String suspectedUserName, String userName) {
+        User suspectedUser = findCheater(suspectedUserName);
+        User user = findUser(userName);
 
-        if (SuspectedUser != null) {
-            SuspectedUser.getGamePoints().modifyWinningPoints(-5);
+        if (suspectedUser != null) {
+            suspectedUser.getGamePoints().modifyWinningPoints(-5);
         } else {
             user.getGamePoints().modifyWinningPoints(-5);
         }

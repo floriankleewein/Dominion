@@ -7,6 +7,7 @@ import android.content.Context;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -110,6 +111,15 @@ public class StartGameActivity extends AppCompatActivity {
                 thread.start();
             }
         });
+
+        clientConnector.registerCallback(StartGameMsg.class, (msg -> {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Log.i("Callback", "Got the Callback");
+                }
+            });
+        }));
     }
 
 

@@ -89,11 +89,11 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
 
         fragmentManager = getSupportFragmentManager();
 
-        //Hexe
-
+        //LKDoc: ActionCards
         actionDialogHandler = new ActionDialogHandler();
         actionDialogHandler.init(this, fragmentManager);
 
+        //LKDoc: Estate- and MoneyCards
         imageButtonHandler = new ImageButtonHandler();
         imageButtonHandler.init(this, fragmentManager);
 
@@ -116,7 +116,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         playerScores = findViewById(R.id.txtVPlayerScore);
         playerScores.setText("Scores of Players.");
 
-        ClientConnector clientConnector = ClientConnector.getClientConnector();
+        clientConnector = ClientConnector.getClientConnector();
 
         actionDialogHandler.setClientConnector(clientConnector);
         imageButtonHandler.setClientConnector(clientConnector);
@@ -135,9 +135,9 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
 
         clientConnector.registerCallback(SuspectMessage.class, (msg -> {
             runOnUiThread(() -> {
-                String SuspectedUser = ((SuspectMessage) msg).getSuspectedUserName();
-                String Username = ((SuspectMessage) msg).getUserName();
-                Toast.makeText(getApplicationContext(), Username + " glaubt, dass " + SuspectedUser + " geschummelt hat", Toast.LENGTH_SHORT).show();
+                String suspectedUser = ((SuspectMessage) msg).getSuspectedUserName();
+                String userName = ((SuspectMessage) msg).getUserName();
+                Toast.makeText(getApplicationContext(), userName + " glaubt, dass " + suspectedUser + " geschummelt hat", Toast.LENGTH_SHORT).show();
             });
         }));
 
@@ -240,6 +240,9 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
                                         ", Card Count: " + actionCard.getAction().getCardCount() +
                                         ", Throw Every UserCards Until Three Left: " + actionCard.getAction().isThrowEveryUserCardsUntilThreeLeft());
                                 break;
+                            default:
+                                //LKDoc: do nothing
+                                break;
                         }
                         String text = "";
                         for (User u : gameUpdateMsg1.getGame().getPlayerList()) {
@@ -296,8 +299,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
 
     public String getUsername() {
         SharedPreferences sharedPreferences = getSharedPreferences("USERNAME", Context.MODE_PRIVATE);
-        String str = sharedPreferences.getString("us", null);
-        return str;
+        return sharedPreferences.getString("us", null);
     }
 
     //führt den Wechsel von Spiel zu Chat durch

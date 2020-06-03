@@ -88,8 +88,6 @@ public class ActionField {
     //LKDoc - just returns the card (needed for the logic of Emanuel)
     public Card getActionCard(ActionType actionType) {
         Card card = null;
-        boolean cardFound = false;
-        int cardIndex = 0;
 
         // Überprüfe ob der ActionType überhaupt noch im Stapel existiert
         if(isTypeExistsInField(actionType)){
@@ -99,8 +97,6 @@ public class ActionField {
                     // Wenn der Kartentyp gefunden wird dann merke Index
                     if (actionCard.getActionType() == actionType) {
                         card = actionCard;
-                        cardIndex = i;
-                        cardFound = true;
                     }
                 }
             }
