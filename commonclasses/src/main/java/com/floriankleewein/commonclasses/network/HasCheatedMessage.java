@@ -2,15 +2,15 @@ package com.floriankleewein.commonclasses.network;
 
 public class HasCheatedMessage extends BaseMessage {
 
-    String CheaterName;
+    private String cheaterName;
 
 
     public String getName() {
-        return CheaterName;
+        return cheaterName;
     }
 
     public void setName(String name) {
-        this.CheaterName = name;
+        this.cheaterName = name;
     }
 
 }

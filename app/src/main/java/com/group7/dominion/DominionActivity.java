@@ -75,12 +75,10 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
 
         sendUpdateMessage();
         ArrayList<String> names = new ArrayList<>();
-        ClientConnector.getClientConnector().registerCallback(UpdatePlayerNamesMsg.class, (msg -> {
-            runOnUiThread(() -> {
-                names.clear();
-                names.addAll(((UpdatePlayerNamesMsg) msg).getNameList());
-            });
-        }));
+        ClientConnector.getClientConnector().registerCallback(UpdatePlayerNamesMsg.class, (msg -> runOnUiThread(() -> {
+            names.clear();
+            names.addAll(((UpdatePlayerNamesMsg) msg).getNameList());
+        })));
 
         ShakeListener shakeListener = new ShakeListener(getSupportFragmentManager(), getUsername(), names);
         SensorManager sm = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -128,8 +126,8 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
 
         clientConnector.registerCallback(HasCheatedMessage.class, (msg -> {
             runOnUiThread(() -> {
-                String CheaterName = ((HasCheatedMessage) msg).getName();
-                Toast.makeText(getApplicationContext(), CheaterName + " hat eine zusätzliche Karte gezogen...", Toast.LENGTH_SHORT).show();
+                String cheaterName = ((HasCheatedMessage) msg).getName();
+                Toast.makeText(getApplicationContext(), cheaterName + " hat eine zusätzliche Karte gezogen...", Toast.LENGTH_SHORT).show();
             });
         }));
 
