@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     client.connect();
                 } catch (InterruptedException e) {
-                    Log.error("Classregistration failed!");
+                    Log.error("Classregistration failed! critical eror");
                     Thread.currentThread().interrupt();
                 }
                 client.checkButtons();
@@ -125,13 +125,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 addUsernametoPreferences();
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        EditText editText = findViewById(R.id.inputName);
-                        String userName = editText.getText().toString();
-                        client.addUser(userName);
-                    }
+                Thread thread = new Thread(() -> {
+                    EditText editText = findViewById(R.id.inputName);
+                    String userName = editText.getText().toString();
+                    client.addUser(userName);
                 });
                 thread.start();
             }
@@ -140,12 +137,7 @@ public class MainActivity extends AppCompatActivity {
         btnReset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        client.resetGame();
-                    }
-                });
+                Thread thread = new Thread(() -> client.resetGame());
                 thread.start();
             }
         });
