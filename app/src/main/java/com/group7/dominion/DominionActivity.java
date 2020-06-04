@@ -126,8 +126,8 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
 
         clientConnector.registerCallback(HasCheatedMessage.class, (msg -> {
             runOnUiThread(() -> {
-                String CheaterName = ((HasCheatedMessage) msg).getName();
-                Toast.makeText(getApplicationContext(), CheaterName + " hat eine zusätzliche Karte gezogen...", Toast.LENGTH_SHORT).show();
+                String cheaterName = ((HasCheatedMessage) msg).getName();
+                Toast.makeText(getApplicationContext(), cheaterName + " hat eine zusätzliche Karte gezogen...", Toast.LENGTH_SHORT).show();
             });
         }));
 
