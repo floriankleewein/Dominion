@@ -137,7 +137,9 @@ public class BuyField {
 
             return card;
         } else {
-            //falls benötigt
+            if (estateType == EstateType.PROVINZ) {
+                noEstateCards = true;
+            }
             return null;
         }
     }
@@ -186,17 +188,15 @@ public class BuyField {
             }
             return card;
         } else {
-            if (estateType == EstateType.ANWESEN) {
+            if (estateType == EstateType.PROVINZ) {
                 noEstateCards = true;
             }
             return null;
         }
     }
+
     public boolean isNoEstateCards() {
         return noEstateCards;
     }
 
-    public void setNoEstateCards(boolean noEstateCards) {
-        this.noEstateCards = noEstateCards;
-    }
 }
