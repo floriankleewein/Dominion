@@ -46,17 +46,14 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 
         client = ClientConnector.getClientConnector();
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    client.connect();
-                } catch (InterruptedException e) {
-                    Log.error("Classregistration failed! critical eror");
-                    Thread.currentThread().interrupt();
-                }
-                client.checkButtons();
+        Thread thread = new Thread(() -> {
+            try {
+                client.connect();
+            } catch (InterruptedException e) {
+                Log.error("Classregistration failed! critical eror");
+                Thread.currentThread().interrupt();
             }
+            client.checkButtons();
         });
         thread.start();
 
@@ -76,13 +73,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        client.createGame();
-                    }
-                });
+                Thread thread = new Thread(() -> client.createGame());
 
                 thread.start();
             }

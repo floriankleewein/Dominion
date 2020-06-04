@@ -75,12 +75,10 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
 
         sendUpdateMessage();
         ArrayList<String> names = new ArrayList<>();
-        ClientConnector.getClientConnector().registerCallback(UpdatePlayerNamesMsg.class, (msg -> {
-            runOnUiThread(() -> {
-                names.clear();
-                names.addAll(((UpdatePlayerNamesMsg) msg).getNameList());
-            });
-        }));
+        ClientConnector.getClientConnector().registerCallback(UpdatePlayerNamesMsg.class, (msg -> runOnUiThread(() -> {
+            names.clear();
+            names.addAll(((UpdatePlayerNamesMsg) msg).getNameList());
+        })));
 
         ShakeListener shakeListener = new ShakeListener(getSupportFragmentManager(), getUsername(), names);
         SensorManager sm = (SensorManager) getSystemService(SENSOR_SERVICE);
