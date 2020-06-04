@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.esotericsoftware.minlog.Log;
 import com.floriankleewein.commonclasses.network.AddPlayerNameErrorMsg;
 import com.floriankleewein.commonclasses.network.AddPlayerSizeErrorMsg;
 import com.floriankleewein.commonclasses.network.AddPlayerSuccessMsg;
@@ -50,7 +52,8 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     client.connect();
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    Log.error("Classregistration failed!");
+                    Thread.currentThread().interrupt();
                 }
                 client.checkButtons();
             }
