@@ -381,12 +381,21 @@ public class TestServer {
         if (msg.getActionTypeClicked() != null) {
             Log.info(msg.getActionTypeClicked() + BOUGHT);
             returnmsg.setBoughtCard(gamehandler.buyCard(msg.getActionTypeClicked()));
+            if (gamehandler.getBoard().getActionField().getNotAvailableCards().contains(msg.getActionTypeClicked())) {
+                returnmsg.setCantBuyCard(true);
+            }
         } else if (msg.getEstateTypeClicked() != null) {
             Log.info(msg.getEstateTypeClicked() + BOUGHT);
             returnmsg.setBoughtCard(gamehandler.buyCard(msg.getEstateTypeClicked()));
+            if (gamehandler.getBoard().getBuyField().getNotAvailableCards().contains(msg.getEstateTypeClicked())) {
+                returnmsg.setCantBuyCard(true);
+            }
         } else if (msg.getMoneyTypeClicked() != null) {
             Log.info(msg.getMoneyTypeClicked() + BOUGHT);
             returnmsg.setBoughtCard(gamehandler.buyCard(msg.getMoneyTypeClicked()));
+            if (gamehandler.getBoard().getBuyField().getNotAvailableCards().contains(msg.getMoneyTypeClicked())) {
+                returnmsg.setCantBuyCard(true);
+            }
         }
         if (gamehandler.isNewTurn()) {
             Log.info("WE HAVE A NEW PLAYER");

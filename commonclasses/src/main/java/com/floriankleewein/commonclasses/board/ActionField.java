@@ -34,7 +34,7 @@ public class ActionField {
     private void init() {
         this.actionCardsToBuy = new ArrayList<>();
         // Hier sind alle Action Karten definiert => von jeder Karte gibt es 10 FM: Fürs testen die Karten auf zwei reduziert, da es sonst sehr lange dauert
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 2; i++) {
             this.actionCardsToBuy.add(new ActionCard(2, ActionType.KELLER));
             this.actionCardsToBuy.add(new ActionCard(2, ActionType.BURGGRABEN));
             this.actionCardsToBuy.add(new ActionCard(3, ActionType.DORF));

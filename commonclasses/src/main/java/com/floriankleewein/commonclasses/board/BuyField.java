@@ -7,10 +7,12 @@ import com.floriankleewein.commonclasses.cards.MoneyCard;
 import com.floriankleewein.commonclasses.cards.MoneyType;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class BuyField {
     private List<Card> cardsToBuy;
+    private List<Enum> notAvailableCards;
     private boolean noEstateCards;
 
     public BuyField() {
@@ -43,13 +45,14 @@ public class BuyField {
         }
 
         // je Provinz 12 Karten
-        for (int i = 0; i < 12; i++) {
+        for (int i = 0; i < 2; i++) {
             this.cardsToBuy.add(new EstateCard(8, 6, EstateType.PROVINZ));
             this.cardsToBuy.add(new EstateCard(5, 3, EstateType.HERZOGTUM));
             this.cardsToBuy.add(new EstateCard(2, 1, EstateType.ANWESEN));
             this.cardsToBuy.add(new EstateCard(0, -1, EstateType.FLUCH));
         }
-        noEstateCards = false;
+        this.noEstateCards = false;
+        this.notAvailableCards = new LinkedList<>();
     }
 
     private boolean isTypeExistsInField(EstateType estateType) {
@@ -106,7 +109,9 @@ public class BuyField {
 
             return card;
         } else {
-            //falls benötigt
+            if (!notAvailableCards.contains(moneyType)) {
+                this.notAvailableCards.add(moneyType);
+            }
             return null;
         }
     }
@@ -137,6 +142,9 @@ public class BuyField {
 
             return card;
         } else {
+            if (!notAvailableCards.contains(estateType)) {
+                this.notAvailableCards.add(estateType);
+            }
             if (estateType == EstateType.PROVINZ) {
                 noEstateCards = true;
             }
@@ -189,7 +197,7 @@ public class BuyField {
             return card;
         } else {
             if (estateType == EstateType.PROVINZ) {
-                noEstateCards = true;
+                this.noEstateCards = true;
             }
             return null;
         }
@@ -197,6 +205,10 @@ public class BuyField {
 
     public boolean isNoEstateCards() {
         return noEstateCards;
+    }
+
+    public List<Enum> getNotAvailableCards() {
+        return notAvailableCards;
     }
 
 }
