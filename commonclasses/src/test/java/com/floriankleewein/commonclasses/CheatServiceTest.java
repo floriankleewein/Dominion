@@ -13,6 +13,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -47,11 +48,13 @@ public class CheatServiceTest {
     public void testaddCardtoUser() {
         cheatService.addCardtoUser("User1");
         cheatService.addCardtoUser("User3");
+        cheatService.addCardtoUser("NotExistingUser");
 
         Assert.assertEquals(true, Playerlist.get(0).isCheater());
         Assert.assertEquals(false, Playerlist.get(1).isCheater());
         Assert.assertEquals(true, Playerlist.get(2).isCheater());
         Assert.assertEquals(false, Playerlist.get(3).isCheater());
+
 
 
         Assert.assertEquals(4, Playerlist.get(0).getUserCards().getDeck().size());
