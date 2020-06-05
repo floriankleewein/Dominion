@@ -15,7 +15,6 @@ import android.widget.ListView;
 
 import com.floriankleewein.commonclasses.network.AllPlayersInDominionActivityMsg;
 import com.floriankleewein.commonclasses.network.ClientConnector;
-import com.floriankleewein.commonclasses.network.GetGameMsg;
 import com.floriankleewein.commonclasses.network.StartGameMsg;
 import com.floriankleewein.commonclasses.network.UpdatePlayerNamesMsg;
 

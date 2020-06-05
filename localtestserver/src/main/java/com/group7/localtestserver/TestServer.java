@@ -31,6 +31,7 @@ import com.floriankleewein.commonclasses.network.ReturnPlayersMsg;
 import com.floriankleewein.commonclasses.network.StartGameMsg;
 import com.floriankleewein.commonclasses.network.SuspectMessage;
 import com.floriankleewein.commonclasses.network.UpdatePlayerNamesMsg;
+import com.floriankleewein.commonclasses.network.messages.SetGameNullMsg;
 import com.floriankleewein.commonclasses.user.User;
 
 import java.io.IOException;
@@ -193,7 +194,7 @@ public class TestServer {
                     buyCardmsgFunctionality(object, con);
                 } else if (object instanceof GetChatMessages) {
                     getChatMessagesFunctionality(con);
-                } else if (object instanceof ResetMsg) {
+                } else if (object instanceof SetGameNullMsg) {
                     setGameNull();
                 }
             }

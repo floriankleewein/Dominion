@@ -193,7 +193,6 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
                             ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
                             errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
                         } else if (card instanceof ActionCard) {
-                            if (card instanceof ActionCard) {
                                 ActionCard actionCard = (ActionCard) card;
                                 switch (actionCard.getActionType()) {
                                     case HEXE:
@@ -258,7 +257,6 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
                                 }
                                 playerScores.setText(text);
                             }
-                        }
                     }
             );
         }));
@@ -270,7 +268,6 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
                 User user = ((EndGameMsg) msg).getWinningUser();
                 Game game = ((EndGameMsg) msg).getGame();
                 i.putExtra("winner", user.getUserName());
-                // i.putExtra("game", (Parcelable) game);
                 startActivity(i);
             });
         }));
