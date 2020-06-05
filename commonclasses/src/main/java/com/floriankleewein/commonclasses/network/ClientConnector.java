@@ -363,12 +363,7 @@ public class ClientConnector {
     }
 
     public void sendsetGameNull() {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                client.sendTCP(new ResetMsg());
-            }
-        });
+        Thread thread = new Thread(() -> client.sendTCP(new ResetMsg()));
         thread.start();
     }
 }

@@ -437,7 +437,6 @@ public class TestServer {
     }
 
     public void setGameNull() {
-        System.out.println("Game is null");
         game = null;
         gamehandler = null;
         board = null;

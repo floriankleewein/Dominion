@@ -3,7 +3,6 @@ package com.group7.dominion;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class GameEndActivity extends AppCompatActivity {
