@@ -50,6 +50,11 @@ import java.util.LinkedList;
 
 public class ClassRegistration {
 
+    /**
+     * FKDoc: here all classes are stored. client and server can make a instance of ClassRegistration to register it.
+     *        Thats very important for sending them via TCP. Also the order plays a very important role. With this
+     *        type of implementation the order always is the same since client and server use the same ressource.
+     */
     private Class[] constants = {BaseMessage.class, GameUpdateMsg.class, NetworkInformationMsg.class, Game.class,
             CreateGameMsg.class, AddPlayerSuccessMsg.class, ArrayList.class, User.class, ResetMsg.class, StartGameMsg.class, ChatMessage.class,
             HasCheatedMessage.class, ActivePlayerMessage.class, UpdatePlayerNamesMsg.class, SuspectMessage.class, CheckButtonsMsg.class,
@@ -60,6 +65,10 @@ public class ClassRegistration {
             CardLogic.class,RecChatListMsg.class, Pair.class,GetChatMessages.class, EndGameMsg.class
     };
 
+    /**
+     * FKDoc: here the server can pass the kryonet-server, and register all classes in the given order.
+     * @param server
+     */
     public void registerAllClassesForServer(Server server){
 
         for(Class c: constants){
@@ -67,6 +76,10 @@ public class ClassRegistration {
         }
     }
 
+    /**
+     * FKDoc: here the client can pass the kryonet-client, and register all classes in the given order.
+     * @param client
+     */
     public void registerAllClassesForClient(Client client){
 
         for(Class c: constants){

@@ -91,11 +91,15 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
 
         fragmentManager = getSupportFragmentManager();
 
-        //LKDoc: ActionCards
+        /**
+         * LKDoc: ActionCards
+         */
         actionDialogHandler = new ActionDialogHandler();
         actionDialogHandler.init(this, fragmentManager);
 
-        //LKDoc: Estate- and MoneyCards
+        /**
+         * LKDoc: Estate- and MoneyCards
+         */
         imageButtonHandler = new ImageButtonHandler();
         imageButtonHandler.init(this, fragmentManager);
 

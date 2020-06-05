@@ -28,13 +28,23 @@ public class ClientConnector {
     private Game game;
     Map<Class, Callback<BaseMessage>> callbackMap = new HashMap<>();
 
-
+    /**
+     * FKDoc: the hidden clientconnector singleton attribute.
+     */
     private static ClientConnector clientConnector;
 
-    //overwriting constructor so it cannot be instanced.
-    ClientConnector() {
+    /**
+     * FKDoc: overwriting constructor so it cannot be instanced just like that. must be private tho. since the kryonet still wants a
+     *        standard constructor.
+     */
+    private ClientConnector() {
     }
 
+    /**
+     * FKDoc: singleton getter which creates exactly one clientConnector per Player. its the same clientConnector for the whole game.
+     *        singleton pattern is very handy here.
+     * @return
+     */
     public static synchronized ClientConnector getClientConnector() {
         if (ClientConnector.clientConnector == null) {
             client = new Client(65536, 65536);
@@ -48,16 +58,22 @@ public class ClientConnector {
     }
 
     public void connect() throws InterruptedException {
-        // Register classes
+        /**
+         * FKDoc: here the classregistration is started.
+         */
         Thread thread = new Thread(() -> registerClasses());
         thread.start();
         thread.join();
 
 
-        // start client
+        /**
+         * FKDoc: kryonet client is started here.
+         */
         client.start();
 
-        //connects aau server
+        /**
+         * FKDoc: at this point the client tries to connect to the server with correct IP and port with a 5 second timeout.
+         */
         try {
             client.connect(5000, SERVER_IP, SERVER_PORT);   // Uni server
         } catch (IOException e) {
@@ -71,6 +87,9 @@ public class ClientConnector {
         client.sendTCP(msg);
     }
 
+    /**
+     * FKDoc: thats the place where the server is told to create the game.
+     */
     public void createGame() {
         Log.info("Connection-Status: " + client.isConnected());
         final CreateGameMsg startMsg = new CreateGameMsg();
@@ -106,6 +125,11 @@ public class ClientConnector {
 
     }
 
+    /**
+     * FKDoc: the client gets the username and sends it to the server via a message. the listener is added, where the server response
+     *        is stored in the message. corresponding callback is called and UI updated aswell for user interface.
+     * @param playerName
+     */
     public void addUser(String playerName) {
         AddPlayerSuccessMsg addPlayerMsg = new AddPlayerSuccessMsg();
         addPlayerMsg.setPlayerName(playerName);
@@ -127,6 +151,11 @@ public class ClientConnector {
 
         });
 
+        /**
+         * FKDoc: the reason this listener is added at exactly this spot is the following: after creating a user, the player is able to
+         *        receive the AllPlayersInDominionActivityMsg. Therefore only players that have a user can land in the DominionActivity
+         *        with the start button.
+         */
         client.addListener(new Listener() {
             @Override
             public void received(Connection connection, Object object) {
@@ -155,15 +184,16 @@ public class ClientConnector {
         return game;
     }
 
-    //for now this method only has the use, to reset the game and playerList, so we
-    //dont have to restart the server for the same purpose.
+    /**
+     * FKDoc: sends the reset message to the server. there the playerlist will be cleared to avoid  server restarts all the time.
+     */
     public void resetGame() {
         ResetMsg msg = new ResetMsg();
         client.sendTCP(msg);
 
         client.addListener(new Listener() {
             public void received(Connection con, Object object) {
-                //what happens then?
+
             }
 
         });
@@ -174,6 +204,11 @@ public class ClientConnector {
         client.sendTCP(msg);
     }
 
+    /**
+     * FKDoc: here the client sends the corresponding message to the server, fetch the playernames.
+     *        after the response with the names, the listener below triggers the callback which updates the UI and shows
+     *        the usernames. this happens whenever a new player joined.
+     */
     public void updatePlayerNames() {
         UpdatePlayerNamesMsg msg = new UpdatePlayerNamesMsg();
         client.sendTCP(msg);
@@ -331,6 +366,9 @@ public class ClientConnector {
         });
     }
 
+    /**
+     * FKDoc: user only sends the corresponding message to the server, who then handles the wished logic.
+     */
     public void checkButtons() {
         CheckButtonsMsg msg = new CheckButtonsMsg();
         client.sendTCP(msg);
@@ -351,12 +389,17 @@ public class ClientConnector {
         client.sendTCP(msgToOthers);
     }
 
-    //FKDoc: this is the message which is broadcasted when startbutton is clicked. everyone lands in the dominion activity then.
+    /**
+     * FKDoc: server is told, to put all players with a user in the DominionActivity.
+     */
     public void allPlayersInDominionActivity() {
         AllPlayersInDominionActivityMsg msg = new AllPlayersInDominionActivityMsg();
         client.sendTCP(msg);
     }
 
+    /**
+     * FKDoc: here the ClassRegistration is instanced, and the kryonet client is passed, which then registers all needed classes.
+     */
     public void registerClasses() {
         ClassRegistration reg = new ClassRegistration();
         reg.registerAllClassesForClient(client);
