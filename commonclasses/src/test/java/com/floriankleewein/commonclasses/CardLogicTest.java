@@ -99,13 +99,13 @@ public class CardLogicTest {
     public void checkEffectOfWitch() {
         Card card = new ActionCard(5, ActionType.HEXE);
         for (User u : gh.getGame().getPlayerList()) {
-//            Assert.assertEquals(3, u.getGamePoints().getWinningPoints());
+            Assert.assertEquals(3, u.getGamePoints().getWinningPoints());
         }
         m_cut.doCardLogic(card);
 
         for (User u : gh.getGame().getPlayerList()) {
             if (u.equals(gh.getActiveUser())) continue;
-            // Assert.assertEquals(2, u.getGamePoints().getWinningPoints());
+            Assert.assertEquals(2, u.getGamePoints().getWinningPoints());
         }
     }
 

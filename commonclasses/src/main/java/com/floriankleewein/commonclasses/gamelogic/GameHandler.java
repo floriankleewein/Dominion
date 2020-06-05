@@ -109,28 +109,6 @@ public class GameHandler {
     }
 
     /**
-     * Change Turn Phase, if end of turn setPlay Status to noPlayPhase
-     * Can be checked everytime since only if turn phase status is set will it change to the next phase.
-     *
-     * @return
-     */
-    public PlayStatus changeTurnStatus() {
-        if (getTurnState() == null) {
-            return null;
-        } else if (getTurnState().equals(PlayStatus.ACTION_PHASE)) {
-            setTurnState(PlayStatus.BUY_PHASE);
-            return PlayStatus.BUY_PHASE;
-        } else if (getTurnState().equals(PlayStatus.BUY_PHASE)) {
-
-            setTurnState(PlayStatus.NO_PLAY_PHASE);
-            return PlayStatus.NO_PLAY_PHASE;
-        } else {
-            setTurnState(PlayStatus.ACTION_PHASE);
-            return PlayStatus.ACTION_PHASE;
-        }
-    }
-
-    /**
      * In case enums are not working over KryoNet
      *
      * @param i
@@ -180,21 +158,6 @@ public class GameHandler {
         return (getActiveUser().getGamePoints().getPlaysAmount() > 0 && isActionPhase());
     }
 
-    /**
-     * TODO Obsolete - delete after merge
-     *
-     * @param msg
-     */
-    private void updateVictoryPts(GameUpdateMsg msg) {
-        int pts = 0;
-        for (User u : game.getPlayerList()) {
-            pts = msg.getVictoryPointsChange(u);
-            if (pts != 0) {
-                changeVictoryPoints(u, pts);
-            }
-        }
-    }
-
     public Card getBuyCard() {
         return buyCard;
     }
@@ -213,7 +176,6 @@ public class GameHandler {
         if (canBuyCard(getBuyCard())) {
             buyCard(getBuyCard());
         }
-        updateVictoryPts(msg);
     }
 
     public void buyCard(ActionCard card) {
@@ -259,22 +221,6 @@ public class GameHandler {
         } else {
             buyCard((EstateCard) card);
         }
-    }
-
-    public GameUpdateMsg updateGameHandlerTwo(GameUpdateMsg msg) {
-        setBoard(msg.getBoard());
-        setPlayedCard(msg.getPlayedCard());
-        Game.setGame(msg.getGame());
-        setGame();
-
-        Card boughtCard = null;
-        if (canBuyCardTwo(msg)) {
-            boughtCard = buyCardTwo(msg);
-        }
-        msg.setBoughtCard(boughtCard);
-
-        updateVictoryPts(msg);
-        return msg;
     }
 
     //LKDoc: new buy methods cause I can't cast on Cards - ActionType has only ActionCard and not Card
@@ -329,22 +275,6 @@ public class GameHandler {
         getActiveUser().getGamePoints().modifyBuyAmounts(-1);
     }
 
-    public Card buyCardTwo(GameUpdateMsg gameUpdateMsg) {
-        if (gameUpdateMsg.getActionTypeClicked() != null) {
-            Log.info(BOUGHT_CARD_TYPE + gameUpdateMsg.getActionTypeClicked());
-            return buyCard(gameUpdateMsg.getActionTypeClicked());
-        } else if (gameUpdateMsg.getEstateTypeClicked() != null) {
-            Log.info(BOUGHT_CARD_TYPE + gameUpdateMsg.getEstateTypeClicked());
-            return buyCard(gameUpdateMsg.getEstateTypeClicked());
-        } else if (gameUpdateMsg.getMoneyTypeClicked() != null) {
-            Log.info(BOUGHT_CARD_TYPE + gameUpdateMsg.getMoneyTypeClicked());
-            return buyCard(gameUpdateMsg.getMoneyTypeClicked());
-        } else {
-            return null;
-        }
-    }
-
-
     private boolean isActionPhase() {
         return turnState.equals(PlayStatus.ACTION_PHASE);
     }
@@ -360,28 +290,11 @@ public class GameHandler {
 
     private boolean canBuyCard(Card card) {
         if (card == null) {
-            System.out.println("CARD IS NULL");
+            Log.info("Card is null.");
             return false;
         }
         if (getActiveUser().getGamePoints().getCoins() >= card.getPrice() && getActiveUser().getGamePoints().getBuyAmounts() > 0) {
             setTurnState(PlayStatus.BUY_PHASE);
-            return true;
-        }
-        return false;
-    }
-
-    private boolean canBuyCardTwo(GameUpdateMsg gameUpdateMsg) {
-        boolean noCard = false;
-        if (gameUpdateMsg.getActionTypeClicked() != null) {
-            noCard = true;
-        } else if (gameUpdateMsg.getEstateTypeClicked() != null) {
-            noCard = true;
-        } else if (gameUpdateMsg.getMoneyTypeClicked() != null) {
-            noCard = true;
-        } else {
-            return noCard;
-        }
-        if (noCard) {
             return true;
         }
         return false;
@@ -397,22 +310,6 @@ public class GameHandler {
 
     public User getActiveUser() {
         return game.getActivePlayer();
-    }
-
-    /**
-     * TODO obsolete - delete after merge
-     *
-     * @param user
-     * @param points
-     */
-    private void changeVictoryPoints(User user, int points) {
-        List<User> users = game.getPlayerList();
-        for (User u : users) {
-            if (u.getUserName().equals(user.getUserName())) {
-                u.getGamePoints().modifyWinningPoints(points);
-            }
-        }
-        game.setPlayerList(users);
     }
 
     public boolean checkHandCards() {
