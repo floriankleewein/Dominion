@@ -218,7 +218,7 @@ public class ImageButtonHandler {
                 public void run() {
                     BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
                     Card card = gameUpdateMsg1.getBoughtCard();
-                    if (card == null) {
+                    if (card == null && !gameUpdateMsg1.isCantBuyCard()) {
                         Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
                     } else if (card == null && gameUpdateMsg1.isCantBuyCard()) {
                         ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
