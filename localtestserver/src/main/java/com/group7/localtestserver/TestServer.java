@@ -51,11 +51,17 @@ public class TestServer {
     private List<Pair> messageList = new ArrayList<>();
     private static final String BOUGHT = " bought";
 
-
+    /**
+     * FKDoc: here the kryonet-server sets the BufferSize. Needed to adapt the size of sent objects.
+     */
     public TestServer() {
         server = new Server(65536, 65536);
     }
 
+    /**
+     * FKDoc: its called to begin with the server start.
+     * @throws InterruptedException
+     */
     public void startServer() throws InterruptedException {
         Log.info("Running Server!");
         //FKDoc: Register classes
@@ -69,16 +75,23 @@ public class TestServer {
         thread.join();
 
 
-        //FKDoc: Start Server
+        /**
+         * FKDoc: here the kryonet server is started.
+         */
         server.start();
 
+        /**
+         * FKDoc: here the kryonet server is bound to the correct tcp Port.
+         */
         try {
             //server.bind(8080);
             server.bind(53217);
         } catch (IOException e) {
             Log.error("ERROR: ", "bind to port failed!");
         }
-        //FKDoc: adds all listeners. cyclic problem still here.
+        /**
+         * FKDoc: adds all listeners.
+         */
         addListeners();
     }
 
@@ -88,6 +101,9 @@ public class TestServer {
         gamehandler.updateGameHandler(msg);
     }
 
+    /**
+     * FKDoc: creates the game, to be sure the instance is there when needed.
+     */
     public void createGame() {
         game = Game.getGame();
         hasGame = true;
@@ -112,7 +128,7 @@ public class TestServer {
     }
 
     /**
-     * Can be used to send ErrorMessages to the active User in the game.
+     * ESDoc: Can be used to send ErrorMessages to the active User in the game.
      *
      * @param errorNumber
      */
@@ -139,12 +155,21 @@ public class TestServer {
         return game;
     }
 
+    /**
+     * FKDoc: here the instance fo the ClassRegistration is made. Pass the kryonet-server attribute
+     *        to the method, to register all needed classes.
+     */
     public void registerClasses() {
 
         ClassRegistration reg = new ClassRegistration();
         reg.registerAllClassesForServer(server);
     }
 
+    /**
+     * FKDoc: here one listener is added to the game. multiple listeners arent needed, since kryonet handles them
+     *        in a ListenerArray anyway. thats why there is an else case for each method. Inside, the corresponding
+     *        method which holds the information is called.
+     */
     public void addListeners() {
         server.addListener(new Listener() {
             public void received(Connection con, Object object) {
@@ -203,7 +228,7 @@ public class TestServer {
 
 
     /**
-     * Creates Starter Deck for all players and returns true if game was created successfully.
+     * ESDoc: Creates Starter Deck for all players and returns true if game was created successfully.
      *
      * @return
      */
@@ -229,6 +254,13 @@ public class TestServer {
         con.sendTCP(startGameMsg);
     }
 
+    /**
+     * FKDoc: gets the playername. then the size and name is checked. if both are checked successfull, the player
+     *        is put in the map and added to the game aswell. the feedback "success" is set in the message.
+     *        Depending on which check fails, a different correct information is set in the message. Msg is sent back then.
+     * @param object
+     * @param con
+     */
     public void addPlayerSuccessMsgFunctionality(Object object, Connection con) {
         AddPlayerSuccessMsg addPlayerMsg = (AddPlayerSuccessMsg) object;
         String name = addPlayerMsg.getPlayerName();
@@ -254,6 +286,9 @@ public class TestServer {
         con.sendTCP(addPlayerMsg);
     }
 
+    /**
+     * FKDoc: clears the playerlist and the corresponding map. that way a server-restart is avoided.
+     */
     public void resetMsgFunctionality() {
         game.getPlayerList().clear();
         userClientConnectorMap.clear();
@@ -319,6 +354,10 @@ public class TestServer {
         sendCheatInformation(cheatMsg.getName());
     }
 
+    /**
+     * FKDoc: iterates over the game's playerlist and adds every username to the message, which also contains a list for the names.
+     *        After that the broadcast done and each player receives the message, which then will trigger an update for the UI.
+     */
     public void updatePlayerNamesMsgFunctionality() {
         UpdatePlayerNamesMsg msg = new UpdatePlayerNamesMsg();
         for (User x : game.getPlayerList()) {
@@ -343,6 +382,12 @@ public class TestServer {
         }
     }
 
+    /**
+     * FKDoc: in this method the state for the buttons are checked. depending on if the game already exists or not,
+     *        boolean values are set and returned with the message.
+     * @param object
+     * @param con
+     */
     public void checkButtonsMsgFunctionality(Object object, Connection con) {
         CheckButtonsMsg msg = (CheckButtonsMsg) object;
         if (hasGame) {
