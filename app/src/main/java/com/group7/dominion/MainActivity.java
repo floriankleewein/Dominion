@@ -9,6 +9,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.esotericsoftware.minlog.Log;
 import com.floriankleewein.commonclasses.network.AddPlayerNameErrorMsg;
 import com.floriankleewein.commonclasses.network.AddPlayerSizeErrorMsg;
 import com.floriankleewein.commonclasses.network.AddPlayerSuccessMsg;
@@ -44,16 +46,14 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 
         client = ClientConnector.getClientConnector();
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    client.connect();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                client.checkButtons();
+        Thread thread = new Thread(() -> {
+            try {
+                client.connect();
+            } catch (InterruptedException e) {
+                Log.error("Classregistration failed! critical eror");
+                Thread.currentThread().interrupt();
             }
+            client.checkButtons();
         });
         thread.start();
 
@@ -73,13 +73,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        client.createGame();
-                    }
-                });
+                Thread thread = new Thread(() -> client.createGame());
 
                 thread.start();
             }
@@ -122,13 +116,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 addUsernametoPreferences();
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        EditText editText = findViewById(R.id.inputName);
-                        String userName = editText.getText().toString();
-                        client.addUser(userName);
-                    }
+                Thread thread = new Thread(() -> {
+                    EditText editText = findViewById(R.id.inputName);
+                    String userName = editText.getText().toString();
+                    client.addUser(userName);
                 });
                 thread.start();
             }
@@ -137,12 +128,7 @@ public class MainActivity extends AppCompatActivity {
         btnReset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        client.resetGame();
-                    }
-                });
+                Thread thread = new Thread(() -> client.resetGame());
                 thread.start();
             }
         });

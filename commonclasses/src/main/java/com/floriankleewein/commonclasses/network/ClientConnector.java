@@ -285,7 +285,7 @@ public class ClientConnector {
         return client;
     }
 
-    public void registerCallback(Class c, Callback<BaseMessage> callback) {
+    public <T> void registerCallback(Class<T> c, Callback<BaseMessage> callback) {
         this.callbackMap.put(c, callback);
     }
 
