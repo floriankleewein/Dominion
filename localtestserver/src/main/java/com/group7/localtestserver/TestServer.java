@@ -47,10 +47,7 @@ public class TestServer {
     private boolean hasGame = false;
     private GameHandler gamehandler;
     private Map<User, Connection> userClientConnectorMap = new HashMap<>(); // TODO fix bad variable name
-
     private List<Pair> messageList = new ArrayList<>();
-
-
     private static final String BOUGHT = " bought";
 
 
@@ -193,9 +190,11 @@ public class TestServer {
                 } else if (object instanceof PlayCardMsg) {
                     playCardmsgFunctionality(object);
                 } else if (object instanceof BuyCardMsg) {
-                    buyCardmsgFunctionality(object);
+                    buyCardmsgFunctionality(object, con);
                 } else if (object instanceof GetChatMessages) {
                     getChatMessagesFunctionality(con);
+                } else if (object instanceof ResetMsg) {
+                    setGameNull();
                 }
             }
         });
@@ -375,7 +374,7 @@ public class TestServer {
         server.sendToAllTCP(msg);
     }
 
-    private void buyCardmsgFunctionality(Object object) {
+    private void buyCardmsgFunctionality(Object object, Connection con) {
         BuyCardMsg msg = (BuyCardMsg) object;
         BuyCardMsg returnmsg = new BuyCardMsg();
         if (msg.getActionTypeClicked() != null) {
@@ -402,6 +401,9 @@ public class TestServer {
             newTurnMsgFunctionality();
             gamehandler.setNewTurn(false);
         }
+        /**
+         * This condition ends the game!!
+         */
         if ((gamehandler.getBoard().getBuyField().isNoEstateCards()) || (gamehandler.getBoard()
                 .getActionField().getNotAvailableCards().size() >= 3)) {
             EndGameMsg endGameMsg = new EndGameMsg();
@@ -410,7 +412,7 @@ public class TestServer {
             server.sendToAllTCP(endGameMsg);
         }
         returnmsg.setGame(Game.getGame());
-        server.sendToAllTCP(returnmsg);
+        con.sendTCP(returnmsg);
     }
 
     private void playCardmsgFunctionality(Object object) {
@@ -431,5 +433,12 @@ public class TestServer {
         RecChatListMsg msg = new RecChatListMsg();
         msg.setMessages(messageList);
         server.sendToTCP(con.getID(), msg);
+    }
+
+    public void setGameNull() {
+        System.out.println("Game is null");
+        game = null;
+        gamehandler = null;
+        board = null;
     }
 }

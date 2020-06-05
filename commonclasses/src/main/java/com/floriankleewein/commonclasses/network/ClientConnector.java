@@ -361,4 +361,14 @@ public class ClientConnector {
         ClassRegistration reg = new ClassRegistration();
         reg.registerAllClassesForClient(client);
     }
+
+    public void sendsetGameNull() {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                client.sendTCP(new ResetMsg());
+            }
+        });
+        thread.start();
+    }
 }

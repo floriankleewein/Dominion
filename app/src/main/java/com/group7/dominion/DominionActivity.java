@@ -34,6 +34,7 @@ import com.floriankleewein.commonclasses.network.SuspectMessage;
 import com.floriankleewein.commonclasses.network.UpdatePlayerNamesMsg;
 import com.floriankleewein.commonclasses.user.User;
 import com.group7.dominion.card.ActionDialogHandler;
+import com.group7.dominion.card.ErrorDialogHandler;
 import com.group7.dominion.card.HandCardsHandler;
 import com.group7.dominion.card.ImageButtonHandler;
 import com.group7.dominion.chat.ChatFragment;
@@ -186,8 +187,11 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
             runOnUiThread(() -> {
                 BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
                 Card card = gameUpdateMsg1.getBoughtCard();
-                if (card == null) {
+                if (card == null && !gameUpdateMsg1.isCantBuyCard()) {
                     Toast.makeText(getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
+                } else if (card == null && gameUpdateMsg1.isCantBuyCard()) {
+                    ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
+                    errorDialogHandler.show(fragmentManager, "errorDialog");
                 } else {
                     if (card instanceof ActionCard) {
                         ActionCard actionCard = (ActionCard) card;

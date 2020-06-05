@@ -341,7 +341,6 @@ public class GameHandler {
         }
     }
 
-
     private boolean isActionPhase() {
         return turnState.equals(PlayStatus.ACTION_PHASE);
     }
@@ -353,7 +352,6 @@ public class GameHandler {
     private boolean isNoPlayPhase() {
         return turnState.equals(PlayStatus.NO_PLAY_PHASE);
     }
-
 
     private boolean canBuyCard(Card card) {
         if (card == null) {
@@ -398,7 +396,6 @@ public class GameHandler {
 
     /**
      * TODO obsolete - delete after merge
-     *
      * @param user
      * @param points
      */
