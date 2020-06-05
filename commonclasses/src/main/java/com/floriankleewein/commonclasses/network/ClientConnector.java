@@ -10,6 +10,7 @@ import com.floriankleewein.commonclasses.chat.GetChatMessages;
 import com.floriankleewein.commonclasses.ClassRegistration;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.gamelogic.GameHandler;
+import com.floriankleewein.commonclasses.network.messages.EndGameMsg;
 import com.floriankleewein.commonclasses.network.messages.NewTurnMessage;
 
 import java.io.IOException;
@@ -218,6 +219,15 @@ public class ClientConnector {
                 }
             }
         });
+
+        client.addListener(new Listener() {
+            public void received(Connection con, Object object) {
+                if (object instanceof EndGameMsg) {
+                    EndGameMsg msg = (EndGameMsg) object;
+                    callbackMap.get(EndGameMsg.class).callback(msg);
+                }
+            }
+        });
     }
 
     /**
@@ -350,5 +360,10 @@ public class ClientConnector {
     public void registerClasses() {
         ClassRegistration reg = new ClassRegistration();
         reg.registerAllClassesForClient(client);
+    }
+
+    public void sendsetGameNull() {
+        Thread thread = new Thread(() -> client.sendTCP(new ResetMsg()));
+        thread.start();
     }
 }

@@ -37,7 +37,6 @@ public class GameHandler {
     private CardLogic cardLogic;
 
 
-
     private boolean newTurn;
 
     /**
@@ -289,8 +288,6 @@ public class GameHandler {
             }
             return boughtCard;
         }
-
-
         return null;
     }
 
@@ -344,7 +341,6 @@ public class GameHandler {
         }
     }
 
-
     private boolean isActionPhase() {
         return turnState.equals(PlayStatus.ACTION_PHASE);
     }
@@ -356,7 +352,6 @@ public class GameHandler {
     private boolean isNoPlayPhase() {
         return turnState.equals(PlayStatus.NO_PLAY_PHASE);
     }
-
 
     private boolean canBuyCard(Card card) {
         if (card == null) {
@@ -401,7 +396,6 @@ public class GameHandler {
 
     /**
      * TODO obsolete - delete after merge
-     *
      * @param user
      * @param points
      */
@@ -422,6 +416,18 @@ public class GameHandler {
             }
         }
         return false;
+    }
+
+    public User declareWinner() {
+        int max = 0;
+        User user = null;
+        for (int i = 0; i < game.getPlayerList().size(); i++) {
+            if (game.getPlayerList().get(i).getGamePoints().getWinningPoints() > max) {
+                max = game.getPlayerList().get(i).getGamePoints().getWinningPoints();
+                user = game.getPlayerList().get(i);
+            }
+        }
+        return user;
     }
 
     private void setGame() {

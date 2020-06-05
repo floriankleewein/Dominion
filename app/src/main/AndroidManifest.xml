@@ -13,11 +13,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".GameEndActivity"></activity>
         <activity
             android:name=".DominionActivity"
             android:screenOrientation="landscape"
-            tools:ignore="LockedOrientationActivity"/>
-
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".StartGameActivity"
             android:screenOrientation="landscape"
