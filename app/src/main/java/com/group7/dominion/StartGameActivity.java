@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+
 import com.floriankleewein.commonclasses.network.AllPlayersInDominionActivityMsg;
 import com.floriankleewein.commonclasses.network.ClientConnector;
 import com.floriankleewein.commonclasses.network.StartGameMsg;

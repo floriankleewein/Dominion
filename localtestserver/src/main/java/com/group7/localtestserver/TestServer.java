@@ -23,6 +23,7 @@ import com.floriankleewein.commonclasses.network.GetPlayerMsg;
 import com.floriankleewein.commonclasses.network.HasCheatedMessage;
 import com.floriankleewein.commonclasses.network.BuyCardMsg;
 import com.floriankleewein.commonclasses.network.PlayCardMsg;
+import com.floriankleewein.commonclasses.network.messages.EndGameMsg;
 import com.floriankleewein.commonclasses.network.messages.NewTurnMessage;
 import com.floriankleewein.commonclasses.network.messages.NotEnoughRessourcesMsg;
 import com.floriankleewein.commonclasses.network.ResetMsg;
@@ -30,6 +31,7 @@ import com.floriankleewein.commonclasses.network.ReturnPlayersMsg;
 import com.floriankleewein.commonclasses.network.StartGameMsg;
 import com.floriankleewein.commonclasses.network.SuspectMessage;
 import com.floriankleewein.commonclasses.network.UpdatePlayerNamesMsg;
+import com.floriankleewein.commonclasses.network.messages.SetGameNullMsg;
 import com.floriankleewein.commonclasses.user.User;
 
 import java.io.IOException;
@@ -46,10 +48,7 @@ public class TestServer {
     private boolean hasGame = false;
     private GameHandler gamehandler;
     private Map<User, Connection> userClientConnectorMap = new HashMap<>(); // TODO fix bad variable name
-
     private List<Pair> messageList = new ArrayList<>();
-
-
     private static final String BOUGHT = " bought";
 
 
@@ -192,9 +191,11 @@ public class TestServer {
                 } else if (object instanceof PlayCardMsg) {
                     playCardmsgFunctionality(object);
                 } else if (object instanceof BuyCardMsg) {
-                    buyCardmsgFunctionality(object);
+                    buyCardmsgFunctionality(object, con);
                 } else if (object instanceof GetChatMessages) {
                     getChatMessagesFunctionality(con);
+                } else if (object instanceof SetGameNullMsg) {
+                    setGameNull();
                 }
             }
         });
@@ -374,26 +375,45 @@ public class TestServer {
         server.sendToAllTCP(msg);
     }
 
-    private void buyCardmsgFunctionality(Object object) {
+    private void buyCardmsgFunctionality(Object object, Connection con) {
         BuyCardMsg msg = (BuyCardMsg) object;
         BuyCardMsg returnmsg = new BuyCardMsg();
         if (msg.getActionTypeClicked() != null) {
             Log.info(msg.getActionTypeClicked() + BOUGHT);
             returnmsg.setBoughtCard(gamehandler.buyCard(msg.getActionTypeClicked()));
+            if (gamehandler.getBoard().getActionField().getNotAvailableCards().contains(msg.getActionTypeClicked())) {
+                returnmsg.setCantBuyCard(true);
+            }
         } else if (msg.getEstateTypeClicked() != null) {
             Log.info(msg.getEstateTypeClicked() + BOUGHT);
             returnmsg.setBoughtCard(gamehandler.buyCard(msg.getEstateTypeClicked()));
+            if (gamehandler.getBoard().getBuyField().getNotAvailableCards().contains(msg.getEstateTypeClicked())) {
+                returnmsg.setCantBuyCard(true);
+            }
         } else if (msg.getMoneyTypeClicked() != null) {
             Log.info(msg.getMoneyTypeClicked() + BOUGHT);
             returnmsg.setBoughtCard(gamehandler.buyCard(msg.getMoneyTypeClicked()));
+            if (gamehandler.getBoard().getBuyField().getNotAvailableCards().contains(msg.getMoneyTypeClicked())) {
+                returnmsg.setCantBuyCard(true);
+            }
         }
         if (gamehandler.isNewTurn()) {
             Log.info("WE HAVE A NEW PLAYER");
             newTurnMsgFunctionality();
             gamehandler.setNewTurn(false);
         }
+        /**
+         * This condition ends the game!!
+         */
+        if ((gamehandler.getBoard().getBuyField().isNoEstateCards()) || (gamehandler.getBoard()
+                .getActionField().getNotAvailableCards().size() >= 3)) {
+            EndGameMsg endGameMsg = new EndGameMsg();
+            endGameMsg.setGame(gamehandler.getGame());
+            endGameMsg.setWinningUser(gamehandler.declareWinner());
+            server.sendToAllTCP(endGameMsg);
+        }
         returnmsg.setGame(Game.getGame());
-        server.sendToAllTCP(returnmsg);
+        con.sendTCP(returnmsg);
     }
 
     private void playCardmsgFunctionality(Object object) {
@@ -414,5 +434,11 @@ public class TestServer {
         RecChatListMsg msg = new RecChatListMsg();
         msg.setMessages(messageList);
         server.sendToTCP(con.getID(), msg);
+    }
+
+    public void setGameNull() {
+        game = null;
+        gamehandler = null;
+        board = null;
     }
 }
