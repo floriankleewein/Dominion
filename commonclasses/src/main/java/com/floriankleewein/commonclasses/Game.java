@@ -20,11 +20,7 @@ public class Game {
 
     private static CheatService cheatService;
 
-    /**
-     * FKDoc: usually we should overwrite the standardconstructor for singleton patterns. kryonet wants to have one,
-     *        so in this case he is only private.
-     */
-    private Game() {
+    Game() {
     }
 
     /**

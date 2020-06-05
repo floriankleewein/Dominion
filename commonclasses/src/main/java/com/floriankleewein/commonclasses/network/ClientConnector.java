@@ -33,11 +33,7 @@ public class ClientConnector {
      */
     private static ClientConnector clientConnector;
 
-    /**
-     * FKDoc: overwriting constructor so it cannot be instanced just like that. must be private tho. since the kryonet still wants a
-     *        standard constructor.
-     */
-    private ClientConnector() {
+    ClientConnector() {
     }
 
     /**
