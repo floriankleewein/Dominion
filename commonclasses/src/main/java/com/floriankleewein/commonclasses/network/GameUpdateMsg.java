@@ -10,8 +10,6 @@ import com.floriankleewein.commonclasses.gamelogic.GameHandler;
 import com.floriankleewein.commonclasses.gamelogic.PlayStatus;
 import com.floriankleewein.commonclasses.user.User;
 
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class GameUpdateMsg extends BaseMessage {
