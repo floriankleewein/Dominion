@@ -49,6 +49,9 @@ public class GameHandler {
         this.game = game;
     }
 
+    /**
+     * Empty Kontruktor required for KryoNet.
+     */
     public GameHandler() {
     }
 
@@ -80,6 +83,10 @@ public class GameHandler {
         }
     }
 
+    /**
+     * Private helper method to determine the new player. Uses modulo to
+     * set the new active player.
+     */
     private void setNewActivePlayer() {
         if (getActiveUser() == null) {
             game.setActivePlayer(game.getPlayerList().get(0));
@@ -96,7 +103,8 @@ public class GameHandler {
     }
 
     /**
-     * Discards Hand of activeUser, draws new Cards and sets new Active User.
+     * Discards Hand of activeUser, draw new Cards and set new Active User.
+     * Also Resets points of all users to the default value.
      */
     public void newTurn() {
         newTurn = true;
@@ -108,7 +116,7 @@ public class GameHandler {
     }
 
     /**
-     * In case enums are not working over KryoNet
+     * Set actual turn state.
      *
      * @param i
      */
@@ -128,13 +136,20 @@ public class GameHandler {
         }
     }
 
-
+    /**
+     * Will call the correct method to handle cardlogic.
+     * @param card
+     */
     public void playCard(Card card) {
         setPlayedCard(card);
         if (card instanceof ActionCard) playCard((ActionCard) card);
         else if (card instanceof MoneyCard) playCard((MoneyCard) card);
     }
 
+    /**
+     * Will check if the action card can be played and use the class CardLogic to handle card effects.
+     * @param card
+     */
     public void playCard(ActionCard card) {
         setPlayedCard(card);
         if (canPlayActionCard()) {
@@ -146,26 +161,45 @@ public class GameHandler {
         }
     }
 
+    /**
+     * Will check if a Money Card can be played and use the class CardLogic to handle card effects.
+     * @param card
+     */
     public void playCard(MoneyCard card) {
         if (!isNoPlayPhase()) {
             cardLogic.doCardLogic(card);
         }
     }
 
-
+    /**
+     * Checks turn state and Game Points in order to assert that the card can be played.
+     * @return
+     */
     private boolean canPlayActionCard() {
         return (getActiveUser().getGamePoints().getPlaysAmount() > 0 && isActionPhase());
     }
 
+    /**
+     * Get the card that is set to be bought.
+     * @return
+     */
     public Card getBuyCard() {
         return buyCard;
     }
 
+    /**
+     * Set Card that needs to be bought.
+     * @param buyCard
+     */
     public void setBuyCard(Card buyCard) {
         this.buyCard = buyCard;
     }
 
-
+    /**
+     * Uses the GameUpdateMessage to set all changed values in gamehandler. Multiple changes can be handled
+     * in one message if required.
+     * @param msg
+     */
     public void updateGameHandler(GameUpdateMsg msg) {
         setBoard(msg.getBoard());
         setPlayedCard(msg.getPlayedCard());
@@ -177,6 +211,10 @@ public class GameHandler {
         }
     }
 
+    /**
+     * Checks if the Action card can be bought and adds it to the players discard deck.
+     * @param card
+     */
     public void buyCard(ActionCard card) {
         if (canBuyCard(card)) {
             Card boughtCard;
@@ -189,6 +227,10 @@ public class GameHandler {
 
     }
 
+    /**
+     * Checks if the Estate card can be bought and adds it to the players discard deck.
+     * @param card
+     */
     public void buyCard(EstateCard card) {
         if (canBuyCard(card)) {
             Card boughtCard;
@@ -201,6 +243,10 @@ public class GameHandler {
         }
     }
 
+    /**
+     * Checks if the Money card can be bought and adds it to the players discard deck.
+     * @param card
+     */
     public void buyCard(MoneyCard card) {
         if (canBuyCard(card)) {
             Card boughtCard;
@@ -212,6 +258,10 @@ public class GameHandler {
         }
     }
 
+    /**
+     * Used to call the correct method.
+     * @param card
+     */
     public void buyCard(Card card) {
         if (card instanceof MoneyCard) {
             buyCard((MoneyCard) card);
@@ -222,8 +272,15 @@ public class GameHandler {
         }
     }
 
-    //LKDoc: new buy methods cause I can't cast on Cards - ActionType has only ActionCard and not Card
+
+
+    /**
+     * Uses enum Type ActionType to buy Action cards.
+     * @param actionType
+     * @return
+     */
     public Card buyCard(ActionType actionType) {
+        //LKDoc: new buy methods cause I can't cast on Cards - ActionType has only ActionCard and not Card
         Card checkCard = getBoard().getActionField().getActionCard(actionType);
         if (canBuyCard(checkCard)) {
             Card boughtCard = getBoard().getActionField().pickCard(actionType);
@@ -239,6 +296,11 @@ public class GameHandler {
         return null;
     }
 
+    /**
+     * Uses the Enum Type EstateType to buy Estate cards.
+     * @param estateType
+     * @return
+     */
     public Card buyCard(EstateType estateType) {
         Card checkCard = getBoard().getBuyField().getEstateCard(estateType);
         if (canBuyCard(checkCard)) {
@@ -254,6 +316,11 @@ public class GameHandler {
         return null;
     }
 
+    /**
+     * Uses enum Type MoneyType to buy Money cards.
+     * @param moneyType
+     * @return
+     */
     public Card buyCard(MoneyType moneyType) {
         Card checkCard = getBoard().getBuyField().getMoneyCard(moneyType);
         if (canBuyCard(checkCard)) {
@@ -268,25 +335,46 @@ public class GameHandler {
         return null;
     }
 
+    /**
+     * Called after buying cards. Modifies coin and Buy values.
+     * @param boughtCard
+     */
     private void calculateCoinsOnActiveUser(Card boughtCard) {
         int oldCoins = getActiveUser().getGamePoints().getCoins();
         getActiveUser().getGamePoints().setCoins(oldCoins - boughtCard.getPrice());
         getActiveUser().getGamePoints().modifyBuyAmounts(-1);
     }
 
+    /**
+     * Return true if turn is in Action Phase.
+     * @return
+     */
     private boolean isActionPhase() {
         return turnState.equals(PlayStatus.ACTION_PHASE);
     }
 
+    /**
+     * Return true if turn is in Buy Phase.
+     * @return
+     */
     private boolean isBuyPhase() {
         return turnState.equals(PlayStatus.BUY_PHASE);
     }
 
+    /**
+     * Return true if game is in No Play Phase.
+     * @return
+     */
     private boolean isNoPlayPhase() {
         return turnState.equals(PlayStatus.NO_PLAY_PHASE);
     }
 
-
+    /**
+     * Private helper method to check if card can be bought.
+     * Checks coin value and Buy value of active user.
+     * @param card
+     * @return
+     */
     private boolean canBuyCard(Card card) {
         if (card == null) {
             Log.info("Card is null.");
@@ -299,18 +387,34 @@ public class GameHandler {
         return false;
     }
 
+    /**
+     * Return current turn state.
+     * @return
+     */
     public PlayStatus getTurnState() {
         return turnState;
     }
 
+    /**
+     * Set TurnState with the Enum PlayStatus.
+     * @param turnState
+     */
     public void setTurnState(PlayStatus turnState) {
         this.turnState = turnState;
     }
 
+    /**
+     * Return active user of the Game.
+     * @return
+     */
     public User getActiveUser() {
         return game.getActivePlayer();
     }
 
+    /**
+     * Checks if the active user has an Action Card on hand.
+     * @return
+     */
     public boolean checkHandCards() {
         for (int i = 0; i < getActiveUser().getUserCards().getHandCards().size(); i++) {
             if (getActiveUser().getUserCards().getHandCards().get(i) instanceof ActionCard) {
@@ -320,30 +424,57 @@ public class GameHandler {
         return false;
     }
 
+    /**
+     * Set Game. Used for updating.
+     */
     private void setGame() {
         this.game = Game.getGame();
     }
 
+    /**
+     * Return the card that is played.
+     * @return
+     */
     public Card getPlayedCard() {
         return playedCard;
     }
 
+    /**
+     * Set the card that is to be played.
+     * @param playedCard
+     */
     public void setPlayedCard(Card playedCard) {
         this.playedCard = playedCard;
     }
 
+    /**
+     * Return the current board.
+     * @return
+     */
     public Board getBoard() {
         return board;
     }
 
+    /**
+     * Set the actual Board.
+     * @param board
+     */
     public void setBoard(Board board) {
         this.board = board;
     }
 
+    /**
+     * Used to check if a new turn was started.
+     * @return
+     */
     public boolean isNewTurn() {
         return newTurn;
     }
 
+    /**
+     * Set that a new turn should be started.
+     * @param newTurn
+     */
     public void setNewTurn(boolean newTurn) {
         this.newTurn = newTurn;
     }
