@@ -36,7 +36,6 @@ public class GameHandler {
     private CardLogic cardLogic;
 
 
-
     private boolean newTurn;
 
     /**
@@ -291,8 +290,6 @@ public class GameHandler {
             }
             return boughtCard;
         }
-
-
         return null;
     }
 
@@ -424,6 +421,18 @@ public class GameHandler {
         return false;
     }
 
+    public User declareWinner() {
+        int max = 0;
+        User user = null;
+        for (int i = 0; i < game.getPlayerList().size(); i++) {
+            if (game.getPlayerList().get(i).getGamePoints().getWinningPoints() > max) {
+                max = game.getPlayerList().get(i).getGamePoints().getWinningPoints();
+                user = game.getPlayerList().get(i);
+            }
+        }
+        return user;
+    }
+  
     /**
      * Set Game. Used for updating.
      */

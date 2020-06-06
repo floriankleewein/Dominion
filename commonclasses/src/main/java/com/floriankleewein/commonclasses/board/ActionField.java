@@ -9,6 +9,7 @@ import java.util.List;
 
 public class ActionField {
     private List<Card> actionCardsToBuy;
+    private List<ActionType> notAvailableCards;
 
     public ActionField() {
         init();
@@ -22,10 +23,18 @@ public class ActionField {
         this.actionCardsToBuy = actionCardsToBuy;
     }
 
+    public List<ActionType> getNotAvailableCards() {
+        return notAvailableCards;
+    }
+
+    public void setNotAvailableCards(List<ActionType> notAvailableCards) {
+        this.notAvailableCards = notAvailableCards;
+    }
+
     private void init() {
         this.actionCardsToBuy = new ArrayList<>();
-        // Hier sind alle Action Karten definiert => von jeder Karte gibt es 10
-        for(int i = 0; i < 10; i++) {
+        // Hier sind alle Action Karten definiert => von jeder Karte gibt es 10 FM: Fürs testen die Karten auf zwei reduziert, da es sonst sehr lange dauert
+        for (int i = 0; i < 10; i++) {
             this.actionCardsToBuy.add(new ActionCard(2, ActionType.KELLER));
             this.actionCardsToBuy.add(new ActionCard(2, ActionType.BURGGRABEN));
             this.actionCardsToBuy.add(new ActionCard(3, ActionType.DORF));
@@ -37,14 +46,15 @@ public class ActionField {
             this.actionCardsToBuy.add(new ActionCard(5, ActionType.MARKT));
             this.actionCardsToBuy.add(new ActionCard(5, ActionType.MINE));
         }
+        this.notAvailableCards = new ArrayList<>();
     }
 
-    private boolean isTypeExistsInField(ActionType actionType){
+    private boolean isTypeExistsInField(ActionType actionType) {
         boolean typeFound = false;
-        for(int i = 0; i < this.actionCardsToBuy.size(); i++) {
-            if(this.actionCardsToBuy.get(i) instanceof ActionCard) {
+        for (int i = 0; i < this.actionCardsToBuy.size(); i++) {
+            if (this.actionCardsToBuy.get(i) instanceof ActionCard) {
                 ActionCard actionCard = (ActionCard) this.actionCardsToBuy.get(i);
-                if(actionCard.getActionType() == actionType){
+                if (actionCard.getActionType() == actionType) {
                     typeFound = true;
                     return typeFound;
                 }
@@ -60,12 +70,12 @@ public class ActionField {
         int cardIndex = 0;
 
         // Überprüfe ob der ActionType überhaupt noch im Stapel existiert
-        if(isTypeExistsInField(actionType)){
-            for(int i = 0; i < this.actionCardsToBuy.size(); i++) {
-                if(this.actionCardsToBuy.get(i) instanceof ActionCard) {
+        if (isTypeExistsInField(actionType)) {
+            for (int i = 0; i < this.actionCardsToBuy.size(); i++) {
+                if (this.actionCardsToBuy.get(i) instanceof ActionCard) {
                     ActionCard actionCard = (ActionCard) this.actionCardsToBuy.get(i);
                     // Wenn der Kartentyp gefunden wird dann merke Index
-                    if(actionCard.getActionType() == actionType) {
+                    if (actionCard.getActionType() == actionType) {
                         card = actionCard;
                         cardIndex = i;
                         cardFound = true;
@@ -74,7 +84,7 @@ public class ActionField {
             }
 
             // Hier wird dann die Karte gelöscht
-            if(cardFound) {
+            if (cardFound) {
                 this.actionCardsToBuy.remove(cardIndex);
             }
 
@@ -90,8 +100,8 @@ public class ActionField {
         Card card = null;
 
         // Überprüfe ob der ActionType überhaupt noch im Stapel existiert
-        if(isTypeExistsInField(actionType)){
-            for(int i = 0; i < this.actionCardsToBuy.size(); i++) {
+        if (isTypeExistsInField(actionType)) {
+            for (int i = 0; i < this.actionCardsToBuy.size(); i++) {
                 if (this.actionCardsToBuy.get(i) instanceof ActionCard) {
                     ActionCard actionCard = (ActionCard) this.actionCardsToBuy.get(i);
                     // Wenn der Kartentyp gefunden wird dann merke Index
@@ -102,9 +112,10 @@ public class ActionField {
             }
             return card;
         } else {
-            //falls benötigt
+            if (!notAvailableCards.contains(actionType)) {
+                this.notAvailableCards.add(actionType);
+            }
             return card;
         }
     }
-
 }

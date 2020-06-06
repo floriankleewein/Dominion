@@ -128,6 +128,18 @@ public class UserClassTest {
         Assert.assertEquals(0, this.user.getUserCards().getDiscardCards().size());
 
     }
+    @Test
+    public void addDeckCardtoHandCard () {
+        this.user.getUserCards().setDeck(fillwithTestCards(4));
+        this.user.getUserCards().setDiscardCards(fillwithTestCards(6));
+        this.user.getUserCards().setHandCards(fillwithTestCards(2));
+
+        this.user.getUserCards().addDeckCardtoHandCard(3);
+
+        Assert.assertEquals(7, this.user.getUserCards().getDeck().size());
+        Assert.assertEquals(5, this.user.getUserCards().getHandCards().size());
+        Assert.assertEquals(0, this.user.getUserCards().getDiscardCards().size());
+    }
 
     //Test are only for Coverage
     @Test

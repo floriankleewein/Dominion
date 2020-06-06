@@ -45,6 +45,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
+        /**
+         * FKDoc: in this thread the client tries to connect to the server.
+         */
         client = ClientConnector.getClientConnector();
         Thread thread = new Thread(() -> {
             try {
@@ -53,10 +56,17 @@ public class MainActivity extends AppCompatActivity {
                 Log.error("Classregistration failed! critical eror");
                 Thread.currentThread().interrupt();
             }
+            /**
+             * FKDoc: here the first buttoncheck happens.
+             */
             client.checkButtons();
         });
         thread.start();
 
+        /**
+         * FKDoc: after the buttoncheck, this callback is called. it sets the corresponding values that were
+         *        returned by the server via the correct message.
+         */
         client.registerCallback(CheckButtonsMsg.class,(msg->{
             CheckButtonsMsg temp = (CheckButtonsMsg)msg;
 
@@ -79,7 +89,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+        /**
+         * FKDoc: if a player was added successfully, this callback is called. the correct feedback is set in the UI.
+         *        you will also land in the next activity.
+         */
         client.registerCallback(AddPlayerSuccessMsg.class, (msg -> {
             runOnUiThread(new Runnable() {
                 @Override
@@ -91,6 +104,9 @@ public class MainActivity extends AppCompatActivity {
             });
         }));
 
+        /**
+         * FKDoc: this callback is called when the name is already in use. correct message is shown in the UI.
+         */
         client.registerCallback(AddPlayerNameErrorMsg.class, (msg -> {
             runOnUiThread(new Runnable() {
                 @Override
@@ -101,6 +117,9 @@ public class MainActivity extends AppCompatActivity {
             });
         }));
 
+        /**
+         * FKDoc: in case the player maximum is already reached, thats the callback for it.
+         */
         client.registerCallback(AddPlayerSizeErrorMsg.class, (msg -> {
             runOnUiThread(new Runnable() {
                 @Override
@@ -111,7 +130,9 @@ public class MainActivity extends AppCompatActivity {
             });
         }));
 
-
+        /**
+         * FKDoc: after typing in your name the client starts an attempt to add your user via the name that was input.
+         */
         btnJoin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,6 +146,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        /**
+         * FKDoc: with this callback the client tries to reset the playerList of the game.
+         */
         btnReset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
