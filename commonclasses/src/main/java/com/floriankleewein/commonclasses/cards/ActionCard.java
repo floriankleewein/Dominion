@@ -28,6 +28,10 @@ public class ActionCard extends Card {
         this.actionType = actionType;
     }
 
+    /**
+     * LKDoc: Action ist am Anfang null - Werte werden abhängig vom ActionType vergeben
+     * @return the action
+     */
     private Action calculateAction() {
         Action action = null;
 
@@ -36,8 +40,8 @@ public class ActionCard extends Card {
                 setId(0);
                 action = new Action();
                 action.setCardCount(2);
-                action.setThrowEveryUserCardsUntilThreeLeft(false); // Da die einzige Angriffskarte die Miliz ist hat diese keine Wirkung auf den Spieler und somit muss der boolean für diesen Spieler false sein
-                // Wenn ein Mitspiler eine Angriffskarte ausspielt, darfst du diese Karte aus deiner Hand aufdecken. Der Angriff hat damit keine Wirkung auf dich.
+                action.setThrowEveryUserCardsUntilThreeLeft(false); /*LKDoc: Da die einzige Angriffskarte die Miliz ist hat diese keine Wirkung auf den Spieler und somit muss der boolean für diesen Spieler false sein
+                Wenn ein Mitspiler eine Angriffskarte ausspielt, darfst du diese Karte aus deiner Hand aufdecken. Der Angriff hat damit keine Wirkung auf dich.*/
                 break;
 
             case DORF:
@@ -45,7 +49,7 @@ public class ActionCard extends Card {
                 action = new Action();
                 action.setCardCount(1);
                 action.setActionCount(2);
-                // +1 Karte, +2 Aktionen
+                //LKDoc: +1 Karte, +2 Aktionen
                 break;
 
             case HOLZFAELLER:
@@ -53,16 +57,16 @@ public class ActionCard extends Card {
                 action = new Action();
                 action.setBuyCount(1);
                 action.setMoneyValue(2);
-                // +1 Kauf, +2 Geld
+                //LKDoc: +1 Kauf, +2 Geld
                 break;
 
             case KELLER: //
                 setId(3);
                 action = new Action();
                 action.setActionCount(1);
-                action.setThrowAnyAmountCards(true); // Maximale Anzahl an Handkarten kann hier abgelegt werden => Input für den User der auf diese Anzahl begrenzt
-                // +1 Aktion, Lege eine beliebeige Anzahl an Handkarten ab.
-                // Ziehe für jede abgelegte Karte eine Karte nach.
+                action.setThrowAnyAmountCards(true); /*LKDoc: Maximale Anzahl an Handkarten kann hier abgelegt werden => Input für den User der auf diese Anzahl begrenzt
+                +1 Aktion, Lege eine beliebeige Anzahl an Handkarten ab.
+                Ziehe für jede abgelegte Karte eine Karte nach.*/
                 break;
 
             case WERKSTATT: //
@@ -70,14 +74,14 @@ public class ActionCard extends Card {
                 action = new Action();
                 action.setBuyCount(1);
                 action.setMoneyValue(4);
-                // +4 geld
+                //LKDoc: +4 geld
                 break;
 
             case SCHMIEDE:
                 setId(5);
                 action = new Action();
                 action.setCardCount(3);
-                // +3 Karten
+                //LKDoc: +3 Karten
                 break;
 
             case MARKT:
@@ -87,7 +91,7 @@ public class ActionCard extends Card {
                 action.setActionCount(1);
                 action.setMoneyValue(1);
                 action.setBuyCount(1);
-                // +1 Karte, +1 Aktion, +1 Kauf, +1 Geld
+                //LKDoc: +1 Karte, +1 Aktion, +1 Kauf, +1 Geld
                 break;
 
             case HEXE: //
@@ -95,7 +99,7 @@ public class ActionCard extends Card {
                 action = new Action();
                 action.setCardCount(1);
                 action.setCurseCount(1);
-                // +2 Karten, Jeder Mitspieler muss sich ine Fluchkarte nehmen.
+                //LKDoc: +2 Karten, Jeder Mitspieler muss sich ine Fluchkarte nehmen.
                 break;
 
             case MINE: //
@@ -104,25 +108,21 @@ public class ActionCard extends Card {
                 action.setCardCount(-1);
                 action.setTakeMoneyCardThatCostThreeMoreThanOld(true);
                 action.setTakeCardOnHand(true);
-                // Entsorge eine Geldkarte aus deiner Hand.
-                // Nimm dir eine Geldkarte, die bis zu 3 mehr kostet.
-                // Nimm diese Geldkarte sofort auf die Hand.
+                /*LKDoc: Entsorge eine Geldkarte aus deiner Hand.
+                Nimm dir eine Geldkarte, die bis zu 3 mehr kostet.
+                Nimm diese Geldkarte sofort auf die Hand.*/
                 break;
 
             case MILIZ:
-                setId(9);// Miliz ist eine Angriffskarte
+                setId(9);//LKDoc: Miliz ist eine Angriffskarte
                 action = new Action();
                 action.setMoneyValue(2);
                 action.setThrowEveryUserCardsUntilThreeLeft(true);
-                // +2 Geld
-                // Jeder Mitspieler legt Karten ab, bis er nur noch drei Karten auf der Hand hat.
+                /* +2 Geld
+                Jeder Mitspieler legt Karten ab, bis er nur noch drei Karten auf der Hand hat.*/
                 break;
 
         }
         return action;
-
-        // bei 2 Spielern je 8 Karten
-        // bei 3-4 Spielern je 12 Karten
-        // weitere mögliche Aktionskarten: Umbau, Laboratorium, Jahrmarkt
     }
 }

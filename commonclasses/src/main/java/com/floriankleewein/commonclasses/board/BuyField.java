@@ -27,24 +27,23 @@ public class BuyField {
         this.cardsToBuy = cardsToBuy;
     }
 
+    /**
+     * LKDoc: Init List mit Provinzen und Währung
+     */
     public void init() {
         this.cardsToBuy = new ArrayList<>();
-        // Init List mit Provinzen und Währung
         // 60 x Kupfer, 40 x Silber, 30 x Gold
         for (int i = 0; i < 30; i++) {
-            // Gold
             this.cardsToBuy.add(new MoneyCard(6, 3, MoneyType.GOLD));
         }
         for (int i = 0; i < 40; i++) {
-            // Silber
             this.cardsToBuy.add(new MoneyCard(3, 2, MoneyType.SILBER));
         }
         for (int i = 0; i < 60; i++) {
-            // Kupfer
             this.cardsToBuy.add(new MoneyCard(0, 1, MoneyType.KUPFER));
         }
 
-        // je Provinz 12 Karten
+        //LKDoc: je Provinz 12 Karten
         for (int i = 0; i < 12; i++) {
             this.cardsToBuy.add(new EstateCard(8, 6, EstateType.PROVINZ));
             this.cardsToBuy.add(new EstateCard(5, 3, EstateType.HERZOGTUM));
@@ -55,6 +54,11 @@ public class BuyField {
         this.notAvailableCards = new LinkedList<>();
     }
 
+    /**
+     * LKDoc: Überprüfe ob der Typ (ActionCard) noch in der Liste existiert
+     * @param estateType
+     * @return
+     */
     private boolean isTypeExistsInField(EstateType estateType) {
         boolean typeFound = false;
         for (int i = 0; i < this.cardsToBuy.size(); i++) {
@@ -83,6 +87,11 @@ public class BuyField {
         return typeFound;
     }
 
+    /**
+     * LKDoc: pickCard Method to buy a card
+     * @param moneyType
+     * @return
+     */
     public Card pickCard(MoneyType moneyType) {
         Card card = null;
         boolean cardFound = false;
@@ -152,7 +161,11 @@ public class BuyField {
         }
     }
 
-    //LKDoc: Methoden werden von Emanuel benötigt
+    /**
+     * LKDoc - gibt die Karte zurück (Methode wird für die buyCard Methode im Gamehandler benötigt)
+     * @param moneyType
+     * @return
+     */
     public Card getMoneyCard(MoneyType moneyType) {
         Card card = null;
 
@@ -169,7 +182,6 @@ public class BuyField {
             }
             return card;
         } else {
-            //falls benötigt
             return null;
         }
     }

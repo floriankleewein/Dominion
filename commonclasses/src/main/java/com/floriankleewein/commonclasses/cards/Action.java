@@ -1,17 +1,20 @@
 package com.floriankleewein.commonclasses.cards;
 
+/**
+ * LKDoc
+ *
+ */
 public class Action {
-    private int actionCount; // Man darf eine Action wie Karten ablegen durchführen (dieser Wert beschreibt die Aktionen die man dürführen darf)
-    private int cardCount; // Nimm irgend eine Karte (dieser Wert beschreibt die Anzahl der Karten die man nehmen darf)
-    private int buyCount; // Kauf dir eine Actions wir auch Provinz oder Geld (dieser Wert beschreibt die Anzahl der Karten die man kaufen darf)
-    private int moneyValue; // Nimm eine Kupfer, Silber oder Gold Karte je nach Wert
-    private int maxMoneyValue; // Maximaler Karten Wert
-    private int curseCount; // Das sind die Anzahl an Fluch Karten die genommen werden müssen
+    private int actionCount;    // Man darf eine Action wie Karten ablegen durchführen (dieser Wert beschreibt die Aktionen die man dürführen darf)
+    private int cardCount;      // Nimm irgend eine Karte (dieser Wert beschreibt die Anzahl der Karten die man nehmen darf)
+    private int buyCount;       // Kauf dir eine Actions wir auch Provinz oder Geld (dieser Wert beschreibt die Anzahl der Karten die man kaufen darf)
+    private int moneyValue;     // Nimm eine Kupfer, Silber oder Gold Karte je nach Wert
+    private int maxMoneyValue;  // Maximaler Karten Wert
+    private int curseCount;     // Das sind die Anzahl an Fluch Karten die genommen werden müssen
     private boolean takeCardOnHand;
     private boolean throwAnyAmountCards;
     private boolean takeMoneyCardThatCostThreeMoreThanOld;
     private boolean throwEveryUserCardsUntilThreeLeft;
-    // Füge andere Eingenschaften später hinzu
 
     public int getActionCount() {
         return actionCount;
