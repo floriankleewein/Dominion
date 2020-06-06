@@ -243,7 +243,8 @@ public class GameHandler {
     }
 
     /**
-     * Checks if the Money card can be bought and adds it to the players discard deck.
+     * Checks if the Money card can be bought and
+     * adds it to the players discard deck.
      * @param card
      */
     public void buyCard(MoneyCard card) {
