@@ -202,8 +202,6 @@ public class ClientConnector {
                         callbackMap.get(StartGameMsg.class).callback(msg);
                         Game.setGame(msg.getGame());
                         gameHandler = msg.getGameHandler();
-                    } else {
-                        //TODO display error in starting game
                     }
                 }
             }

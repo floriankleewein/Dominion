@@ -29,7 +29,6 @@ public class GameHandler {
     private Game game;
     private static final  int CON_MONEY_CARDS = 7;
     private static final int CON_ANWESEN_CARDS = 3;
-    private static final String BOUGHT_CARD_TYPE = "Bought card type: ";
     private Board board;
     private Card playedCard;
     private Card buyCard;
