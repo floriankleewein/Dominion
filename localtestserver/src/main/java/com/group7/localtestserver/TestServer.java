@@ -302,7 +302,6 @@ public class TestServer {
         if (setupGame()) {
             msg.setFeedbackUI(0);
             msg.setGame(gamehandler.getGame());
-            // Send message to all clients, TODO they need to be in lobby
             server.sendToAllTCP(msg);
             ActivePlayerMessage activePlayerMsg = new ActivePlayerMessage();
             activePlayerMsg.setGame(getGame());
@@ -377,7 +376,7 @@ public class TestServer {
         GameUpdateMsg gameUpdateMsg = (GameUpdateMsg) object;
         if (gameUpdateMsg.getGameHandler() != null) {
             updateAll(gameUpdateMsg);
-            gameUpdateMsg.setGameHandler(gamehandler); // TODO take care on GameupdateMessage
+            gameUpdateMsg.setGameHandler(gamehandler);
             server.sendToAllTCP(gameUpdateMsg);
         }
     }

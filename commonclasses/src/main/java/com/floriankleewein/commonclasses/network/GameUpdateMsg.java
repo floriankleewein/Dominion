@@ -10,8 +10,6 @@ import com.floriankleewein.commonclasses.gamelogic.GameHandler;
 import com.floriankleewein.commonclasses.gamelogic.PlayStatus;
 import com.floriankleewein.commonclasses.user.User;
 
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class GameUpdateMsg extends BaseMessage {
@@ -23,7 +21,6 @@ public class GameUpdateMsg extends BaseMessage {
     private Card boughtCard;
     private GameHandler gameHandler;
     private PlayStatus turnStatus;
-    private Map<User, Integer> victoryPointsChange = new HashMap<>();
 
     private MoneyType moneyTypeClicked;
     private ActionType actionTypeClicked;
@@ -33,11 +30,6 @@ public class GameUpdateMsg extends BaseMessage {
     private boolean newHandCards;
 
     public GameUpdateMsg() {
-        /*
-        for (User u : game.getPlayerList()) {
-            victoryPointsChange.put(u, 0);
-        }
-        */
         newHandCards = false;
     }
 
@@ -57,26 +49,12 @@ public class GameUpdateMsg extends BaseMessage {
         this.clickedCard = clickedCard;
     }
 
-    public int getVictoryPointsChange(User user) {
-        for (Map.Entry<User, Integer> entry : victoryPointsChange.entrySet()) {
-            if (entry.getKey().getUserName().equals(user.getUserName())) {
-                return entry.getValue();
-            }
-        }
-        return 0;
-    }
-
     public GameHandler getGameHandler() {
         return gameHandler;
     }
 
     public void setGameHandler(GameHandler gameHandler) {
         this.gameHandler = gameHandler;
-    }
-
-    public void addVictoryPointsChange(User user, int points) {
-        int pts = victoryPointsChange.get(user);
-        victoryPointsChange.replace(user, pts, pts + points);
     }
 
     public Card getPlayedCard() {
