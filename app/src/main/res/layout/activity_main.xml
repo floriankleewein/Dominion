@@ -68,6 +68,7 @@
         android:ems="10"
         android:hint="Spielername"
         android:inputType="textPersonName"
+        android:textAlignment="center"
         android:textColor="#FFFFFF"
         android:textColorHint="#F6F6F6"
         app:layout_constraintBottom_toBottomOf="parent"

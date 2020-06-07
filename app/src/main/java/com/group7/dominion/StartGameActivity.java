@@ -25,7 +25,6 @@ import java.util.ArrayList;
 public class StartGameActivity extends AppCompatActivity {
 
     Button btnStart;
-    Button btnshowPlayers;
     ClientConnector client;
 
 
@@ -37,7 +36,6 @@ public class StartGameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_or_join);
         btnStart = findViewById(R.id.btn_start);
-        btnshowPlayers = findViewById(R.id.ShowPlayer);
     }
 
     @Override
@@ -79,7 +77,7 @@ public class StartGameActivity extends AppCompatActivity {
                     names.clear();
                     names.addAll(((UpdatePlayerNamesMsg) msg).getNameList());
                     listViewAdapter.notifyDataSetChanged();
-                    if (names.size() == 2) {
+                    if (names.size() == 4) {
                         Thread thread1 = new Thread(new Runnable() {
                             @Override
                             public void run() {
