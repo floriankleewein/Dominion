@@ -30,17 +30,24 @@ public class ActionDialogHandler extends AppCompatDialogFragment {
     private static final String MONEYVALUE_CONST = ", Money Value: " ;
     private static final String ACTIONCOUNT_CONST = ", Action Count: ";
 
+    /**
+     * LKDoc:   AlertDialogBuilder für die Info-Karte die dem Spieler mehr Informationen über die Aktionskarte
+     *          liefern soll. Der Spieler kann anschließend die Karte kaufen ("Buy") oder aber das Fenster wieder schließen ("Close")
+     *          und eine andere Karte wählen
+     * @param savedInstanceState
+     * @return builder (es wird alles wieder zum Builder returnt)
+     */
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                 .setTitle("Buy Action Card")
                 .setMessage("Do you want to buy this card?")
                 .setPositiveButton("Buy", (dialog, which) -> {
-                    //LKDoc: Buy the Card
+                    //LKDoc: Karte kaufen
                     BuyCardMsg buyCardMsg =new BuyCardMsg();
                     buyCardMsg.setActionTypeClicked(actionType);
                     sendUpdate(buyCardMsg);
-                    //LKDoc: UIThread is in the Dominion Activity
+                    //LKDoc: UIThread ist in der Dominion Activity
                 })
                 .setNegativeButton("Close", (dialog, which) -> {
                     dialog.cancel();
@@ -54,6 +61,11 @@ public class ActionDialogHandler extends AppCompatDialogFragment {
         return builder.create();
     }
 
+    /**
+     * LKDoc: setOnClickListener für die einzelnen Aktionskarten
+     * @param activity
+     * @param fragmentManager wird benötigt wegen dem ErrorDialogHandler
+     */
     public void init(Activity activity, FragmentManager fragmentManager) {
         // Hexe
         ImageButton buttonHexe;
@@ -61,11 +73,12 @@ public class ActionDialogHandler extends AppCompatDialogFragment {
         buttonHexe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //LKDoc: fragmentManager muss mitgegeben werden
                 onClickHexe(fragmentManager);
             }
         });
 
-        // Burggraben
+        //Burggraben
         ImageButton buttonBurggraben;
         buttonBurggraben = activity.findViewById(R.id.btn_burggraben);
         buttonBurggraben.setOnClickListener(new View.OnClickListener() {
@@ -154,6 +167,11 @@ public class ActionDialogHandler extends AppCompatDialogFragment {
         });
     }
 
+    /**
+     * LKDoc: OnClick Methoden. .show --> wird vom Fragmentmanager gebraucht (Lifecycle)
+     * show ruft daher den entsprechenden Dialog für die entsprechende Karte auf
+     * @param fragmentManager muss ebenfalls übergeben werden, wegen dem OnClick
+     */
     private void onClickHexe(FragmentManager fragmentManager) {
         this.fragmentManager = fragmentManager;
         this.actionType = ActionType.HEXE;
@@ -222,6 +240,10 @@ public class ActionDialogHandler extends AppCompatDialogFragment {
         this.show(fragmentManager, "werkstattDialog");
     }
 
+    /**
+     * LKDoc: sende Update der msg an clientConnector --> ClientConnector.class
+     * @param buyCardMsg
+     */
     private void sendUpdate(BuyCardMsg buyCardMsg){
         //LKDoc: Sonarcloud wants to have lambda
         Thread th = new Thread(() -> clientConnector.sendbuyCard(buyCardMsg));

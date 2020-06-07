@@ -26,6 +26,11 @@ public class ImageButtonHandler {
     private static final String ESTATECARD_CONST = "EstateCard";
     private static final String ESTATETYPE_CONST = "EstateType: ";
 
+    /**
+     * LKDoc:   setOnClickListener für die einzelnen Aktionskarten
+     * @param activity
+     * @param fragmentManager wird benötigt wegen dem ErrorDialogHandler
+     */
     public void init(Activity activity, FragmentManager fragmentManager) {
         //Gold
         ImageButton buttonGold;
@@ -98,7 +103,17 @@ public class ImageButtonHandler {
         });
     }
 
+    /**
+     * LKDoc:   onClick Methoden für die Geld-, Fluch-, & Provinzkarten
+     *          wie im ActionDialogHandler:
+     *              1) zuerst wird überprüft ob die Karte gekauft werden kann (genug Geld) = Toast
+     *              2) ist die Karte zusätzlich null bedeutet dies es sind keine mehr im Stapel und der ErrorDialogHandler wird aufgerufen (braucht Fragment)
+     *              3) ist alles ok kann die Karte gekauft werden
+     * @param activity
+     * @param fragmentManager
+     */
     private void onClickGold(Activity activity, FragmentManager fragmentManager) {
+        //LKDoc: Karte kaufen
         BuyCardMsg gameUpdateMsg = new BuyCardMsg();
         gameUpdateMsg.setMoneyTypeClicked(MoneyType.GOLD);
         sendUpdate(gameUpdateMsg);
@@ -111,7 +126,6 @@ public class ImageButtonHandler {
                     Card card = gameUpdateMsg1.getBoughtCard();
                     if (card == null) {
                         Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
-
                     } else if (card == null && gameUpdateMsg1.isCantBuyCard()) {
                         ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
                         errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
@@ -162,7 +176,6 @@ public class ImageButtonHandler {
                     BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
                     Card card = gameUpdateMsg1.getBoughtCard();
                     if (card == null && !gameUpdateMsg1.isCantBuyCard()) {
-
                         Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
                     } else if (card == null && gameUpdateMsg1.isCantBuyCard()) {
                         ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
@@ -238,7 +251,6 @@ public class ImageButtonHandler {
                     BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
                     Card card = gameUpdateMsg1.getBoughtCard();
                     if (card == null) {
-
                         Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
                     } else if (card == null && gameUpdateMsg1.isCantBuyCard()) {
                         ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
@@ -265,7 +277,6 @@ public class ImageButtonHandler {
                     BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
                     Card card = gameUpdateMsg1.getBoughtCard();
                     if (card == null) {
-
                         Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
                     } else if (card == null && gameUpdateMsg1.isCantBuyCard()) {
                         ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
@@ -279,6 +290,10 @@ public class ImageButtonHandler {
         }));
     }
 
+    /**
+     * LKDoc: sende Update der msg an clientConnector --> ClientConnector.class
+     * @param msg
+     */
     private void sendUpdate(BuyCardMsg msg) {
         //LKDoc: Sonarcloud wanted a lambda
         Thread th = new Thread(() -> clientConnector.sendbuyCard(msg));

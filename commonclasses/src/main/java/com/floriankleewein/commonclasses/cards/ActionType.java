@@ -1,5 +1,8 @@
 package com.floriankleewein.commonclasses.cards;
 
+/**
+ * LKDoc: Enums für die Actionskarten
+ */
 public enum ActionType {
     BURGGRABEN,
     DORF,

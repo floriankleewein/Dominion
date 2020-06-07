@@ -43,10 +43,7 @@ import java.util.ArrayList;
 
 public class DominionActivity extends AppCompatActivity implements ChatFragment.OnChatMessageArrivedListener {
 
-    private Button chatButton;
-    private FrameLayout fragmentContainer;
     private ChatFragment chatFragment;
-    private FragmentTransaction trans;
     private ClientConnector clientConnector;
     private HandCardsHandler cardsHandler;
     private TextView playerScores;
@@ -56,7 +53,6 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
 
     //Image Buttons
     private ImageButtonHandler imageButtonHandler;
-
 
     //Pop-up Info Dialogs
     private ActionDialogHandler actionDialogHandler;
@@ -69,11 +65,14 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dominion);
         cardsHandler = new HandCardsHandler(this);
+
+        Button chatButton;
         chatButton = findViewById(R.id.chat_Button);
 
-        fragmentContainer = findViewById(R.id.chatFragmentContainer);
+        FrameLayout fragmentContainer = findViewById(R.id.chatFragmentContainer);
 
         this.clientConnector = ClientConnector.getClientConnector();
+
 
         chatButton.setOnClickListener(view -> openFragment());
 
@@ -149,8 +148,8 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
 
         clientConnector.registerCallback(ChatMessage.class, (msg -> {
             runOnUiThread(() -> {
-                String ChatMessages = ((ChatMessage) msg).getMessage();
-                Toast.makeText(getApplicationContext(), "Nachricht: " + ChatMessages, Toast.LENGTH_SHORT).show();
+                String chatMessages = ((ChatMessage) msg).getMessage();
+                Toast.makeText(getApplicationContext(), "Nachricht: " + chatMessages, Toast.LENGTH_SHORT).show();
             });
         }));
 
@@ -186,6 +185,12 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
 
         final String ERRORDIALOG_CONST = "errorDialog";
 
+        /**
+         * LKDoc:   großer UIThread für den ActionDialogHandler. Hier wird die msg vom Server abgefangen
+         *              1) zuerst wird überprüft ob die Karte gekauft werden kann (genug Geld) = Toast
+         *              2) ist die Karte zusätzlich null bedeutet dies es sind keine mehr im Stapel und der ErrorDialogHandler wird aufgerufen (braucht Fragment)
+         *              3) ist alles ok kann die Karte gekauft werden
+         */
         clientConnector.registerCallback(BuyCardMsg.class, (msg -> {
             runOnUiThread(() -> {
                         BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
@@ -324,7 +329,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
 
     //führt den Wechsel von Spiel zu Chat durch
     public void openFragment() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager = getSupportFragmentManager();
         FragmentTransaction trans = fragmentManager.beginTransaction();
         trans.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_right,
                 R.anim.enter_from_right, R.anim.exit_to_right);

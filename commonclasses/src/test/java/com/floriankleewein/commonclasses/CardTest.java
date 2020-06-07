@@ -36,6 +36,11 @@ public class CardTest {
 
     }
 
+    /**
+     * LKDoc:   ActionCard testen
+     *          ActionCard: Integers/Booleans rausholen + vergleichen
+     *          ob es mit den expected Werten zusammenpasst
+     */
     @Test
     public void testActionCardCalculationAction() {
         ActionCard actionCard = new ActionCard(1, ActionType.BURGGRABEN);
@@ -79,6 +84,10 @@ public class CardTest {
         assertActionBooleans(actionCard, false, false, false, true);
     }
 
+    /**
+     * LKDoc:   Testet die Card allgemein
+     *          Preis wird gesetzt - richtig? Preis wird erneut gesetzt
+     */
     @Test
     public void testCard() {
         Card card = new Card(1);
@@ -87,6 +96,11 @@ public class CardTest {
         Assert.assertEquals(2, card.getPrice());
     }
 
+
+    /**
+     * LKDoc:   Diese Tests testen den Typ ActionType,  EstateType, Moneytype
+     *          Typ setzen, value & worth auch testen falls benötigt
+     */
     @Test
     public void testActionCard() {
         Card card = new ActionCard(1, ActionType.KELLER);

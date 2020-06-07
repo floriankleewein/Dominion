@@ -29,7 +29,6 @@ public class EstateCard extends Card {
         this.estateType = estateType;
     }
 
-
     public void setIdEstate(EstateType estateType) {
         switch (estateType) {
             case PROVINZ:

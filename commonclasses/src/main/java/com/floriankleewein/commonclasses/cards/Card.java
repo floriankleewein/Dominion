@@ -2,7 +2,6 @@ package com.floriankleewein.commonclasses.cards;
 
 public class Card {
 
-
     private int id;
     private int price;
 
