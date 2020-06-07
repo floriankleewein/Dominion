@@ -23,6 +23,7 @@ import com.floriankleewein.commonclasses.network.GetPlayerMsg;
 import com.floriankleewein.commonclasses.network.HasCheatedMessage;
 import com.floriankleewein.commonclasses.network.BuyCardMsg;
 import com.floriankleewein.commonclasses.network.PlayCardMsg;
+import com.floriankleewein.commonclasses.network.StartbuttonMsg;
 import com.floriankleewein.commonclasses.network.messages.EndGameMsg;
 import com.floriankleewein.commonclasses.network.messages.NewTurnMessage;
 import com.floriankleewein.commonclasses.network.messages.NotEnoughRessourcesMsg;
@@ -221,6 +222,8 @@ public class TestServer {
                     getChatMessagesFunctionality(con);
                 } else if (object instanceof SetGameNullMsg) {
                     setGameNull();
+                } else if (object instanceof StartbuttonMsg){
+                    startbuttonMsgFunctionality(object);
                 }
             }
         });
@@ -484,6 +487,22 @@ public class TestServer {
         RecChatListMsg msg = new RecChatListMsg();
         msg.setMessages(messageList);
         server.sendToTCP(con.getID(), msg);
+    }
+
+
+    /**
+     * FKDoc: checks how many players are in the game. startbutton is activated as soon as there are at least two people in the game.
+     * @param object
+     */
+    public void startbuttonMsgFunctionality(Object object){
+        StartbuttonMsg msg = (StartbuttonMsg) object;
+        if(game.getPlayerList().size() > 1) {
+            msg.setStartValue(true);
+        }else{
+            msg.setStartValue(false);
+        }
+        server.sendToAllTCP(msg);
+
     }
 
     public void setGameNull() {

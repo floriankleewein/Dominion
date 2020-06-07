@@ -16,6 +16,7 @@ import android.widget.ListView;
 import com.floriankleewein.commonclasses.network.AllPlayersInDominionActivityMsg;
 import com.floriankleewein.commonclasses.network.ClientConnector;
 import com.floriankleewein.commonclasses.network.StartGameMsg;
+import com.floriankleewein.commonclasses.network.StartbuttonMsg;
 import com.floriankleewein.commonclasses.network.UpdatePlayerNamesMsg;
 
 import com.group7.dominion.cheatfunction.ShakeListener;
@@ -68,6 +69,9 @@ public class StartGameActivity extends AppCompatActivity {
 
         playerNamesListView.setAdapter(listViewAdapter);
 
+        Thread thread2 = new Thread(clientConnector::checkStartbutton);
+        thread2.start();
+
         /**
          * FKDoc: thats the servercallback which is triggered after the clientConnector.getGame() call. The client calls start game,
          *        which handles the further steps.
@@ -79,15 +83,6 @@ public class StartGameActivity extends AppCompatActivity {
                     names.clear();
                     names.addAll(((UpdatePlayerNamesMsg) msg).getNameList());
                     listViewAdapter.notifyDataSetChanged();
-                    if (names.size() == 2) {
-                        Thread thread1 = new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                clientConnector.startGame();
-                            }
-                        });
-                        thread1.start();
-                    }
                 }
             });
         }));
@@ -100,8 +95,24 @@ public class StartGameActivity extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    Thread thread1 = new Thread(clientConnector::startGame);
+                    thread1.start();
                     Intent intent = new Intent(StartGameActivity.this, DominionActivity.class);
                     startActivity(intent);
+                }
+            });
+        }));
+
+        /**
+         * FKDoc: this is the callback which is executed to enable the button to start the game
+         */
+        clientConnector.registerCallback(StartbuttonMsg.class, (msg -> {
+            StartbuttonMsg temp = (StartbuttonMsg) msg;
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Button btn = findViewById(R.id.btn_start);
+                    btn.setEnabled(temp.isStartValue());
                 }
             });
         }));
@@ -114,7 +125,6 @@ public class StartGameActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Thread thread = new Thread(() -> clientConnector.allPlayersInDominionActivity());
-
                 thread.start();
             }
         });
