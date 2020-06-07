@@ -19,6 +19,12 @@ import java.util.LinkedList;
 
 import static com.floriankleewein.commonclasses.cards.ActionType.HEXE;
 
+/**
+ * @Author Maurer Florian
+ * testing if someone who cheated is declared as a cheater, and also if someone not cheated he is not decleared as a cheater
+ * Also tested if it works, that the cheater gets his extra card.
+ */
+
 
 public class CheatServiceTest {
 
@@ -28,10 +34,6 @@ public class CheatServiceTest {
 
     @Before
     public void setup() {
-        /**
-         * Objects like game or user should be mocked!!!!
-         */
-
         Game game = new Game();
         Playerlist = new <User>ArrayList();
         Playerlist.add(new User("User1"));
@@ -54,7 +56,6 @@ public class CheatServiceTest {
         Assert.assertEquals(false, Playerlist.get(1).isCheater());
         Assert.assertEquals(true, Playerlist.get(2).isCheater());
         Assert.assertEquals(false, Playerlist.get(3).isCheater());
-
 
 
         Assert.assertEquals(4, Playerlist.get(0).getUserCards().getDeck().size());
