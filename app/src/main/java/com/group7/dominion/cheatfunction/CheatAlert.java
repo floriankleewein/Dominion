@@ -27,8 +27,11 @@ public class CheatAlert extends AppCompatDialogFragment implements AdapterView.O
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-        /**
-         * Creating the Dialog and the Spinner
+        /**@Author Maurer Florian
+         * Creating the Dialog and the Spinner.
+         * A Player can cheat in the game 1x. He will get an extra card from his deck. The Player can cheat anytime in the Game
+         * so he should decied wisely when he use it. Also the player can suspect an another Player, if he is right, he will get +5 Points.
+         * If he is wrong, his Points decrease 5 Points.
          */
 
         String[] s = parseLisToString();
@@ -38,19 +41,19 @@ public class CheatAlert extends AppCompatDialogFragment implements AdapterView.O
         sp.setAdapter(adp);
         sp.setOnItemSelectedListener(this);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-                .setTitle("Very Secret Cheat Menu")
-                .setMessage("You really want to cheat? Or do you want to suspect someone?")
+                .setTitle("Geheimes Cheat Menü")
+                .setMessage("Willst du cheaten oder jemanden verdächtigen?")
                 .setView(sp)
-                .setPositiveButton("Give me an Extra Card", (dialog, which) -> {
+                .setPositiveButton("Gib eine Karte", (dialog, which) -> {
                     if (!alreadyCheated) {
                         alreadyCheated = true;
                         sendMessage();
                         dialog.cancel();
                     }
                 })
-                .setNegativeButton("Close Cheat Menu", (dialog, which) -> {
+                .setNegativeButton("Menü schließen", (dialog, which) -> {
                     dialog.cancel();
-                }).setNeutralButton("Suspect Selected User", (dialog, which) -> {
+                }).setNeutralButton("Ausgewählten Spieler verdächtigen", (dialog, which) -> {
                     if (!this.suspectedUser.equals(this.name)) {
                         deleteSelectedUser(this.suspectedUser);
                         sendSuspectMessage();
@@ -62,7 +65,7 @@ public class CheatAlert extends AppCompatDialogFragment implements AdapterView.O
         return builder.create();
     }
 
-    /**
+    /**@Author Maurer Florian
      * Methods for parsing the ArrayList to String Array for Spinner, delete User who already got suspected and sending Messages to
      * the Server
      */
@@ -97,7 +100,7 @@ public class CheatAlert extends AppCompatDialogFragment implements AdapterView.O
         thread.start();
     }
 
-    /**
+    /**@Author Maurer Florian
      * Methods for the Spinner
      */
     @Override
