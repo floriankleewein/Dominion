@@ -97,6 +97,8 @@ public class StartGameActivity extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    Thread thread1 = new Thread(() -> clientConnector.startGame());
+                    thread1.start();
                     Intent intent = new Intent(StartGameActivity.this, DominionActivity.class);
                     startActivity(intent);
                 }
@@ -124,8 +126,6 @@ public class StartGameActivity extends AppCompatActivity {
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Thread thread1 = new Thread(() -> clientConnector.startGame());
-                thread1.start();
                 Thread thread = new Thread(() -> clientConnector.allPlayersInDominionActivity());
                 thread.start();
             }
