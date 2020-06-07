@@ -489,6 +489,11 @@ public class TestServer {
         server.sendToTCP(con.getID(), msg);
     }
 
+
+    /**
+     * FKDoc: checks how many players are in the game. startbutton is activated as soon as there are at least two people in the game.
+     * @param object
+     */
     public void startbuttonMsgFunctionality(Object object){
         StartbuttonMsg msg = (StartbuttonMsg) object;
         if(game.getPlayerList().size() > 1) {

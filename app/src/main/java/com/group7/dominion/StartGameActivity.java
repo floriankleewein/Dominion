@@ -85,15 +85,6 @@ public class StartGameActivity extends AppCompatActivity {
                     names.clear();
                     names.addAll(((UpdatePlayerNamesMsg) msg).getNameList());
                     listViewAdapter.notifyDataSetChanged();
-                    /*if (names.size() == 2) {
-                        Thread thread1 = new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                clientConnector.startGame();
-                            }
-                        });
-                        thread1.start();
-                    }*/
                 }
             });
         }));
@@ -112,6 +103,9 @@ public class StartGameActivity extends AppCompatActivity {
             });
         }));
 
+        /**
+         * FKDoc: this is the callback which is executed to enable the button to start the game
+         */
         clientConnector.registerCallback(StartbuttonMsg.class, (msg -> {
             StartbuttonMsg temp = (StartbuttonMsg) msg;
             runOnUiThread(new Runnable() {
