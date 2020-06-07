@@ -5,6 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+/**@Author Maurer Florian
+ * Activity shows the winner of the current game.
+ */
+
+
 public class GameEndActivity extends AppCompatActivity {
     private String winner;
     private TextView textViewWinner;

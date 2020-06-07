@@ -7,11 +7,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Class User
- * The Lists should have the params Card
- */
-
 public class UserCards {
 
     private LinkedList<Card> deck;
@@ -20,6 +15,11 @@ public class UserCards {
 
     public UserCards() {
     }
+
+    /**@Author Maurer Florian
+     * Get the first cards for the game
+     * @param givenCards
+     */
 
     public void getFirstCards(LinkedList<Card> givenCards) {
         this.deck = new LinkedList<>();
@@ -32,12 +32,18 @@ public class UserCards {
         drawNewCards();
     }
 
+    /**@Author Maurer Florian
+     * Shuffles the deck cards.
+     */
 
     public void shufflesCards() {
 
         Collections.shuffle(this.deck);
     }
 
+    /**@Author Maurer Florian
+     * Draw new Hand Cards from the Deck.
+     */
 
     public void drawNewCards() {
 
@@ -60,10 +66,19 @@ public class UserCards {
         }
     }
 
+    /**@Author Maurer Florian
+     * Add the Card to the Discard Pile
+     * @param card
+     */
+
     public void addCardToDiscardPile(Card card) {
         this.discardCards.add(card);
     }
 
+    /**@Author Maurer Florian
+     * Removes the played Card from the handcards and added it to the discard pile.
+     * @param playedCard
+     */
     public void playCard(Card playedCard) {
 
         for (int i = 0; i < getHandCards().size(); i++) {
@@ -76,14 +91,28 @@ public class UserCards {
         this.discardCards.add(playedCard);
     }
 
+    /**@Author Maurer Florian
+     * adds a new card to the deck
+     * @param newCard
+     */
+
     public void addCardtoDeck(Card newCard) {
         this.deck.add(newCard);
     }
 
+    /**@Author Maurer Florian
+     * adds cards to the deck
+     * @param givenCards
+     */
     public void putCardsinTheDeck(List<Card> givenCards) {
         this.deck.addAll(givenCards);
     }
 
+    /**@Author Maurer Florian
+     * adds deckcards to the the handcards. If the deck size is to low, a new deck will be generated from the
+     * discard pile.
+     * @param amountCards
+     */
 
     public void addDeckCardtoHandCard(int amountCards) {
 

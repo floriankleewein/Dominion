@@ -1,7 +1,7 @@
 package com.floriankleewein.commonclasses.user;
 
-/**
- * Class that manage the points for a Player. Every Param can be increased and decreased. Those Methods should be called in the Class "Card"!
+/**@Author Maurer Florian
+ * Class that manage the points for a Player. Every Param can be increased and decreased.
  */
 
 public class GamePoints {
@@ -35,6 +35,9 @@ public class GamePoints {
         this.buyAmounts += buyAmounts;
     }
 
+    /**@Author Maurer Florian
+     * Set back the Points to the default. a player has 1x play and buy amount per turn.
+     */
     public void setPointsDefault() {
         coins = 0;
         playsAmount = 1;

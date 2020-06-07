@@ -60,6 +60,7 @@ public class TestServer {
 
     /**
      * FKDoc: its called to begin with the server start.
+     *
      * @throws InterruptedException
      */
     public void startServer() throws InterruptedException {
@@ -157,7 +158,7 @@ public class TestServer {
 
     /**
      * FKDoc: here the instance fo the ClassRegistration is made. Pass the kryonet-server attribute
-     *        to the method, to register all needed classes.
+     * to the method, to register all needed classes.
      */
     public void registerClasses() {
 
@@ -167,8 +168,8 @@ public class TestServer {
 
     /**
      * FKDoc: here one listener is added to the game. multiple listeners arent needed, since kryonet handles them
-     *        in a ListenerArray anyway. thats why there is an else case for each method. Inside, the corresponding
-     *        method which holds the information is called.
+     * in a ListenerArray anyway. thats why there is an else case for each method. Inside, the corresponding
+     * method which holds the information is called.
      */
     public void addListeners() {
         server.addListener(new Listener() {
@@ -256,8 +257,9 @@ public class TestServer {
 
     /**
      * FKDoc: gets the playername. then the size and name is checked. if both are checked successfull, the player
-     *        is put in the map and added to the game aswell. the feedback "success" is set in the message.
-     *        Depending on which check fails, a different correct information is set in the message. Msg is sent back then.
+     * is put in the map and added to the game aswell. the feedback "success" is set in the message.
+     * Depending on which check fails, a different correct information is set in the message. Msg is sent back then.
+     *
      * @param object
      * @param con
      */
@@ -347,15 +349,10 @@ public class TestServer {
         server.sendToAllExceptTCP(con.getID(), msg);
     }
 
-    public void hasCheatedMessageFunctionality(Object object) {
-        HasCheatedMessage cheatMsg = (HasCheatedMessage) object;
-        gamehandler.getGame().findUser(cheatMsg.getName()).getUserCards().addDeckCardtoHandCard(1);
-        sendCheatInformation(cheatMsg.getName());
-    }
 
     /**
      * FKDoc: iterates over the game's playerlist and adds every username to the message, which also contains a list for the names.
-     *        After that the broadcast done and each player receives the message, which then will trigger an update for the UI.
+     * After that the broadcast done and each player receives the message, which then will trigger an update for the UI.
      */
     public void updatePlayerNamesMsgFunctionality() {
         UpdatePlayerNamesMsg msg = new UpdatePlayerNamesMsg();
@@ -365,7 +362,26 @@ public class TestServer {
         server.sendToAllTCP(msg);
     }
 
-    public void suspectMessageFunctionality(Object object) {
+    /**@Author Maurer Florian
+     *This msg triggers the addDeckCardtoHandCard method from UserCards and adds a new Card to the HandCards.
+     * @param object
+     */
+
+    private void hasCheatedMessageFunctionality(Object object) {
+        HasCheatedMessage cheatMsg = (HasCheatedMessage) object;
+        gamehandler.getGame().findUser(cheatMsg.getName()).getUserCards().addDeckCardtoHandCard(1);
+        sendCheatInformation(cheatMsg.getName());
+    }
+
+
+    /**@Author Maurer Florian
+     * This msg triggers the suspectUser method from CheatService class.
+     *
+     * @param object, msg from client who wants to suspect someone.
+     */
+
+
+    private void suspectMessageFunctionality(Object object) {
         SuspectMessage msg = (SuspectMessage) object;
         Log.info("GOT SUSPECT MESSAGE FROM" + msg.getUserName());
         gamehandler.getGame().getCheatService().suspectUser(msg.getSuspectedUserName(), msg.getUserName());
@@ -383,7 +399,8 @@ public class TestServer {
 
     /**
      * FKDoc: in this method the state for the buttons are checked. depending on if the game already exists or not,
-     *        boolean values are set and returned with the message.
+     * boolean values are set and returned with the message.
+     *
      * @param object
      * @param con
      */
@@ -412,6 +429,11 @@ public class TestServer {
         server.sendToAllTCP(msg);
     }
 
+    /**
+     * @Author Maurer Florian
+     * Send the new turn back to all clients.
+     */
+
     public void newTurnMsgFunctionality() {
         NewTurnMessage msg = new NewTurnMessage();
         msg.setGame(gamehandler.getGame());
@@ -421,7 +443,8 @@ public class TestServer {
 
     /**
      * LKDoc:   Überprüft ob geklickte Karte gekauft werden kann und schickt die msg zurück
-     *          --> BuyCardMsg --> ClientConnector
+     * --> BuyCardMsg --> ClientConnector
+     *
      * @param object
      * @param con
      */
@@ -453,7 +476,7 @@ public class TestServer {
             gamehandler.setNewTurn(false);
         }
         /**
-         * This condition ends the game!!
+         * This condition ends the game!
          */
         if ((gamehandler.getBoard().getBuyField().isNoEstateCards()) || (gamehandler.getBoard()
                 .getActionField().getNotAvailableCards().size() >= 3)) {
@@ -466,6 +489,11 @@ public class TestServer {
         con.sendTCP(returnmsg);
     }
 
+    /**
+     * @param object, the msg from the server
+     * @Author Maurer Florian
+     * plays the card in the gamehandler and send back a msg, so the active user get his actual cards.
+     */
     private void playCardmsgFunctionality(Object object) {
         PlayCardMsg msg = (PlayCardMsg) object;
         Log.info(msg.getPlayedCard().getId() + "is played");
