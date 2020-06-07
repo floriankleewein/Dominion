@@ -186,10 +186,10 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         final String ERRORDIALOG_CONST = "errorDialog";
 
         /**
-         * LKDoc: großer UIThread für den ActionDialogHandler. Hier wird die msg vom Server abgefangen
-         * 1) zuerst wird überprüft ob die Karte gekauft werden kann (genug Geld) = Toast
-         * 2) ist die Karte zusätzlich null bedeutet dies es sind keine mehr im Stapel und der ErrorDialogHandler wird aufgerufen (braucht Fragment)
-         * 3) ist alles ok kann die Karte gekauft werden
+         * LKDoc:   großer UIThread für den ActionDialogHandler. Hier wird die msg vom Server abgefangen
+         *              1) zuerst wird überprüft ob die Karte gekauft werden kann (genug Geld) = Toast
+         *              2) ist die Karte zusätzlich null bedeutet dies es sind keine mehr im Stapel und der ErrorDialogHandler wird aufgerufen (braucht Fragment)
+         *              3) ist alles ok kann die Karte gekauft werden
          */
         clientConnector.registerCallback(BuyCardMsg.class, (msg -> {
             runOnUiThread(() -> {

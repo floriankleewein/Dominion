@@ -291,6 +291,13 @@ public class ClientConnector {
         });
     }
 
+    /**
+     * LKDoc:   send BuyCardMsg zum Server + fängt die geklickte Karte ab
+     *          Dies löst den Listener aus - received (generelles Objekt). Instance of BuyCardMsg?
+     *          Cast to BuyCardMsg = callback msg
+     *          Dies wird ausgelöst sobald ein Spieler eine Karte kauft
+     * @param msg
+     */
     public void sendbuyCard(BuyCardMsg msg) {
         Thread thread = new Thread(() -> client.sendTCP(msg));
         thread.start();

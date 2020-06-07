@@ -29,7 +29,7 @@ public class ActionCard extends Card {
     }
 
     /**
-     * LKDoc: Action ist am Anfang null - Werte werden abhängig vom ActionType vergeben
+     * LKDoc:   Action ist am Anfang null - Werte werden abhängig vom ActionType vergeben
      * @return the action
      */
     private Action calculateAction() {

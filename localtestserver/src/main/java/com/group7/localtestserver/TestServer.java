@@ -419,6 +419,12 @@ public class TestServer {
         server.sendToAllTCP(msg);
     }
 
+    /**
+     * LKDoc:   Überprüft ob geklickte Karte gekauft werden kann und schickt die msg zurück
+     *          --> BuyCardMsg --> ClientConnector
+     * @param object
+     * @param con
+     */
     private void buyCardmsgFunctionality(Object object, Connection con) {
         BuyCardMsg msg = (BuyCardMsg) object;
         BuyCardMsg returnmsg = new BuyCardMsg();

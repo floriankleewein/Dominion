@@ -1,9 +1,5 @@
 package com.floriankleewein.commonclasses.cards;
 
-/**
- * LKDoc
- *
- */
 public class Action {
     private int actionCount;    // Man darf eine Action wie Karten ablegen durchführen (dieser Wert beschreibt die Aktionen die man dürführen darf)
     private int cardCount;      // Nimm irgend eine Karte (dieser Wert beschreibt die Anzahl der Karten die man nehmen darf)

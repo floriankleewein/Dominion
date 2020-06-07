@@ -31,9 +31,9 @@ public class ActionDialogHandler extends AppCompatDialogFragment {
     private static final String ACTIONCOUNT_CONST = ", Action Count: ";
 
     /**
-     * LKDoc: AlertDialogBuilder für die Info-Karte die dem Spieler mehr Informationen über die Aktionskarte
-     * liefern soll. Der Spieler kann anschließend die Karte kaufen ("Buy") oder aber das Fenster wieder schließen ("Close")
-     * und eine andere Karte wählen
+     * LKDoc:   AlertDialogBuilder für die Info-Karte die dem Spieler mehr Informationen über die Aktionskarte
+     *          liefern soll. Der Spieler kann anschließend die Karte kaufen ("Buy") oder aber das Fenster wieder schließen ("Close")
+     *          und eine andere Karte wählen
      * @param savedInstanceState
      * @return builder (es wird alles wieder zum Builder returnt)
      */
@@ -43,11 +43,11 @@ public class ActionDialogHandler extends AppCompatDialogFragment {
                 .setTitle("Buy Action Card")
                 .setMessage("Do you want to buy this card?")
                 .setPositiveButton("Buy", (dialog, which) -> {
-                    //LKDoc: Buy the Card
+                    //LKDoc: Karte kaufen
                     BuyCardMsg buyCardMsg =new BuyCardMsg();
                     buyCardMsg.setActionTypeClicked(actionType);
                     sendUpdate(buyCardMsg);
-                    //LKDoc: UIThread is in the Dominion Activity
+                    //LKDoc: UIThread ist in der Dominion Activity
                 })
                 .setNegativeButton("Close", (dialog, which) -> {
                     dialog.cancel();
@@ -168,9 +168,9 @@ public class ActionDialogHandler extends AppCompatDialogFragment {
     }
 
     /**
-     * LKDoc: OnClick Methoden. .show --> wird vom Fragmentmanager gebraucht (Lifecylce)
+     * LKDoc: OnClick Methoden. .show --> wird vom Fragmentmanager gebraucht (Lifecycle)
      * show ruft daher den entsprechenden Dialog für die entsprechende Karte auf
-     * @param fragmentManager
+     * @param fragmentManager muss ebenfalls übergeben werden, wegen dem OnClick
      */
     private void onClickHexe(FragmentManager fragmentManager) {
         this.fragmentManager = fragmentManager;
@@ -241,7 +241,7 @@ public class ActionDialogHandler extends AppCompatDialogFragment {
     }
 
     /**
-     *
+     * LKDoc: sende Update der msg an clientConnector --> ClientConnector.class
      * @param buyCardMsg
      */
     private void sendUpdate(BuyCardMsg buyCardMsg){
