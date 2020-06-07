@@ -24,108 +24,30 @@ public class ActionDialogHandler extends AppCompatDialogFragment {
     private FragmentManager fragmentManager;
     private ClientConnector clientConnector;
 
-    //Pop-up Info Image Buttons
-    private ImageButton buttonHexe;
-    private ImageButton buttonBurggraben;
-    private ImageButton buttonDorf;
-    private ImageButton buttonHolzfaeller;
-    private ImageButton buttonKeller;
-    private ImageButton buttonMarkt;
-    private ImageButton buttonMiliz;
-    private ImageButton buttonMine;
-    private ImageButton buttonSchmiede;
-    private ImageButton buttonWerkstatt;
-
     private static final String ACTION_CONST = "Action";
     private static final String ACTIONTYPE_CONST = "ActionType: ";
     private static final String CARDCOUNT_CONST = ", Card Count: ";
     private static final String MONEYVALUE_CONST = ", Money Value: " ;
     private static final String ACTIONCOUNT_CONST = ", Action Count: ";
 
+    /**
+     * LKDoc:   AlertDialogBuilder für die Info-Karte die dem Spieler mehr Informationen über die Aktionskarte
+     *          liefern soll. Der Spieler kann anschließend die Karte kaufen ("Buy") oder aber das Fenster wieder schließen ("Close")
+     *          und eine andere Karte wählen
+     * @param savedInstanceState
+     * @return builder (es wird alles wieder zum Builder returnt)
+     */
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                 .setTitle("Buy Action Card")
                 .setMessage("Do you want to buy this card?")
                 .setPositiveButton("Buy", (dialog, which) -> {
-                    // Buy the Card
-                    //Card card = this.board.getActionField().pickCard(actionType);
+                    //LKDoc: Karte kaufen
                     BuyCardMsg buyCardMsg =new BuyCardMsg();
                     buyCardMsg.setActionTypeClicked(actionType);
                     sendUpdate(buyCardMsg);
-/*
-                    clientConnector.registerCallback(BuyCardMsg.class, (msg -> {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                BuyCardMsg buyCardMsg1= (BuyCardMsg) msg;
-                                Card card = buyCardMsg1.getBoughtCard();
-                                if(card == null) {
-                                    ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
-                                    errorDialogHandler.show(fragmentManager, "errorDialog");
-                                } else {
-                                    ActionCard actionCard = (ActionCard) card;
-                                    switch (actionCard.getActionType()) {
-
-                                        case HEXE:
-                                            Log.i(actionConst, actiontypeConst + actionCard.getActionType() +
-                                                    cardcountConst + actionCard.getAction().getCardCount() +
-                                                    ", Curse Count: " + actionCard.getAction().getCurseCount());
-                                            break;
-                                        case WERKSTATT:
-                                            Log.i(actionConst, actiontypeConst + actionCard.getActionType() +
-                                                    cardcountConst + actionCard.getAction().getCardCount() +
-                                                    ", Max Money Value: " + actionCard.getAction().getMaxMoneyValue());
-                                            break;
-                                        case SCHMIEDE:
-                                            Log.i(actionConst, actiontypeConst + actionCard.getActionType() +
-                                                    cardcountConst + actionCard.getAction().getCardCount());
-                                            break;
-                                        case MINE:
-                                            Log.i(actionConst, actiontypeConst + actionCard.getActionType() +
-                                                    cardcountConst + actionCard.getAction().getCardCount() +
-                                                    ", Take MoneyCard That Cost Three More Than Old: " + actionCard.getAction().isTakeMoneyCardThatCostThreeMoreThanOld() +
-                                                    ", Take Card On Hand: " + actionCard.getAction().isTakeCardOnHand());
-                                            break;
-                                        case MILIZ:
-                                            Log.i(actionConst, actiontypeConst + actionCard.getActionType() +
-                                                    moneyvalueConst + actionCard.getAction().getMoneyValue() +
-                                                    ", Throw Every UserCards Until Three Left: " + actionCard.getAction().isThrowEveryUserCardsUntilThreeLeft());
-                                            break;
-                                        case MARKT:
-                                            Log.i(actionConst, actiontypeConst + actionCard.getActionType() +
-                                                    cardcountConst + actionCard.getAction().getCardCount() +
-                                                    actioncountConst + actionCard.getAction().getActionCount() +
-                                                    moneyvalueConst + actionCard.getAction().getMoneyValue() +
-                                                    ", Buy Count: " + actionCard.getAction().getBuyCount());
-                                            break;
-                                        case KELLER:
-                                            Log.i(actionConst, actiontypeConst + actionCard.getActionType() +
-                                                    actioncountConst + actionCard.getAction().getActionCount() +
-                                                    ", Throw Any Amount Cards: " + actionCard.getAction().isThrowAnyAmountCards());
-                                            break;
-                                        case HOLZFAELLER:
-                                            Log.i(actionConst, actiontypeConst + actionCard.getActionType() +
-                                                    ", Buy Count: " + actionCard.getAction().getBuyCount() +
-                                                    moneyvalueConst + actionCard.getAction().getMoneyValue());
-                                            break;
-                                        case DORF:
-                                            Log.i(actionConst, actiontypeConst + actionCard.getActionType() +
-                                                    cardcountConst + actionCard.getAction().getCardCount() +
-                                                    actioncountConst + actionCard.getAction().getActionCount());
-                                            break;
-                                        case BURGGRABEN:
-                                            Log.i(actionConst, actiontypeConst + actionCard.getActionType() +
-                                                    cardcountConst + actionCard.getAction().getCardCount() +
-                                                    ", Throw Every UserCards Until Three Left: " + actionCard.getAction().isThrowEveryUserCardsUntilThreeLeft());
-                                            break;
-                                        default:
-                                            Log.e("ERROR", "critical error @ actionDialogHandler. I am the default case!");
-                                    }
-                                }
-                            }
-                        });
-                    })); */
+                    //LKDoc: UIThread ist in der Dominion Activity
                 })
                 .setNegativeButton("Close", (dialog, which) -> {
                     dialog.cancel();
@@ -139,17 +61,25 @@ public class ActionDialogHandler extends AppCompatDialogFragment {
         return builder.create();
     }
 
+    /**
+     * LKDoc: setOnClickListener für die einzelnen Aktionskarten
+     * @param activity
+     * @param fragmentManager wird benötigt wegen dem ErrorDialogHandler
+     */
     public void init(Activity activity, FragmentManager fragmentManager) {
         // Hexe
+        ImageButton buttonHexe;
         buttonHexe = activity.findViewById(R.id.btn_hexe);
         buttonHexe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //LKDoc: fragmentManager muss mitgegeben werden
                 onClickHexe(fragmentManager);
             }
         });
 
-        // Burggraben
+        //Burggraben
+        ImageButton buttonBurggraben;
         buttonBurggraben = activity.findViewById(R.id.btn_burggraben);
         buttonBurggraben.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,6 +89,7 @@ public class ActionDialogHandler extends AppCompatDialogFragment {
         });
 
         //Dorf
+        ImageButton buttonDorf;
         buttonDorf = activity.findViewById(R.id.btn_dorf);
         buttonDorf.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,7 +97,9 @@ public class ActionDialogHandler extends AppCompatDialogFragment {
                 onClickDorf(fragmentManager);
             }
         });
+
         //Holzfaeller
+        ImageButton buttonHolzfaeller;
         buttonHolzfaeller = activity.findViewById(R.id.btn_holzfaeller);
         buttonHolzfaeller.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -175,6 +108,7 @@ public class ActionDialogHandler extends AppCompatDialogFragment {
             }
         });
         //Keller
+        ImageButton buttonKeller;
         buttonKeller = activity.findViewById(R.id.btn_keller);
         buttonKeller.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -184,6 +118,7 @@ public class ActionDialogHandler extends AppCompatDialogFragment {
         });
 
         //Markt
+        ImageButton buttonMarkt;
         buttonMarkt = activity.findViewById(R.id.btn_markt);
         buttonMarkt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -193,6 +128,7 @@ public class ActionDialogHandler extends AppCompatDialogFragment {
         });
 
         //Miliz
+        ImageButton buttonMiliz;
         buttonMiliz = activity.findViewById(R.id.btn_miliz);
         buttonMiliz.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -200,7 +136,9 @@ public class ActionDialogHandler extends AppCompatDialogFragment {
                 onClickMiliz(fragmentManager);
             }
         });
+
         //Mine
+        ImageButton buttonMine;
         buttonMine = activity.findViewById(R.id.btn_mine);
         buttonMine.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -210,6 +148,7 @@ public class ActionDialogHandler extends AppCompatDialogFragment {
         });
 
         //Schmiede
+        ImageButton buttonSchmiede;
         buttonSchmiede = activity.findViewById(R.id.btn_schmiede);
         buttonSchmiede.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -218,6 +157,7 @@ public class ActionDialogHandler extends AppCompatDialogFragment {
             }
         });
         //Werkstatt
+        ImageButton buttonWerkstatt;
         buttonWerkstatt = activity.findViewById(R.id.btn_werkstatt);
         buttonWerkstatt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -227,6 +167,11 @@ public class ActionDialogHandler extends AppCompatDialogFragment {
         });
     }
 
+    /**
+     * LKDoc: OnClick Methoden. .show --> wird vom Fragmentmanager gebraucht (Lifecycle)
+     * show ruft daher den entsprechenden Dialog für die entsprechende Karte auf
+     * @param fragmentManager muss ebenfalls übergeben werden, wegen dem OnClick
+     */
     private void onClickHexe(FragmentManager fragmentManager) {
         this.fragmentManager = fragmentManager;
         this.actionType = ActionType.HEXE;
@@ -295,13 +240,13 @@ public class ActionDialogHandler extends AppCompatDialogFragment {
         this.show(fragmentManager, "werkstattDialog");
     }
 
+    /**
+     * LKDoc: sende Update der msg an clientConnector --> ClientConnector.class
+     * @param buyCardMsg
+     */
     private void sendUpdate(BuyCardMsg buyCardMsg){
-        Thread th = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                clientConnector.sendbuyCard(buyCardMsg);
-            }
-        });
+        //LKDoc: Sonarcloud wants to have lambda
+        Thread th = new Thread(() -> clientConnector.sendbuyCard(buyCardMsg));
         th.start();
     }
 

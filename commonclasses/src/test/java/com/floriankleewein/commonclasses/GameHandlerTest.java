@@ -1,5 +1,6 @@
 package com.floriankleewein.commonclasses;
 
+import com.floriankleewein.commonclasses.board.Board;
 import com.floriankleewein.commonclasses.cards.ActionCard;
 import com.floriankleewein.commonclasses.cards.ActionType;
 import com.floriankleewein.commonclasses.cards.Card;
@@ -9,6 +10,7 @@ import com.floriankleewein.commonclasses.cards.MoneyCard;
 import com.floriankleewein.commonclasses.cards.MoneyType;
 import com.floriankleewein.commonclasses.gamelogic.GameHandler;
 import com.floriankleewein.commonclasses.gamelogic.PlayStatus;
+import com.floriankleewein.commonclasses.network.GameUpdateMsg;
 import com.floriankleewein.commonclasses.user.User;
 
 import org.junit.After;
@@ -90,17 +92,6 @@ public class GameHandlerTest {
         m_cut = null;
     }
 
-//    @Test
-//    public void changeTurnState() {
-////        Assert.assertEquals(PlayStatus.ACTION_PHASE, m_cut.getTurnState());
-//        m_cut.changeTurnStatus();
-////        Assert.assertEquals(PlayStatus.BUY_PHASE, m_cut.getTurnState());
-//        m_cut.changeTurnStatus();
-//        Assert.assertEquals(PlayStatus.NO_PLAY_PHASE, m_cut.getTurnState());
-//        m_cut.changeTurnStatus();
-//        Assert.assertEquals(PlayStatus.ACTION_PHASE, m_cut.getTurnState());
-//    }
-
     @Test
     public void changeTurnStateIfNull() {
         m_cut.setTurnState(null);
@@ -122,17 +113,38 @@ public class GameHandlerTest {
     }
 
     @Test
+    public void updateGameHandlerWithMessage() {
+        GameUpdateMsg msg = new GameUpdateMsg();
+        msg.setBoard(new Board());
+        Card playedCard = new MoneyCard(0, 1, MoneyType.KUPFER);
+        msg.setPlayedCard(playedCard);
+        Card boughtCard = new MoneyCard(3, 2, MoneyType.SILBER);
+        msg.setClickedCard(boughtCard);
+        msg.setGame(Game.getGame());
+        m_cut.updateGameHandler(msg);
+        Assert.assertEquals(playedCard.getId(), m_cut.getPlayedCard().getId());
+        Assert.assertEquals(boughtCard.getId(), m_cut.getBuyCard().getId());
+    }
+
+    @Test
     public void checkPlayCardGeneral() {
+        User myUser = m_cut.getActiveUser();
+        myUser.getGamePoints().setPlaysAmount(1);
+        m_cut.setTurnState(1);
         Card card = new ActionCard(5, ActionType.HEXE);
         m_cut.playCard(card);
         Assert.assertEquals(card, m_cut.getPlayedCard());
+        Assert.assertEquals(0, myUser.getGamePoints().getPlaysAmount());
     }
 
     @Test
     public void checkPlayCardAction() {
         Card card = new ActionCard(5, ActionType.HEXE);
+        User myUser = m_cut.getActiveUser();
+        m_cut.setTurnState(1);
+        myUser.getGamePoints().setPlaysAmount(2);
         m_cut.playCard(card);
-//        Assert.assertEquals(0, m_cut.getActiveUser().getGamePoints().getPlaysAmount());
+        Assert.assertEquals(1, myUser.getGamePoints().getPlaysAmount());
     }
 
     @Test
@@ -173,11 +185,12 @@ public class GameHandlerTest {
     public void checkBuyMoneyCardWithType() {
         Card card = new MoneyCard(6, 3, MoneyType.GOLD);
         m_cut.getActiveUser().getGamePoints().modifyCoins(6);
-        Assert.assertEquals(6, m_cut.getActiveUser().getGamePoints().getCoins());
+        User myUser = m_cut.getActiveUser();
+        Assert.assertEquals(6, myUser.getGamePoints().getCoins());
         Assert.assertEquals(card.getId(), m_cut.buyCard(MoneyType.GOLD).getId());
-        Assert.assertEquals(0, m_cut.getActiveUser().getGamePoints().getCoins());
-        Assert.assertEquals(1, m_cut.getActiveUser().getGamePoints().getBuyAmounts());
-        //Assert.assertEquals(1, m_cut.getActiveUser().getUserCards().getDeck().stream().filter(card1 -> card1.getId() == 16).count());
+        Assert.assertEquals(0, myUser.getGamePoints().getCoins());
+        Assert.assertEquals(1, myUser.getGamePoints().getBuyAmounts());
+        Assert.assertEquals(1, myUser.getUserCards().getDiscardCards().stream().filter(card1 -> card1.getId() == 16).count());
     }
 
     @Test
@@ -193,41 +206,48 @@ public class GameHandlerTest {
     @Test
     public void checkBuyActionCardWithType() {
         Card card = new ActionCard(3, ActionType.HOLZFAELLER);
-        m_cut.getActiveUser().getGamePoints().modifyCoins(3);
-        Assert.assertEquals(3, m_cut.getActiveUser().getGamePoints().getCoins());
+        User myUser = m_cut.getActiveUser();
+        myUser.getGamePoints().modifyCoins(3);
+        Assert.assertEquals(3, myUser.getGamePoints().getCoins());
         Assert.assertEquals(card.getId(), m_cut.buyCard(ActionType.HOLZFAELLER).getId());
-        Assert.assertEquals(0, m_cut.getActiveUser().getGamePoints().getCoins());
-        //Assert.assertEquals(0, m_cut.getActiveUser().getGamePoints().getBuyAmounts());
+        Assert.assertEquals(0, myUser.getGamePoints().getCoins());
+        Assert.assertEquals(1, myUser.getGamePoints().getBuyAmounts());
     }
 
     @Test
     public void checkBuyEstateCard() {
         Card card = new EstateCard(2, 1, EstateType.ANWESEN);
-        m_cut.getActiveUser().getGamePoints().modifyCoins(2);
-        Assert.assertEquals(2, m_cut.getActiveUser().getGamePoints().getCoins());
+        User myUser = m_cut.getActiveUser();
+        myUser.getGamePoints().modifyCoins(2);
+        Assert.assertEquals(2, myUser.getGamePoints().getCoins());
         m_cut.buyCard(card);
-        Assert.assertEquals(0, m_cut.getActiveUser().getGamePoints().getCoins());
-        Assert.assertEquals(0, m_cut.getActiveUser().getGamePoints().getBuyAmounts());
-//        Assert.assertEquals(4, m_cut.getActiveUser().getGamePoints().getWinningPoints());
+        Assert.assertEquals(0, myUser.getGamePoints().getCoins());
+        Assert.assertEquals(0, myUser.getGamePoints().getBuyAmounts());
+        Assert.assertEquals(4, myUser.getGamePoints().getWinningPoints());
     }
 
     @Test
     public void checkBuyEstateCardWithType() {
         Card card = new EstateCard(2, 1, EstateType.ANWESEN);
-        m_cut.getActiveUser().getGamePoints().modifyCoins(2);
-        Assert.assertEquals(2, m_cut.getActiveUser().getGamePoints().getCoins());
+        User myUser = m_cut.getActiveUser();
+        myUser.getGamePoints().modifyCoins(2);
+        Assert.assertEquals(2, myUser.getGamePoints().getCoins());
         Assert.assertEquals(card.getId(), m_cut.buyCard(EstateType.ANWESEN).getId());
-        Assert.assertEquals(0, m_cut.getActiveUser().getGamePoints().getCoins());
-        //Assert.assertEquals(0, m_cut.getActiveUser().getGamePoints().getBuyAmounts());
-//        Assert.assertEquals(4, m_cut.getActiveUser().getGamePoints().getWinningPoints());
+        Assert.assertEquals(0, myUser.getGamePoints().getCoins());
+        Assert.assertEquals(1, myUser.getGamePoints().getBuyAmounts());
+        Assert.assertEquals(4, myUser.getGamePoints().getWinningPoints());
+    }
+
+    @Test
+    public void checkHandCardsForActionCard() {
+        Assert.assertEquals(false, m_cut.checkHandCards());
+        Card card = new ActionCard(3, ActionType.HOLZFAELLER);
+        addCardtoHand(card);
+        Assert.assertEquals(true, m_cut.checkHandCards());
     }
 
     private void addCardtoHand(Card card) {
         LinkedList<Card> newHand = m_cut.getActiveUser().getUserCards().getHandCards();
         newHand.add(card);
     }
-/*
-Test modified (into Comments) by Florian M. because the failed Date: 01.06.2020!
- */
-
 }

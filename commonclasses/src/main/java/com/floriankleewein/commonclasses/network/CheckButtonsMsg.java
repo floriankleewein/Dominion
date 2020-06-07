@@ -1,22 +1,22 @@
 package com.floriankleewein.commonclasses.network;
 
 public class CheckButtonsMsg extends BaseMessage {
-    boolean CreateValue;
-    boolean JoinValue;
+    boolean createValue;
+    boolean joinValue;
 
     public void setCreateValue(boolean b){
-        this.CreateValue = b;
+        this.createValue = b;
     }
 
     public boolean getCreateValue(){
-        return this.CreateValue;
+        return this.createValue;
     }
 
     public void setJoinValue(boolean b){
-        this.JoinValue = b;
+        this.joinValue = b;
     }
 
     public boolean getJoinValue(){
-        return this.JoinValue;
+        return this.joinValue;
     }
 }

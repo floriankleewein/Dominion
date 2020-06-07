@@ -39,16 +39,12 @@ import butterknife.Unbinder;
  */
 public class ChatFragment extends ListFragment implements UserInputHandler {
 
-    private static final String CHAT_STATE = "ChatListState";
-
     private Handler mHandler = new Handler(Looper.getMainLooper());
 
     // Adapter für die Chatansicht
     private ChatListAdapter chatListAdapter;
 
     private OnChatMessageArrivedListener mListener;
-
-    private Button backButton;
 
     // zum Unbinden von Views aus dem Fragment
     private Unbinder unbinder;
@@ -91,8 +87,8 @@ public class ChatFragment extends ListFragment implements UserInputHandler {
 
         this.client = ClientConnector.getClientConnector();
 
-        this.backButton = chatFragmentView.findViewById(R.id.back_Button);
-
+        Button backButton;
+        backButton = chatFragmentView.findViewById(R.id.back_Button);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,30 +99,27 @@ public class ChatFragment extends ListFragment implements UserInputHandler {
         });
 
 
-        Thread chatMessageRecThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-              if (isRestorable) {
+        Thread chatMessageRecThread = new Thread(() -> {
+          if (isRestorable) {
 
-                  client.getChatMessages();
-                  client.getClient().addListener(new Listener() {
-                      @Override
-                      public void received(Connection connection, Object object) {
-                          System.out.println("RECEIVED MESSAGE THREAD");
+              client.getChatMessages();
+              client.getClient().addListener(new Listener() {
+                  @Override
+                  public void received(Connection connection, Object object) {
+                      System.out.println("RECEIVED MESSAGE THREAD");
 
-                          if (object instanceof RecChatListMsg) {
+                      if (object instanceof RecChatListMsg) {
 
-                              System.out.println("RECEIVED CHAT MESSAGES FROM SERVER");
-                              System.out.println("FROM CONNECTION: " + connection.getID());
-                              RecChatListMsg msg = (RecChatListMsg) object;
-                              messageList = msg.getMessages();
-                              System.out.println("OBJECT: ");
-                          }
+                          System.out.println("RECEIVED CHAT MESSAGES FROM SERVER");
+                          System.out.println("FROM CONNECTION: " + connection.getID());
+                          RecChatListMsg msg = (RecChatListMsg) object;
+                          messageList = msg.getMessages();
+                          System.out.println("OBJECT: ");
                       }
+                  }
 
-                  });
-              }
-            }
+              });
+          }
         });
 
         return chatFragmentView;
@@ -262,15 +255,12 @@ public class ChatFragment extends ListFragment implements UserInputHandler {
 
             new SendMessage(sendToOthers).execute();
 
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
+            getActivity().runOnUiThread(() -> {
 
-                    // hiermit wird die Nachricht in die View eingebunden und angezeigt
-                    chatListAdapter.add(sendToOthers);
-                    chatListAdapter.notifyDataSetChanged();
-                    getListView().setSelection(chatListAdapter.getCount() - 1);
-                }
+                // hiermit wird die Nachricht in die View eingebunden und angezeigt
+                chatListAdapter.add(sendToOthers);
+                chatListAdapter.notifyDataSetChanged();
+                getListView().setSelection(chatListAdapter.getCount() - 1);
             });
 
         } else {
@@ -320,13 +310,10 @@ public class ChatFragment extends ListFragment implements UserInputHandler {
         protected void onPostExecute(Boolean messageSent) {
 
             if(messageSent) {
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        clearInput();
+                getActivity().runOnUiThread(() -> {
+                    clearInput();
 
-                        System.out.println("CLIENT: Succesfully sent message to others.");
-                    }
+                    System.out.println("CLIENT: Succesfully sent message to others.");
                 });
             } else {
                 Toast.makeText(getActivity(), "Message not sent.", Toast.LENGTH_LONG).show();

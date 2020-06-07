@@ -7,10 +7,12 @@ import android.content.Context;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+
 import com.floriankleewein.commonclasses.network.AllPlayersInDominionActivityMsg;
 import com.floriankleewein.commonclasses.network.ClientConnector;
 import com.floriankleewein.commonclasses.network.StartGameMsg;
@@ -44,27 +46,32 @@ public class StartGameActivity extends AppCompatActivity {
 
         ClientConnector clientConnector = ClientConnector.getClientConnector();
 
-        //FKDoc: this is the arrayList,where the names will be stored.
+
+        /**
+         * FKDoc: this is the arrayList,where the names will be stored.
+         */
         ArrayList<String> names = new ArrayList<>();
 
-        //FKDoc: this is the listView where the playerNames should be viewed.
+        /**
+         * FKDoc: this is the listView where the playerNames should be viewed.
+         */
         ListView playerNamesListView = findViewById(R.id.playerNamesListView);
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                clientConnector.updatePlayerNames();
-            }
-        });
+        Thread thread = new Thread(() -> clientConnector.updatePlayerNames());
 
         thread.start();
 
-        //FKDoc: the listViewAdapter is used as a communication tool between the listView and the data that should be shown.
+        /**
+         * FKDoc: the listViewAdapter is used as a communication tool between the listView and the data that should be shown.
+         */
         ArrayAdapter<String> listViewAdapter =
                 new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, names);
 
         playerNamesListView.setAdapter(listViewAdapter);
 
-        //FKDoc: thats the servercallback which is triggered after the clientConnector.getGame() call.
+        /**
+         * FKDoc: thats the servercallback which is triggered after the clientConnector.getGame() call. The client calls start game,
+         *        which handles the further steps.
+         */
         clientConnector.registerCallback(UpdatePlayerNamesMsg.class, (msg -> {
             runOnUiThread(new Runnable() {
                 @Override
@@ -85,6 +92,10 @@ public class StartGameActivity extends AppCompatActivity {
             });
         }));
 
+        /**
+         * FKDoc: this callback is done after each user receives the corresponding message, which puts everyone in the DominionActivity
+         *        at the same time.
+         */
         clientConnector.registerCallback(AllPlayersInDominionActivityMsg.class, (msg -> {
             runOnUiThread(new Runnable() {
                 @Override
@@ -95,21 +106,27 @@ public class StartGameActivity extends AppCompatActivity {
             });
         }));
 
+        /**
+         * FKDoc: one player can click the button START, to trigger all further events to place all players in the actual game screen aka
+         *        DominionActivity.
+         */
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-
-                        clientConnector.allPlayersInDominionActivity();
-
-                    }
-                });
+                Thread thread = new Thread(() -> clientConnector.allPlayersInDominionActivity());
 
                 thread.start();
             }
         });
+
+        clientConnector.registerCallback(StartGameMsg.class, (msg -> {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Log.i("Callback", "Got the Callback");
+                }
+            });
+        }));
     }
 
 

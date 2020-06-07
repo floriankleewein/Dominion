@@ -4,8 +4,9 @@ public class Board {
     private ActionField actionField;
     private BuyField buyField;
 
-    private static Board board;
-
+    /**
+     * ActionField und BuyField werden initialisiert wenn wir das Board initalisieren
+     */
     public Board() {
         this.actionField = new ActionField();
         this.buyField = new BuyField();

@@ -32,6 +32,7 @@ import com.floriankleewein.commonclasses.network.GetGameMsg;
 import com.floriankleewein.commonclasses.network.HasCheatedMessage;
 import com.floriankleewein.commonclasses.network.BuyCardMsg;
 import com.floriankleewein.commonclasses.network.PlayCardMsg;
+import com.floriankleewein.commonclasses.network.messages.EndGameMsg;
 import com.floriankleewein.commonclasses.network.messages.NewTurnMessage;
 import com.floriankleewein.commonclasses.network.messages.NotEnoughRessourcesMsg;
 import com.floriankleewein.commonclasses.network.NetworkInformationMsg;
@@ -49,6 +50,11 @@ import java.util.LinkedList;
 
 public class ClassRegistration {
 
+    /**
+     * FKDoc: here all classes are stored. client and server can make a instance of ClassRegistration to register it.
+     *        Thats very important for sending them via TCP. Also the order plays a very important role. With this
+     *        type of implementation the order always is the same since client and server use the same ressource.
+     */
     private Class[] constants = {BaseMessage.class, GameUpdateMsg.class, NetworkInformationMsg.class, Game.class,
             CreateGameMsg.class, AddPlayerSuccessMsg.class, ArrayList.class, User.class, ResetMsg.class, StartGameMsg.class, ChatMessage.class,
             HasCheatedMessage.class, ActivePlayerMessage.class, UpdatePlayerNamesMsg.class, SuspectMessage.class, CheckButtonsMsg.class,
@@ -56,9 +62,13 @@ public class ClassRegistration {
             GameHandler.class, Action.class, Board.class, BuyField.class, ActionType.class,
             EstateType.class, MoneyType.class, CheatService.class, EstateCard.class, ActionField.class, AllPlayersInDominionActivityMsg.class,
             HashMap.class, NewTurnMessage.class, NotEnoughRessourcesMsg.class, CardLogic.class, BuyCardMsg.class, PlayCardMsg.class, PlayStatus.class,
-            CardLogic.class,RecChatListMsg.class, Pair.class,GetChatMessages.class
+            CardLogic.class,RecChatListMsg.class, Pair.class,GetChatMessages.class, EndGameMsg.class
     };
 
+    /**
+     * FKDoc: here the server can pass the kryonet-server, and register all classes in the given order.
+     * @param server
+     */
     public void registerAllClassesForServer(Server server){
 
         for(Class c: constants){
@@ -66,6 +76,10 @@ public class ClassRegistration {
         }
     }
 
+    /**
+     * FKDoc: here the client can pass the kryonet-client, and register all classes in the given order.
+     * @param client
+     */
     public void registerAllClassesForClient(Client client){
 
         for(Class c: constants){

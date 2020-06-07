@@ -41,6 +41,11 @@ public class BoardTest {
 
     }
 
+    /**
+     *LKDoc:    ActionCards Test - von jeder Karte werden jeweils 10 generiert
+     *          wie viele sind in ArrayListe? 100 expected
+     *          ist der Preis für diese Karte korrekt?
+     */
     @Test
     public void testActionFieldInit() {
         List<Card> actionCardsToBuy =  board.getActionField().getActionCardsToBuy();
@@ -58,6 +63,11 @@ public class BoardTest {
         assertActionCardType(actionCardsToBuy, ActionType.MINE, 5);
     }
 
+    /**
+     * LKDoc:
+     *      1) CardIsFound: Karte wurde gefunden und ist nicht null
+     *      2) CardNotFound: das Board wird zuerst geleert, dadurch wird auch keine Karte gefunden (=null)
+     */
     @Test
     public void testActionFieldPickCardIsFound() {
         Card card = board.getActionField().pickCard(ActionType.KELLER);
@@ -118,6 +128,13 @@ public class BoardTest {
         Assert.assertNull(card);
     }
 
+    /**
+     * LKDoc:   hier wird durch die ganze Liste spezifischer Karten iteriert.
+     *          Dann wird nochmal die Karte i geprüft und der Wert für diese Karte (z.B.price, worth, value
+     * @param actionCardsToBuy
+     * @param expectedActionType
+     * @param expectedPrice
+     */
     private void assertActionCardType(List<Card> actionCardsToBuy, ActionType expectedActionType, int expectedPrice) {
         for(int i = 0; i < actionCardsToBuy.size(); i++) {
             Assert.assertTrue(actionCardsToBuy.get(i) instanceof ActionCard);
@@ -126,6 +143,7 @@ public class BoardTest {
             }
         }
     }
+
 
     private void assertMoneyCardType(List<Card> moneyCardsToBuy, MoneyType expectedMoneyType, int expectedPrice, int expectedWorth) {
         for(int i = 0; i < moneyCardsToBuy.size(); i++) {

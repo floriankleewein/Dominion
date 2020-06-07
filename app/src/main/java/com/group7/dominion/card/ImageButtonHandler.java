@@ -18,16 +18,7 @@ import com.group7.dominion.R;
 import androidx.fragment.app.FragmentManager;
 
 public class ImageButtonHandler {
-    //private Board board;
     private ClientConnector clientConnector;
-
-    private ImageButton buttonGold;
-    private ImageButton buttonSilber;
-    private ImageButton buttonKupfer;
-    private ImageButton buttonProvinz;
-    private ImageButton buttonAnwesen;
-    private ImageButton buttonHerzogturm;
-    private ImageButton buttonFluch;
 
     private static final String ERRORDIALOG_CONST = "errorDialog";
     private static final String MONEYCARD_CONST = "MoneyCard";
@@ -35,8 +26,14 @@ public class ImageButtonHandler {
     private static final String ESTATECARD_CONST = "EstateCard";
     private static final String ESTATETYPE_CONST = "EstateType: ";
 
+    /**
+     * LKDoc:   setOnClickListener für die einzelnen Aktionskarten
+     * @param activity
+     * @param fragmentManager wird benötigt wegen dem ErrorDialogHandler
+     */
     public void init(Activity activity, FragmentManager fragmentManager) {
         //Gold
+        ImageButton buttonGold;
         buttonGold = activity.findViewById(R.id.btn_gold);
         buttonGold.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,6 +43,7 @@ public class ImageButtonHandler {
         });
 
         //Silber
+        ImageButton buttonSilber;
         buttonSilber = activity.findViewById(R.id.btn_silber);
         buttonSilber.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,7 +51,9 @@ public class ImageButtonHandler {
                 onClickSilber(activity, fragmentManager);
             }
         });
+
         //Kupfer
+        ImageButton buttonKupfer;
         buttonKupfer = activity.findViewById(R.id.btn_kupfer);
         buttonKupfer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,6 +63,7 @@ public class ImageButtonHandler {
         });
 
         //Provinz
+        ImageButton buttonProvinz;
         buttonProvinz = activity.findViewById(R.id.btn_provinz);
         buttonProvinz.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -72,6 +73,7 @@ public class ImageButtonHandler {
         });
 
         //Anwesen
+        ImageButton buttonAnwesen;
         buttonAnwesen = activity.findViewById(R.id.btn_anwesen);
         buttonAnwesen.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,6 +83,7 @@ public class ImageButtonHandler {
         });
 
         //Herzogturm
+        ImageButton buttonHerzogturm;
         buttonHerzogturm = activity.findViewById(R.id.btn_herzogturm);
         buttonHerzogturm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,6 +93,7 @@ public class ImageButtonHandler {
         });
 
         //Fluch
+        ImageButton buttonFluch;
         buttonFluch = activity.findViewById(R.id.btn_fluch);
         buttonFluch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,8 +103,17 @@ public class ImageButtonHandler {
         });
     }
 
+    /**
+     * LKDoc:   onClick Methoden für die Geld-, Fluch-, & Provinzkarten
+     *          wie im ActionDialogHandler:
+     *              1) zuerst wird überprüft ob die Karte gekauft werden kann (genug Geld) = Toast
+     *              2) ist die Karte zusätzlich null bedeutet dies es sind keine mehr im Stapel und der ErrorDialogHandler wird aufgerufen (braucht Fragment)
+     *              3) ist alles ok kann die Karte gekauft werden
+     * @param activity
+     * @param fragmentManager
+     */
     private void onClickGold(Activity activity, FragmentManager fragmentManager) {
-        //Card card = board.getBuyField().pickCard(MoneyType.GOLD);
+        //LKDoc: Karte kaufen
         BuyCardMsg gameUpdateMsg = new BuyCardMsg();
         gameUpdateMsg.setMoneyTypeClicked(MoneyType.GOLD);
         sendUpdate(gameUpdateMsg);
@@ -112,12 +125,10 @@ public class ImageButtonHandler {
                     BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
                     Card card = gameUpdateMsg1.getBoughtCard();
                     if (card == null) {
-                        /*
+                        Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
+                    } else if (card == null && gameUpdateMsg1.isCantBuyCard()) {
                         ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
                         errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
-
-                         */
-                        Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
                     } else if (card instanceof MoneyCard) {
                         MoneyCard moneyCard = (MoneyCard) card;
                         Log.i(MONEYCARD_CONST, MONEYTYPE_CONST + moneyCard.getMoneyType());
@@ -128,7 +139,6 @@ public class ImageButtonHandler {
     }
 
     private void onClickSilber(Activity activity, FragmentManager fragmentManager) {
-        //Card card = board.getBuyField().pickCard(MoneyType.SILBER);
         BuyCardMsg gameUpdateMsg = new BuyCardMsg();
         gameUpdateMsg.setMoneyTypeClicked(MoneyType.SILBER);
         sendUpdate(gameUpdateMsg);
@@ -140,12 +150,10 @@ public class ImageButtonHandler {
                     BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
                     Card card = gameUpdateMsg1.getBoughtCard();
                     if (card == null) {
-                        /*
+                        Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
+                    } else if (card == null && gameUpdateMsg1.isCantBuyCard()) {
                         ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
                         errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
-
-                         */
-                        Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
                     } else if (card instanceof MoneyCard) {
                         MoneyCard moneyCard = (MoneyCard) card;
                         Log.i(MONEYCARD_CONST, MONEYTYPE_CONST + moneyCard.getMoneyType());
@@ -157,7 +165,6 @@ public class ImageButtonHandler {
     }
 
     private void onClickKupfer(Activity activity, FragmentManager fragmentManager) {
-        //Card card = board.getBuyField().pickCard(MoneyType.KUPFER);
         BuyCardMsg gameUpdateMsg = new BuyCardMsg();
         gameUpdateMsg.setMoneyTypeClicked(MoneyType.KUPFER);
         sendUpdate(gameUpdateMsg);
@@ -168,13 +175,11 @@ public class ImageButtonHandler {
                 public void run() {
                     BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
                     Card card = gameUpdateMsg1.getBoughtCard();
-                    if (card == null) {
-                        /*
+                    if (card == null && !gameUpdateMsg1.isCantBuyCard()) {
+                        Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
+                    } else if (card == null && gameUpdateMsg1.isCantBuyCard()) {
                         ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
                         errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
-
-                         */
-                        Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
                     } else if (card instanceof MoneyCard) {
                         MoneyCard moneyCard = (MoneyCard) card;
                         Log.i(MONEYCARD_CONST, MONEYTYPE_CONST + moneyCard.getMoneyType());
@@ -185,7 +190,6 @@ public class ImageButtonHandler {
     }
 
     private void onClickAnwesen(Activity activity, FragmentManager fragmentManager) {
-        //Card card = board.getBuyField().pickCard(EstateType.ANWESEN);
         BuyCardMsg gameUpdateMsg = new BuyCardMsg();
         gameUpdateMsg.setEstateTypeClicked(EstateType.ANWESEN);
         sendUpdate(gameUpdateMsg);
@@ -196,13 +200,11 @@ public class ImageButtonHandler {
                 public void run() {
                     BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
                     Card card = gameUpdateMsg1.getBoughtCard();
-                    if (card == null) {
-                        /*
+                    if (card == null && !gameUpdateMsg1.isCantBuyCard()) {
+                        Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
+                    } else if (card == null && gameUpdateMsg1.isCantBuyCard()) {
                         ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
                         errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
-
-                         */
-                        Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
                     } else if (card instanceof EstateCard) {
                         EstateCard estateCard = (EstateCard) card;
                         Log.i(ESTATECARD_CONST, ESTATETYPE_CONST + estateCard.getEstateType());
@@ -213,7 +215,6 @@ public class ImageButtonHandler {
     }
 
     private void onClickProvinz(Activity activity, FragmentManager fragmentManager) {
-        //Card card = board.getBuyField().pickCard(EstateType.PROVINZ);
         BuyCardMsg gameUpdateMsg = new BuyCardMsg();
         gameUpdateMsg.setEstateTypeClicked(EstateType.PROVINZ);
         sendUpdate(gameUpdateMsg);
@@ -224,13 +225,11 @@ public class ImageButtonHandler {
                 public void run() {
                     BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
                     Card card = gameUpdateMsg1.getBoughtCard();
-                    if (card == null) {
-                        /*
+                    if (card == null && !gameUpdateMsg1.isCantBuyCard()) {
+                        Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
+                    } else if (card == null && gameUpdateMsg1.isCantBuyCard()) {
                         ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
                         errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
-
-                         */
-                        Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
                     } else if (card instanceof EstateCard) {
                         EstateCard estateCard = (EstateCard) card;
                         Log.i(ESTATECARD_CONST, ESTATETYPE_CONST + estateCard.getEstateType());
@@ -241,7 +240,6 @@ public class ImageButtonHandler {
     }
 
     private void onClickHerzogturm(Activity activity, FragmentManager fragmentManager) {
-        //Card card = board.getBuyField().pickCard(EstateType.HERZOGTUM);
         BuyCardMsg gameUpdateMsg = new BuyCardMsg();
         gameUpdateMsg.setEstateTypeClicked(EstateType.HERZOGTUM);
         sendUpdate(gameUpdateMsg);
@@ -253,12 +251,10 @@ public class ImageButtonHandler {
                     BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
                     Card card = gameUpdateMsg1.getBoughtCard();
                     if (card == null) {
-                        /*
+                        Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
+                    } else if (card == null && gameUpdateMsg1.isCantBuyCard()) {
                         ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
                         errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
-
-                         */
-                        Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
                     } else if (card instanceof EstateCard) {
                         EstateCard estateCard = (EstateCard) card;
                         Log.i(ESTATECARD_CONST, ESTATETYPE_CONST + estateCard.getEstateType());
@@ -270,7 +266,6 @@ public class ImageButtonHandler {
     }
 
     private void onClickFluch(Activity activity, FragmentManager fragmentManager) {
-        //Card card = board.getBuyField().pickCard(EstateType.FLUCH);
         BuyCardMsg gameUpdateMsg = new BuyCardMsg();
         gameUpdateMsg.setEstateTypeClicked(EstateType.FLUCH);
         sendUpdate(gameUpdateMsg);
@@ -282,12 +277,10 @@ public class ImageButtonHandler {
                     BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
                     Card card = gameUpdateMsg1.getBoughtCard();
                     if (card == null) {
-                        /*
+                        Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
+                    } else if (card == null && gameUpdateMsg1.isCantBuyCard()) {
                         ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
                         errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
-
-                         */
-                        Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
                     } else if (card instanceof EstateCard) {
                         EstateCard estateCard = (EstateCard) card;
                         Log.i(ESTATECARD_CONST, ESTATETYPE_CONST + estateCard.getEstateType());
@@ -297,25 +290,15 @@ public class ImageButtonHandler {
         }));
     }
 
+    /**
+     * LKDoc: sende Update der msg an clientConnector --> ClientConnector.class
+     * @param msg
+     */
     private void sendUpdate(BuyCardMsg msg) {
-        Thread th = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                clientConnector.sendbuyCard(msg);
-            }
-        });
+        //LKDoc: Sonarcloud wanted a lambda
+        Thread th = new Thread(() -> clientConnector.sendbuyCard(msg));
         th.start();
     }
-
-    /*
-    public Board getBoard() {
-        return board;
-    }
-
-    public void setBoard(Board board) {
-        this.board = board;
-    }
-    */
 
     public ClientConnector getClientConnector() {
         return clientConnector;

@@ -8,7 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ActionField {
+
+    //LKDoc: Liste von Karten definiert - Card hat ID & price
     private List<Card> actionCardsToBuy;
+    private List<ActionType> notAvailableCards;
 
     public ActionField() {
         init();
@@ -22,10 +25,21 @@ public class ActionField {
         this.actionCardsToBuy = actionCardsToBuy;
     }
 
+    public List<ActionType> getNotAvailableCards() {
+        return notAvailableCards;
+    }
+
+    public void setNotAvailableCards(List<ActionType> notAvailableCards) {
+        this.notAvailableCards = notAvailableCards;
+    }
+
+    /**
+     * LKDoc: Hier sind alle Action Karten definiert => von jeder Karte gibt es 10
+     * FM: Fürs testen die Karten auf zwei reduziert, da es sonst sehr lange dauert
+     */
     private void init() {
         this.actionCardsToBuy = new ArrayList<>();
-        // Hier sind alle Action Karten definiert => von jeder Karte gibt es 10
-        for(int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10; i++) {
             this.actionCardsToBuy.add(new ActionCard(2, ActionType.KELLER));
             this.actionCardsToBuy.add(new ActionCard(2, ActionType.BURGGRABEN));
             this.actionCardsToBuy.add(new ActionCard(3, ActionType.DORF));
@@ -37,14 +51,20 @@ public class ActionField {
             this.actionCardsToBuy.add(new ActionCard(5, ActionType.MARKT));
             this.actionCardsToBuy.add(new ActionCard(5, ActionType.MINE));
         }
+        this.notAvailableCards = new ArrayList<>();
     }
 
-    private boolean isTypeExistsInField(ActionType actionType){
+    /**
+     * LKDoc: Überprüfe ob der Typ (ActionCard) noch in der Liste existiert
+     * @param actionType
+     * @return
+     */
+    private boolean isTypeExistsInField(ActionType actionType) {
         boolean typeFound = false;
-        for(int i = 0; i < this.actionCardsToBuy.size(); i++) {
-            if(this.actionCardsToBuy.get(i) instanceof ActionCard) {
+        for (int i = 0; i < this.actionCardsToBuy.size(); i++) {
+            if (this.actionCardsToBuy.get(i) instanceof ActionCard) {
                 ActionCard actionCard = (ActionCard) this.actionCardsToBuy.get(i);
-                if(actionCard.getActionType() == actionType){
+                if (actionCard.getActionType() == actionType) {
                     typeFound = true;
                     return typeFound;
                 }
@@ -53,50 +73,22 @@ public class ActionField {
         return typeFound;
     }
 
-    //LKDoc: pickCard Method to buy a card
+    /**
+     * LKDoc: pickCard Method to buy a card
+     * @param actionType
+     * @return
+     */
     public Card pickCard(ActionType actionType) {
         Card card = null;
         boolean cardFound = false;
         int cardIndex = 0;
 
-        // Überprüfe ob der ActionType überhaupt noch im Stapel existiert
-        if(isTypeExistsInField(actionType)){
-            for(int i = 0; i < this.actionCardsToBuy.size(); i++) {
-                if(this.actionCardsToBuy.get(i) instanceof ActionCard) {
-                    ActionCard actionCard = (ActionCard) this.actionCardsToBuy.get(i);
-                    // Wenn der Kartentyp gefunden wird dann merke Index
-                    if(actionCard.getActionType() == actionType) {
-                        card = actionCard;
-                        cardIndex = i;
-                        cardFound = true;
-                    }
-                }
-            }
-
-            // Hier wird dann die Karte gelöscht
-            if(cardFound) {
-                this.actionCardsToBuy.remove(cardIndex);
-            }
-
-            return card;
-        } else {
-            //falls benötigt
-            return card;
-        }
-    }
-
-    //LKDoc - just returns the card (needed for the logic of Emanuel)
-    public Card getActionCard(ActionType actionType) {
-        Card card = null;
-        boolean cardFound = false;
-        int cardIndex = 0;
-
-        // Überprüfe ob der ActionType überhaupt noch im Stapel existiert
-        if(isTypeExistsInField(actionType)){
-            for(int i = 0; i < this.actionCardsToBuy.size(); i++) {
+        //LKDoc: Überprüfe ob der ActionType überhaupt noch im Stapel existiert
+        if (isTypeExistsInField(actionType)) {
+            for (int i = 0; i < this.actionCardsToBuy.size(); i++) {
                 if (this.actionCardsToBuy.get(i) instanceof ActionCard) {
                     ActionCard actionCard = (ActionCard) this.actionCardsToBuy.get(i);
-                    // Wenn der Kartentyp gefunden wird dann merke Index
+                    //LKDoc: Wenn der Kartentyp gefunden wird dann merke Index
                     if (actionCard.getActionType() == actionType) {
                         card = actionCard;
                         cardIndex = i;
@@ -104,11 +96,42 @@ public class ActionField {
                     }
                 }
             }
+
+            //LKDoc: Hier wird dann die Karte gelöscht
+            if (cardFound) {
+                this.actionCardsToBuy.remove(cardIndex);
+            }
+
             return card;
         } else {
-            //falls benötigt
+            //Card is null in that case
             return card;
         }
     }
 
+    /**
+     * LKDoc - gibt die Karte zurück (Methode wird für die buyCard Methode im Gamehandler benötigt)
+     * @param actionType
+     * @return
+     */
+    public Card getActionCard(ActionType actionType) {
+        Card card = null;
+
+        if (isTypeExistsInField(actionType)) {
+            for (int i = 0; i < this.actionCardsToBuy.size(); i++) {
+                if (this.actionCardsToBuy.get(i) instanceof ActionCard) {
+                    ActionCard actionCard = (ActionCard) this.actionCardsToBuy.get(i);
+                    if (actionCard.getActionType() == actionType) {
+                        card = actionCard;
+                    }
+                }
+            }
+            return card;
+        } else {
+            if (!notAvailableCards.contains(actionType)) {
+                this.notAvailableCards.add(actionType);
+            }
+            return card;
+        }
+    }
 }
