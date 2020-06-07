@@ -40,16 +40,16 @@ public class ActionDialogHandler extends AppCompatDialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-                .setTitle("Buy Action Card")
-                .setMessage("Do you want to buy this card?")
-                .setPositiveButton("Buy", (dialog, which) -> {
+                .setTitle("Kaufe Aktionskarte")
+                .setMessage("Willst du diese Karte kaufen?")
+                .setPositiveButton("Kaufen", (dialog, which) -> {
                     //LKDoc: Karte kaufen
                     BuyCardMsg buyCardMsg =new BuyCardMsg();
                     buyCardMsg.setActionTypeClicked(actionType);
                     sendUpdate(buyCardMsg);
                     //LKDoc: UIThread ist in der Dominion Activity
                 })
-                .setNegativeButton("Close", (dialog, which) -> {
+                .setNegativeButton("Schließen", (dialog, which) -> {
                     dialog.cancel();
                 });
 

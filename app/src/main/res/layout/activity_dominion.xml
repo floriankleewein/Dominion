@@ -4,158 +4,43 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background_board"
     tools:context=".DominionActivity">
 
-    <androidx.gridlayout.widget.GridLayout
-        android:id="@+id/gridLayout"
-        android:layout_width="154dp"
-        android:layout_height="246dp"
+    <Button
+        android:id="@+id/chat_Button"
+        android:layout_width="56dp"
+        android:layout_height="29dp"
         android:layout_marginStart="12dp"
         android:layout_marginTop="12dp"
-        app:columnCount="3"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/gridLayout3"
-        app:layout_constraintHorizontal_bias="0.114"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/receive_bubble"
+        android:text="Chat"
+        android:textColor="#000"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/gridLayout2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/txtWinningPoints"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/chatFragmentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <TextView
+        android:id="@+id/txtWinningPoints"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="88dp"
+        android:text="WP:"
+        app:layout_constraintBottom_toTopOf="@+id/gridLayout2"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.024"
-        app:rowCount="3">
-
-
-        <ImageButton
-            android:id="@+id/btn_gold"
-            android:layout_width="51dp"
-            android:layout_height="82dp"
-            android:adjustViewBounds="true"
-            android:padding="0dp"
-            android:paddingHorizontal="0dp"
-            android:paddingVertical="0dp"
-            android:paddingStart="0dp"
-            android:paddingLeft="0dp"
-            android:paddingTop="0dp"
-            android:paddingEnd="0dp"
-            android:paddingRight="0dp"
-            android:paddingBottom="0dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/gold"
-            app:layout_column="0"
-            app:layout_row="0" />
-
-        <ImageButton
-            android:id="@+id/btn_silber"
-            android:layout_width="51dp"
-            android:layout_height="82dp"
-            android:adjustViewBounds="true"
-            android:padding="0dp"
-            android:paddingHorizontal="0dp"
-            android:paddingVertical="0dp"
-            android:paddingStart="0dp"
-            android:paddingLeft="0dp"
-            android:paddingTop="0dp"
-            android:paddingEnd="0dp"
-            android:paddingRight="0dp"
-            android:paddingBottom="0dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/silber"
-            app:layout_column="0"
-            app:layout_row="1" />
-
-        <ImageButton
-            android:id="@+id/btn_kupfer"
-            android:layout_width="51dp"
-            android:layout_height="82dp"
-            android:adjustViewBounds="true"
-            android:padding="0dp"
-            android:paddingHorizontal="0dp"
-            android:paddingVertical="0dp"
-            android:paddingStart="0dp"
-            android:paddingLeft="0dp"
-            android:paddingTop="0dp"
-            android:paddingEnd="0dp"
-            android:paddingRight="0dp"
-            android:paddingBottom="0dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/kupfer"
-            app:layout_column="0"
-            app:layout_row="2" />
-
-        <ImageButton
-            android:id="@+id/btn_herzogturm"
-            android:layout_width="51dp"
-            android:layout_height="82dp"
-            android:adjustViewBounds="true"
-            android:padding="0dp"
-            android:paddingHorizontal="0dp"
-            android:paddingVertical="0dp"
-            android:paddingStart="0dp"
-            android:paddingLeft="0dp"
-            android:paddingTop="0dp"
-            android:paddingEnd="0dp"
-            android:paddingRight="0dp"
-            android:paddingBottom="0dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/herzogtum"
-            app:layout_column="1"
-            app:layout_row="1" />
-
-        <ImageButton
-            android:id="@+id/btn_provinz"
-            android:layout_width="51dp"
-            android:layout_height="82dp"
-            android:adjustViewBounds="true"
-            android:padding="0dp"
-            android:paddingHorizontal="0dp"
-            android:paddingVertical="0dp"
-            android:paddingStart="0dp"
-            android:paddingLeft="0dp"
-            android:paddingTop="0dp"
-            android:paddingEnd="0dp"
-            android:paddingRight="0dp"
-            android:paddingBottom="0dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/provinz"
-            app:layout_column="1"
-            app:layout_row="0" />
-
-        <ImageButton
-            android:id="@+id/btn_anwesen"
-            android:layout_width="51dp"
-            android:layout_height="82dp"
-            android:adjustViewBounds="true"
-            android:padding="0dp"
-            android:paddingHorizontal="0dp"
-            android:paddingVertical="0dp"
-            android:paddingStart="0dp"
-            android:paddingLeft="0dp"
-            android:paddingTop="0dp"
-            android:paddingEnd="0dp"
-            android:paddingRight="0dp"
-            android:paddingBottom="0dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/anwesen"
-            app:layout_column="1"
-            app:layout_row="2" />
-
-        <ImageButton
-            android:id="@+id/btn_fluch"
-            android:layout_width="51dp"
-            android:layout_height="82dp"
-            android:adjustViewBounds="true"
-            android:padding="0dp"
-            android:paddingHorizontal="0dp"
-            android:paddingVertical="0dp"
-            android:paddingStart="0dp"
-            android:paddingLeft="0dp"
-            android:paddingTop="0dp"
-            android:paddingEnd="0dp"
-            android:paddingRight="0dp"
-            android:paddingBottom="0dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/fluch"
-            app:layout_column="2"
-            app:layout_row="2" />
-
-    </androidx.gridlayout.widget.GridLayout>
+        app:layout_constraintVertical_bias="0.64" />
 
     <androidx.gridlayout.widget.GridLayout
         android:id="@+id/gridLayout2"
@@ -472,68 +357,155 @@
             android:src="@drawable/backofcard" />
     </androidx.gridlayout.widget.GridLayout>
 
-    <TextView
-        android:id="@+id/txtWinningPoints"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="88dp"
-        android:text="WP:"
-        app:layout_constraintBottom_toTopOf="@+id/gridLayout2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.64" />
-
-    <TextView
-        android:id="@+id/txtLastCard"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="162dp"
-        android:text="Last played card:"
-        android:textSize="10sp"
-        app:layout_constraintBottom_toTopOf="@+id/scrollView2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.996" />
-
-    <ScrollView
-        android:id="@+id/scrollView2"
-        android:layout_width="116dp"
-        android:layout_height="94dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginBottom="12dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/gridLayout3"
-        app:layout_constraintHorizontal_bias="0.214"
-        app:layout_constraintStart_toEndOf="@+id/gridLayout4">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" />
-    </ScrollView>
-
-    <Button
-        android:id="@+id/chat_Button"
-        android:layout_width="56dp"
-        android:layout_height="29dp"
+    <androidx.gridlayout.widget.GridLayout
+        android:id="@+id/gridLayout"
+        android:layout_width="154dp"
+        android:layout_height="246dp"
         android:layout_marginStart="12dp"
         android:layout_marginTop="12dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginBottom="8dp"
-        android:text="Chat"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="@+id/gridLayout2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/txtWinningPoints"
+        app:columnCount="3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/gridLayout3"
+        app:layout_constraintHorizontal_bias="0.114"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:textColor="#000"
-        android:background="@drawable/receive_bubble"/>
+        app:layout_constraintVertical_bias="0.024"
+        app:rowCount="3">
 
-    <FrameLayout
-        android:id="@+id/chatFragmentContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp" />
+
+        <ImageButton
+            android:id="@+id/btn_gold"
+            android:layout_width="51dp"
+            android:layout_height="82dp"
+            android:adjustViewBounds="true"
+            android:padding="0dp"
+            android:paddingHorizontal="0dp"
+            android:paddingVertical="0dp"
+            android:paddingStart="0dp"
+            android:paddingLeft="0dp"
+            android:paddingTop="0dp"
+            android:paddingEnd="0dp"
+            android:paddingRight="0dp"
+            android:paddingBottom="0dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/gold"
+            app:layout_column="0"
+            app:layout_row="0" />
+
+        <ImageButton
+            android:id="@+id/btn_silber"
+            android:layout_width="51dp"
+            android:layout_height="82dp"
+            android:adjustViewBounds="true"
+            android:padding="0dp"
+            android:paddingHorizontal="0dp"
+            android:paddingVertical="0dp"
+            android:paddingStart="0dp"
+            android:paddingLeft="0dp"
+            android:paddingTop="0dp"
+            android:paddingEnd="0dp"
+            android:paddingRight="0dp"
+            android:paddingBottom="0dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/silber"
+            app:layout_column="0"
+            app:layout_row="1" />
+
+        <ImageButton
+            android:id="@+id/btn_kupfer"
+            android:layout_width="51dp"
+            android:layout_height="82dp"
+            android:adjustViewBounds="true"
+            android:padding="0dp"
+            android:paddingHorizontal="0dp"
+            android:paddingVertical="0dp"
+            android:paddingStart="0dp"
+            android:paddingLeft="0dp"
+            android:paddingTop="0dp"
+            android:paddingEnd="0dp"
+            android:paddingRight="0dp"
+            android:paddingBottom="0dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/kupfer"
+            app:layout_column="0"
+            app:layout_row="2" />
+
+        <ImageButton
+            android:id="@+id/btn_herzogturm"
+            android:layout_width="51dp"
+            android:layout_height="82dp"
+            android:adjustViewBounds="true"
+            android:padding="0dp"
+            android:paddingHorizontal="0dp"
+            android:paddingVertical="0dp"
+            android:paddingStart="0dp"
+            android:paddingLeft="0dp"
+            android:paddingTop="0dp"
+            android:paddingEnd="0dp"
+            android:paddingRight="0dp"
+            android:paddingBottom="0dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/herzogtum"
+            app:layout_column="1"
+            app:layout_row="1" />
+
+        <ImageButton
+            android:id="@+id/btn_provinz"
+            android:layout_width="51dp"
+            android:layout_height="82dp"
+            android:adjustViewBounds="true"
+            android:padding="0dp"
+            android:paddingHorizontal="0dp"
+            android:paddingVertical="0dp"
+            android:paddingStart="0dp"
+            android:paddingLeft="0dp"
+            android:paddingTop="0dp"
+            android:paddingEnd="0dp"
+            android:paddingRight="0dp"
+            android:paddingBottom="0dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/provinz"
+            app:layout_column="1"
+            app:layout_row="0" />
+
+        <ImageButton
+            android:id="@+id/btn_anwesen"
+            android:layout_width="51dp"
+            android:layout_height="82dp"
+            android:adjustViewBounds="true"
+            android:padding="0dp"
+            android:paddingHorizontal="0dp"
+            android:paddingVertical="0dp"
+            android:paddingStart="0dp"
+            android:paddingLeft="0dp"
+            android:paddingTop="0dp"
+            android:paddingEnd="0dp"
+            android:paddingRight="0dp"
+            android:paddingBottom="0dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/anwesen"
+            app:layout_column="1"
+            app:layout_row="2" />
+
+        <ImageButton
+            android:id="@+id/btn_fluch"
+            android:layout_width="51dp"
+            android:layout_height="82dp"
+            android:adjustViewBounds="true"
+            android:padding="0dp"
+            android:paddingHorizontal="0dp"
+            android:paddingVertical="0dp"
+            android:paddingStart="0dp"
+            android:paddingLeft="0dp"
+            android:paddingTop="0dp"
+            android:paddingEnd="0dp"
+            android:paddingRight="0dp"
+            android:paddingBottom="0dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/fluch"
+            app:layout_column="2"
+            app:layout_row="2" />
+
+    </androidx.gridlayout.widget.GridLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
