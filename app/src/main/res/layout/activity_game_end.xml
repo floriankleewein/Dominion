@@ -4,7 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background_board"
     tools:context=".GameEndActivity">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="220dp"
+        android:layout_height="141dp"
+        app:layout_constraintBottom_toBottomOf="@+id/linearLayoutGameEnd"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/linearLayoutGameEnd"
+        app:srcCompat="@drawable/crown" />
 
     <LinearLayout
         android:id="@+id/linearLayoutGameEnd"
@@ -12,7 +23,9 @@
         android:layout_height="184dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></LinearLayout>
+        app:layout_constraintTop_toTopOf="parent">
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/winnerID"
@@ -23,10 +36,11 @@
         android:layout_marginBottom="18dp"
         android:text="Der Spieler "
         android:textAlignment="gravity"
+        android:textColor="#FFFFFF"
         android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/winnerView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintHorizontal_bias="0.609"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayoutGameEnd" />
 
@@ -37,9 +51,11 @@
         android:layout_marginStart="110dp"
         android:layout_marginEnd="178dp"
         android:text="TextView"
+        android:textColor="#FFFFFF"
         android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/hasWon"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.606"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/winnerID" />
 
@@ -52,9 +68,11 @@
         android:layout_marginEnd="167dp"
         android:layout_marginBottom="8dp"
         android:text="hat gewonnen"
+        android:textColor="#FFFFFF"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.608"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/winnerView" />
 </androidx.constraintlayout.widget.ConstraintLayout>

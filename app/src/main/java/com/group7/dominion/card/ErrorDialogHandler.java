@@ -15,8 +15,8 @@ public class ErrorDialogHandler extends AppCompatDialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
                 .setTitle("Error")
-                .setMessage("No cards left on stack for this type.")
-                .setNeutralButton("Close", (dialog, which) -> {
+                .setMessage("Keine Karten mehr von diesem Typ im Stapel")
+                .setNeutralButton("Schließen", (dialog, which) -> {
                 });
         return builder.create();
     }
