@@ -69,9 +69,7 @@ public class StartGameActivity extends AppCompatActivity {
 
         playerNamesListView.setAdapter(listViewAdapter);
 
-        Thread thread2 = new Thread(() -> {
-            clientConnector.checkStartbutton();
-        });
+        Thread thread2 = new Thread(clientConnector::checkStartbutton);
         thread2.start();
 
         /**
@@ -97,7 +95,7 @@ public class StartGameActivity extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Thread thread1 = new Thread(() -> clientConnector.startGame());
+                    Thread thread1 = new Thread(clientConnector::startGame);
                     thread1.start();
                     Intent intent = new Intent(StartGameActivity.this, DominionActivity.class);
                     startActivity(intent);
