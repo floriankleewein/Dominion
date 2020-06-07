@@ -66,12 +66,7 @@ public class TestServer {
     public void startServer() throws InterruptedException {
         Log.info("Running Server!");
         //FKDoc: Register classes
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                registerClasses();
-            }
-        });
+        Thread thread = new Thread(this::registerClasses);
         thread.start();
         thread.join();
 

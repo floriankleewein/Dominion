@@ -55,7 +55,7 @@ public class StartGameActivity extends AppCompatActivity {
          * FKDoc: this is the listView where the playerNames should be viewed.
          */
         ListView playerNamesListView = findViewById(R.id.playerNamesListView);
-        Thread thread = new Thread(() -> clientConnector.updatePlayerNames());
+        Thread thread = new Thread(clientConnector::updatePlayerNames);
 
         thread.start();
 
@@ -122,7 +122,7 @@ public class StartGameActivity extends AppCompatActivity {
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Thread thread = new Thread(() -> clientConnector.allPlayersInDominionActivity());
+                Thread thread = new Thread(clientConnector::allPlayersInDominionActivity);
                 thread.start();
             }
         });

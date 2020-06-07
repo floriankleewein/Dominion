@@ -202,13 +202,6 @@ public class ClientConnector {
     public void resetGame() {
         ResetMsg msg = new ResetMsg();
         client.sendTCP(msg);
-
-        client.addListener(new Listener() {
-            public void received(Connection con, Object object) {
-
-            }
-
-        });
     }
 
     public void endTurn() {
