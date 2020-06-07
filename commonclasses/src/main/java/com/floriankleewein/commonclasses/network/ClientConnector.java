@@ -12,7 +12,6 @@ import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.gamelogic.GameHandler;
 import com.floriankleewein.commonclasses.network.messages.EndGameMsg;
 import com.floriankleewein.commonclasses.network.messages.NewTurnMessage;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -81,6 +80,23 @@ public class ClientConnector {
     public void recreateStartGameActivity() {
         RecreateStartActivityMsg msg = new RecreateStartActivityMsg();
         client.sendTCP(msg);
+    }
+
+    /**
+     * FKDoc: sends the server the request to check the playernumber to see if the start button is enabled or not.
+     */
+    public void checkStartbutton(){
+        StartbuttonMsg msg = new StartbuttonMsg();
+        client.sendTCP(msg);
+
+        client.addListener(new Listener() {
+            public void received(Connection con, Object object) {
+                if (object instanceof StartbuttonMsg) {
+                    StartbuttonMsg msg = (StartbuttonMsg) object;
+                    callbackMap.get(StartbuttonMsg.class).callback(msg);
+                }
+            }
+        });
     }
 
     /**
