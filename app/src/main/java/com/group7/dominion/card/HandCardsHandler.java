@@ -9,10 +9,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.floriankleewein.commonclasses.cards.Card;
-import com.floriankleewein.commonclasses.gamelogic.PlayStatus;
 import com.floriankleewein.commonclasses.network.ClientConnector;
 import com.floriankleewein.commonclasses.network.PlayCardMsg;
-import com.floriankleewein.commonclasses.network.StartGameMsg;
 import com.floriankleewein.commonclasses.user.User;
 import com.group7.dominion.DominionActivity;
 import com.group7.dominion.R;
@@ -20,15 +18,19 @@ import com.group7.dominion.R;
 import java.util.LinkedList;
 import java.util.List;
 
+/**@Author Maurer Florian
+ * This class handles the hand cards. It's implemented with dynamic lists, because you can have a different amount of hand cards.
+ * ImageButtonList stores the Image Buttons which are the cards in the UI.
+ * The CardList stores the cards objects, which are necessary for sending to the server, who needs to know which card object is played.
+ *
+ */
 
 public class HandCardsHandler {
-    PlayStatus playStatus;
     LinearLayout linearLayout;
     LinearLayout.LayoutParams lparams;
     private List<ImageButton> imageButtonList;
     private List<Card> cardList;
     Context context;
-    int imgId;
     boolean canGetCards;
 
     public HandCardsHandler(Context context) {
@@ -37,7 +39,6 @@ public class HandCardsHandler {
         lparams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         imageButtonList = new LinkedList<>();
         lparams.weight = 1;
-        playStatus = PlayStatus.NO_PLAY_PHASE;
         canGetCards = true;
         cardList = new LinkedList<>();
     }
@@ -58,6 +59,13 @@ public class HandCardsHandler {
         thread.start();
 
     }
+
+    /**
+     * @param card
+     * @return id from the drawable.
+     * @Author Maurer Florian
+     * This Methods gets the right picture id and returns the int value
+     */
 
     private int setRessource(Card card) {
         switch (card.getId()) {
@@ -100,6 +108,12 @@ public class HandCardsHandler {
         }
     }
 
+    /**
+     * @Author Maurer Florian
+     * set a click listener on the hand cards which are in the views.
+     * in this on click listener method only cards where id is less than or equal 10. (Those are all Action Cards!!!)
+     * If a card is clicked it will be removed from the View and the played card will be sended to the Server.
+     */
 
     public void onClickListenerActionPhase() {
         for (int i = 0; i < imageButtonList.size(); i++) {
@@ -118,6 +132,11 @@ public class HandCardsHandler {
             });
         }
     }
+
+    /**
+     * @Author Maurer Florian
+     * Similar to the method beyond. Different here is that you can only click the cards where the id is greater or equal 14. (Those are all Money Cards!!!)
+     */
 
     public void onClickListenerBuyPhase() {
         for (int i = 0; i < imageButtonList.size(); i++) {
@@ -141,24 +160,32 @@ public class HandCardsHandler {
 
     }
 
+    /**
+     * @param card, the Card which is played
+     * @Author Maurer Florian
+     * Adds a card to the to the linearLayout and stores the view in the List, so it can be removed when it will be played
+     */
+
     private void addCard(Card card) {
         ImageButton umg = new ImageButton(context);
         umg.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-        umg.setId(imgId);
         umg.setLayoutParams(lparams);
         umg.setImageResource(setRessource(card));
         linearLayout.addView(umg);
         imageButtonList.add(umg);
-        imgId++;
     }
 
+    /**
+     * @Author Maurer Florian
+     * Sets back the linearLayout and clears the ImageButtonList.
+     */
     public void setImageButtonsNull() {
         Log.i("SEt", "SET IMAGE BUTTON NULL IS CALLED ");
         linearLayout.removeAllViewsInLayout();
         imageButtonList.clear();
         canGetCards = true;
     }
-    
+
 }
 
 

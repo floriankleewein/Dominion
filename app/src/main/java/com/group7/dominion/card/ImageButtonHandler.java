@@ -25,6 +25,7 @@ public class ImageButtonHandler {
     private static final String MONEYTYPE_CONST = "MoneyType: ";
     private static final String ESTATECARD_CONST = "EstateCard";
     private static final String ESTATETYPE_CONST = "EstateType: ";
+    private static final String CANT_BUYCARD_CONST = "Du kannst diese Karte nicht kaufen";
 
     /**
      * LKDoc:   setOnClickListener für die einzelnen Aktionskarten
@@ -125,7 +126,7 @@ public class ImageButtonHandler {
                     BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
                     Card card = gameUpdateMsg1.getBoughtCard();
                     if (card == null) {
-                        Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity.getApplicationContext(), CANT_BUYCARD_CONST, Toast.LENGTH_SHORT).show();
                     } else if (card == null && gameUpdateMsg1.isCantBuyCard()) {
                         ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
                         errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
@@ -150,7 +151,7 @@ public class ImageButtonHandler {
                     BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
                     Card card = gameUpdateMsg1.getBoughtCard();
                     if (card == null) {
-                        Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity.getApplicationContext(), CANT_BUYCARD_CONST, Toast.LENGTH_SHORT).show();
                     } else if (card == null && gameUpdateMsg1.isCantBuyCard()) {
                         ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
                         errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
@@ -176,7 +177,7 @@ public class ImageButtonHandler {
                     BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
                     Card card = gameUpdateMsg1.getBoughtCard();
                     if (card == null && !gameUpdateMsg1.isCantBuyCard()) {
-                        Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity.getApplicationContext(), CANT_BUYCARD_CONST, Toast.LENGTH_SHORT).show();
                     } else if (card == null && gameUpdateMsg1.isCantBuyCard()) {
                         ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
                         errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
@@ -201,7 +202,7 @@ public class ImageButtonHandler {
                     BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
                     Card card = gameUpdateMsg1.getBoughtCard();
                     if (card == null && !gameUpdateMsg1.isCantBuyCard()) {
-                        Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity.getApplicationContext(), CANT_BUYCARD_CONST, Toast.LENGTH_SHORT).show();
                     } else if (card == null && gameUpdateMsg1.isCantBuyCard()) {
                         ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
                         errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
@@ -226,7 +227,7 @@ public class ImageButtonHandler {
                     BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
                     Card card = gameUpdateMsg1.getBoughtCard();
                     if (card == null && !gameUpdateMsg1.isCantBuyCard()) {
-                        Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity.getApplicationContext(), CANT_BUYCARD_CONST, Toast.LENGTH_SHORT).show();
                     } else if (card == null && gameUpdateMsg1.isCantBuyCard()) {
                         ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
                         errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
@@ -251,7 +252,7 @@ public class ImageButtonHandler {
                     BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
                     Card card = gameUpdateMsg1.getBoughtCard();
                     if (card == null) {
-                        Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity.getApplicationContext(), CANT_BUYCARD_CONST, Toast.LENGTH_SHORT).show();
                     } else if (card == null && gameUpdateMsg1.isCantBuyCard()) {
                         ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
                         errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
@@ -277,7 +278,7 @@ public class ImageButtonHandler {
                     BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
                     Card card = gameUpdateMsg1.getBoughtCard();
                     if (card == null) {
-                        Toast.makeText(activity.getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(activity.getApplicationContext(), CANT_BUYCARD_CONST, Toast.LENGTH_SHORT).show();
                     } else if (card == null && gameUpdateMsg1.isCantBuyCard()) {
                         ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
                         errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);

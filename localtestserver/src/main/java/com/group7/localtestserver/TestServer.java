@@ -182,9 +182,6 @@ public class TestServer {
                 } else if (object instanceof StartGameMsg) {
                     startGameMsgFunctionality(con);
 
-                } else if (object instanceof GetPlayerMsg) {
-                    getPlayerMsgFunctionality(con);
-
                 } else if (object instanceof ChatMessage) {
                     chatMessageFunctionality(object, con);
 
@@ -218,7 +215,7 @@ public class TestServer {
                     getChatMessagesFunctionality(con);
                 } else if (object instanceof SetGameNullMsg) {
                     setGameNull();
-                } else if (object instanceof StartbuttonMsg){
+                } else if (object instanceof StartbuttonMsg) {
                     startbuttonMsgFunctionality(object);
                 }
             }
@@ -316,12 +313,6 @@ public class TestServer {
 
     }
 
-    public void getPlayerMsgFunctionality(Connection con) {
-        Log.info("Got the GetPlayerMsg");
-        ReturnPlayersMsg msg = new ReturnPlayersMsg();
-        con.sendTCP(msg);
-    }
-
     public void chatMessageFunctionality(Object object, Connection con) {
         ChatMessage msg = (ChatMessage) object;
 
@@ -360,9 +351,10 @@ public class TestServer {
         server.sendToAllTCP(msg);
     }
 
-    /**@Author Maurer Florian
-     *This msg triggers the addDeckCardtoHandCard method from UserCards and adds a new Card to the HandCards.
+    /**
      * @param object
+     * @Author Maurer Florian
+     * This msg triggers the addDeckCardtoHandCard method from UserCards and adds a new Card to the HandCards.
      */
 
     private void hasCheatedMessageFunctionality(Object object) {
@@ -372,10 +364,10 @@ public class TestServer {
     }
 
 
-    /**@Author Maurer Florian
-     * This msg triggers the suspectUser method from CheatService class.
-     *
+    /**
      * @param object, msg from client who wants to suspect someone.
+     * @Author Maurer Florian
+     * This msg triggers the suspectUser method from CheatService class.
      */
 
 
@@ -515,13 +507,14 @@ public class TestServer {
 
     /**
      * FKDoc: checks how many players are in the game. startbutton is activated as soon as there are at least two people in the game.
+     *
      * @param object
      */
-    public void startbuttonMsgFunctionality(Object object){
+    public void startbuttonMsgFunctionality(Object object) {
         StartbuttonMsg msg = (StartbuttonMsg) object;
-        if(game.getPlayerList().size() > 1) {
+        if (game.getPlayerList().size() > 1) {
             msg.setStartValue(true);
-        }else{
+        } else {
             msg.setStartValue(false);
         }
         server.sendToAllTCP(msg);

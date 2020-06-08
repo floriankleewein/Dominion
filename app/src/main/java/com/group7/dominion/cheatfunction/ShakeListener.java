@@ -8,7 +8,6 @@ import android.hardware.SensorManager;
 
 import androidx.fragment.app.FragmentManager;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -18,7 +17,7 @@ public class ShakeListener {
     private float shake;
     private CheatAlert cheatAlert;
     private FragmentManager fragmentManager;
-    private String Username;
+    private String username;
     private List<String> names;
 
     public ShakeListener(FragmentManager fragmentManager, String username, List<String> names) {
@@ -27,7 +26,7 @@ public class ShakeListener {
         shake = 0.00f;
         cheatAlert = new CheatAlert();
         this.fragmentManager = fragmentManager;
-        this.Username = username;
+        this.username = username;
         this.names = names;
     }
 
@@ -52,7 +51,7 @@ public class ShakeListener {
                 shake = shake * 0.9f + delta;
 
                 if (shake > 4 && !cheatAlert.isAdded()) {
-                    cheatAlert.setName(Username);
+                    cheatAlert.setName(username);
                     cheatAlert.setNamesList(names);
                     cheatAlert.show(fragmentManager, "cheat");
                 }
