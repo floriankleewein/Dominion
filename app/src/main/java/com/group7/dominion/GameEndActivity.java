@@ -5,7 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
-/**@Author Maurer Florian
+import com.floriankleewein.commonclasses.network.ClientConnector;
+
+/**
+ * @Author Maurer Florian
  * Activity shows the winner of the current game.
  */
 
@@ -26,5 +29,6 @@ public class GameEndActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         textViewWinner.setText(winner);
+        ClientConnector.getClientConnector().sendsetGameNull();
     }
 }

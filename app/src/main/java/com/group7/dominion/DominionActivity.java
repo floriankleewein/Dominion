@@ -18,7 +18,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.floriankleewein.commonclasses.Game;
-import com.floriankleewein.commonclasses.board.Board;
+
 import com.floriankleewein.commonclasses.cards.ActionCard;
 import com.floriankleewein.commonclasses.cards.Card;
 import com.floriankleewein.commonclasses.chat.ChatMessage;
@@ -60,7 +60,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
     //Pop-up Info Dialogs
     private ActionDialogHandler actionDialogHandler;
 
-    private Board board;
+    private static final String NEW_TURN_MESSAGE = "Ist am Zug";
 
 
     @Override
@@ -350,6 +350,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
             text += u.getUserName() + ": " + u.getGamePoints().getWinningPoints() + "\n";
         }
         playerScores.setText(text);
+        Toast.makeText(getApplicationContext(), msg.getGame().getActivePlayer().getUserName() + " " + NEW_TURN_MESSAGE, Toast.LENGTH_SHORT).show();
     }
 
     public void sendUpdateMessage() {

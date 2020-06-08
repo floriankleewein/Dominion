@@ -520,8 +520,7 @@ public class TestServer {
     }
 
     public void setGameNull() {
-        game = null;
+        game.getPlayerList().clear();
         gamehandler = null;
-        board = null;
     }
 }
