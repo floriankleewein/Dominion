@@ -40,7 +40,6 @@ import com.group7.dominion.chat.ChatFragment;
 import com.group7.dominion.cheatfunction.ShakeListener;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 public class DominionActivity extends AppCompatActivity implements ChatFragment.OnChatMessageArrivedListener {
 
@@ -52,7 +51,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
     private TextView coinAmounts;
     private TextView[] playerNames = new TextView[4];
     private TextView[] playerScores = new TextView[4];
-    private static final int nameMaxLength = 10;
+    private static final int PLAYER_NAME_MAXLENGTH = 10;
 
     private FragmentManager fragmentManager;
 
@@ -288,8 +287,8 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
                             }
                             int iterator = 0;
                             for (User u : gameUpdateMsg1.getGame().getPlayerList()) {
-                                if(u.getUserName().length() > nameMaxLength) {
-                                    playerNames[iterator].setText((u.getUserName()).substring(0, nameMaxLength));
+                                if(u.getUserName().length() > PLAYER_NAME_MAXLENGTH) {
+                                    playerNames[iterator].setText((u.getUserName()).substring(0, PLAYER_NAME_MAXLENGTH));
                                 } else {
                                     playerNames[iterator].setText(u.getUserName());
                                 }
@@ -335,8 +334,8 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         }
         int iterator = 0;
         for (User u : msg.getGame().getPlayerList()) {
-            if(u.getUserName().length() > nameMaxLength) {
-                playerNames[iterator].setText((u.getUserName()).substring(0, nameMaxLength));
+            if(u.getUserName().length() > PLAYER_NAME_MAXLENGTH) {
+                playerNames[iterator].setText((u.getUserName()).substring(0, PLAYER_NAME_MAXLENGTH));
             } else {
                 playerNames[iterator].setText(u.getUserName());
             }
@@ -365,8 +364,8 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         }
         int iterator = 0;
         for (User u : msg.getGame().getPlayerList()) {
-            if(u.getUserName().length() > nameMaxLength) {
-                playerNames[iterator].setText((u.getUserName()).substring(0, nameMaxLength));
+            if(u.getUserName().length() > PLAYER_NAME_MAXLENGTH) {
+                playerNames[iterator].setText((u.getUserName()).substring(0, PLAYER_NAME_MAXLENGTH));
             } else {
                 playerNames[iterator].setText(u.getUserName());
             }
