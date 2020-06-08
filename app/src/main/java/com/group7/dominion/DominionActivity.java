@@ -53,6 +53,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
     private TextView coinAmounts;
     private TextView[] playerNames = new TextView[4];
     private TextView[] playerScores = new TextView[4];
+    private static final int nameMaxLength = 10;
 
     private FragmentManager fragmentManager;
 
@@ -288,8 +289,11 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
                             }
                             int iterator = 0;
                             for (User u : gameUpdateMsg1.getGame().getPlayerList()) {
-                                playerNames[iterator].setText((u.getUserName()).substring(0, 10));
-                                playerScores[iterator++].setText(Integer.toString(u.getGamePoints().getWinningPoints()));
+                                if(u.getUserName().length() > nameMaxLength) {
+                                    playerNames[iterator].setText((u.getUserName()).substring(0, nameMaxLength));
+                                } else {
+                                    playerNames[iterator].setText(u.getUserName());
+                                }
                             }
                         }
                     }
@@ -331,7 +335,11 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         }
         int iterator = 0;
         for (User u : msg.getGame().getPlayerList()) {
-            playerNames[iterator].setText((u.getUserName()).substring(0, 10));
+            if(u.getUserName().length() > nameMaxLength) {
+                playerNames[iterator].setText((u.getUserName()).substring(0, nameMaxLength));
+            } else {
+                playerNames[iterator].setText(u.getUserName());
+            }
             playerScores[iterator++].setText(Integer.toString(u.getGamePoints().getWinningPoints()));
         }
     }
@@ -357,8 +365,11 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         }
         int iterator = 0;
         for (User u : msg.getGame().getPlayerList()) {
-            playerNames[iterator].setText((u.getUserName()).substring(0, 10));
-            playerScores[iterator++].setText(Integer.toString(u.getGamePoints().getWinningPoints()));
+            if(u.getUserName().length() > nameMaxLength) {
+                playerNames[iterator].setText((u.getUserName()).substring(0, nameMaxLength));
+            } else {
+                playerNames[iterator].setText(u.getUserName());
+            }
         }
 
         Toast.makeText(getApplicationContext(), msg.getGame().getActivePlayer().getUserName() + " " + NEW_TURN_MESSAGE, Toast.LENGTH_SHORT).show();
