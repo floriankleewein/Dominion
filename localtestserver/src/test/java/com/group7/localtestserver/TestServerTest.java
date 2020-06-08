@@ -6,8 +6,12 @@ import com.esotericsoftware.minlog.Log;
 import com.floriankleewein.commonclasses.ClassRegistration;
 import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.gamelogic.GameHandler;
+import com.floriankleewein.commonclasses.network.AddPlayerSuccessMsg;
 import com.floriankleewein.commonclasses.network.GameUpdateMsg;
 import com.floriankleewein.commonclasses.network.HasCheatedMessage;
+import com.floriankleewein.commonclasses.network.StartGameMsg;
+import com.floriankleewein.commonclasses.network.UpdatePlayerNamesMsg;
+import com.floriankleewein.commonclasses.network.messages.NotEnoughRessourcesMsg;
 import com.floriankleewein.commonclasses.user.User;
 
 import org.junit.After;
@@ -19,6 +23,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
+import java.util.Map;
 
 import static org.mockito.Mockito.*;
 
@@ -31,7 +36,10 @@ public class TestServerTest {
     private Game game;
 
     @Mock
-    private Connection Mockconnection;
+    private Map<User, Connection> mockMap;
+
+    @Mock
+    private Connection mockConnection;
 
     @Mock
     private HasCheatedMessage mockHasCheatedMsg;
@@ -44,6 +52,9 @@ public class TestServerTest {
 
     @InjectMocks
     private TestServer m_cut;
+
+    private NotEnoughRessourcesMsg errorMsg;
+
 
     @Before
     public void setup() {
@@ -59,7 +70,8 @@ public class TestServerTest {
     @After
     public void teardown() {
         m_cut = null;
-        game = null;
+        Game.setGame(null);
+        errorMsg = null;
     }
 
     @Test
@@ -96,6 +108,34 @@ public class TestServerTest {
         m_cut.updateAll(msg);
         verify(mockGameHandler, times(1)).updateGameHandler(msg);
     }
+
+    @Test
+    public void setupGame() {
+        m_cut.createGame();
+        verify(mockGameHandler, times(0)).prepareGame();
+        Assert.assertEquals(true, m_cut.hasGame());
+        m_cut.setupGame();
+        verify(mockGameHandler, times(0)).prepareGame();
+    }
+
+    @Test
+    public void addPlayer() {
+        AddPlayerSuccessMsg msg = new AddPlayerSuccessMsg();
+        msg.setPlayerName("TomTurbo");
+        m_cut.createGame();
+        m_cut.addPlayerSuccessMsgFunctionality(msg, mockConnection);
+        verify(mockConnection, times(1)).sendTCP(msg);
+        Assert.assertEquals(3, m_cut.getGame().getPlayerNumber());
+    }
+
+    @Test
+    public void resetMessage() {
+        m_cut.createGame();
+        Assert.assertEquals(2, m_cut.getGame().getPlayerNumber());
+        m_cut.resetMsgFunctionality();
+        Assert.assertEquals(0, m_cut.getGame().getPlayerNumber());
+    }
+
 
 
 }
