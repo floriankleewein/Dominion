@@ -24,7 +24,7 @@ public class ClientConnector {
     private static final int SERVER_PORT = 53217;
     private static Client client;
     private GameHandler gameHandler;
-    private List<ChatMessage> msgList;
+
 
     private Game game;
     Map<Class, Callback<BaseMessage>> callbackMap = new HashMap<>();
