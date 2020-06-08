@@ -80,13 +80,13 @@
         android:id="@+id/backToMainActivitybtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="96dp"
-        android:layout_marginTop="33dp"
-        android:layout_marginEnd="157dp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginStart="69dp"
+        android:layout_marginTop="163dp"
+        android:layout_marginEnd="133dp"
+        android:layout_marginBottom="16dp"
         android:text="Zurück zum Start"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/hasWon"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hasWon" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutGameEnd" />
 </androidx.constraintlayout.widget.ConstraintLayout>
