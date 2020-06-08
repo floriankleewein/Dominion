@@ -68,17 +68,18 @@ public class ChatFragment extends ListFragment implements UserInputHandler {
         return new ChatFragment();
     }
 
-    @BindView(R.id.user_input_edit_text) EditText userInput;
+    @BindView(R.id.user_input_edit_text)
+    EditText userInput;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        System.out.println("CHATFRAGMENT ONCREATEVIEW");
+        Log.i("Chat", "CHATFRAGMENT ONCREATEVIEW");
         // Inflate the layout for this fragment
         View chatFragmentView = inflater.inflate(R.layout.fragment_chat, container, false);
 
 
-        System.out.println("IS RESTORED: " + isRestorable);
+        Log.i("Chat", "IS RESTORED: " + isRestorable);
 
         unbinder = ButterKnife.bind(this, chatFragmentView);
 
@@ -100,26 +101,26 @@ public class ChatFragment extends ListFragment implements UserInputHandler {
 
 
         Thread chatMessageRecThread = new Thread(() -> {
-          if (isRestorable) {
+            if (isRestorable) {
 
-              client.getChatMessages();
-              client.getClient().addListener(new Listener() {
-                  @Override
-                  public void received(Connection connection, Object object) {
-                      System.out.println("RECEIVED MESSAGE THREAD");
+                client.getChatMessages();
+                client.getClient().addListener(new Listener() {
+                    @Override
+                    public void received(Connection connection, Object object) {
+                        Log.i("Chat", "RECEIVED MESSAGE THREAD");
 
-                      if (object instanceof RecChatListMsg) {
+                        if (object instanceof RecChatListMsg) {
 
-                          System.out.println("RECEIVED CHAT MESSAGES FROM SERVER");
-                          System.out.println("FROM CONNECTION: " + connection.getID());
-                          RecChatListMsg msg = (RecChatListMsg) object;
-                          messageList = msg.getMessages();
-                          System.out.println("OBJECT: ");
-                      }
-                  }
+                            Log.i("Chat", "RECEIVED CHAT MESSAGES FROM SERVER");
+                            Log.i("Chat", "FROM CONNECTION: " + connection.getID());
+                            RecChatListMsg msg = (RecChatListMsg) object;
+                            messageList = msg.getMessages();
+                            Log.i("Chat", "OBJECT: ");
+                        }
+                    }
 
-              });
-          }
+                });
+            }
         });
 
         return chatFragmentView;
@@ -149,7 +150,7 @@ public class ChatFragment extends ListFragment implements UserInputHandler {
         this.chatListAdapter = new ChatListAdapter(getActivity(), R.layout.chat_fragment_row);
         setListAdapter(this.chatListAdapter);
 
-        System.out.println("CHATFRAGMENT ONACTIVITYCREATED");
+        Log.i("Chat","CHATFRAGMENT ONACTIVITYCREATED");
 
         //Wiederherstellen der Chat Messages
 
@@ -157,14 +158,14 @@ public class ChatFragment extends ListFragment implements UserInputHandler {
 
             if (isAdded() & messageList != null) {
 
-                System.out.println("restore chat messages");
-                System.out.println("list size: " + messageList.size());
+               Log.i("Chat","restore chat messages");
+               Log.i("Chat", "list size: " + messageList.size());
 
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
 
-                        for (Pair chatMessagePair: messageList) {
+                        for (Pair chatMessagePair : messageList) {
 
                             //prüfe, ob die Nachricht von mir selbst gesendet wurde
                             if (chatMessagePair.getPlayerId() == client.getClient().getID()) {
@@ -182,32 +183,32 @@ public class ChatFragment extends ListFragment implements UserInputHandler {
 
         if (this.client.isConnected()) {
 
-                    client.getClient().addListener(new Listener() {
-                        @Override
-                        public void received(Connection connection, Object object) {
-                            if (object instanceof ChatMessage) {
-                                ChatMessage response = (ChatMessage) object;
-                                Log.d("ChatFragment", "Nachricht des anderen Spielers: " + response.getMessage());
+            client.getClient().addListener(new Listener() {
+                @Override
+                public void received(Connection connection, Object object) {
+                    if (object instanceof ChatMessage) {
+                        ChatMessage response = (ChatMessage) object;
+                        Log.d("ChatFragment", "Nachricht des anderen Spielers: " + response.getMessage());
 
-                                responseMessage = response.getMessage();
+                        responseMessage = response.getMessage();
 
-                                System.out.println("CHAT LIST ADAPTER SIZE: " + chatListAdapter.getCount());
+                       Log.i("Cheat","CHAT LIST ADAPTER SIZE: " + chatListAdapter.getCount());
 
-                                if (isAdded() & !response.isSentByMe()) {
+                        if (isAdded() & !response.isSentByMe()) {
 
-                                    mHandler.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            // hiermit wird die Nachricht in die View eigebunden und angezeigt
-                                            chatListAdapter.add(response);
-                                            chatListAdapter.notifyDataSetChanged();
-                                            getListView().setSelection(chatListAdapter.getCount() - 1);
-                                        }
-                                    });
+                            mHandler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    // hiermit wird die Nachricht in die View eigebunden und angezeigt
+                                    chatListAdapter.add(response);
+                                    chatListAdapter.notifyDataSetChanged();
+                                    getListView().setSelection(chatListAdapter.getCount() - 1);
                                 }
-                            }
+                            });
                         }
-                    });
+                    }
+                }
+            });
 
         } else {
             Toast.makeText(getActivity(), "Not connected", Toast.LENGTH_LONG).show();
@@ -217,25 +218,25 @@ public class ChatFragment extends ListFragment implements UserInputHandler {
     @Override
     public void onResume() {
         super.onResume();
-        System.out.println("CHATFRAGMENT ONRESUME");
+        Log.i("Chat","CHATFRAGMENT ONRESUME");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        System.out.println("CHATFRAGMENT ONDESTROY");
+        Log.i("Chat","CHATFRAGMENT ONDESTROY");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        System.out.println("CHATFRAGMENT ONPAUSE");
+        Log.i("Chat","CHATFRAGMENT ONPAUSE");
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        System.out.println("CHATFRAGMENT DETACHED");
+        Log.i("Chat","CHATFRAGMENT DETACHED");
     }
 
     @Override
@@ -247,7 +248,7 @@ public class ChatFragment extends ListFragment implements UserInputHandler {
     @OnClick(R.id.send_Button)
     public void sendMessage() {
 
-        if(client.isConnected()) {
+        if (client.isConnected()) {
             ChatMessage sendToOthers = new ChatMessage();
             sendToOthers.setMessage(this.getMessageToBeSent());
             sendToOthers.setSentByMe(true);
@@ -299,7 +300,7 @@ public class ChatFragment extends ListFragment implements UserInputHandler {
             try {
                 client.sendChatMessage(sendMessage);
                 messageSent = true;
-            }catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 messageSent = false;
             }
@@ -309,11 +310,11 @@ public class ChatFragment extends ListFragment implements UserInputHandler {
         @Override
         protected void onPostExecute(Boolean messageSent) {
 
-            if(messageSent) {
+            if (messageSent) {
                 getActivity().runOnUiThread(() -> {
                     clearInput();
 
-                    System.out.println("CLIENT: Succesfully sent message to others.");
+                    Log.i("Chat","CLIENT: Succesfully sent message to others.");
                 });
             } else {
                 Toast.makeText(getActivity(), "Message not sent.", Toast.LENGTH_LONG).show();
@@ -322,7 +323,7 @@ public class ChatFragment extends ListFragment implements UserInputHandler {
     }
 
     //Callback, um zum Spiel zurückkehren zu können
-    public interface OnChatMessageArrivedListener{
+    public interface OnChatMessageArrivedListener {
         void onChatMessageArrived(String msg);
     }
 }

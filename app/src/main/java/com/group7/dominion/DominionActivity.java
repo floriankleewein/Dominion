@@ -86,8 +86,6 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         Button chatButton;
         chatButton = findViewById(R.id.chat_Button);
 
-        FrameLayout fragmentContainer = findViewById(R.id.chatFragmentContainer);
-
         this.clientConnector = ClientConnector.getClientConnector();
 
 

@@ -314,7 +314,7 @@ public class TestServer {
     public void chatMessageFunctionality(Object object, Connection con) {
         ChatMessage msg = (ChatMessage) object;
 
-        System.out.println("Receive msg from client:" + msg.getPlayerName());
+        Log.info("Receive msg from client:" + msg.getPlayerName());
 
 
         msg.setSentByMe(false);
@@ -495,8 +495,8 @@ public class TestServer {
 
 
     public void getChatMessagesFunctionality(Connection con) {
-        System.out.println("SEND CHAT MESSAGES TO CLIENT");
-        System.out.println("SERVER MESSAGE LIST SIZE: " + messageList.size());
+        Log.info("SEND CHAT MESSAGES TO CLIENT");
+        Log.info("SERVER MESSAGE LIST SIZE: " + messageList.size());
         RecChatListMsg msg = new RecChatListMsg();
         msg.setMessages(messageList);
         server.sendToTCP(con.getID(), msg);
