@@ -56,6 +56,68 @@
 
     </androidx.gridlayout.widget.GridLayout>
 
+    <TableLayout
+        android:layout_width="459dp"
+        android:layout_height="52dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/gridLayout2">
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="92dp"
+                android:layout_height="wrap_content"
+                android:text="Aktion"
+                android:textAlignment="center"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="175dp"
+                android:layout_height="wrap_content"
+                android:text="Kaufaktionen"
+                android:textAlignment="center"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="98dp"
+                android:layout_height="wrap_content"
+                android:text="Münzen"
+                android:textAlignment="center"
+                android:textColor="@android:color/white" />
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:id="@+id/textViewActionAmount"
+                android:layout_width="92dp"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textAlignment="center"
+                android:textColor="@android:color/white"></TextView>
+
+            <TextView
+                android:id="@+id/textViewBuyAmounts"
+                android:layout_width="92dp"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textAlignment="center"
+                android:textColor="@android:color/white"></TextView>
+
+            <TextView
+                android:id="@+id/textViewCoinsAmount"
+                android:layout_width="92dp"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textAlignment="center"
+                android:textColor="@android:color/white"></TextView>
+
+        </TableRow>
+    </TableLayout>
+
     <androidx.gridlayout.widget.GridLayout
         android:id="@+id/GridCards"
         android:layout_width="441dp"
@@ -68,7 +130,7 @@
         <LinearLayout
             android:id="@+id/LinearCards"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="106dp"
             android:orientation="horizontal"
             tools:visibility="visible"></LinearLayout>
     </androidx.gridlayout.widget.GridLayout>

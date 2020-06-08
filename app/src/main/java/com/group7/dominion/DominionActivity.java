@@ -47,7 +47,9 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
     private ClientConnector clientConnector;
     private HandCardsHandler cardsHandler;
     private TextView playerScores;
-
+    private TextView buyAmounts;
+    private TextView playAmounts;
+    private TextView coinAmounts;
 
     private FragmentManager fragmentManager;
 
@@ -113,6 +115,10 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
 
         //hiermit wird die transition von game zum chat durchgeführt
         chatButton.setOnClickListener(view -> openFragment());
+
+        buyAmounts = findViewById(R.id.textViewBuyAmounts);
+        playAmounts = findViewById(R.id.textViewActionAmount);
+        coinAmounts = findViewById(R.id.textViewCoinsAmount);
     }
 
     @Override
@@ -199,6 +205,10 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         clientConnector.registerCallback(BuyCardMsg.class, (msg -> {
             runOnUiThread(() -> {
                         BuyCardMsg gameUpdateMsg1 = (BuyCardMsg) msg;
+                        User user = gameUpdateMsg1.getGame().findUser(getUsername());
+                        buyAmounts.setText(Integer.toString(user.getGamePoints().getBuyAmounts()));
+                        coinAmounts.setText(Integer.toString(user.getGamePoints().getCoins()));
+                        playAmounts.setText(Integer.toString(user.getGamePoints().getPlaysAmount()));
                         Card card = gameUpdateMsg1.getBoughtCard();
                         if (card == null && !gameUpdateMsg1.isCantBuyCard()) {
                             Toast.makeText(getApplicationContext(), "Du kannst diese Karte nicht kaufen", Toast.LENGTH_SHORT).show();
@@ -206,70 +216,70 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
                             ErrorDialogHandler errorDialogHandler = new ErrorDialogHandler();
                             errorDialogHandler.show(fragmentManager, ERRORDIALOG_CONST);
                         } else if (card instanceof ActionCard) {
-                                ActionCard actionCard = (ActionCard) card;
-                                switch (actionCard.getActionType()) {
-                                    case HEXE:
-                                        Log.i("Action", "ActionType: " + actionCard.getActionType() +
-                                                ", Card Count: " + actionCard.getAction().getCardCount() +
-                                                ", Curse Count: " + actionCard.getAction().getCurseCount());
-                                        break;
-                                    case WERKSTATT:
-                                        Log.i("Action", "ActionType: " + actionCard.getActionType() +
-                                                ", Card Count: " + actionCard.getAction().getCardCount() +
-                                                ", Max Money Value: " + actionCard.getAction().getMaxMoneyValue());
-                                        break;
-                                    case SCHMIEDE:
-                                        Log.i("Action", "ActionType: " + actionCard.getActionType() +
-                                                ", Card Count: " + actionCard.getAction().getCardCount());
-                                        break;
-                                    case MINE:
-                                        Log.i("Action", "ActionType: " + actionCard.getActionType() +
-                                                ", Card Count: " + actionCard.getAction().getCardCount() +
-                                                ", Take MoneyCard That Cost Three More Than Old: " + actionCard.getAction().isTakeMoneyCardThatCostThreeMoreThanOld() +
-                                                ", Take Card On Hand: " + actionCard.getAction().isTakeCardOnHand());
-                                        break;
-                                    case MILIZ:
-                                        Log.i("Action", "ActionType: " + actionCard.getActionType() +
-                                                ", Money Value: " + actionCard.getAction().getMoneyValue() +
-                                                ", Throw Every UserCards Until Three Left: " + actionCard.getAction().isThrowEveryUserCardsUntilThreeLeft());
-                                        break;
-                                    case MARKT:
-                                        Log.i("Action", "ActionType: " + actionCard.getActionType() +
-                                                ", Card Count: " + actionCard.getAction().getCardCount() +
-                                                ", Action Count: " + actionCard.getAction().getActionCount() +
-                                                ", Money Value: " + actionCard.getAction().getMoneyValue() +
-                                                ", Buy Count: " + actionCard.getAction().getBuyCount());
-                                        break;
-                                    case KELLER:
-                                        Log.i("Action", "ActionType: " + actionCard.getActionType() +
-                                                ", Action Count: " + actionCard.getAction().getActionCount() +
-                                                ", Throw Any Amount Cards: " + actionCard.getAction().isThrowAnyAmountCards());
-                                        break;
-                                    case HOLZFAELLER:
-                                        Log.i("Action", "ActionType: " + actionCard.getActionType() +
-                                                ", Buy Count: " + actionCard.getAction().getBuyCount() +
-                                                ", Money Value: " + actionCard.getAction().getMoneyValue());
-                                        break;
-                                    case DORF:
-                                        Log.i("Action", "ActionType: " + actionCard.getActionType() +
-                                                ", Card Count: " + actionCard.getAction().getCardCount() +
-                                                ", Action Count: " + actionCard.getAction().getActionCount());
-                                        break;
-                                    case BURGGRABEN:
-                                        Log.i("Action", "ActionType: " + actionCard.getActionType() +
-                                                ", Card Count: " + actionCard.getAction().getCardCount() +
-                                                ", Throw Every UserCards Until Three Left: " + actionCard.getAction().isThrowEveryUserCardsUntilThreeLeft());
-                                        break;
-                                    default:
-                                        //LKDoc: do nothing
-                                        break;
-                                }
-                                String text = "";
-                                for (User u : gameUpdateMsg1.getGame().getPlayerList()) {
-                                    text += u.getUserName() + ": " + u.getGamePoints().getWinningPoints() + "\n";
-                                }
-                                playerScores.setText(text);
+                            ActionCard actionCard = (ActionCard) card;
+                            switch (actionCard.getActionType()) {
+                                case HEXE:
+                                    Log.i("Action", "ActionType: " + actionCard.getActionType() +
+                                            ", Card Count: " + actionCard.getAction().getCardCount() +
+                                            ", Curse Count: " + actionCard.getAction().getCurseCount());
+                                    break;
+                                case WERKSTATT:
+                                    Log.i("Action", "ActionType: " + actionCard.getActionType() +
+                                            ", Card Count: " + actionCard.getAction().getCardCount() +
+                                            ", Max Money Value: " + actionCard.getAction().getMaxMoneyValue());
+                                    break;
+                                case SCHMIEDE:
+                                    Log.i("Action", "ActionType: " + actionCard.getActionType() +
+                                            ", Card Count: " + actionCard.getAction().getCardCount());
+                                    break;
+                                case MINE:
+                                    Log.i("Action", "ActionType: " + actionCard.getActionType() +
+                                            ", Card Count: " + actionCard.getAction().getCardCount() +
+                                            ", Take MoneyCard That Cost Three More Than Old: " + actionCard.getAction().isTakeMoneyCardThatCostThreeMoreThanOld() +
+                                            ", Take Card On Hand: " + actionCard.getAction().isTakeCardOnHand());
+                                    break;
+                                case MILIZ:
+                                    Log.i("Action", "ActionType: " + actionCard.getActionType() +
+                                            ", Money Value: " + actionCard.getAction().getMoneyValue() +
+                                            ", Throw Every UserCards Until Three Left: " + actionCard.getAction().isThrowEveryUserCardsUntilThreeLeft());
+                                    break;
+                                case MARKT:
+                                    Log.i("Action", "ActionType: " + actionCard.getActionType() +
+                                            ", Card Count: " + actionCard.getAction().getCardCount() +
+                                            ", Action Count: " + actionCard.getAction().getActionCount() +
+                                            ", Money Value: " + actionCard.getAction().getMoneyValue() +
+                                            ", Buy Count: " + actionCard.getAction().getBuyCount());
+                                    break;
+                                case KELLER:
+                                    Log.i("Action", "ActionType: " + actionCard.getActionType() +
+                                            ", Action Count: " + actionCard.getAction().getActionCount() +
+                                            ", Throw Any Amount Cards: " + actionCard.getAction().isThrowAnyAmountCards());
+                                    break;
+                                case HOLZFAELLER:
+                                    Log.i("Action", "ActionType: " + actionCard.getActionType() +
+                                            ", Buy Count: " + actionCard.getAction().getBuyCount() +
+                                            ", Money Value: " + actionCard.getAction().getMoneyValue());
+                                    break;
+                                case DORF:
+                                    Log.i("Action", "ActionType: " + actionCard.getActionType() +
+                                            ", Card Count: " + actionCard.getAction().getCardCount() +
+                                            ", Action Count: " + actionCard.getAction().getActionCount());
+                                    break;
+                                case BURGGRABEN:
+                                    Log.i("Action", "ActionType: " + actionCard.getActionType() +
+                                            ", Card Count: " + actionCard.getAction().getCardCount() +
+                                            ", Throw Every UserCards Until Three Left: " + actionCard.getAction().isThrowEveryUserCardsUntilThreeLeft());
+                                    break;
+                                default:
+                                    //LKDoc: do nothing
+                                    break;
                             }
+                            String text = "";
+                            for (User u : gameUpdateMsg1.getGame().getPlayerList()) {
+                                text += u.getUserName() + ": " + u.getGamePoints().getWinningPoints() + "\n";
+                            }
+                            playerScores.setText(text);
+                        }
                     }
             );
         }));
@@ -286,15 +296,18 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         }));
     }
 
-    /**@Author Maurer Florian
-     * @param msg
-     * This Method decide how to handle the Play Card Message.
-     * It checks if the Player is the active Player and if he is in the Action Phase or
-     * the Play Coins Phase
+    /**
+     * @param msg This Method decide how to handle the Play Card Message.
+     *            It checks if the Player is the active Player and if he is in the Action Phase or
+     *            the Play Coins Phase
+     * @Author Maurer Florian
      */
 
     private void handlePlayCardMsg(PlayCardMsg msg) {
         User user = msg.getGame().findUser(getUsername());
+        buyAmounts.setText(Integer.toString(user.getGamePoints().getBuyAmounts()));
+        coinAmounts.setText(Integer.toString(user.getGamePoints().getCoins()));
+        playAmounts.setText(Integer.toString(user.getGamePoints().getPlaysAmount()));
         if (user.getUserName().equals(msg.getGame().getActivePlayer().getUserName())) {
             cardsHandler.setImageButtonsNull();
             cardsHandler.initCards(user);
@@ -312,13 +325,15 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
     }
 
     /**
+     * @param msg Method is similarly to the handlePlayCardMsg Method. It's only programmed twice because of casting the messages
      * @Author Maurer Florian
-     * @param msg
-     * Method is similarly to the handlePlayCardMsg Method. It's only programmed twice because of casting the messages
      */
     public void handNewTurnMsg(NewTurnMessage msg) {
         cardsHandler.setImageButtonsNull();
         User user = msg.getGame().findUser(getUsername());
+        buyAmounts.setText(Integer.toString(user.getGamePoints().getBuyAmounts()));
+        coinAmounts.setText(Integer.toString(user.getGamePoints().getCoins()));
+        playAmounts.setText(Integer.toString(user.getGamePoints().getPlaysAmount()));
         if (user.getUserName().equals(msg.getGame().getActivePlayer().getUserName())) {
             cardsHandler.initCards(user);
             if (msg.getPlayStatus() == PlayStatus.ACTION_PHASE) {
