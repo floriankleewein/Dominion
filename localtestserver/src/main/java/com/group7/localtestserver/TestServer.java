@@ -79,7 +79,6 @@ public class TestServer {
          * FKDoc: here the kryonet server is bound to the correct tcp Port.
          */
         try {
-            //server.bind(8080);
             server.bind(53217);
         } catch (IOException e) {
             Log.error("ERROR: ", "bind to port failed!");
@@ -332,7 +331,6 @@ public class TestServer {
         messageList.add(chatPair);
 
         //sende die Nachrihct an die anderen Spieler
-        //server.sendToAllTCP(msg);
         server.sendToAllExceptTCP(con.getID(), msg);
     }
 

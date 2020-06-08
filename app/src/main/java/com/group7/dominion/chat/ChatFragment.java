@@ -150,36 +150,32 @@ public class ChatFragment extends ListFragment implements UserInputHandler {
         this.chatListAdapter = new ChatListAdapter(getActivity(), R.layout.chat_fragment_row);
         setListAdapter(this.chatListAdapter);
 
-        Log.i("Chat","CHATFRAGMENT ONACTIVITYCREATED");
+        Log.i("Chat", "CHATFRAGMENT ONACTIVITYCREATED");
 
         //Wiederherstellen der Chat Messages
 
-        if (isRestorable) {
 
-            if (isAdded() & messageList != null) {
+        if ((isRestorable) && isAdded() & messageList != null) {
 
-               Log.i("Chat","restore chat messages");
-               Log.i("Chat", "list size: " + messageList.size());
+            Log.i("Chat", "restore chat messages");
+            Log.i("Chat", "list size: " + messageList.size());
 
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
+            getActivity().runOnUiThread(() -> {
 
-                        for (Pair chatMessagePair : messageList) {
+                for (Pair chatMessagePair : messageList) {
 
-                            //prüfe, ob die Nachricht von mir selbst gesendet wurde
-                            if (chatMessagePair.getPlayerId() == client.getClient().getID()) {
-                                chatMessagePair.getChatMessage().setSentByMe(true);
-                                chatListAdapter.add(chatMessagePair.getChatMessage());
-                            } else {
-                                chatMessagePair.getChatMessage().setSentByMe(false);
-                                chatListAdapter.add(chatMessagePair.getChatMessage());
-                            }
-                        }
+                    //prüfe, ob die Nachricht von mir selbst gesendet wurde
+                    if (chatMessagePair.getPlayerId() == client.getClient().getID()) {
+                        chatMessagePair.getChatMessage().setSentByMe(true);
+                        chatListAdapter.add(chatMessagePair.getChatMessage());
+                    } else {
+                        chatMessagePair.getChatMessage().setSentByMe(false);
+                        chatListAdapter.add(chatMessagePair.getChatMessage());
                     }
-                });
-            }
+                }
+            });
         }
+
 
         if (this.client.isConnected()) {
 
@@ -192,18 +188,15 @@ public class ChatFragment extends ListFragment implements UserInputHandler {
 
                         responseMessage = response.getMessage();
 
-                       Log.i("Cheat","CHAT LIST ADAPTER SIZE: " + chatListAdapter.getCount());
+                        Log.i("Cheat", "CHAT LIST ADAPTER SIZE: " + chatListAdapter.getCount());
 
                         if (isAdded() & !response.isSentByMe()) {
 
-                            mHandler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    // hiermit wird die Nachricht in die View eigebunden und angezeigt
-                                    chatListAdapter.add(response);
-                                    chatListAdapter.notifyDataSetChanged();
-                                    getListView().setSelection(chatListAdapter.getCount() - 1);
-                                }
+                            mHandler.post(() -> {
+                                // hiermit wird die Nachricht in die View eigebunden und angezeigt
+                                chatListAdapter.add(response);
+                                chatListAdapter.notifyDataSetChanged();
+                                getListView().setSelection(chatListAdapter.getCount() - 1);
                             });
                         }
                     }
@@ -218,25 +211,25 @@ public class ChatFragment extends ListFragment implements UserInputHandler {
     @Override
     public void onResume() {
         super.onResume();
-        Log.i("Chat","CHATFRAGMENT ONRESUME");
+        Log.i("Chat", "CHATFRAGMENT ONRESUME");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.i("Chat","CHATFRAGMENT ONDESTROY");
+        Log.i("Chat", "CHATFRAGMENT ONDESTROY");
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Log.i("Chat","CHATFRAGMENT ONPAUSE");
+        Log.i("Chat", "CHATFRAGMENT ONPAUSE");
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        Log.i("Chat","CHATFRAGMENT DETACHED");
+        Log.i("Chat", "CHATFRAGMENT DETACHED");
     }
 
     @Override
@@ -314,7 +307,7 @@ public class ChatFragment extends ListFragment implements UserInputHandler {
                 getActivity().runOnUiThread(() -> {
                     clearInput();
 
-                    Log.i("Chat","CLIENT: Succesfully sent message to others.");
+                    Log.i("Chat", "CLIENT: Succesfully sent message to others.");
                 });
             } else {
                 Toast.makeText(getActivity(), "Message not sent.", Toast.LENGTH_LONG).show();

@@ -9,7 +9,6 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -319,6 +318,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
      * @Author Maurer Florian
      */
 
+    @SuppressLint("SetTextI18n")
     private void handlePlayCardMsg(PlayCardMsg msg) {
         User user = msg.getGame().findUser(getUsername());
         buyAmounts.setText(Integer.toString(user.getGamePoints().getBuyAmounts()));
