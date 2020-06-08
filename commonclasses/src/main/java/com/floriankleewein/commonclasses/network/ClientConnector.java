@@ -12,6 +12,8 @@ import com.floriankleewein.commonclasses.Game;
 import com.floriankleewein.commonclasses.gamelogic.GameHandler;
 import com.floriankleewein.commonclasses.network.messages.EndGameMsg;
 import com.floriankleewein.commonclasses.network.messages.NewTurnMessage;
+import com.floriankleewein.commonclasses.network.messages.SetGameNullMsg;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -37,7 +39,8 @@ public class ClientConnector {
 
     /**
      * FKDoc: singleton getter which creates exactly one clientConnector per Player. its the same clientConnector for the whole game.
-     *        singleton pattern is very handy here.
+     * singleton pattern is very handy here.
+     *
      * @return
      */
     public static synchronized ClientConnector getClientConnector() {
@@ -85,7 +88,7 @@ public class ClientConnector {
     /**
      * FKDoc: sends the server the request to check the playernumber to see if the start button is enabled or not.
      */
-    public void checkStartbutton(){
+    public void checkStartbutton() {
         StartbuttonMsg msg = new StartbuttonMsg();
         client.sendTCP(msg);
 
@@ -139,7 +142,8 @@ public class ClientConnector {
 
     /**
      * FKDoc: the client gets the username and sends it to the server via a message. the listener is added, where the server response
-     *        is stored in the message. corresponding callback is called and UI updated aswell for user interface.
+     * is stored in the message. corresponding callback is called and UI updated aswell for user interface.
+     *
      * @param playerName
      */
     public void addUser(String playerName) {
@@ -211,8 +215,8 @@ public class ClientConnector {
 
     /**
      * FKDoc: here the client sends the corresponding message to the server, fetch the playernames.
-     *        after the response with the names, the listener below triggers the callback which updates the UI and shows
-     *        the usernames. this happens whenever a new player joined.
+     * after the response with the names, the listener below triggers the callback which updates the UI and shows
+     * the usernames. this happens whenever a new player joined.
      */
     public void updatePlayerNames() {
         UpdatePlayerNamesMsg msg = new UpdatePlayerNamesMsg();
@@ -302,9 +306,10 @@ public class ClientConnector {
 
     /**
      * LKDoc:   send BuyCardMsg zum Server + fängt die geklickte Karte ab
-     *          Dies löst den Listener aus - received (generelles Objekt). Instance of BuyCardMsg?
-     *          Cast to BuyCardMsg = callback msg
-     *          Dies wird ausgelöst sobald ein Spieler eine Karte kauft
+     * Dies löst den Listener aus - received (generelles Objekt). Instance of BuyCardMsg?
+     * Cast to BuyCardMsg = callback msg
+     * Dies wird ausgelöst sobald ein Spieler eine Karte kauft
+     *
      * @param msg
      */
     public void sendbuyCard(BuyCardMsg msg) {
@@ -416,7 +421,7 @@ public class ClientConnector {
     }
 
     public void sendsetGameNull() {
-        Thread thread = new Thread(() -> client.sendTCP(new ResetMsg()));
+        Thread thread = new Thread(() -> client.sendTCP(new SetGameNullMsg()));
         thread.start();
     }
 }

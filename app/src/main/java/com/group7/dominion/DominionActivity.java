@@ -1,5 +1,6 @@
 package com.group7.dominion;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,7 +18,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.floriankleewein.commonclasses.Game;
-import com.floriankleewein.commonclasses.board.Board;
+
 import com.floriankleewein.commonclasses.cards.ActionCard;
 import com.floriankleewein.commonclasses.cards.Card;
 import com.floriankleewein.commonclasses.chat.ChatMessage;
@@ -62,7 +63,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
     //Pop-up Info Dialogs
     private ActionDialogHandler actionDialogHandler;
 
-    private Board board;
+    private static final String NEW_TURN_MESSAGE = "Ist am Zug";
 
 
     @Override
@@ -136,6 +137,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         coinAmounts = findViewById(R.id.textViewCoinsAmount);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onStart() {
         super.onStart();
@@ -348,6 +350,7 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
      * @param msg Method is similarly to the handlePlayCardMsg Method. It's only programmed twice because of casting the messages
      * @Author Maurer Florian
      */
+    @SuppressLint("SetTextI18n")
     public void handNewTurnMsg(NewTurnMessage msg) {
         cardsHandler.setImageButtonsNull();
         User user = msg.getGame().findUser(getUsername());
@@ -370,6 +373,8 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
                 playerNames[iterator].setText(u.getUserName());
             }
         }
+
+        Toast.makeText(getApplicationContext(), msg.getGame().getActivePlayer().getUserName() + " " + NEW_TURN_MESSAGE, Toast.LENGTH_SHORT).show();
     }
 
     public void sendUpdateMessage() {
