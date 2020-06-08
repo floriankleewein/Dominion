@@ -15,6 +15,12 @@ public class CheatService {
         playerList = game.getPlayerList();
     }
 
+    /**@Author Maurer Florian
+     * find a user in the game.
+     * @param name
+     * @return
+     */
+
     public User findUser(String name) {
 
         for (int i = 0; i < this.playerList.size(); i++) {
@@ -25,6 +31,10 @@ public class CheatService {
         return null;
     }
 
+    /**@Author Maurer Florian
+     * Add a card to the hand cards
+      * @param name
+     */
     public void addCardtoUser(String name) {
         User cheatUser = findUser(name);
         if (cheatUser != null && (!cheatUser.isCheater())) {
@@ -32,6 +42,13 @@ public class CheatService {
             cheatUser.setCheater(true);
         }
     }
+
+    /**@Author Maurer Florian
+     * Finds a cheater in the Playerlist. If a Cheater is finded, the Player get 5 extra Points.
+     * If he is wrong, his winning points, will be decreased by 5 Points.
+     * @param name
+     * @return
+     */
 
     public User findCheater(String name) {
         User cheatUser = findUser(name);

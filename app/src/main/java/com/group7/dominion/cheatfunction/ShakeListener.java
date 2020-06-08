@@ -31,6 +31,11 @@ public class ShakeListener {
         this.names = names;
     }
 
+    /**@Author Maurer Florian
+     * x,y,z are the coordinates from the Phone. If they change, they method will detected it and open the Cheat Alert Fragment
+     *
+     * @return the Sensor Listener for Dominion Activity
+     */
 
     public SensorEventListener newSensorListener() {
         return new SensorEventListener() {

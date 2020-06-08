@@ -1,8 +1,5 @@
 package com.floriankleewein.commonclasses.user;
 
-
-
-
 public class User {
 
     private String userName;
@@ -21,6 +18,9 @@ public class User {
         setUpforGame();
     }
 
+    /**@Author Maurer Florian
+     * Instanced the user cards and the game points.
+     */
     public void setUpforGame() {
         this.userCards = new UserCards();
         this.gamePoints = new GamePoints();

@@ -22,9 +22,6 @@ import static com.floriankleewein.commonclasses.cards.ActionType.HEXE;
 
 public class UserClassTest {
     static String UserName = "TestUser";
-    static String UserEmail = "test@email.com";
-    static String UserPassword = "TestPassword";
-
     private User user;
     private LinkedList<Card> TestObjects;
 
@@ -54,6 +51,7 @@ public class UserClassTest {
     }
 
     /**
+     * @Author Maurer Florian
      * Tests compare the size of the List, with an excpected value.
      * REASON : You cant compare the Objects because you dont know where which card is (Shuffle Function)
      */
@@ -74,8 +72,7 @@ public class UserClassTest {
         Assert.assertEquals(5, this.user.getUserCards().getHandCards().size());
         Assert.assertEquals(0, this.user.getUserCards().getDiscardCards().size());
 
-        //Card will be played
-
+        /** * Card will be played*/
         this.user.getUserCards().playCard(playedCard);
 
         Assert.assertEquals(4, this.user.getUserCards().getHandCards().size());
@@ -128,8 +125,9 @@ public class UserClassTest {
         Assert.assertEquals(0, this.user.getUserCards().getDiscardCards().size());
 
     }
+
     @Test
-    public void addDeckCardtoHandCard () {
+    public void addDeckCardtoHandCard() {
         this.user.getUserCards().setDeck(fillwithTestCards(4));
         this.user.getUserCards().setDiscardCards(fillwithTestCards(6));
         this.user.getUserCards().setHandCards(fillwithTestCards(2));
@@ -158,7 +156,7 @@ public class UserClassTest {
         Assert.assertEquals("TestUser", user.getUserName());
         Assert.assertEquals(true, user.isCheater());
         Assert.assertEquals(false, user.isGameCreator());
-        Assert.assertEquals(TestCards ,user.getUserCards());
+        Assert.assertEquals(TestCards, user.getUserCards());
         Assert.assertEquals(TestPoints, user.getGamePoints());
     }
 

@@ -131,6 +131,11 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
          */
         cardsHandler.sendMessage();
 
+        /**
+         * @Author Maurer Florian
+         * Two Callbacks shows who cheated and who is suspecting someone.
+         */
+
         clientConnector.registerCallback(HasCheatedMessage.class, (msg -> {
             runOnUiThread(() -> {
                 String cheaterName = ((HasCheatedMessage) msg).getName();
@@ -281,6 +286,13 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         }));
     }
 
+    /**@Author Maurer Florian
+     * @param msg
+     * This Method decide how to handle the Play Card Message.
+     * It checks if the Player is the active Player and if he is in the Action Phase or
+     * the Play Coins Phase
+     */
+
     private void handlePlayCardMsg(PlayCardMsg msg) {
         User user = msg.getGame().findUser(getUsername());
         if (user.getUserName().equals(msg.getGame().getActivePlayer().getUserName())) {
@@ -299,6 +311,11 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         playerScores.setText(text);
     }
 
+    /**
+     * @Author Maurer Florian
+     * @param msg
+     * Method is similarly to the handlePlayCardMsg Method. It's only programmed twice because of casting the messages
+     */
     public void handNewTurnMsg(NewTurnMessage msg) {
         cardsHandler.setImageButtonsNull();
         User user = msg.getGame().findUser(getUsername());

@@ -7,6 +7,12 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * @Author Maurer Florian
+ * Test the method from the GamePoints class.
+ */
+
+
 public class GamePointsTest {
     private static String UserName = "TestUser";
 
@@ -27,31 +33,37 @@ public class GamePointsTest {
     }
 
     @Test
-    public void testModifyWinningPoints () {
+    public void testModifyWinningPoints() {
         this.user.getGamePoints().modifyWinningPoints(5);
         this.user.getGamePoints().modifyWinningPoints(3);
         this.user.getGamePoints().modifyWinningPoints(1);
 
-        Assert.assertEquals(9,this.user.getGamePoints().getWinningPoints());
+        Assert.assertEquals(9, this.user.getGamePoints().getWinningPoints());
     }
 
     @Test
-    public void testModifyPlaysAmount () {
+    public void testModifyPlaysAmount() {
         this.user.getGamePoints().modifyPlayAmounts(3);
         this.user.getGamePoints().modifyPlayAmounts(-1);
-        Assert.assertEquals(3,this.user.getGamePoints().getPlaysAmount());
+        Assert.assertEquals(3, this.user.getGamePoints().getPlaysAmount());
         //+1 because you start with one Play Amount
     }
 
     @Test
-    public void testModifyBuymount () {
+    public void testModifyBuymount() {
         this.user.getGamePoints().modifyBuyAmounts(3);
         this.user.getGamePoints().modifyBuyAmounts(-2);
-        Assert.assertEquals(2,this.user.getGamePoints().getBuyAmounts());
+        Assert.assertEquals(2, this.user.getGamePoints().getBuyAmounts());
         //+1 because you start with one Buy Amount
     }
+
+    /**
+     * @Author Maurer Florian
+     * In this testcase it is important, that the winning points will not be putted back to 0.
+     */
+
     @Test
-   public void testsetPointsDefault (){
+    public void testsetPointsDefault() {
         this.user.getGamePoints().setCoins(6);
         this.user.getGamePoints().setBuyAmounts(3);
         this.user.getGamePoints().setPlaysAmount(4);
@@ -59,9 +71,9 @@ public class GamePointsTest {
 
         this.user.getGamePoints().setPointsDefault();
 
-        Assert.assertEquals(0,this.user.getGamePoints().getCoins());
-        Assert.assertEquals(1,this.user.getGamePoints().getBuyAmounts());
-        Assert.assertEquals(1,this.user.getGamePoints().getPlaysAmount());
+        Assert.assertEquals(0, this.user.getGamePoints().getCoins());
+        Assert.assertEquals(1, this.user.getGamePoints().getBuyAmounts());
+        Assert.assertEquals(1, this.user.getGamePoints().getPlaysAmount());
         Assert.assertEquals(15, this.user.getGamePoints().getWinningPoints());
     }
 
