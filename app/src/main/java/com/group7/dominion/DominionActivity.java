@@ -40,16 +40,18 @@ import com.group7.dominion.chat.ChatFragment;
 import com.group7.dominion.cheatfunction.ShakeListener;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class DominionActivity extends AppCompatActivity implements ChatFragment.OnChatMessageArrivedListener {
 
     private ChatFragment chatFragment;
     private ClientConnector clientConnector;
     private HandCardsHandler cardsHandler;
-    private TextView playerScores;
     private TextView buyAmounts;
     private TextView playAmounts;
     private TextView coinAmounts;
+    private TextView[] playerNames = new TextView[4];
+    private TextView[] playerScores = new TextView[4];
 
     private FragmentManager fragmentManager;
 
@@ -67,6 +69,18 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dominion);
         cardsHandler = new HandCardsHandler(this);
+
+
+        playerNames[0] = findViewById(R.id.txtVPlayername1);
+        playerNames[1] = findViewById(R.id.txtVPlayername2);
+        playerNames[2] = findViewById(R.id.txtVPlayername3);
+        playerNames[3] = findViewById(R.id.txtVPlayername4);
+
+        playerScores[0] = findViewById(R.id.txtVPlayerScore1);
+        playerScores[1] = findViewById(R.id.txtVPlayerScore2);
+        playerScores[2] = findViewById(R.id.txtVPlayerScore3);
+        playerScores[3] = findViewById(R.id.txtVPlayerScore4);
+
 
         Button chatButton;
         chatButton = findViewById(R.id.chat_Button);
@@ -124,8 +138,6 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
     @Override
     protected void onStart() {
         super.onStart();
-        playerScores = findViewById(R.id.txtVPlayerScore);
-        playerScores.setText("Scores of Players.");
 
         clientConnector = ClientConnector.getClientConnector();
 
@@ -274,11 +286,11 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
                                     //LKDoc: do nothing
                                     break;
                             }
-                            String text = "";
+                            int iterator = 0;
                             for (User u : gameUpdateMsg1.getGame().getPlayerList()) {
-                                text += u.getUserName() + ": " + u.getGamePoints().getWinningPoints() + "\n";
+                                playerNames[iterator].setText((u.getUserName()).substring(0, 10));
+                                playerScores[iterator++].setText(Integer.toString(u.getGamePoints().getWinningPoints()));
                             }
-                            playerScores.setText(text);
                         }
                     }
             );
@@ -317,11 +329,11 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
                 cardsHandler.onClickListenerBuyPhase();
             }
         }
-        String text = "";
+        int iterator = 0;
         for (User u : msg.getGame().getPlayerList()) {
-            text += u.getUserName() + ": " + u.getGamePoints().getWinningPoints() + "\n";
+            playerNames[iterator].setText((u.getUserName()).substring(0, 10));
+            playerScores[iterator++].setText(Integer.toString(u.getGamePoints().getWinningPoints()));
         }
-        playerScores.setText(text);
     }
 
     /**
@@ -342,11 +354,11 @@ public class DominionActivity extends AppCompatActivity implements ChatFragment.
                 cardsHandler.onClickListenerBuyPhase();
             }
         }
-        String text = "";
+        int iterator = 0;
         for (User u : msg.getGame().getPlayerList()) {
-            text += u.getUserName() + ": " + u.getGamePoints().getWinningPoints() + "\n";
+            playerNames[iterator].setText((u.getUserName()).substring(0, 10));
+            playerScores[iterator++].setText(Integer.toString(u.getGamePoints().getWinningPoints()));
         }
-        playerScores.setText(text);
     }
 
     public void sendUpdateMessage() {
