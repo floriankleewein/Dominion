@@ -208,9 +208,9 @@ public class GameHandlerTest {
 
     @Test
     public void checkBuyActionCard() {
-        Card card = new ActionCard(3, ActionType.HOLZFAELLER);
-        m_cut.getActiveUser().getGamePoints().modifyCoins(3);
-        Assert.assertEquals(3, m_cut.getActiveUser().getGamePoints().getCoins());
+        Card card = new ActionCard(5, ActionType.HOLZFAELLER);
+        m_cut.getActiveUser().getGamePoints().modifyCoins(5);
+        Assert.assertEquals(5, m_cut.getActiveUser().getGamePoints().getCoins());
         m_cut.buyCard(card);
         Assert.assertEquals(0, m_cut.getActiveUser().getGamePoints().getCoins());
         Assert.assertEquals(0, m_cut.getActiveUser().getGamePoints().getBuyAmounts());
