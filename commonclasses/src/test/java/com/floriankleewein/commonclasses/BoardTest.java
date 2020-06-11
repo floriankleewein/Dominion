@@ -55,7 +55,7 @@ public class BoardTest {
         assertActionCardType(actionCardsToBuy, ActionType.BURGGRABEN, 2);
         assertActionCardType(actionCardsToBuy, ActionType.DORF, 3);
         assertActionCardType(actionCardsToBuy, ActionType.WERKSTATT, 3);
-        assertActionCardType(actionCardsToBuy, ActionType.HOLZFAELLER, 3);
+        assertActionCardType(actionCardsToBuy, ActionType.HOLZFAELLER, 5);
         assertActionCardType(actionCardsToBuy, ActionType.SCHMIEDE, 4);
         assertActionCardType(actionCardsToBuy, ActionType.HEXE, 4);
         assertActionCardType(actionCardsToBuy, ActionType.MILIZ, 4);

@@ -138,13 +138,26 @@ public class GameHandlerTest {
     }
 
     @Test
-    public void checkPlayCardAction() {
+    public void checkPlayCardAction1() {
         Card card = new ActionCard(5, ActionType.HEXE);
         User myUser = m_cut.getActiveUser();
         m_cut.setTurnState(1);
         myUser.getGamePoints().setPlaysAmount(2);
         m_cut.playCard(card);
         Assert.assertEquals(1, myUser.getGamePoints().getPlaysAmount());
+    }
+
+    @Test
+    public void checkPlayCardAction2() {
+        Card card = new ActionCard(5, ActionType.DORF);
+        addCardtoHand(card);
+        User myUser = m_cut.getActiveUser();
+        m_cut.setTurnState(1);
+        Assert.assertEquals(1, myUser.getGamePoints().getPlaysAmount());
+        Assert.assertEquals(6, myUser.getUserCards().getHandCards().size());
+        m_cut.playCard(card);
+        Assert.assertEquals(2, myUser.getGamePoints().getPlaysAmount());
+        Assert.assertEquals(6, myUser.getUserCards().getHandCards().size());
     }
 
     @Test
@@ -207,8 +220,8 @@ public class GameHandlerTest {
     public void checkBuyActionCardWithType() {
         Card card = new ActionCard(3, ActionType.HOLZFAELLER);
         User myUser = m_cut.getActiveUser();
-        myUser.getGamePoints().modifyCoins(3);
-        Assert.assertEquals(3, myUser.getGamePoints().getCoins());
+        myUser.getGamePoints().modifyCoins(5);
+        Assert.assertEquals(5, myUser.getGamePoints().getCoins());
         Assert.assertEquals(card.getId(), m_cut.buyCard(ActionType.HOLZFAELLER).getId());
         Assert.assertEquals(0, myUser.getGamePoints().getCoins());
         Assert.assertEquals(1, myUser.getGamePoints().getBuyAmounts());
