@@ -44,7 +44,7 @@ public class ActionField {
             this.actionCardsToBuy.add(new ActionCard(2, ActionType.BURGGRABEN));
             this.actionCardsToBuy.add(new ActionCard(3, ActionType.DORF));
             this.actionCardsToBuy.add(new ActionCard(3, ActionType.WERKSTATT));
-            this.actionCardsToBuy.add(new ActionCard(3, ActionType.HOLZFAELLER));
+            this.actionCardsToBuy.add(new ActionCard(5, ActionType.HOLZFAELLER));
             this.actionCardsToBuy.add(new ActionCard(4, ActionType.SCHMIEDE));
             this.actionCardsToBuy.add(new ActionCard(4, ActionType.HEXE));
             this.actionCardsToBuy.add(new ActionCard(4, ActionType.MILIZ));
