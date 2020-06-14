@@ -355,7 +355,7 @@ public class TestServer {
 
     private void hasCheatedMessageFunctionality(Object object) {
         HasCheatedMessage cheatMsg = (HasCheatedMessage) object;
-        gamehandler.getGame().findUser(cheatMsg.getName()).getUserCards().addDeckCardtoHandCard(1);
+        gamehandler.getGame().getCheatService().addCardtoUser(cheatMsg.getName());
         sendCheatInformation(cheatMsg.getName());
     }
 
