@@ -39,7 +39,7 @@ public class ActionField {
      */
     private void init() {
         this.actionCardsToBuy = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 10; i++) {
             this.actionCardsToBuy.add(new ActionCard(2, ActionType.KELLER));
             this.actionCardsToBuy.add(new ActionCard(2, ActionType.BURGGRABEN));
             this.actionCardsToBuy.add(new ActionCard(3, ActionType.DORF));
