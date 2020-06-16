@@ -44,7 +44,7 @@ public class BuyField {
         }
 
         //LKDoc: je Provinz 12 Karten
-        for (int i = 0; i < 12; i++) {
+        for (int i = 0; i < 6; i++) {
             this.cardsToBuy.add(new EstateCard(8, 6, EstateType.PROVINZ));
             this.cardsToBuy.add(new EstateCard(5, 3, EstateType.HERZOGTUM));
             this.cardsToBuy.add(new EstateCard(2, 1, EstateType.ANWESEN));

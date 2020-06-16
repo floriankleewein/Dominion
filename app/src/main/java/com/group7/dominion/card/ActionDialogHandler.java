@@ -27,13 +27,14 @@ public class ActionDialogHandler extends AppCompatDialogFragment {
     private static final String ACTION_CONST = "Action";
     private static final String ACTIONTYPE_CONST = "ActionType: ";
     private static final String CARDCOUNT_CONST = ", Card Count: ";
-    private static final String MONEYVALUE_CONST = ", Money Value: " ;
+    private static final String MONEYVALUE_CONST = ", Money Value: ";
     private static final String ACTIONCOUNT_CONST = ", Action Count: ";
 
     /**
      * LKDoc:   AlertDialogBuilder für die Info-Karte die dem Spieler mehr Informationen über die Aktionskarte
-     *          liefern soll. Der Spieler kann anschließend die Karte kaufen ("Buy") oder aber das Fenster wieder schließen ("Close")
-     *          und eine andere Karte wählen
+     * liefern soll. Der Spieler kann anschließend die Karte kaufen ("Buy") oder aber das Fenster wieder schließen ("Close")
+     * und eine andere Karte wählen
+     *
      * @param savedInstanceState
      * @return builder (es wird alles wieder zum Builder returnt)
      */
@@ -44,7 +45,7 @@ public class ActionDialogHandler extends AppCompatDialogFragment {
                 .setMessage("Willst du diese Karte kaufen?")
                 .setPositiveButton("Kaufen", (dialog, which) -> {
                     //LKDoc: Karte kaufen
-                    BuyCardMsg buyCardMsg =new BuyCardMsg();
+                    BuyCardMsg buyCardMsg = new BuyCardMsg();
                     buyCardMsg.setActionTypeClicked(actionType);
                     sendUpdate(buyCardMsg);
                     //LKDoc: UIThread ist in der Dominion Activity
@@ -63,6 +64,7 @@ public class ActionDialogHandler extends AppCompatDialogFragment {
 
     /**
      * LKDoc: setOnClickListener für die einzelnen Aktionskarten
+     *
      * @param activity
      * @param fragmentManager wird benötigt wegen dem ErrorDialogHandler
      */
@@ -170,81 +172,105 @@ public class ActionDialogHandler extends AppCompatDialogFragment {
     /**
      * LKDoc: OnClick Methoden. .show --> wird vom Fragmentmanager gebraucht (Lifecycle)
      * show ruft daher den entsprechenden Dialog für die entsprechende Karte auf
+     *
      * @param fragmentManager muss ebenfalls übergeben werden, wegen dem OnClick
      */
     private void onClickHexe(FragmentManager fragmentManager) {
-        this.fragmentManager = fragmentManager;
-        this.actionType = ActionType.HEXE;
-        this.drawableDialog = R.layout.hexe_info_dialog;
-        this.show(fragmentManager, "hexeDialog");
+        if (!isAdded()) {
+            this.fragmentManager = fragmentManager;
+            this.actionType = ActionType.HEXE;
+            this.drawableDialog = R.layout.hexe_info_dialog;
+            this.show(fragmentManager, "hexeDialog");
+        }
     }
 
     private void onClickHolzfaeller(FragmentManager fragmentManager) {
-        this.fragmentManager = fragmentManager;
-        this.actionType = ActionType.HOLZFAELLER;
-        this.drawableDialog = R.layout.holzfaeller_info_dialog;
-        this.show(fragmentManager, "holzfaellerDialog");
+        if (!isAdded()) {
+            this.fragmentManager = fragmentManager;
+            this.actionType = ActionType.HOLZFAELLER;
+            this.drawableDialog = R.layout.holzfaeller_info_dialog;
+            this.show(fragmentManager, "holzfaellerDialog");
+        }
     }
 
     private void onClickBurggraben(FragmentManager fragmentManager) {
-        this.fragmentManager = fragmentManager;
-        this.actionType = ActionType.BURGGRABEN;
-        this.drawableDialog = R.layout.burggraben_info_dialog;
-        this.show(fragmentManager, "burggrabenDialog");
+        if (!isAdded()) {
+            this.fragmentManager = fragmentManager;
+            this.actionType = ActionType.BURGGRABEN;
+            this.drawableDialog = R.layout.burggraben_info_dialog;
+            this.show(fragmentManager, "burggrabenDialog");
+        }
     }
 
     private void onClickDorf(FragmentManager fragmentManager) {
-        this.fragmentManager = fragmentManager;
-        this.actionType = ActionType.DORF;
-        this.drawableDialog = R.layout.dorf_info_dialog;
-        this.show(fragmentManager, "dorfDialog");
+        if (!isAdded()) {
+            this.fragmentManager = fragmentManager;
+            this.actionType = ActionType.DORF;
+            this.drawableDialog = R.layout.dorf_info_dialog;
+            this.show(fragmentManager, "dorfDialog");
+        }
     }
 
     private void onClickKeller(FragmentManager fragmentManager) {
-        this.fragmentManager = fragmentManager;
-        this.actionType = ActionType.KELLER;
-        this.drawableDialog = R.layout.keller_info_dialog;
-        this.show(fragmentManager, "kellerDialog");
+        if (!isAdded()) {
+            this.fragmentManager = fragmentManager;
+            this.actionType = ActionType.KELLER;
+            this.drawableDialog = R.layout.keller_info_dialog;
+            this.show(fragmentManager, "kellerDialog");
+        }
     }
 
     private void onClickMarkt(FragmentManager fragmentManager) {
-        this.fragmentManager = fragmentManager;
-        this.actionType = ActionType.MARKT;
-        this.drawableDialog = R.layout.markt_info_dialog;
-        this.show(fragmentManager, "marktDialog");
+        if (!isAdded()) {
+            this.fragmentManager = fragmentManager;
+            this.actionType = ActionType.MARKT;
+            this.drawableDialog = R.layout.markt_info_dialog;
+            this.show(fragmentManager, "marktDialog");
+        }
     }
 
     private void onClickMiliz(FragmentManager fragmentManager) {
-        this.fragmentManager = fragmentManager;
-        this.actionType = ActionType.MILIZ;
-        this.drawableDialog = R.layout.miliz_info_dialog;
-        this.show(fragmentManager, "milizDialog");
+        if (!isAdded()) {
+            this.fragmentManager = fragmentManager;
+            this.actionType = ActionType.MILIZ;
+            this.drawableDialog = R.layout.miliz_info_dialog;
+            this.show(fragmentManager, "milizDialog");
+        }
     }
 
     private void onClickMine(FragmentManager fragmentManager) {
-        this.fragmentManager = fragmentManager;
-        this.actionType = ActionType.MINE;
-        this.drawableDialog = R.layout.mine_info_dialog;
-        this.show(fragmentManager, "mineDialog");
+        if (!isAdded()) {
+            this.fragmentManager = fragmentManager;
+            this.actionType = ActionType.MINE;
+            this.drawableDialog = R.layout.mine_info_dialog;
+            this.show(fragmentManager, "mineDialog");
+        }
     }
+
     private void onClickSchmiede(FragmentManager fragmentManager) {
-        this.fragmentManager = fragmentManager;
-        this.actionType = ActionType.SCHMIEDE;
-        this.drawableDialog = R.layout.schmiede_info_dialog;
-        this.show(fragmentManager, "schmiedeDialog");
+        if (!isAdded()) {
+            this.fragmentManager = fragmentManager;
+            this.actionType = ActionType.SCHMIEDE;
+            this.drawableDialog = R.layout.schmiede_info_dialog;
+            this.show(fragmentManager, "schmiedeDialog");
+        }
     }
+
     private void onClickWerkstatt(FragmentManager fragmentManager) {
-        this.fragmentManager = fragmentManager;
-        this.actionType = ActionType.WERKSTATT;
-        this.drawableDialog = R.layout.werkstatt_info_dialog;
-        this.show(fragmentManager, "werkstattDialog");
+        if (!isAdded()) {
+            this.fragmentManager = fragmentManager;
+            this.actionType = ActionType.WERKSTATT;
+            this.drawableDialog = R.layout.werkstatt_info_dialog;
+            this.show(fragmentManager, "werkstattDialog");
+        }
     }
 
     /**
      * LKDoc: sende Update der msg an clientConnector --> ClientConnector.class
+     *
      * @param buyCardMsg
      */
-    private void sendUpdate(BuyCardMsg buyCardMsg){
+    private void sendUpdate(BuyCardMsg buyCardMsg) {
         //LKDoc: Sonarcloud wants to have lambda
         Thread th = new Thread(() -> clientConnector.sendbuyCard(buyCardMsg));
         th.start();
